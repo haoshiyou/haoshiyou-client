@@ -3,6 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu-site-verification" content="afUPUBDmry" />
     <title>周载南的湾区租房互助群</title>
     <!-- Start of Google Analytics -->
     <script>
@@ -90,47 +91,40 @@
 <script>
     jQuery(function($) {
         $(document).ready(function() {
-            var jsonp
+            var geoinfo;
+
             $.getJSON("http://www.telize.com/geoip?callback=?",
                     function(json) {
-                        jsonp = json;
+                        var geoinfo = $.extend({}, json, navigator.userAgent);
+                        var strgeoinfo = JSON.stringify(strgeoinfo);
+                        ga('send', 'event', 'button', 'click', 'load-geo', geoinfo);
+                        woopra.track('load-geo', geoinfo);
 
-                        ga('send', 'event', 'button', 'click', 'load-geo', {
-                            ip: jsonp ? jsonp.ip: "ip unavailable",
-                            geoip: JSON.stringify(jsonp) || "unavailable",
-                            userAgent: JSON.stringify(navigator.userAgent)
-                        });
-                        woopra.track('load-geo', {
-                            ip: jsonp ? jsonp.ip: "ip unavailable",
-                            geoip: JSON.stringify(jsonp) || "unavailable",
-                            userAgent: JSON.stringify(navigator.userAgent)
-                        });
+                        ga('send', 'event', 'button', 'click', 'load-geo-str', strgeoinfo);
+                        woopra.track('load-geo-str', strgeoinfo);
+                        console.log(geoinfo);
 
                     }
             );
 
             $("#rent-form").click(function() {
                 ga('send', 'event', 'button', 'click', 'go-to-rent-form');
-                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo', {
-                    ip: jsonp ? jsonp.ip: "ip unavailable",
-                    geoip: JSON.stringify(jsonp) || "unavailable",
-                    userAgent: JSON.stringify(navigator.userAgent)
-                });
-                woopra.track('go-to-rent-form', {
-                    ip: jsonp ? jsonp.ip: "ip unavailable",
-                    geoip: JSON.stringify(jsonp) || "unavailable",
-                    userAgent: JSON.stringify(navigator.userAgent)
-                });
+
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo', geoinfo);
+                woopra.track('go-to-rent-form', geoinfo);
+
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo-str', strgeoinfo);
+                woopra.track('go-to-rent-form-geo-str', strgeoinfo);
             });
 
             $("#rent-result").click(function() {
                 ga('send', 'event', 'button', 'click', 'go-to-rent-result');
-                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo', {geoip: jsonp, userAgent: $.userAgent});
-                woopra.track('go-to-rent-result', {
-                    ip: jsonp ? jsonp.ip: "ip unavailable",
-                    geoip: jsonp || "unavailable",
-                    userAgent: $.userAgent
-                });
+
+                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo', geoinfo);
+                woopra.track('go-to-rent-result', geoinfo);
+
+                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo-str', strgeoinfo);
+                woopra.track('go-to-rent-result-geo-str', strgeoinfo);
 
             });
 
