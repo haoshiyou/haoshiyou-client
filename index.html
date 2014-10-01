@@ -95,14 +95,18 @@
 
             $.getJSON("http://www.telize.com/geoip?callback=?",
                     function(json) {
-                        var geoinfo = $.extend({}, json, navigator.userAgent);
+                        geoinfo = json;
+                        geoinfo.gmapurl = "http://maps.google.com/?q=" + geoinfo.latitude + "," + geoinfo.longitude;
+                        geoinfo.userAgent = navigator.userAgent;
+
+
                         var strgeoinfo = JSON.stringify(strgeoinfo);
                         ga('send', 'event', 'button', 'click', 'load-geo', geoinfo);
                         woopra.track('load-geo', geoinfo);
 
                         ga('send', 'event', 'button', 'click', 'load-geo-str', strgeoinfo);
                         woopra.track('load-geo-str', strgeoinfo);
-                        console.log(geoinfo);
+                        //console.log(geoinfo);
 
                     }
             );
