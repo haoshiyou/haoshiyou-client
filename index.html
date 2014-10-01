@@ -86,22 +86,32 @@
             $.getJSON("http://www.telize.com/geoip?callback=?",
                     function(json) {
                         jsonp = json;
-                        ga('send', 'event', 'button', 'click', 'load-geo', {geoip: jsonp, userAgent: $.userAgent});
+
+                        ga('send', 'event', 'button', 'click', 'load-geo', {
+                            ip: jsonp ? jsonp.ip: "ip unavailable",
+                            geoip: JSON.stringify(jsonp) || "unavailable",
+                            userAgent: JSON.stringify(navigator.userAgent)
+                        });
                         woopra.track('load-geo', {
                             ip: jsonp ? jsonp.ip: "ip unavailable",
-                            geoip: jsonp || "unavailable",
-                            userAgent: $.userAgent
+                            geoip: JSON.stringify(jsonp) || "unavailable",
+                            userAgent: JSON.stringify(navigator.userAgent)
                         });
+
                     }
             );
 
             $("#rent-form").click(function() {
                 ga('send', 'event', 'button', 'click', 'go-to-rent-form');
-                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo', {geoip: jsonp, userAgent: $.userAgent});
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo', {
+                    ip: jsonp ? jsonp.ip: "ip unavailable",
+                    geoip: JSON.stringify(jsonp) || "unavailable",
+                    userAgent: JSON.stringify(navigator.userAgent)
+                });
                 woopra.track('go-to-rent-form', {
                     ip: jsonp ? jsonp.ip: "ip unavailable",
-                    geoip: jsonp || "unavailable",
-                    userAgent: $.userAgent
+                    geoip: JSON.stringify(jsonp) || "unavailable",
+                    userAgent: JSON.stringify(navigator.userAgent)
                 });
             });
 
