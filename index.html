@@ -89,8 +89,19 @@
                     }
             );
 
+            $("#rent-form").click(function() {
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form');
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo', {geoip: jsonp, userAgent: $.userAgent});
+                woopra.track('go-to-rent-form', {
+                    ip: jsonp ? jsonp.ip: "ip unavailable",
+                    geoip: jsonp || "unavailable",
+                    userAgent: $.userAgent
+                });
+            });
+
             $("#rent-result").click(function() {
                 ga('send', 'event', 'button', 'click', 'go-to-rent-result');
+                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo', {geoip: jsonp, userAgent: $.userAgent});
                 woopra.track('go-to-rent-result', {
                     ip: jsonp ? jsonp.ip: "ip unavailable",
                     geoip: jsonp || "unavailable",
@@ -99,14 +110,7 @@
 
             });
 
-            $("#rent-form").click(function() {
-                ga('send', 'event', 'button', 'click', 'go-to-rent-form');
-                woopra.track('go-to-rent-form', {
-                    ip: jsonp ? jsonp.ip: "ip unavailable",
-                    geoip: jsonp || "unavailable",
-                    userAgent: $.userAgent
-                });
-            });
+
         });
     });
 </script>
