@@ -86,6 +86,12 @@
             $.getJSON("http://www.telize.com/geoip?callback=?",
                     function(json) {
                         jsonp = json;
+                        ga('send', 'event', 'button', 'click', 'load-geo', {geoip: jsonp, userAgent: $.userAgent});
+                        woopra.track('load-geo', {
+                            ip: jsonp ? jsonp.ip: "ip unavailable",
+                            geoip: jsonp || "unavailable",
+                            userAgent: $.userAgent
+                        });
                     }
             );
 
