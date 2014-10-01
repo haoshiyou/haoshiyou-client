@@ -91,13 +91,13 @@
 <script>
     jQuery(function($) {
         $(document).ready(function() {
-            var geoinfo;
+            var geoinfo = {};
 
             $.getJSON("http://www.telize.com/geoip?callback=?",
-                    function(json) {
-                        geoinfo.ip = json.ip;
-                        geoinfo.city = json.city;
-                        geoinfo.country = json.country;
+                    function(jsonp) {
+                        geoinfo.ip = jsonp.ip;
+                        geoinfo.city = jsonp.city;
+                        geoinfo.country = jsonp.country;
                         geoinfo.gmapurl = "http://maps.google.com/?q=" + geoinfo.latitude + "," + geoinfo.longitude;
                         geoinfo.userAgent = navigator.userAgent;
 
