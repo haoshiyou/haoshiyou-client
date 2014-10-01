@@ -57,19 +57,6 @@
 </div>
 <script src="jquery-2.1.1.min.js"></script>
 <script src="jquery.cookie.js"></script>
-<script>
-    jQuery(function($) {
-        $(document).ready(function() {
-            $("#rent-result").click(function() {
-                ga('send', 'event', 'button', 'click', 'go-to-rent-result');
-            });
-
-            $("#rent-form").click(function() {
-                ga('send', 'event', 'button', 'click', 'go-to-rent-form');
-            });
-        });
-    });
-</script>
 <!-- Start of Woopra Code -->
 <script>
     (function () {
@@ -92,6 +79,38 @@
     woopra.track();
 </script>
 <!-- End of Woopra Code -->
+<script>
+    jQuery(function($) {
+        $(document).ready(function() {
+            var jsonp
+            $.getJSON("http://www.telize.com/geoip?callback=?",
+                    function(json) {
+                        jsonp = json;
+                    }
+            );
+
+            $("#rent-result").click(function() {
+                ga('send', 'event', 'button', 'click', 'go-to-rent-result');
+                woopra.track('go-to-rent-result', {
+                    ip: jsonp ? jsonp.ip: "ip unavailable",
+                    geoip: jsonp || "unavailable",
+                    userAgent: $.userAgent
+                });
+
+            });
+
+            $("#rent-form").click(function() {
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form');
+                woopra.track('go-to-rent-form', {
+                    ip: jsonp ? jsonp.ip: "ip unavailable",
+                    geoip: jsonp || "unavailable",
+                    userAgent: $.userAgent
+                });
+            });
+        });
+    });
+</script>
+
 
 <!-- Google Tag Manager -->
 <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PVD5TJ"
