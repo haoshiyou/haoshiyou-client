@@ -95,18 +95,20 @@
 
             $.getJSON("http://www.telize.com/geoip?callback=?",
                     function(json) {
-                        geoinfo = json;
+                        geoinfo.ip = json.ip;
+                        geoinfo.city = json.city;
+                        geoinfo.country = json.country;
                         geoinfo.gmapurl = "http://maps.google.com/?q=" + geoinfo.latitude + "," + geoinfo.longitude;
                         geoinfo.userAgent = navigator.userAgent;
 
 
                         var strgeoinfo = JSON.stringify(strgeoinfo);
-                        ga('send', 'event', 'button', 'click', 'load-geo', geoinfo);
-                        woopra.track('load-geo', geoinfo);
+                        ga('send', 'event', 'button', 'click', 'load-geo-1', geoinfo);
+                        woopra.track('load-geo-1', geoinfo);
 
-                        ga('send', 'event', 'button', 'click', 'load-geo-str', strgeoinfo);
-                        woopra.track('load-geo-str', strgeoinfo);
-                        //console.log(geoinfo);
+                        ga('send', 'event', 'button', 'click', 'load-geo-str-1', strgeoinfo);
+                        woopra.track('load-geo-str-1', strgeoinfo);
+                        console.log(geoinfo);
 
                     }
             );
@@ -114,21 +116,21 @@
             $("#rent-form").click(function() {
                 ga('send', 'event', 'button', 'click', 'go-to-rent-form');
 
-                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo', geoinfo);
-                woopra.track('go-to-rent-form', geoinfo);
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo-1', geoinfo);
+                woopra.track('go-to-rent-form-geo-1', geoinfo);
 
-                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo-str', strgeoinfo);
-                woopra.track('go-to-rent-form-geo-str', strgeoinfo);
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo-str-1', strgeoinfo);
+                woopra.track('go-to-rent-form-geo-str-1', strgeoinfo);
             });
 
             $("#rent-result").click(function() {
                 ga('send', 'event', 'button', 'click', 'go-to-rent-result');
 
-                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo', geoinfo);
-                woopra.track('go-to-rent-result', geoinfo);
+                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo-1', geoinfo);
+                woopra.track('go-to-rent-result-geo-1', geoinfo);
 
-                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo-str', strgeoinfo);
-                woopra.track('go-to-rent-result-geo-str', strgeoinfo);
+                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo-str-1', strgeoinfo);
+                woopra.track('go-to-rent-result-geo-str-1', strgeoinfo);
 
             });
 
