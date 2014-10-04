@@ -22,3 +22,11 @@
 .zzn-content {
     text-align: right;
 }
+
+/* Overriding bootstrap */
+.container {
+    padding-right: 0px; /*15px in bootstrap.css*/
+    padding-left: 0px;  /*idem*/
+    margin-right: auto;
+    margin-left: auto;
+}
