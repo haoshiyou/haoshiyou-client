@@ -30,3 +30,8 @@
     margin-right: auto;
     margin-left: auto;
 }
+
+.outwrapper {
+    margin-left: -15px;
+    margin-right: -15px;
+}
