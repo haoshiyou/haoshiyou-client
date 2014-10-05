@@ -65,14 +65,7 @@
                     <td colspan="2"><i class="fa fa-user"></i> 个人介绍</td>
                 </tr>
                 <tr>
-                    <td id="value_grjs" colspan="2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                        in
-                        voluptate velit esse cillum dolore eu fugiat. cillum dolore eu fugiat nulla pariatur. olore
-                        magna
-                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat.
+                    <td id="value_grjs" colspan="2">
                     </td>
                 </tr>
                 <tr>
@@ -87,33 +80,10 @@
     </div>
     </div>
 </div>
-<!--    <div class="row">
-        <div class="col-xs-6 col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-3 col-lg-2 col-lg-offset-4 ">需求</div>
-        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 ">求租</div>
-    </div>
-    <div class="row">
-        <div class="col-xs-6 col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-3 col-lg-2 col-lg-offset-4 ">起始时间</div>
-        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 ">2014-11-01</div>
-    </div>
-    <div class="row">
-        <div class="col-xs-6 col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-3 col-lg-2 col-lg-offset-4 ">位置</div>
-        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 ">Sunnyvale</div>
-    </div>
-    <div class="row">
-        <div class="col-xs-6 col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-3 col-lg-2 col-lg-offset-4 ">预期价格</div>
-        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 ">1000</div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-offset-1 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 ">个人介绍及需求</div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-offset-1 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 "><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.  cillum dolore eu fugiat nulla pariatur. olore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            </div>
-    </div>
--->
 </div>
 <script src="jquery-2.1.1.min.js"></script>
 <script src="jquery.cookie.js"></script>
+<script src="purl.js"></script>
 <!-- Start of Woopra Code -->
 <script>
     (function () {
@@ -174,17 +144,20 @@
               wxId: "gsx$微信号"
             };
 
-
             var row = 1;
             $.get(url, function(data) {
-                var getCell = function(row, col) {
-                    return data.feed.entry[row][columns[col]]["$t"];
+                var refresh = function(row) {
+                    var getCell = function(row, col) {
+                        return data.feed.entry[row][columns[col]]["$t"];
+                    };
+
+                    for (var col in columns) {
+                        $("#value_" + col).text(getCell(row, col));
+                    }
                 };
-
-                for (var col in columns) {
-                    $("#value_" + col).text(getCell(row, col));
-                }
-
+                var row = purl().param("row");
+                console.log(row);
+                refresh(row || 0);
             });
 
         });
