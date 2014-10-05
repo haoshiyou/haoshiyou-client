@@ -47,25 +47,25 @@
             <table class="table ">
                 <tr>
                     <td><i class="fa fa-crosshairs"></i> 需求</td>
-                    <td class="zzn-content">求租</td>
+                    <td id="value_xq" class="zzn-content">求租</td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-clock-o"></i> 起始时间</td>
-                    <td class="zzn-content">2014-11-01</td>
+                    <td id="value_qssj" class="zzn-content">2014-11-01</td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-location-arrow"></i> 位置</td>
-                    <td class="zzn-content">SUNNYVALE</td>
+                    <td id="value_wz" class="zzn-content">SUNNYVALE</td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-calculator"></i> 预期价格</td>
-                    <td class="zzn-content">1000</td>
+                    <td id="value_yqjg" class="zzn-content">1000</td>
                 </tr>
                 <tr>
                     <td colspan="2"><i class="fa fa-user"></i> 个人介绍</td>
                 </tr>
                 <tr>
-                    <td colspan="2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                    <td id="value_grjs" colspan="2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
                         ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
                         in
@@ -157,11 +157,39 @@
                     }
             );
 
+            $.ajaxPrefilter(function(options) {
+                if(options.crossDomain && jQuery.support.cors) {
+                    var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+                    options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
+                    //options.url = "http://cors.corsproxy.io/url=" + options.url;
+                }
+            });
+            var url = "https://spreadsheets.google.com/feeds/list/1vzugrYLpgXmFODqysSx331Lhq8LpDQGJ4sQtwSMrtV4/1/public/values?alt=json";
+            var columns = {
+              xq: "gsx$需求类别",
+              qssj: "gsx$预计起始日期超过这个日期本条信息失效",
+              wz: "gsx$位置",
+              yqjg: "gsx$预期价格美元每月",
+              grjs: "gsx$租房需求介绍和自我介绍",
+              wxId: "gsx$微信号"
+            };
+
+
+            var row = 1;
+            $.get(url, function(data) {
+                var getCell = function(row, col) {
+                    return data.feed.entry[row][columns[col]]["$t"];
+                };
+
+                for (var col in columns) {
+                    $("#value_" + col).text(getCell(row, col));
+                }
+
+            });
 
         });
     });
 </script>
-
 
 <!-- Google Tag Manager -->
 <noscript>
