@@ -41,39 +41,44 @@
             <!-- Default panel contents -->
             <div class="panel-heading">
                 <span id="value_panel_title" class="pull">手机版湾区租房信息互助表</span>
-                <span class="pull-right"><i class="fa fa-search"></i></span>
+                <span class="pull-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-search"></i></span>
             </div>
 
             <table class="table ">
                 <tr>
                     <td><i class="fa fa-weixin"></i> 微信号</td>
-                    <td id="value_wxId" class="zzn-content">xinbenlv</td>
+                    <td id="value_wxId" class="zzn-content"></td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-mail-forward"></i> 电话邮箱</td>
+                    <td id="value_dhyx" class="zzn-content"></td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-crosshairs"></i> 需求</td>
-                    <td id="value_xq" class="zzn-content">求租</td>
+                    <td id="value_xq" class="zzn-content"></td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-clock-o"></i> 起始时间</td>
-                    <td id="value_qssj" class="zzn-content">2014-11-01</td>
+                    <td id="value_qssj" class="zzn-content"></td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-location-arrow"></i> 位置</td>
-                    <td id="value_wz" class="zzn-content">SUNNYVALE</td>
+                    <td id="value_wz" class="zzn-content"></td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-calculator"></i> 预期价格</td>
-                    <td id="value_yqjg" class="zzn-content">1000</td>
+                    <td id="value_yqjg" class="zzn-content"></td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-child"></i> 性别</td>
-                    <td id="value_xb" class="zzn-content">Male</td>
+                    <td id="value_xb" class="zzn-content"></td>
                 </tr>
                 <tr>
                     <td colspan="2"><i class="fa fa-user"></i> 个人介绍</td>
                 </tr>
                 <tr>
-                    <td id="value_grjs" colspan="2">
+                    <td  colspan="2">
+                        <p><span id="value_grjs"></span></p>
                     </td>
                 </tr>
                 <tr>
@@ -91,10 +96,36 @@
         </div>
     </div>
     </div>
+
 </div>
+<div class="height-100px"></div>
+<h5 style="text-align: center">
+    maintained by <a href="//www.zzn.im">Zainan Zhou</a>
+    <a href="https://www.linkedin.com/in/zainanvictorzhou/"><i class="fa fa-linkedin-square"></i></a>
+</h5>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">敬请期待</h4>
+            </div>
+            <div class="modal-body">
+                <p>搜索功能尚在开发中 ：）</p>
+                <p>点击<a href="http://rent.zzn.im">这里</a>填表或者看表</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="jquery-2.1.1.min.js"></script>
 <script src="jquery.cookie.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="purl.js"></script>
 <!-- Start of Woopra Code -->
 <script>
@@ -154,7 +185,8 @@
               yqjg: "gsx$预期价格美元每月",
               grjs: "gsx$租房需求介绍和自我介绍",
               wxId: "gsx$微信号",
-              xb: "gsx$性别"
+              xb: "gsx$性别",
+              dhyx: "gsx$其他联系方式电话邮箱等"
             };
             var setLoad = function() {
                 for (var col in columns) {
@@ -182,7 +214,6 @@
                     };
 
                     for (var col in columns) {
-                        console.log(row);
                         $("#value_" + col).text(getCell(row, col));
                     }
                     $("#value_panel_title").text("(" + (row) + "/" + data.feed.entry.length + ") 湾区租房互助信息");
@@ -198,11 +229,11 @@
                     refreshPage(pageRow + currentIndex);
                 });
                 $("#btn_last").click(function(){
-                    currentIndex += data.feed.entry.length - row - 1;
+                    currentIndex = data.feed.entry.length - pageRow - 1;
                     refreshPage(pageRow + currentIndex);
                 });
                 $("#btn_first").click(function(){
-                    currentIndex += 0 - row;
+                    currentIndex = 0 - pageRow;
                     refreshPage(pageRow + currentIndex);
                 });
 
