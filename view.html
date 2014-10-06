@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>安得广厦——靠谱的房租给靠谱的人</title>
+    <title></title>
 
     <!-- Start of Google Analytics -->
     <script>
@@ -40,11 +40,15 @@
         <div class="panel panel-primary ">
             <!-- Default panel contents -->
             <div class="panel-heading">
-                <span class="pull">安得广厦——靠谱的房租给靠谱的人</span>
+                <span id="value_panel_title" class="pull">手机版湾区租房信息互助表</span>
                 <span class="pull-right"><i class="fa fa-search"></i></span>
             </div>
 
             <table class="table ">
+                <tr>
+                    <td><i class="fa fa-weixin"></i> 微信号</td>
+                    <td id="value_wxId" class="zzn-content">xinbenlv</td>
+                </tr>
                 <tr>
                     <td><i class="fa fa-crosshairs"></i> 需求</td>
                     <td id="value_xq" class="zzn-content">求租</td>
@@ -62,6 +66,10 @@
                     <td id="value_yqjg" class="zzn-content">1000</td>
                 </tr>
                 <tr>
+                    <td><i class="fa fa-child"></i> 性别</td>
+                    <td id="value_xb" class="zzn-content">Male</td>
+                </tr>
+                <tr>
                     <td colspan="2"><i class="fa fa-user"></i> 个人介绍</td>
                 </tr>
                 <tr>
@@ -70,9 +78,13 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div class="btn btn-success col-xs-6 col-sm-6 col-md-6 col-lg-6"><i class="fa fa-share-alt"></i> 分享</div>
-                        <div class="btn btn-primary col-xs-6 col-sm-6 col-md-6 col-lg-6"><i class="fa fa-weixin"></i> 联系</div>
-                        <!-- TODO(zzn) add contact information -->
+                        <button id="btn_first" class="btn btn-success col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="fa fa-fast-backward"></i> 最旧</button>
+
+                        <button id="btn_prev" class="btn btn-success col-xs-3 col-sm-3 col-md-3 col-lg-3"><i class="fa fa-angle-left"></i> 上一个</button>
+
+                        <button id="btn_last"  class="btn btn-primary col-xs-3 col-sm-3 col-md-3 col-lg-3 pull-right">最新 <i class="fa fa-fast-forward"></i></button>
+                        <button id="btn_next"  class="btn btn-primary col-xs-3 col-sm-3 col-md-3 col-lg-3 pull-right">下一个 <i class="fa fa-angle-right"></i></button>
+
                     </td>
                 </tr>
             </table>
@@ -141,23 +153,60 @@
               wz: "gsx$位置",
               yqjg: "gsx$预期价格美元每月",
               grjs: "gsx$租房需求介绍和自我介绍",
-              wxId: "gsx$微信号"
+              wxId: "gsx$微信号",
+              xb: "gsx$性别"
+            };
+            var setLoad = function() {
+                for (var col in columns) {
+                    $("#value_" + col).text("");
+                }
             };
 
             var row = 1;
+            setLoad();
             $.get(url, function(data) {
-                var refresh = function(row) {
+                var pageRow = parseInt(purl().param("row"));
+                var currentIndex = 0;
+                var refreshPage = function(row) {
+                    $("#btn_next").show();
+                    $("#btn_prev").show();
+                    if (row == data.feed.entry.length-1) {
+                        $("#btn_next").hide();
+                    } else if (row == 0) {
+                        $("#btn_prev").hide();
+                    } else if(row < 0 || row >= data.feed.entry.length) {
+                        //TODO(zzn) handle error URL
+                    }
                     var getCell = function(row, col) {
-                        return data.feed.entry[row][columns[col]]["$t"];
+                        return data.feed.entry[row][columns[col]]["$t"] || "N/A";
                     };
 
                     for (var col in columns) {
+                        console.log(row);
                         $("#value_" + col).text(getCell(row, col));
                     }
+                    $("#value_panel_title").text("(" + row + 1 + "/" + data.feed.entry.length + ") 湾区租房互助信息");
+                    $("#value_title").text(data.feed.entry[row][columns.xq]["$t"] + "-" + data.feed.entry[row][columns.wz]["$t"]);
+
                 };
-                var row = purl().param("row");
-                console.log(row);
-                refresh(row || 0);
+                $("#btn_prev").click(function(){
+                    currentIndex -= 1;
+                    refreshPage(pageRow + currentIndex);
+                });
+                $("#btn_next").click(function(){
+                    currentIndex += 1;
+                    refreshPage(pageRow + currentIndex);
+                });
+                $("#btn_last").click(function(){
+                    currentIndex += data.feed.entry.length - row - 1;
+                    refreshPage(pageRow + currentIndex);
+                });
+                $("#btn_first").click(function(){
+                    currentIndex += 0 - row;
+                    refreshPage(pageRow + currentIndex);
+                });
+
+                refreshPage(pageRow + currentIndex);
             });
 
         });
