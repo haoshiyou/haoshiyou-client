@@ -127,6 +127,8 @@
 <script src="jquery.cookie.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="purl.js"></script>
+<script src="//www.parsecdn.com/js/parse-1.3.0.min.js"></script>
+<script src="guid.js"></script>
 <!-- Start of Woopra Code -->
 <script>
     (function () {
@@ -153,6 +155,27 @@
 <script>
     jQuery(function ($) {
         $(document).ready(function () {
+            Parse.initialize("RPjt04MBMl3rzzEKBGKUpP7KHFXAsomtDbr9cS0y", "DSqWg9xElC6mI1PwtPWzzeIPQYUXPGTOC66nT82h");
+
+            var myId = $.cookie("myId") || guid();
+            $.cookie("myId", myId);
+            var parseTrack = function(action, data) {
+                var ParseTracking = Parse.Object.extend("ParseTracking");
+                var parseTracking = new ParseTracking();
+                parseTracking.set("client_id", myId);
+                parseTracking.set("location", purl().attr("source"));
+                parseTracking.set("userAgent", navigator.userAgent);
+                parseTracking.set("timestamp", new Date());
+                parseTracking.set("action", action);
+                parseTracking.set("data", data);
+                parseTracking.save().then(function() {
+                    console.log("saved data");
+                });
+            };
+
+            // Init view
+            parseTrack("view");
+
             var geoinfo = {};
 
             $.getJSON("http://www.telize.com/geoip?callback=?",
@@ -161,11 +184,16 @@
                         geoinfo.city = jsonp.city;
                         geoinfo.country = jsonp.country;
                         geoinfo.gmapurl = "http://maps.google.com/?q=" + geoinfo.latitude + "," + geoinfo.longitude;
-                        geoinfo.userAgent = navigator.userAgent;
 
                         var strgeoinfo = JSON.stringify(strgeoinfo);
-                        ga('send', 'event', 'button', 'click', 'view',{ "strgeoinfo": strgeoinfo});
-                        woopra.track('view', { "strgeoinfo": strgeoinfo});
+                        ga('send', 'event', 'button', 'click', 'view-geo',{ "strgeoinfo": strgeoinfo});
+                        woopra.track('view-geo', { "strgeoinfo": strgeoinfo});
+                        parseTrack("view-geo", {
+                            strgeoinfo: strgeoinfo,
+                            ip: geoinfo.ip,
+                            city: geoinfo.city,
+                            country: geoinfo.country
+                        })
 
                     }
             );
