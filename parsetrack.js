@@ -2,10 +2,21 @@ Parse.initialize("RPjt04MBMl3rzzEKBGKUpP7KHFXAsomtDbr9cS0y", "DSqWg9xElC6mI1PwtP
 
 var myId = $.cookie("myId") || guid();
 $.cookie("myId", myId);
+var isDebug = function(id) {
+    if (id === "12d506b1-5d1c-6d4b-10dc-0789815264d8" ||
+        id === "zzn-mac" ||
+        id === "zzn-mac-local" ||
+        id === "eb56ba79-92e5-9fd4-2918-930a1bad4943") {
+        return true
+    } else {
+        return false;
+    }
+}
 var parseTrack = function(action, data) {
     var ParseTracking = Parse.Object.extend("ParseTracking");
     var parseTracking = new ParseTracking();
     parseTracking.set("client_id", myId);
+    parseTracking.set("isDebug", isDebug(myId));
     parseTracking.set("location", purl().attr("source"));
     parseTracking.set("userAgent", navigator.userAgent);
     parseTracking.set("timestamp", new Date());
