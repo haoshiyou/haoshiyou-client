@@ -62,6 +62,10 @@
 
 <script src="jquery-2.1.1.min.js"></script>
 <script src="jquery.cookie.js"></script>
+<script src="purl.js"></script>
+<script src="//www.parsecdn.com/js/parse-1.3.0.min.js"></script>
+<script src="guid.js"></script>
+<script src="parsetrack.js"></script>
 <!-- Start of Woopra Code -->
 <script>
     (function () {
@@ -89,6 +93,8 @@
     jQuery(function($) {
         $(document).ready(function() {
             var geoinfo = {};
+            // Init view
+            parseTrack("view");
 
             $.getJSON("http://www.telize.com/geoip?callback=?",
                     function(jsonp) {
@@ -101,6 +107,12 @@
                         var strgeoinfo = JSON.stringify(strgeoinfo);
                         ga('send', 'event', 'button', 'click', 'home',{ "strgeoinfo": strgeoinfo});
                         woopra.track('home', { "strgeoinfo": strgeoinfo});
+                        parseTrack("view-geo", {
+                            strgeoinfo: strgeoinfo,
+                            ip: geoinfo.ip,
+                            city: geoinfo.city,
+                            country: geoinfo.country
+                        });
 
                     }
             );
@@ -110,6 +122,12 @@
 
                 ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo-str',{ "strgeoinfo": strgeoinfo});
                 woopra.track('go-to-rent-form-geo-str', { "strgeoinfo": strgeoinfo});
+                parseTrack("go-to-rent-form-geo", {
+                    strgeoinfo: strgeoinfo,
+                    ip: geoinfo.ip,
+                    city: geoinfo.city,
+                    country: geoinfo.country
+                });
             });
 
             $("#rent-result").click(function() {
@@ -117,7 +135,12 @@
 
                 ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo-str',{ "strgeoinfo": strgeoinfo});
                 woopra.track('go-to-rent-result-geo-str', { "strgeoinfo": strgeoinfo});
-
+                parseTrack("go-to-rent-result-geo", {
+                    strgeoinfo: strgeoinfo,
+                    ip: geoinfo.ip,
+                    city: geoinfo.city,
+                    country: geoinfo.country
+                });
             });
 
 
