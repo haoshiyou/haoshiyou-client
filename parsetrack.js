@@ -6,7 +6,8 @@ var isDebug = function(id) {
     if (id === "12d506b1-5d1c-6d4b-10dc-0789815264d8" ||
         id === "zzn-mac" ||
         id === "zzn-mac-local" ||
-        id === "eb56ba79-92e5-9fd4-2918-930a1bad4943") {
+        id === "eb56ba79-92e5-9fd4-2918-930a1bad4943" ||
+        id === "b9640001-2f59-f47f-d36a-b8178e5dfb5a") {
         return true
     } else {
         return false;
