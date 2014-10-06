@@ -133,8 +133,8 @@
                         geoinfo.userAgent = navigator.userAgent;
 
                         var strgeoinfo = JSON.stringify(strgeoinfo);
-                        ga('send', 'event', 'button', 'click', 'view', strgeoinfo);
-                        woopra.track('view', strgeoinfo);
+                        ga('send', 'event', 'button', 'click', 'view',{ "strgeoinfo": strgeoinfo});
+                        woopra.track('view', { "strgeoinfo": strgeoinfo});
 
                     }
             );
@@ -185,7 +185,7 @@
                         console.log(row);
                         $("#value_" + col).text(getCell(row, col));
                     }
-                    $("#value_panel_title").text("(" + row + 1 + "/" + data.feed.entry.length + ") 湾区租房互助信息");
+                    $("#value_panel_title").text("(" + (row) + "/" + data.feed.entry.length + ") 湾区租房互助信息");
                     $("#value_title").text(data.feed.entry[row][columns.xq]["$t"] + "-" + data.feed.entry[row][columns.wz]["$t"]);
 
                 };
