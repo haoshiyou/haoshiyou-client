@@ -95,7 +95,6 @@
             var geoinfo = {};
             // Init view
             parseTrack("view");
-
             $.getJSON("http://www.telize.com/geoip?callback=?",
                     function(jsonp) {
                         geoinfo.ip = jsonp.ip;

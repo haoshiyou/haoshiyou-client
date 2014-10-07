@@ -10,4 +10,4 @@
 
 ## Developer
 
-Zainan Victor Zhou<zzn@zzn.im>
+Zainan Victor Zhou <zzn@zzn.im>
