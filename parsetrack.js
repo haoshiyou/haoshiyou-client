@@ -3,7 +3,7 @@ Parse.initialize("RPjt04MBMl3rzzEKBGKUpP7KHFXAsomtDbr9cS0y", "DSqWg9xElC6mI1PwtP
 var myId = $.cookie("myId") || guid();
 $.cookie("myId", myId);
 var isDebug = function(id) {
-    if (purl().param("debug") == 1) {
+    if ($.url().param("debug") == 1) {
         console.log("url param is debug.");
         return true;
     }
@@ -25,22 +25,21 @@ var parseTrack = function(action, data) {
     var timestamp = new Date();
     parseTracking.set("client_id", myId);
     parseTracking.set("isDebug", debug);
-    parseTracking.set("location", purl().attr("source"));
+    parseTracking.set("location", $.url().attr("source"));
     parseTracking.set("userAgent", navigator.userAgent);
     parseTracking.set("timestamp", timestamp);
     parseTracking.set("action", action);
     parseTracking.set("data", data);
     parseTracking.save().then(function() {
-        console.log("saved data");
+        // Do Nothing
     });
 
     Parse.Analytics.track(action, {
         client_id: myId,
         isDebug: debug.toString(),
-        location: purl().attr("source"),
+        location: $.url().attr("source"),
         userAgent: navigator.userAgent,
-        timestamp: timestamp.toUTCString(),
+        timestamp: timestamp.toUTCString()
         //data: JSON.stringify(data)
     });
 };
-console.log("parse initialized");
