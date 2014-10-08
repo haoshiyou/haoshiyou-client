@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>湾区租房互助群</title>
+    <base target="_blank" />
+
+    <!-- Start of Google Analytics -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-55311687-1', 'auto');
+        ga('require', 'displayfeatures');
+        ga('send', 'pageview');
+
+    </script>
+    <!-- End of Google Analytics -->
+
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="font-awesome-4.2.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="style.css"/>
+
+</head>
+<body>
+<div class="container">
+    <h1 class="group-qr-code-caption">湾区租房互助群 </h1>
+    <div class="row">
+    <div class="">
+        <img class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4" src="group-qrcode.jpg" alt=""/>
+    </div>
+    </div>
+    <h3 class="group-qr-code-caption">入群请扫描QR-Code </h3>
+    <div class="row">
+    <a id="rent-form" class="link-btn col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 btn btn-success"
+       href="http://rent-form.zzn.im">
+        我要填表，让别人看到我在招租求租
+    </a>
+    </div>
+    <div class="row">
+    <a id="rent-result" class="link-btn col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 btn btn-success"
+       href="http://rent-result.zzn.im">
+        直接看谁正在出租求租
+    </a>
+    </div>
+    <div class="height-100px"></div>
+    <h5 style="text-align: center">
+        maintained by <a href="//me.zzn.im">Zainan Zhou</a>
+        <a href="https://www.linkedin.com/in/zainanvictorzhou/"><i class="fa fa-linkedin-square"></i></a>
+    </h5>
+
+</div>
+
+<script src="jquery-2.1.1.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<script src="purl.js"></script>
+<script src="//www.parsecdn.com/js/parse-1.3.0.min.js"></script>
+<script src="guid.js"></script>
+<script src="parsetrack.js"></script>
+<!-- Start of Woopra Code -->
+<script>
+    (function () {
+        var t, i, e, n = window, o = document, a = arguments, s = "script", r = ["config", "track", "identify", "visit", "push", "call", "trackForm", "trackClick"], c = function () {
+            var t, i = this;
+            for (i._e = [], t = 0; r.length > t; t++)(function (t) {
+                i[t] = function () {
+                    return i._e.push([t].concat(Array.prototype.slice.call(arguments, 0))), i
+                }
+            })(r[t])
+        };
+        for (n._w = n._w || {}, t = 0; a.length > t; t++)n._w[a[t]] = n[a[t]] = n[a[t]] || new c;
+        i = o.createElement(s), i.async = 1, i.src = "//static.woopra.com/js/w.js", e = o.getElementsByTagName(s)[0], e.parentNode.insertBefore(i, e)
+    })("woopra");
+
+    woopra.config({
+        domain: 'rent.zzn.im'
+    });
+
+    woopra.track();
+</script>
+<!-- End of Woopra Code -->
+
+<script>
+    jQuery(function($) {
+        $(document).ready(function() {
+            var geoinfo = {};
+            // Init view
+            parseTrack("view");
+            $.getJSON("http://www.telize.com/geoip?callback=?",
+                    function(jsonp) {
+                        geoinfo.ip = jsonp.ip;
+                        geoinfo.city = jsonp.city;
+                        geoinfo.country = jsonp.country;
+                        geoinfo.gmapurl = "http://maps.google.com/?q=" + geoinfo.latitude + "," + geoinfo.longitude;
+                        geoinfo.userAgent = navigator.userAgent;
+
+                        var strgeoinfo = JSON.stringify(strgeoinfo);
+                        ga('send', 'event', 'button', 'click', 'home',{ "strgeoinfo": strgeoinfo});
+                        woopra.track('home', { "strgeoinfo": strgeoinfo});
+                        parseTrack("view-geo", {
+                            strgeoinfo: strgeoinfo,
+                            ip: geoinfo.ip,
+                            city: geoinfo.city,
+                            country: geoinfo.country
+                        });
+
+                    }
+            );
+
+            $("#rent-form").click(function() {
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form');
+
+                ga('send', 'event', 'button', 'click', 'go-to-rent-form-geo-str',{ "strgeoinfo": strgeoinfo});
+                woopra.track('go-to-rent-form-geo-str', { "strgeoinfo": strgeoinfo});
+                parseTrack("go-to-rent-form-geo", {
+                    strgeoinfo: strgeoinfo,
+                    ip: geoinfo.ip,
+                    city: geoinfo.city,
+                    country: geoinfo.country
+                });
+            });
+
+            $("#rent-result").click(function() {
+                ga('send', 'event', 'button', 'click', 'go-to-rent-result');
+
+                ga('send', 'event', 'button', 'click', 'go-to-rent-result-geo-str',{ "strgeoinfo": strgeoinfo});
+                woopra.track('go-to-rent-result-geo-str', { "strgeoinfo": strgeoinfo});
+                parseTrack("go-to-rent-result-geo", {
+                    strgeoinfo: strgeoinfo,
+                    ip: geoinfo.ip,
+                    city: geoinfo.city,
+                    country: geoinfo.country
+                });
+            });
+
+
+        });
+    });
+</script>
+
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PVD5TJ"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PVD5TJ');</script>
+<!-- End Google Tag Manager -->
+
+</body>
+</html>
