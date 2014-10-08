@@ -2,6 +2,9 @@
     height: 30px;
 }
 
+.height-60px {
+    height: 60px;
+}
 .height-100px {
     height: 100px;
 }
@@ -63,3 +66,4 @@ table {
     background-color: #f0ad4e;
     background-image: none;
 }
+
