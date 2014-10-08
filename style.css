@@ -30,3 +30,36 @@
     margin-right: auto;
     margin-left: auto;
 }
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.zzn-panel-footer-button {
+    margin-right: 20px;
+}
+.panel {
+    margin-top: 20px;
+}
+
+.panel-success .panel-heading {
+    color: white;
+    background-color: #5cb85c;
+    background-image: none;
+}
+
+.fa-link {
+    color: white
+}
+
+.panel-primary .panel-heading {
+    color: white;
+    background-color: #428bca;
+    background-image: none;
+}
+.panel-warning .panel-heading {
+    color: white;
+    background-color: #f0ad4e;
+    background-image: none;
+}
