@@ -100,7 +100,6 @@
                     <td ><i class="fa fa-weixin"></i> 微信号</td>
                     <td class="zzn-content">
                         <span id="value_wxId"> </span>
-                        <a id="value_wxId_add" href=""><i class="fa fa-plus"></i></a>
                         <button class="btn btn-success btn-xs" id="btn_show_wxId">显示 <i class="glyphicon glyphicon-eye-open"></i></button>
                     </td>
                 </tr>
@@ -186,7 +185,7 @@
 <script src="purl.js"></script>
 <script src="//www.parsecdn.com/js/parse-1.3.0.min.js"></script>
 <script src="guid.js"></script>
-<script src="parsetrack.js"></script>
+<script src="zHelper.js"></script>
 <!-- Start of Woopra Code -->
 <script>
     (function () {
@@ -215,29 +214,44 @@
         $(document).ready(function () {
             var template = $("#value_panel_template").clone();
             var parent = $("#value_panel_parent").empty();
+            Parse.initialize("RPjt04MBMl3rzzEKBGKUpP7KHFXAsomtDbr9cS0y", "DSqWg9xElC6mI1PwtPWzzeIPQYUXPGTOC66nT82h");
+            zHelper.trackerFunctions["woopra"] = function(action, dimensions) {
+                woopra.track(action, dimensions);
+            };
+            zHelper.trackerFunctions["ga"] = function(action, dimensions) {
+                ga('send', 'event', 'button', 'click', action, dimensions);
+            };
+            zHelper.trackerFunctions["ga"] = function(action, dimensions) {
+                ga('send', 'event', 'button', 'click', action, dimensions);
+            };
+            zHelper.trackerFunctions["parse"] = function(action, dimensions) {
+                var ParseTracking = Parse.Object.extend("ParseTracking");
+                var parseTracking = new ParseTracking();
+                for(var key in dimensions) {
+                    parseTracking.set(key, dimensions[key]);
+                }
+                parseTracking.save();
+            };
+            zHelper.loggerFunctions["parse"] = function(msg, level, data) {
+                var ParseLogging = Parse.Object.extend("ParseLogging");
+                var parseLogging = new ParseLogging();
+                parseLogging.set("msg", msg);
+                parseLogging.set("level", level);
+                for(var key in data) {
+                    parseLogging.set(key, data[key]);
+                }
+                parseLogging.save();
+            };
             // Init view
-            parseTrack("view");
-
-            var geoinfo = {};
+            zHelper.log("track view");
+            zHelper.track("view");
 
             $.getJSON("http://www.telize.com/geoip?callback=?",
                     function (jsonp) {
-
-                        geoinfo.ip = jsonp.ip;
-                        geoinfo.city = jsonp.city;
-                        geoinfo.country = jsonp.country;
-                        geoinfo.gmapurl = "http://maps.google.com/?q=" + geoinfo.latitude + "," + geoinfo.longitude;
-
-                        var strgeoinfo = JSON.stringify(strgeoinfo);
-                        ga('send', 'event', 'button', 'click', 'view-geo',{ "strgeoinfo": strgeoinfo});
-                        woopra.track('view-geo', { "strgeoinfo": strgeoinfo});
-                        parseTrack("view-geo", {
-                            strgeoinfo: strgeoinfo,
-                            ip: geoinfo.ip,
-                            city: geoinfo.city,
-                            country: geoinfo.country
-                        });
-
+                        zHelper.geoInfo.ip = jsonp.ip;
+                        zHelper.geoInfo.city = jsonp.city;
+                        zHelper.geoInfo.country = jsonp.country;
+                        zHelper.track("loaded-geo-info");
                     }
             );
 
@@ -274,7 +288,6 @@
                     var child = template.clone();
                     var xq = data.feed.entry[row][columns["xq"]]["$t"];
                     child.find("#value_wxId").hide();
-                    child.find("#value_wxId_add").hide();
                     child.find("#value_dhyx").hide();
 
                     child.find(".detail").hide();
@@ -298,30 +311,17 @@
                     child.find("#btn_show_wxId").click(function(){
                         child.find("#btn_show_wxId").hide();
                         child.find("#value_wxId").show();
-                        child.find("#value_wxId_add").show();
-                        parseTrack("show-wechat-id", {
-                            ip: geoinfo.ip,
-                            city: geoinfo.city,
-                            country: geoinfo.country
-                        });
+                        zHelper.track("show-wechat-id", {pageRow: pageRow});
                     });
                     child.find("#btn_show_dhyx").click(function(){
                         child.find("#btn_show_dhyx").hide();
                         child.find("#value_dhyx").show();
-                        parseTrack("show-dhyx", {
-                            ip: geoinfo.ip,
-                            city: geoinfo.city,
-                            country: geoinfo.country
-                        });
+                        zHelper.track("show-dhyx", {pageRow: pageRow});
                     });
                     child.find("#btn_show_detail").click(function(){
                         child.find("#btn_show_detail").hide();
                         child.find(".detail").show();
-                        parseTrack("show-detail", {
-                            ip: geoinfo.ip,
-                            city: geoinfo.city,
-                            country: geoinfo.country
-                        });
+                        zHelper.track("show-detail", {pageRow: pageRow});
                     });
                     var rowLink = $.url().attr("path") + "?" + $.param($.extend($.url().param(), {"row": row}));
                     child.find("#row_link").attr("href", rowLink);
