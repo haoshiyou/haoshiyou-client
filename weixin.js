@@ -1,7 +1,9 @@
 // 所有功能必须包含在 WeixinApi.ready 中进行
 (function(zHelper) {
-    WeixinApi.ready(function (Api) {
 
+    zHelper.log("Wait for WeixinApi.ready!");
+    WeixinApi.ready(function (Api) {
+        zHelper.log("WeixinApi.ready!");
         // 微信分享的数据
         var wxData = {
             "imgUrl": 'http://www.baidufe.com/fe/blog/static/img/weixin-qrcode-2.jpg',
