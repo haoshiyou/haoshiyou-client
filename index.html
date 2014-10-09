@@ -46,16 +46,9 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-nav navbar-right">
-                <!--<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">类别 <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/view.html?filter=出租">出租</a></li>
-                        <li><a href="/view.html?filter=求租">求租</a></li>
-                        <li><a href="/view.html?filter=找室友">找室友</a></li>
-                    </ul>
-                </li>-->
-                <li><a href="/group-qrcode.jpg">入群 <i class="fa fa-qrcode"></i></a></li>
+                <li><a href="http://rent-result.zzn.im">看表 <i class="fa fa-eye"></i></a></li>
                 <li><a href="http://rent-form.zzn.im">填表 <i class="fa fa-plus"></i></a></li>
+                <li><a id="refresh_btn" href="">刷新 <i class="fa fa-refresh"></i></a></li>
             </ul>
         </div><!--/.nav-collapse -->
         </div>
@@ -76,7 +69,7 @@
                 <span class="pull-right"><a id="row_link" href=""><i class="fa fa-link"></i></a></span>
             </div>
             <table class="table ">
-                <tr>
+                <tr class="detail">
                     <td><i class="fa fa-clock-o"></i> 发布时间</td>
                     <td id="value_fbsj" class="zzn-content"></td>
                 </tr>
@@ -123,7 +116,7 @@
                 <span class="zzn-panel-footer-button" data-toggle="modal" data-target="#notReadyModal"><i class="fa fa-share-alt"></i></span>
                 <span class="zzn-panel-footer-button" data-toggle="modal" data-target="#notReadyModal"><i class="fa fa-thumbs-up"></i></span>
                 <span class="zzn-panel-footer-button" data-toggle="modal" data-target="#notReadyModal"><i class="fa fa-bookmark"></i></span>
-                <button class="btn btn-primary btn-xs pull-right" id="btn_show_detail"><i class="fa fa-bookmark"></i> 详细信息</button>
+                <button class="btn btn-primary btn-xs pull-right" id="btn_show_detail"><i class="fa fa-dashboard"></i> 详细信息</button>
             </div>
         </div>
 
@@ -137,18 +130,9 @@
             查看总信息表
         </a>
     </div>
-    <div class="height-30px"></div>
-
-    <h3 class="group-qr-code-caption">入群请扫描QR-Code </h3>
-    <div class="row">
-        <div class="">
-            <img class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4" src="group-qrcode.jpg" alt=""/>
-        </div>
-    </div>
     <div class="height-100px"></div>
 
 </div>
-
 
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
     <div class="container">
@@ -156,6 +140,11 @@
             <div class="navbar-header">
                 <ul class="nav navbar-nav">
                     <li><a href="https://www.linkedin.com/in/zainanvictorzhou/">Zainan Zhou <i class="fa fa-linkedin-square"></i></a></li>
+                </ul>
+            </div>
+            <div class="navbar-header pull-right">
+                <ul class="nav navbar-nav">
+                    <li ><a href="/group-qrcode.jpg">加入微信群 <i class="fa fa-qrcode"></i></a></li>
                 </ul>
             </div>
         </div>
@@ -170,7 +159,7 @@
                 <h4 class="modal-title" id="myModalLabel"><i class="fa fa-paint-brush"></i> 敬请期待</h4>
             </div>
             <div class="modal-body">
-                <p>功能尚在开发中 ：）</p>
+                <p>功能尚在开发中，请过两天再次查看 ：）</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -255,6 +244,7 @@
                     }
             );
 
+            // Set up cors proxy for jQuery
             $.ajaxPrefilter(function(options) {
                 if(options.crossDomain && jQuery.support.cors) {
                     var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
@@ -274,15 +264,8 @@
               dhyx: "gsx$其他联系方式电话邮箱等",
               fbsj: "gsx$timestamp"
             };
-            var setLoad = function() {
-                for (var col in columns) {
-                    $("#value_" + col).text("");
-                }
-            };
 
-            var row = 1;
-            setLoad();
-            $.get(url, function(data) {
+            var refreshPage = function(data){
                 var pageRow = parseInt($.url().param("row"));
                 var createChild = function(row) {
                     var child = template.clone();
@@ -337,8 +320,29 @@
                     var child = createChild(pageRow);
                     parent.append(child);
                 }
+            };
+            var row = 1;
+            var cachedData = JSON.parse(localStorage.getItem("GoogleSheetData"));
+            console.log(cachedData);
+            if (typeof cachedData === "undefined" || cachedData == null) {
+                zHelper.log("cache missed, loading data...");
+                $.get(url, function(data) {
+                    zHelper.log("loaded data from CORS proxy");
+                    localStorage.setItem("GoogleSheetData", JSON.stringify(data));
+                    refreshPage(data);
+                });
+            } else {
+                zHelper.log("using cached data");
+                refreshPage(cachedData);
+            }
+            $("#refresh_btn").click(function() {
+                zHelper.log("force fetch new data");
+                $.get(url, function(data) {
+                    zHelper.log("loaded data from CORS proxy");
+                    localStorage.setItem("GoogleSheetData", JSON.stringify(data));
+                    refreshPage(data);
+                });
             });
-
         });
     });
 </script>
