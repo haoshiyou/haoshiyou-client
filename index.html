@@ -114,9 +114,8 @@
                 </tr>
             </table>
             <div class="panel-footer">
-                <span class="zzn-panel-footer-button" data-toggle="modal" data-target="#notReadyModal"><i class="fa fa-share-alt"></i></span>
-                <span class="zzn-panel-footer-button" data-toggle="modal" data-target="#notReadyModal"><i class="fa fa-thumbs-up"></i></span>
-                <span class="zzn-panel-footer-button" data-toggle="modal" data-target="#notReadyModal"><i class="fa fa-bookmark"></i></span>
+                <span id="btn_like" class="zzn-panel-footer-button" data-track-action="like"><i class="fa fa-thumbs-up"></i></span>
+                <span id="btn_share" class="zzn-panel-footer-button" data-track-action="share"><i class="fa fa-share-alt"></i></span>
                 <button class="btn btn-primary btn-xs pull-right" id="btn_show_detail"><i class="fa fa-dashboard"></i> 详细信息</button>
             </div>
         </div>
@@ -149,10 +148,10 @@
                 <h4 class="modal-title" id="myModalLabel"><i class="fa fa-paint-brush"></i> 敬请期待</h4>
             </div>
             <div class="modal-body">
-                <p>功能尚在开发中，请过两天再次查看 ：）</p>
+                <h5>功能<span class="label label-primary" id="feature"></span>尚在开发中，请过两天再次查看 ：）</h5>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal">朕知道了</button>
             </div>
         </div>
     </div>
@@ -261,7 +260,6 @@
             };
 
             var refreshPage = function(data){
-                console.log(data);
                 var pageRow = parseInt($.url().param("row"));
                 var getCell = function(row, col) {
                     return data.feed.entry[row][columns[col]]["$t"] || "N/A";
@@ -304,6 +302,8 @@
                     });
                     var rowLink = $.url().attr("path") + "?" + $.param({"row": row});
                     child.find("#row_link").attr("href", rowLink);
+                    child.find("#btn_share").attr("data-row", row);
+                    child.find("#btn_like").attr("data-row", row);
                     child.show();
                     return child;
                 };
@@ -360,6 +360,14 @@
                         $("#loading_panel").hide();
                     }, 250);
                 });
+            });
+            $(".zzn-panel-footer-button").click(function(e){
+                var action = $(this).attr("data-track-action");
+                var row = $(this).attr("data-row");
+                zHelper.log("panel footer button " + action + " clicked. row:" + row);
+                zHelper.track(action, "panel footer button " + action + " clicked. row:" + row, {row: row});
+                $('#notReadyModal').find("#feature").text(action);
+                $('#notReadyModal').modal();
             });
         });
     });
