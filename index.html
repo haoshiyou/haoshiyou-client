@@ -317,8 +317,8 @@
                     var rowLink = $.url().attr("source");
                     zHelper.log("sharing " + rowLink);
                     weixin.wxData.link = rowLink;
-                    weixin.wxData.title = getCell(pageRow, "xq") + "-" + getCell(pageRow, "wz");
-                    weixin.wxData.desc = "起始时间:" + getCell(pageRow, "qssj") + ",预期价格" + getCell(pageRow, "yqjg");
+                    weixin.wxData.title = "求分享：" +getCell(pageRow, "xq") + "-" + getCell(pageRow, "wz");
+                    weixin.wxData.desc = weixin.wxData.title + ",起始时间:" + getCell(pageRow, "qssj") + ", 预期价格" + getCell(pageRow, "yqjg");
                     weixin.wxCallbacks.confirm = function() {
                         zHelper.log("分享成功", "INFO", rowLink);
                         $.notify("分享成功", "success");
