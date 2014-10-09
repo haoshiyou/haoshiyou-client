@@ -195,6 +195,8 @@
         $(document).ready(function () {
             var template = $("#value_panel_template").clone();
             var parent = $("#value_panel_parent").empty();
+            var DATA_KEY = "GoogleSheetData-3.0";
+
             Parse.initialize("RPjt04MBMl3rzzEKBGKUpP7KHFXAsomtDbr9cS0y", "DSqWg9xElC6mI1PwtPWzzeIPQYUXPGTOC66nT82h");
             zHelper.trackerFunctions["woopra"] = function(action, dimensions) {
                 woopra.track(action, dimensions);
@@ -335,12 +337,12 @@
             var row = 1;
             parent.empty();
             $("#loading_panel").show();
-            var cachedData = JSON.parse(localStorage.getItem("GoogleSheetData"));
+            var cachedData = JSON.parse(localStorage.getItem(DATA_KEY));
             if (typeof cachedData === "undefined" || cachedData == null) {
                 zHelper.log("cache missed, loading data...");
                 $.get(url, function(data) {
                     zHelper.log("loaded data from CORS proxy");
-                    localStorage.setItem("GoogleSheetData", JSON.stringify(data));
+                    localStorage.setItem(DATA_KEY, JSON.stringify(data));
                     refreshPage(data);
                 });
             } else {
@@ -354,7 +356,7 @@
                 $("#loading_panel").show();
                 $.get(url, function(data) {
                     zHelper.log("loaded data from CORS proxy");
-                    localStorage.setItem("GoogleSheetData", JSON.stringify(data));
+                    localStorage.setItem(DATA_KEY, JSON.stringify(data));
                     setTimeout(function(){
                         refreshPage(data);
                         $("#loading_panel").hide();
