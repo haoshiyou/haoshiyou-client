@@ -314,7 +314,7 @@
                 } else {
                     var child = createChild(pageRow);
                     parent.append(child);
-                    var rowLink = $.url().attr("path") + "?" + $.param($.extend($.url().param(), {"row": pageRow}));
+                    var rowLink = $.url().attr("source");
                     zHelper.log("sharing " + rowLink);
                     weixin.wxData.link = rowLink;
                     weixin.wxData.title = getCell(pageRow, "xq") + "-" + getCell(pageRow, "wz");
