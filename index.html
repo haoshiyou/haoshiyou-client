@@ -263,6 +263,9 @@
 
             var refreshPage = function(data){
                 var pageRow = parseInt($.url().param("row"));
+                var getCell = function(row, col) {
+                    return data.feed.entry[row][columns[col]]["$t"] || "N/A";
+                };
                 var createChild = function(row) {
                     var child = template.clone();
                     var xq = data.feed.entry[row][columns["xq"]]["$t"];
@@ -270,9 +273,7 @@
                     child.find("#value_dhyx").hide();
 
                     child.find(".detail").hide();
-                    var getCell = function(row, col) {
-                        return data.feed.entry[row][columns[col]]["$t"] || "N/A";
-                    };
+
 
                     for (var col in columns) {
                         child.find("#value_" + col).text(getCell(row, col));
@@ -329,12 +330,10 @@
                     };
                 }
             };
-            $.notify("分享成功", "success");
             var row = 1;
             parent.empty();
             $("#loading_panel").show();
             var cachedData = JSON.parse(localStorage.getItem("GoogleSheetData"));
-            console.log(cachedData);
             if (typeof cachedData === "undefined" || cachedData == null) {
                 zHelper.log("cache missed, loading data...");
 
