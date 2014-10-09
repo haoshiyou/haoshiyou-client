@@ -1,6 +1,8 @@
 // 所有功能必须包含在 WeixinApi.ready 中进行
 var weixin = (function(zHelper) {
-
+    if (zHelper.isDebug()) {
+        WeixinApi.enableDebugMode();
+    }
     zHelper.log("Wait for WeixinApi.ready!");
     var wxData = {
         "imgUrl": 'http://rent.zzn.im/Logo_108.jpg'
