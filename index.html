@@ -163,6 +163,7 @@
 <script src="jquery-2.1.1.min.js"></script>
 <script src="jquery.cookie.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="notify.min.js"></script>
 <script src="purl.js"></script>
 <script src="//www.parsecdn.com/js/parse-1.3.0.min.js"></script>
 <script src="guid.js"></script>
@@ -277,7 +278,6 @@
                         child.find("#value_" + col).text(getCell(row, col));
 
                     }
-                    child.find("#value_wxId_add").attr("href", "weixin://profile/" + data.feed.entry[row][columns["wxId"]]["$t"]);
                     if (xq == "出租") {
                         child.addClass("panel-success");
                     } else if (xq == "求租") {
@@ -315,8 +315,21 @@
                 } else {
                     var child = createChild(pageRow);
                     parent.append(child);
+                    var rowLink = $.url().attr("path") + "?" + $.param($.extend($.url().param(), {"row": pageRow}));
+                    weixin.wxData.link = rowLink;
+                    weixin.wxData.title = getCell(pageRow, "xq") + "-" + getCell(pageRow, "wz");
+                    weixin.wxData.desc = "起始时间:" + getCell(pageRow, "qssj") + ",预期价格" + getCell(pageRow, "yqjg");
+                    weixin.wxCallbacks.confirm = function() {
+                        zHelper.log("分享成功", "INFO", rowLink);
+                        $.notify("分享成功", "success");
+                    };
+                    weixin.wxCallbacks.fail = function() {
+                        zHelper.log("分享失败", "WARNING", rowLink);
+                        $.notify("分享失败", "danger");
+                    };
                 }
             };
+            $.notify("分享成功", "success");
             var row = 1;
             parent.empty();
             $("#loading_panel").show();
@@ -346,7 +359,6 @@
                         refreshPage(data);
                         $("#loading_panel").hide();
                     },500);
-
                 });
             });
         });
