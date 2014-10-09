@@ -27,7 +27,6 @@ var zHelper = (function($) {
 
     function isDebug() {
         if ($.url().param("debug") == 1) {
-            console.log("url param is debug.");
             return true;
         }
         if (myId === "12d506b1-5d1c-6d4b-10dc-0789815264d8" ||
