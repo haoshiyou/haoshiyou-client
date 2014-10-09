@@ -77,6 +77,10 @@
                     <td><i class="fa fa-clock-o"></i> 起始时间</td>
                     <td id="value_qssj" class="zzn-content"></td>
                 </tr>
+                <tr class="detail">
+                    <td><i class="fa fa-clock-o"></i> 短租长租</td>
+                    <td id="value_stlt" class="zzn-content"></td>
+                </tr>
                 <tr>
                     <td><i class="fa fa-location-arrow"></i> 位置</td>
                     <td id="value_wz" class="zzn-content"></td>
@@ -124,14 +128,6 @@
 
     </div>
     <div class="height-100px"></div>
-    <div class="row">
-        <a id="rent-result" class="link-btn col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 btn btn-success"
-           href="http://rent-result.zzn.im">
-            查看总信息表
-        </a>
-    </div>
-    <div class="height-100px"></div>
-
 </div>
 
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
@@ -262,7 +258,8 @@
               wxId: "gsx$微信号",
               xb: "gsx$性别",
               dhyx: "gsx$其他联系方式电话邮箱等",
-              fbsj: "gsx$timestamp"
+              fbsj: "gsx$timestamp",
+              ltst: "gsx$shorttermorlongterm"
             };
 
             var refreshPage = function(data){
@@ -323,6 +320,7 @@
             };
             var row = 1;
             var cachedData = JSON.parse(localStorage.getItem("GoogleSheetData"));
+            console.log(cachedData);
             if (typeof cachedData === "undefined" || cachedData == null) {
                 zHelper.log("cache missed, loading data...");
                 $.get(url, function(data) {
