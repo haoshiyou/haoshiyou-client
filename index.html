@@ -99,7 +99,8 @@
                 <tr class="detail">
                     <td ><i class="fa fa-weixin"></i> 微信号</td>
                     <td class="zzn-content">
-                        <span id="value_wxId"></span>
+                        <span id="value_wxId"> </span>
+                        <a id="value_wxId_add" href=""><i class="fa fa-plus"></i></a>
                         <button class="btn btn-success btn-xs" id="btn_show_wxId">显示 <i class="glyphicon glyphicon-eye-open"></i></button>
                     </td>
                 </tr>
@@ -272,7 +273,10 @@
                 var createChild = function(row) {
                     var child = template.clone();
                     var xq = data.feed.entry[row][columns["xq"]]["$t"];
+                    child.find("#value_wxId").hide();
+                    child.find("#value_wxId_add").hide();
                     child.find("#value_dhyx").hide();
+
                     child.find(".detail").hide();
                     var getCell = function(row, col) {
                         return data.feed.entry[row][columns[col]]["$t"] || "N/A";
@@ -282,6 +286,7 @@
                         child.find("#value_" + col).text(getCell(row, col));
 
                     }
+                    child.find("#value_wxId_add").attr("href", "weixin://profile/" + data.feed.entry[row][columns["wxId"]]["$t"]);
                     if (xq == "出租") {
                         child.addClass("panel-success");
                     } else if (xq == "求租") {
@@ -293,6 +298,7 @@
                     child.find("#btn_show_wxId").click(function(){
                         child.find("#btn_show_wxId").hide();
                         child.find("#value_wxId").show();
+                        child.find("#value_wxId_add").show();
                         parseTrack("show-wechat-id", {
                             ip: geoinfo.ip,
                             city: geoinfo.city,
