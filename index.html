@@ -256,17 +256,19 @@
               xb: "gsx$性别",
               dhyx: "gsx$其他联系方式电话邮箱等",
               fbsj: "gsx$timestamp",
-              ltst: "gsx$shorttermorlongterm"
+              ltst: "gsx$shorttermorlongterm",
+              entryid: "gsx$entryid"
             };
 
             var refreshPage = function(data){
+                console.log(data);
                 var pageRow = parseInt($.url().param("row"));
                 var getCell = function(row, col) {
                     return data.feed.entry[row][columns[col]]["$t"] || "N/A";
                 };
                 var createChild = function(row) {
                     var child = template.clone();
-                    var xq = data.feed.entry[row][columns["xq"]]["$t"];
+                    var xq = getCell(row, "xq");
                     child.find("#value_wxId").hide();
                     child.find("#value_dhyx").hide();
 
@@ -300,18 +302,12 @@
                         child.find(".detail").show();
                         zHelper.track("show-detail", {pageRow: pageRow});
                     });
-                    var rowLink = $.url().attr("path") + "?" + $.param($.extend($.url().param(), {"row": row}));
+                    var rowLink = $.url().attr("path") + "?" + $.param({"row": row});
                     child.find("#row_link").attr("href", rowLink);
                     child.show();
                     return child;
                 };
-                if (!parseInt($.url().param("row"))) {
-                    var dataLength = data.feed.entry.length;
-                    for (var i = dataLength - 1; i >= 0; i--) {
-                        var child = createChild(i);
-                        parent.append(child);
-                    }
-                } else {
+                if (!isNaN(pageRow)) {
                     var child = createChild(pageRow);
                     parent.append(child);
                     var rowLink = $.url().attr("source");
@@ -328,6 +324,12 @@
                         zHelper.log("分享失败", "WARNING", rowLink);
                         $.notify("分享失败", "danger");
                     };
+                } else {
+                    var dataLength = data.feed.entry.length;
+                    for (var i = dataLength - 1; i >= 0; i--) {
+                        var child = createChild(i);
+                        parent.append(child);
+                    }
                 }
             };
             var row = 1;
@@ -336,7 +338,6 @@
             var cachedData = JSON.parse(localStorage.getItem("GoogleSheetData"));
             if (typeof cachedData === "undefined" || cachedData == null) {
                 zHelper.log("cache missed, loading data...");
-
                 $.get(url, function(data) {
                     zHelper.log("loaded data from CORS proxy");
                     localStorage.setItem("GoogleSheetData", JSON.stringify(data));
@@ -354,10 +355,10 @@
                 $.get(url, function(data) {
                     zHelper.log("loaded data from CORS proxy");
                     localStorage.setItem("GoogleSheetData", JSON.stringify(data));
-                    setInterval(function(){
+                    setTimeout(function(){
                         refreshPage(data);
                         $("#loading_panel").hide();
-                    },500);
+                    }, 250);
                 });
             });
         });
