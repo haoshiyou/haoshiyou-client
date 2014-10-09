@@ -41,6 +41,10 @@ var zHelper = (function($) {
             return false;
         }
     }
+
+    if (isDebug()) {
+        console.log("zHelper turns on debug mode.");
+    }
     var loggerFunctions = {};
     var trackerFunctions = {};
 
