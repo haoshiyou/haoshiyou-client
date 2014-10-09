@@ -67,3 +67,7 @@ table {
     background-image: none;
 }
 
+#loading_panel {
+    height: 300px;
+    line-height: 300px;
+}

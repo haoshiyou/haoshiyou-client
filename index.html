@@ -54,14 +54,11 @@
         </div>
     </div><!--/.container-fluid -->
 </div>
-
+<div class="height-60px"></div>
 <div class="container">
-
-    <div class="height-60px"></div>
-
     <div class="outwrapper">
     <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4" id="value_panel_parent">
-        <div class="panel" id="value_panel_template">
+        <div class="panel" id="value_panel_template" style="display: none">
             <!-- Default panel contents -->
             <div class="panel-heading">
                 <span><i class="fa fa-crosshairs"></i> </span>
@@ -125,11 +122,13 @@
         </div>
 
     </div>
-
+    <div id="loading_panel" class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4" style="text-align: center" id="loading_indicator">
+        <img src="ajax-loader.gif" alt="Loading..."/>
     </div>
-    <div class="height-100px"></div>
+    </div>
 </div>
 
+<div class="height-100px"></div>
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
     <div class="container">
         <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4" >
@@ -305,6 +304,7 @@
                     });
                     var rowLink = $.url().attr("path") + "?" + $.param($.extend($.url().param(), {"row": row}));
                     child.find("#row_link").attr("href", rowLink);
+                    child.show();
                     return child;
                 };
                 if (!parseInt($.url().param("row"))) {
@@ -319,10 +319,13 @@
                 }
             };
             var row = 1;
+            parent.empty();
+            $("#loading_panel").show();
             var cachedData = JSON.parse(localStorage.getItem("GoogleSheetData"));
             console.log(cachedData);
             if (typeof cachedData === "undefined" || cachedData == null) {
                 zHelper.log("cache missed, loading data...");
+
                 $.get(url, function(data) {
                     zHelper.log("loaded data from CORS proxy");
                     localStorage.setItem("GoogleSheetData", JSON.stringify(data));
@@ -332,12 +335,19 @@
                 zHelper.log("using cached data");
                 refreshPage(cachedData);
             }
+            $("#loading_panel").hide();
             $("#refresh_btn").click(function() {
                 zHelper.log("force fetch new data");
+                parent.empty();
+                $("#loading_panel").show();
                 $.get(url, function(data) {
                     zHelper.log("loaded data from CORS proxy");
                     localStorage.setItem("GoogleSheetData", JSON.stringify(data));
-                    refreshPage(data);
+                    setInterval(function(){
+                        refreshPage(data);
+                        $("#loading_panel").hide();
+                    },500);
+
                 });
             });
         });
