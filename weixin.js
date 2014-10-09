@@ -1,9 +1,5 @@
 // 所有功能必须包含在 WeixinApi.ready 中进行
 (function(zHelper) {
-    if (typeof WeixinApi === "undefined") {
-        zHelper.log("WeixinApi undefined, ignored");
-        return;
-    }
     WeixinApi.ready(function (Api) {
 
         // 微信分享的数据
