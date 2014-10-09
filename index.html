@@ -323,7 +323,6 @@
             };
             var row = 1;
             var cachedData = JSON.parse(localStorage.getItem("GoogleSheetData"));
-            console.log(cachedData);
             if (typeof cachedData === "undefined" || cachedData == null) {
                 zHelper.log("cache missed, loading data...");
                 $.get(url, function(data) {
