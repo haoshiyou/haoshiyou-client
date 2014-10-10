@@ -264,17 +264,19 @@
             var refreshPage = function(data){
                 var pageRow = parseInt($.url().param("row"));
                 var getCell = function(row, col) {
-                    return data.feed.entry[row][columns[col]]["$t"] || "N/A";
+                    try {
+                        var cell = data.feed.entry[row][columns[col]]["$t"] || "N/A";
+                        return cell;
+                    } catch(e) {
+                        zHelper.log("error when getting cell", "ERROR", {e: e, row: row, col: col, data: data});
+                    }
                 };
                 var createChild = function(row) {
                     var child = template.clone();
                     var xq = getCell(row, "xq");
                     child.find("#value_wxId").hide();
                     child.find("#value_dhyx").hide();
-
                     child.find(".detail").hide();
-
-
                     for (var col in columns) {
                         child.find("#value_" + col).text(getCell(row, col));
 
@@ -313,7 +315,7 @@
                     var child = createChild(pageRow);
                     parent.append(child);
                     var rowLink = $.url().attr("source");
-                    zHelper.log("sharing " + rowLink);
+                    zHelper.log("custom sharing " + rowLink);
                     weixin.wxData.link = rowLink;
                     var title =  "求分享：" +getCell(pageRow, "xq") + "-" + getCell(pageRow, "wz");
                     weixin.wxData.title = title;
@@ -332,6 +334,20 @@
                         var child = createChild(i);
                         parent.append(child);
                     }
+                    var homeLink = $.url().attr("source");
+                    zHelper.log("custom sharing " + homeLink);
+                    weixin.wxData.link = rowLink;
+                    var title =  "朋友找房子你愿意帮忙介绍吗？";
+                    weixin.wxData.title = title;
+                    weixin.wxData.desc = title + "湾区租房互助群，靠谱租房靠朋友。rent.zzn.im";
+                    weixin.wxCallbacks.confirm = function() {
+                        zHelper.log("分享成功", "INFO", rowLink);
+                        $.notify("分享成功", "success");
+                    };
+                    weixin.wxCallbacks.fail = function() {
+                        zHelper.log("分享失败", "WARNING", rowLink);
+                        $.notify("分享失败", "danger");
+                    };
                 }
             };
             var row = 1;
