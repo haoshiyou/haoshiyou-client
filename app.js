@@ -20,6 +20,7 @@ jQuery(function ($) {
             for(var key in dimensions) {
                 parseTracking.set(key, dimensions[key]);
             }
+            parseTracking.set("action", action);
             parseTracking.save();
         };
         zHelper.loggerFunctions["parse"] = function(msg, level, data) {
