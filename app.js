@@ -162,7 +162,8 @@ jQuery(function ($) {
         parent.empty();
         $("#loading_panel").show();
         var cachedData = JSON.parse(localStorage.getItem(DATA_KEY));
-        if (typeof cachedData === "undefined" || cachedData == null) {
+        var alwaysRefresh = true; // TODO(zzn): consider how should I configure caching.
+        if (alwaysRefresh || typeof cachedData === "undefined" || cachedData == null) {
             zHelper.log("cache missed, loading data...");
             $.get(url, function(data) {
                 zHelper.log("loaded data from CORS proxy");
