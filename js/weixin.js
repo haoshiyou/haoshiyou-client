@@ -5,7 +5,7 @@ var weixin = (function(zHelper) {
     }
     zHelper.log("Wait for WeixinApi.ready!");
     var wxData = {
-        "imgUrl": 'http://rent.zzn.im/Logo_108.jpg'
+        "imgUrl": 'http://rent.zzn.im/img/logo/Logo_108.jpg'
         // "link": 'http://www.baidufe.com',
         // "desc": '大家好，我是Alien，Web前端&Android客户端码农，喜欢技术上的瞎倒腾！欢迎多交流',
         // "title": "大家好，我是赵先烈"
