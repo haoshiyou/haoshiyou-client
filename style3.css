@@ -1,0 +1,21 @@
+.height-60px {
+    height: 60px;
+}
+
+.height-80px {
+    height: 80px;
+}
+.big-center-box {
+    width: 100%;
+    height: 34px;
+    margin-bottom: 15px;
+}
+
+#map_canvas {
+    height: 300px;
+}
+
+#listing_step_1_location_input_group {
+    margin-bottom: 30px;
+}
+
