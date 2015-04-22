@@ -1,0 +1,12 @@
+
+* Introduction
+zzn's note for development of HaoShiYou project
+* Journal
+** <2015-04-21 Tue> 
+1. Update the qr code
+2. Started the notes
+
+xiaohan: updated the logo design
+
+* Wish list
+
