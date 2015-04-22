@@ -65,6 +65,12 @@ var zHelper = (function($) {
 
     }
 
+    function assert(value, msg) {
+        if (value !== true) {
+            console.log("value = " + value, msg);
+        }
+    }
+
     return {
         // A dict{} which key is name of logger, value is logging function to call, same format of log
         loggerFunctions: loggerFunctions,
@@ -77,6 +83,7 @@ var zHelper = (function($) {
 
         log: log,
         track: track,
-        isDebug: isDebug
+        isDebug: isDebug,
+        assert: assert
     };
 })($);
