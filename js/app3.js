@@ -55,6 +55,10 @@ jQuery(function ($) {
         }
 
         var currentState = null;
+        var LOCATION = 1,
+            TIME_AND_PRICE = 2,
+            FEATURES = 3,
+            RESTRICTIONS = 4;
 
         var hideBasicPages = function() {
             $(".basic-page").hide();
@@ -103,6 +107,7 @@ jQuery(function ($) {
 
         var showListingStep2TimeAndPrice = function () {
             $(".listing-page").hide();
+            $("#listing_step_2_time_and_price").show();
         };
 
         var showListingStep3Features = function(){
@@ -115,7 +120,7 @@ jQuery(function ($) {
 
         var showListingStepsPage = function() {
             $("#listing_steps_page").show();
-            assert(currentState==null);
+            zHelper.assert(currentState==null,"Current state should be null.");
             currentState = 1; // Enters at state 1
             showListingStep1Locaiton();
         };
@@ -136,23 +141,24 @@ jQuery(function ($) {
         });
 
         $("#listing_step_prev").click(function(e) {
+            zHelper.log("Prev clicked");
             switch(currentState) {
-                case 1:
+                case LOCATION:
                     $("#listing_steps_page").hide();
                     showStartPage();
                     currentState = null;
                     break;
-                case 2:
+                case TIME_AND_PRICE:
                     showListingStep1Locaiton();
-                    currentState = 1;
+                    currentState = LOCATION;
                     break;
-                case 3:
+                case FEATURES:
                     showListingStep2TimeAndPrice();
-                    currentState = 2;
+                    currentState = TIME_AND_PRICE;
                     break;
-                case 4:
+                case RESTRICTIONS:
                     showListingStep3Features();
-                    currentState = 3;
+                    currentState = FEATURES;
                     break;
                 default:
                     zHelper.log("Pressed on PREV when on a wrong state: " + currentState);
@@ -160,20 +166,21 @@ jQuery(function ($) {
         });
 
         $("#listing_step_next").click(function(e) {
+            zHelper.log("Next clicked");
             switch(currentState) {
-                case 1:
+                case LOCATION:
                     showListingStep2TimeAndPrice();
-                    currentState = 2;
+                    currentState = TIME_AND_PRICE;
                     break;
-                case 2:
+                case TIME_AND_PRICE:
                     showListingStep3Features();
-                    currentState = 3;
+                    currentState = FEATURES;
                     break;
-                case 3:
+                case FEATURES:
                     showListingStep4Restrictions();
-                    currentState = 4;
+                    currentState = RESTRICTIONS;
                     break;
-                case 4:
+                case RESTRICTIONS:
                     //TODO(zzn): preview
                     break;
                 default:
