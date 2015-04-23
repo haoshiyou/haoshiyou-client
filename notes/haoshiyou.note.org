@@ -7,6 +7,10 @@ zzn's note for development of HaoShiYou project
 2. Started the notes
 
 xiaohan: updated the logo design
-
+** <2015-04-22 Wed>
+1. Created a archive, moved all old data to the archive sheet
+2. Update the form to add "areas"
+3. Update the form to add "city or zip code"
+4. Update the site
 * Wish list
 

@@ -58,7 +58,9 @@ jQuery(function ($) {
         var columns = {
             xq: "gsx$需求类别",
             qssj: "gsx$预计起始日期超过这个日期本条信息失效",
-            wz: "gsx$位置",
+            qy: "gsx$区域",
+
+            ybhzcs: "gsx$邮编或者城市",
             yqjg: "gsx$预期价格美元每月",
             grjs: "gsx$租房需求介绍和自我介绍",
             wxId: "gsx$微信号",
@@ -84,7 +86,6 @@ jQuery(function ($) {
                 var xq = getCell(row, "xq");
                 child.find("#value_wxId").hide();
                 child.find("#value_dhyx").hide();
-                child.find(".detail").hide();
                 for (var col in columns) {
                     child.find("#value_" + col).text(getCell(row, col));
 
@@ -106,11 +107,6 @@ jQuery(function ($) {
                     child.find("#btn_show_dhyx").hide();
                     child.find("#value_dhyx").show();
                     zHelper.track("show-dhyx", {pageRow: pageRow});
-                });
-                child.find("#btn_show_detail").click(function(){
-                    child.find("#btn_show_detail").hide();
-                    child.find(".detail").show();
-                    zHelper.track("show-detail", {pageRow: pageRow});
                 });
                 var rowLink = $.url().attr("path") + "?" + $.param({"row": row});
                 child.find("#row_link").attr("href", rowLink);
