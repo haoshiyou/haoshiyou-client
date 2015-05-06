@@ -2,9 +2,9 @@
 var zHelper = (function($) {
     "use strict";
 
-    var myId = $.cookie("myId") || guid();
+    var myId = $.cookie("myId") || uuid();
     $.cookie("myId", myId);
-    var sessionId = guid();
+    var sessionId = uuid();
     var geoInfo = {
         ip: "",
         city: "",
