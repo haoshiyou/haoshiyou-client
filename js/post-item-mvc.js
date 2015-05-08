@@ -107,14 +107,11 @@ var PostItemMVC = (function ($) {
      * @private
      */
     ItemView.prototype.decrorate_ = function () {
+
         var guid = this.guid_;
         var template = this.templateClone_;
-
-
         var guidLink = $.url().attr("path") + "?" + $.param({"guid": guid});
         template.find("#row_link").attr("href", guidLink);
-
-
         template.find("#btn_share").attr("data-guid", guid);
         template.find("#btn_like").attr("data-guid", guid);
         template.show();
@@ -151,8 +148,9 @@ var PostItemMVC = (function ($) {
         }
     };
 
-    ItemView.prototype.displayData = function (model, guid) {
+    ItemView.prototype.displayData = function (model) {
         var template = this.templateClone_;
+        var guid = this.guid_;
         var xq = model.getFieldData("xq", guid);
         if (xq == "出租") {
             template.addClass("panel-success");
@@ -167,7 +165,7 @@ var PostItemMVC = (function ($) {
 
         // Set up Id of template
         template.attr("id", "value_panel" + guid);
-        this.decrorate_(guid);
+        this.decrorate_();
     };
     ItemView.prototype.getDom = function () {
         return this.templateClone_;
@@ -187,7 +185,7 @@ var PostItemMVC = (function ($) {
         var that = this;
         this.panelView_.clearChildren();
         this.model_.getGuidArray().forEach(function (guid) {
-            var item = new ItemView();
+            var item = new ItemView(guid);
             item.displayData(that.model_, guid);
             item.shouldShowContactInfo(false);
             that.panelView_.addChild(item.getDom());
