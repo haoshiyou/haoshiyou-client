@@ -110,7 +110,9 @@ var PostItemMVC = (function ($) {
 
         var guid = this.guid_;
         var template = this.templateClone_;
-        var guidLink = $.url().attr("path") + "?" + $.param({"guid": guid});
+        //var guidLink = $.url().attr("path") + "?" + $.param({"guid": guid});
+        var guidLink = "http://haoshiyou.org/?" + $.param({"guid": guid});
+        template.find("#qrcode").qrcode(guidLink);
         template.find("#row_link").attr("href", guidLink);
         template.find("#btn_share").attr("data-guid", guid);
         template.find("#btn_like").attr("data-guid", guid);
@@ -122,7 +124,6 @@ var PostItemMVC = (function ($) {
      * @param should boolean to indicate show(true) or hide(false)
      */
     ItemView.prototype.shouldShowContactInfo = function (should) {
-        var guid = this.guid_;
         var template = this.templateClone_;
         if (should) {
             template.find("#btn_show_wxId").hide();
@@ -140,11 +141,7 @@ var PostItemMVC = (function ($) {
                 template.find("#btn_show_dhyx").hide();
                 template.find("#value_dhyx").show();
             });
-            var guidLink = $.url().attr("path") + "?" + $.param({"guid": guid});
-            template.find("#row_link").attr("href", guidLink);
-            template.find("#btn_share").attr("data-guid", guid);
-            template.find("#btn_like").attr("data-guid", guid);
-            template.show();
+
         }
     };
 
@@ -181,6 +178,7 @@ var PostItemMVC = (function ($) {
     Controller.prototype.initAsync = function (callback) {
         this.model_.loadDataAsync(callback);
     };
+
     Controller.prototype.showAllItems = function () {
         var that = this;
         this.panelView_.clearChildren();
