@@ -79,13 +79,15 @@ jQuery(function ($) {
         var guid = $.url().param("guid");
         $("#loading_panel").show();
 
+        $("#download_button_panel").hide();
         controller.initAsync(function(){
             if (guid) {
                 $(".wechat_qr_code").hide();
+
+                $("#download_button_panel").show();
                 guid = guid.replace(/\/$/,'');
                 controller.showItemByGuid(guid);
             } else {
-                $("#download_button_panel").hide();
                 controller.showAllItems();
             }
             $("#loading_panel").hide();
