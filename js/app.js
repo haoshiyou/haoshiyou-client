@@ -84,7 +84,8 @@ jQuery(function ($) {
             if (guid) {
                 $(".wechat_qr_code").hide();
 
-                $("#download_button_panel").show();
+                //TODO(zzn): add this when fixed
+                // $("#download_button_panel").show();
                 guid = guid.replace(/\/$/,'');
                 controller.showItemByGuid(guid);
             } else {
