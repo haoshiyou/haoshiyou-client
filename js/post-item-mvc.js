@@ -41,11 +41,11 @@ var PostItemMVC = (function ($) {
 
     /**
      *
-     * Creates a view as a clone of template selected by CONST_ITEM_TEMPLATE_ID
-     * @param CONST_ITEM_TEMPLATE_ID The Id to locate template, e.g. "#value_panel_template"
+     * Creates a view as a clone of template
      * @constructor
      */
-    var ItemView = function () {
+    var ItemView = function (guid) {
+        this.guid_ = guid;
         this.templateClone_ = $(CONST_ITEM_TEMPLATE_ID).clone();
     };
 
@@ -106,22 +106,10 @@ var PostItemMVC = (function ($) {
      * @param guid
      * @private
      */
-    ItemView.prototype.decrorate_ = function (guid) {
+    ItemView.prototype.decrorate_ = function () {
+        var guid = this.guid_;
         var template = this.templateClone_;
-        template.find("#value_wxId").hide();
-        template.find("#value_dhyx").hide();
 
-        template.find("#value_wxId").hide();
-        template.find("#btn_show_wxId").click(function () {
-            template.find("#btn_show_wxId").hide();
-            template.find("#value_wxId").show();
-            zHelper.track("show-wechat-id", {pageRow: pageRow});
-        });
-        template.find("#btn_show_dhyx").click(function () {
-            template.find("#btn_show_dhyx").hide();
-            template.find("#value_dhyx").show();
-            zHelper.track("show-dhyx", {pageRow: pageRow});
-        });
 
         var guidLink = $.url().attr("path") + "?" + $.param({"guid": guid});
         template.find("#row_link").attr("href", guidLink);
@@ -130,6 +118,37 @@ var PostItemMVC = (function ($) {
         template.find("#btn_share").attr("data-guid", guid);
         template.find("#btn_like").attr("data-guid", guid);
         template.show();
+    };
+
+    /**
+     *
+     * @param should boolean to indicate show(true) or hide(false)
+     */
+    ItemView.prototype.shouldShowContactInfo = function (should) {
+        var guid = this.guid_;
+        var template = this.templateClone_;
+        if (should) {
+            template.find("#btn_show_wxId").hide();
+            template.find("#btn_show_dhyx").hide();
+        } else {
+            template.find("#value_wxId").hide();
+            template.find("#value_dhyx").hide();
+
+            template.find("#value_wxId").hide();
+            template.find("#btn_show_wxId").click(function () {
+                template.find("#btn_show_wxId").hide();
+                template.find("#value_wxId").show();
+            });
+            template.find("#btn_show_dhyx").click(function () {
+                template.find("#btn_show_dhyx").hide();
+                template.find("#value_dhyx").show();
+            });
+            var guidLink = $.url().attr("path") + "?" + $.param({"guid": guid});
+            template.find("#row_link").attr("href", guidLink);
+            template.find("#btn_share").attr("data-guid", guid);
+            template.find("#btn_like").attr("data-guid", guid);
+            template.show();
+        }
     };
 
     ItemView.prototype.displayData = function (model, guid) {
@@ -170,17 +189,23 @@ var PostItemMVC = (function ($) {
         this.model_.getGuidArray().forEach(function (guid) {
             var item = new ItemView();
             item.displayData(that.model_, guid);
+            item.shouldShowContactInfo(false);
             that.panelView_.addChild(item.getDom());
+
         });
     };
 
+    /**
+     *
+     * @param guid The GUID of a given listing post
+     */
     Controller.prototype.showItemByGuid = function (guid) {
         this.panelView_.clearChildren();
-        var item = new ItemView();
+        var item = new ItemView(guid);
         item.displayData(this.model_, guid);
+        item.shouldShowContactInfo(true);
         this.panelView_.addChild(item.getDom());
     };
-
 
     return {
         Controller: Controller

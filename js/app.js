@@ -56,6 +56,18 @@ jQuery(function ($) {
         });
     };
 
+
+    function setDownloadScreenshot() {
+        $("#download_image_btn").click(function() {
+            zHelper.log("clicked download screenshot");
+            zHelper.track("screenshot");
+            html2canvas($("#value_panel_parent"), {
+                onrendered: function(canvas) {
+                    Canvas2Image.saveAsJPEG(canvas);
+                }
+            });
+        });
+    };
     function main() {
         init();
 
@@ -69,16 +81,19 @@ jQuery(function ($) {
 
         controller.initAsync(function(){
             if (guid) {
+                $(".wechat_qr_code").hide();
                 guid = guid.replace(/\/$/,'');
                 controller.showItemByGuid(guid);
-                $(".wechat_qr_code").hide();
             } else {
+                $("#download_button_panel").hide();
                 controller.showAllItems();
             }
             $("#loading_panel").hide();
         });
 
         setFooterButtons();
+        setDownloadScreenshot();
+
     };
 
     $(document).ready(function () {
