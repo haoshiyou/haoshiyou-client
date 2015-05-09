@@ -201,7 +201,7 @@ var PostItemMVC = (function ($, weixin, zHelper) {
         } else if (xq == "找室友") {
             weixin.wxData.imgUrl = "http://haoshiyou.org/img/logo-v1-yellow-1024sq2.jpg";
         }
-        weixin.wxData.title = this.model_.getFieldData("xq", guid) +
+        weixin.wxData.title = model.getFieldData("xq", guid) +
             model.getFieldData("qy", guid) + "，时间是"
             model.getFieldData("qssj", guid) + "左右开始，求分享！";
 
