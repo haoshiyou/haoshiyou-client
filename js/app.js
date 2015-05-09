@@ -59,9 +59,18 @@ jQuery(function ($) {
             });
         });
     };
+    function initWeixin() {
+        zHelper.log("Start weichat config");
+        var auth = WeiXinJsSdkWrapper.authenticator;
+        auth.configAsync(function(ret) {
+            console.log("XXX");
+            console.log(ret);
+
+        });
+    };
     function main() {
         init();
-
+        initWeixin();
         // Init view
         zHelper.log("track view");
         zHelper.track("view");
