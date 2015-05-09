@@ -208,7 +208,7 @@ var PostItemMVC = (function ($, weixin, zHelper) {
         weixin.wxData.link = guidLink;
         weixin.wxData.desc = model.getFieldData("grjs", guid);
 
-        zHelper("XXX set wechat", "INFO", weixin.wxData);
+        zHelper.log("XXX set wechat", "INFO", weixin.wxData);
         weixin.wxCallbacks.confirm = function() {
             zHelper.log("分享成功", "INFO", guidLink);
             zHelper.track("wechat share succeeded.");
