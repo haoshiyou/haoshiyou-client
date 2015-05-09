@@ -34,15 +34,6 @@ jQuery(function ($) {
             }
             parseLogging.save();
         };
-
-        $.getJSON("http://www.telize.com/geoip?callback=?",
-            function (data) {
-                zHelper.geoInfo.ip = data.ip;
-                zHelper.geoInfo.city = data.city;
-                zHelper.geoInfo.country = data.country;
-                zHelper.track("loaded-geo-info");
-            }
-        );
     }
 
     function setFooterButtons() {
@@ -78,7 +69,6 @@ jQuery(function ($) {
         var controller = new PostItemMVC.Controller();
         var guid = $.url().param("guid");
         $("#loading_panel").show();
-
         $("#download_button_panel").hide();
         controller.initAsync(function(){
             if (guid) {
@@ -96,7 +86,6 @@ jQuery(function ($) {
 
         setFooterButtons();
         setDownloadScreenshot();
-
     };
 
     $(document).ready(function () {

@@ -5,7 +5,7 @@
  * Requires jQuery
  */
 
-var PostItemMVC = (function ($) {
+var PostItemMVC = (function ($, weixin, zHelper) {
     "use strict";
     var CONST_SPREADSHEET_URL = "https://spreadsheets.google.com/feeds/list/1vzugrYLpgXmFODqysSx331Lhq8LpDQGJ4sQtwSMrtV4/1/public/values?alt=json";
     var CONST_FIELD_KEYS = {
@@ -47,6 +47,7 @@ var PostItemMVC = (function ($) {
     var ItemView = function (guid) {
         this.guid_ = guid;
         this.templateClone_ = $(CONST_ITEM_TEMPLATE_ID).clone();
+        this.guidLink_ = "http://haoshiyou.org/?" + $.param({"guid": guid});
     };
 
     var PanelView = function () {
@@ -107,11 +108,9 @@ var PostItemMVC = (function ($) {
      * @private
      */
     ItemView.prototype.decrorate_ = function () {
-
         var guid = this.guid_;
         var template = this.templateClone_;
-        //var guidLink = $.url().attr("path") + "?" + $.param({"guid": guid});
-        var guidLink = "http://haoshiyou.org/?" + $.param({"guid": guid});
+        var guidLink = this.guidLink_;
         template.find("#qrcode").qrcode(guidLink);
         template.find("#row_link").attr("href", guidLink);
         template.find("#btn_share").attr("data-guid", guid);
@@ -191,6 +190,35 @@ var PostItemMVC = (function ($) {
         });
     };
 
+    ItemView.prototype.configureWeChat_ = function(model){
+        var guidLink = this.guidLink_;
+        var guid = this.guid_;
+        var xq = model.getFieldData("xq", guid);
+        if (xq == "出租") {
+            weixin.wxData.imgUrl = "http://haoshiyou.org/img/logo-v1-green-1024sq2.jpg";
+        } else if (xq == "求租") {
+            weixin.wxData.imgUrl = "http://haoshiyou.org/img/logo-v1-blue-1024sq2.jpg";
+        } else if (xq == "找室友") {
+            weixin.wxData.imgUrl = "http://haoshiyou.org/img/logo-v1-yellow-1024sq2.jpg";
+        }
+        weixin.wxData.title = this.model_.getFieldData("xq", guid) +
+            model.getFieldData("qy", guid) + "，时间是"
+            model.getFieldData("qssj", guid) + "左右开始，求分享！";
+
+        weixin.wxData.link = guidLink;
+        weixin.wxData.desc = model.getFieldData("grjs", guid);
+        weixin.wxCallbacks.confirm = function() {
+            zHelper.log("分享成功", "INFO", guidLink);
+            zHelper.track("wechat share succeeded.");
+            $.notify("分享成功", "success");
+        };
+        weixin.wxCallbacks.fail = function() {
+            zHelper.log("分享失败", "WARNING", guidLink);
+            zHelper.track("Wechat share failed");
+            $.notify("分享失败", "danger");
+        };
+    };
+
     /**
      *
      * @param guid The GUID of a given listing post
@@ -200,10 +228,11 @@ var PostItemMVC = (function ($) {
         var item = new ItemView(guid);
         item.displayData(this.model_, guid);
         item.shouldShowContactInfo(true);
+        item.configureWeChat_(this.model_);
         this.panelView_.addChild(item.getDom());
     };
 
     return {
         Controller: Controller
     };
-})($);
+})($, weixin, zHelper);
