@@ -207,6 +207,8 @@ var PostItemMVC = (function ($, weixin, zHelper) {
 
         weixin.wxData.link = guidLink;
         weixin.wxData.desc = model.getFieldData("grjs", guid);
+
+        zHelper("XXX set wechat", "INFO", weixin.wxData);
         weixin.wxCallbacks.confirm = function() {
             zHelper.log("分享成功", "INFO", guidLink);
             zHelper.track("wechat share succeeded.");
@@ -228,7 +230,9 @@ var PostItemMVC = (function ($, weixin, zHelper) {
         var item = new ItemView(guid);
         item.displayData(this.model_, guid);
         item.shouldShowContactInfo(true);
+        zHelper("XXX before setting wechat");
         item.configureWeChat_(this.model_);
+        zHelper("XXX after setting wechat");
         this.panelView_.addChild(item.getDom());
     };
 
