@@ -230,9 +230,9 @@ var PostItemMVC = (function ($, weixin, zHelper) {
         var item = new ItemView(guid);
         item.displayData(this.model_, guid);
         item.shouldShowContactInfo(true);
-        zHelper("XXX before setting wechat");
+        zHelper.log("XXX before setting wechat");
         item.configureWeChat_(this.model_);
-        zHelper("XXX after setting wechat");
+        zHelper.log("XXX after setting wechat");
         this.panelView_.addChild(item.getDom());
     };
 
