@@ -62,10 +62,9 @@ jQuery(function ($) {
     function initWeixin() {
         zHelper.log("Start weichat config");
         var auth = WeiXinJsSdkWrapper.authenticator;
-        auth.configAsync(function(ret) {
+        auth.configAsync("http://haoshiyou.org", function(ret) {
             console.log("XXX");
             console.log(ret);
-
         });
     };
     function main() {
