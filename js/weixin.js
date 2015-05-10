@@ -1,31 +1,7 @@
 // 所有功能必须包含在 WeixinApi.ready 中进行
-var weixin = (function(zHelper) {
-
+var weixin = (function(zHelper, wx) {
 
     zHelper.log("Wait for WeixinApi.ready!");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     var wxData = {
         "imgUrl": 'http://rent.zzn.im/img/logo/Logo_108.jpg'
         // "link": 'http://www.baidufe.com',
@@ -61,21 +37,18 @@ var weixin = (function(zHelper) {
             // 如果你做的是一个鼓励用户进行分享的产品，在这里是不是可以给用户一些反馈了？
         }
     };
-
-    WeixinApi.ready(function (Api) {
-        zHelper.log("WeixinApi.ready!");
-        // 微信分享的数据
-        // 用户点开右上角popup菜单后，点击分享给好友，会执行下面这个代码
-        Api.shareToFriend(wxData, wxCallbacks);
-
-        // 点击分享到朋友圈，会执行下面这个代码
-        Api.shareToTimeline(wxData, wxCallbacks);
-
-        // 点击分享到腾讯微博，会执行下面这个代码
-        Api.shareToWeibo(wxData, wxCallbacks);
-    });
+    var dataAndCallBack = {
+        title: wxData.title, // 分享标题
+        link: wxData.link, // 分享链接
+        imgUrl: wxData.imgUrl, // 分享图标
+        desc: wxData.desc,
+        success: wxCallbacks.confirm,
+        cancel: wxCallbacks.cancel
+    };
+    wx.onMenuShareTimeline(dataAndCallBack);
+    wx.onMenuShareAppMessage(dataAndCallBack);
     return {
         wxData: wxData,
         wxCallbacks: wxCallbacks
     };
-})(zHelper);
+})(zHelper, wx);
