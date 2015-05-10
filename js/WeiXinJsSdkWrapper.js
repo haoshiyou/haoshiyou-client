@@ -17,6 +17,7 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
            function(dataRead) {
                if (dataRead !== null) {
                    zHelper.log("Cache hit, already have access token");
+                   zHelper.track("CacheHitWeChatAccessToken");
                    cb(dataRead);
                } else {
                    zHelper.log("Cached not hit, requesting access token");
@@ -46,6 +47,7 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
             function(dataRead) {
                 if (dataRead !== null) {
                     zHelper.log("Cache hit, already have jsapi_ticket");
+                    zHelper.track("CacheHitWeChatJsApiTicket");
                     cb(dataRead);
                     return;
                 } else {
