@@ -1,5 +1,5 @@
 
-var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache){
+var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
     //TODO(zzn): to be replaced by a real secret after development.
     var CONST_APPID = "wx4bf3130f55a3352d";
     var CONST_APPSECRET = "d15f5121f0047d288f1ba81dd0fe7cca";
@@ -76,32 +76,25 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
         var nonceStr = this.nonceStr_;
         var that = this;
         zHelper.log("Start configAsync");
-        wx.ready(function(){
-            zHelper.log("Wechat Config OK!");
-            cb();
-            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，
-            // 所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，
-            // 则可以直接调用，不需要放在ready函数中。
-        });
 
-        wx.error(function(res){
-            zHelper.log("error in wx.config", "ERROR", res);
-            cb(null, res);
-        });
 
         that.getJsApiTokenAsync_(function(jsApiToken) {
             zHelper.assert(jsApiToken, "jsApiToken should exist" );
             zHelper.assert(nonceStr, "nonceStr should exist" );
             zHelper.assert(timestamp, "timestamp should exist" );
-            zHelper.assert(url, "url should exist" );
+            zHelper.assert(url, "url should exist" ); // TODO XXXX remove url
             var msg = [
                 "jsapi_ticket=" + jsApiToken,
                 "noncestr="  + nonceStr,
                 "timestamp=" + timestamp,
-                "url=" + url,
+                "url=" + window.location.href,
             ].join('&');
-            var signature = CryptoJS.SHA1(msg);
+            var SHA1 = new Hashes.SHA1;
+            var signature = SHA1.hex(msg);
+
             console.log(msg);
+            console.log("XXX signature!");
+            console.log(signature);
             wx.config({
                 debug: zHelper.isDebug(), // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                 appId: CONST_APPID, // 必填，公众号的唯一标识
@@ -113,6 +106,18 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
                     "onMenuShareAppMessage"
                 ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
+            wx.ready(function(){
+                zHelper.log("Wechat Config OK!");
+                cb();
+                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，
+                // 所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，
+                // 则可以直接调用，不需要放在ready函数中。
+            });
+
+            wx.error(function(res){
+                zHelper.log("error in wx.config", "ERROR", res);
+                cb(null, res);
+            });
         });
 
     };
@@ -120,4 +125,4 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
     return {
         authenticator : authenticator
     };
-})($, CryptoJS, wx, zHelper, ParseJsGlobalCache);
+})($, Hashes, wx, zHelper, ParseJsGlobalCache);
