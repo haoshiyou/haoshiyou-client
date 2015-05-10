@@ -30,7 +30,7 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
                                ACCESS_TOKEN_CACHE_KEY,
                                data.access_token, 7200 * 1000,
                                function (wroteData) {
-                                   if (cb)cb(wroteData);
+                                   cb(wroteData);
                            });
                        } else if ("errcode" in data) {
                            zHelper.log("getAccessTokenAsync_ error", "ERROR", data);
