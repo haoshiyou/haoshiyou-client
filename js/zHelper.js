@@ -1,7 +1,13 @@
 // Requires jQuery
 var zHelper = (function($) {
     "use strict";
-
+    var LOG_LEVELS = {
+        VERBOSE: "VERBOSE",
+        DEBUG: "DEBUG",
+        INFO: "INFO",
+        WARNING: "WARNING",
+        ERROR: "ERROR"
+    }
     var myId = $.cookie("myId") || uuid();
     $.cookie("myId", myId);
     var sessionId = uuid();
@@ -66,9 +72,15 @@ var zHelper = (function($) {
     }
 
     function assert(value, msg) {
-        if (value !== true) {
-            console.log("value = " + value, msg);
+        if (value) {
+            // PASS
+        } else  {
+            zHelper.log("Assert failed!", LOG_LEVELS.ERROR, msg);
+            if (isDebug()) {
+                console.assert(value, msg);
+            }
         }
+
     }
 
     return {
@@ -84,6 +96,7 @@ var zHelper = (function($) {
         log: log,
         track: track,
         isDebug: isDebug,
-        assert: assert
+        assert: assert,
+        LOG_LEVELS: LOG_LEVELS
     };
 })($);
