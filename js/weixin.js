@@ -46,8 +46,7 @@ var weixin = (function(zHelper, wx) {
         cancel: wxCallbacks.cancel,
         fail: wxCallbacks.fail
     };
-    wx.onMenuShareTimeline(dataAndCallBack);
-    wx.onMenuShareAppMessage(dataAndCallBack);
+
     return {
         wxData: wxData,
         wxCallbacks: wxCallbacks

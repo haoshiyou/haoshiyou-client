@@ -5,7 +5,7 @@
  * Requires jQuery
  */
 
-var PostItemMVC = (function ($, weixin, zHelper) {
+var PostItemMVC = (function ($, wx, zHelper) {
     "use strict";
     var CONST_SPREADSHEET_URL = "https://spreadsheets.google.com/feeds/list/1vzugrYLpgXmFODqysSx331Lhq8LpDQGJ4sQtwSMrtV4/1/public/values?alt=json";
     var CONST_FIELD_KEYS = {
@@ -194,31 +194,43 @@ var PostItemMVC = (function ($, weixin, zHelper) {
         var guidLink = this.guidLink_;
         var guid = this.guid_;
         var xq = model.getFieldData("xq", guid);
+        var dataAndCallBack = {
+            /*title: wxData.title, // 分享标题
+            link: wxData.link, // 分享链接
+            imgUrl: wxData.imgUrl, // 分享图标
+            desc: wxData.desc,
+            success: wxCallbacks.confirm,
+            cancel: wxCallbacks.cancel,
+            fail: wxCallbacks.fail*/
+        };
         if (xq == "出租") {
-            weixin.wxData.imgUrl = "http://haoshiyou.org/img/logo-v1-green-1024sq2.jpg";
+            dataAndCallBack.imgUrl = "http://haoshiyou.org/img/logo-v1-green-1024sq2.jpg";
         } else if (xq == "求租") {
-            weixin.wxData.imgUrl = "http://haoshiyou.org/img/logo-v1-blue-1024sq2.jpg";
+            dataAndCallBack.imgUrl = "http://haoshiyou.org/img/logo-v1-blue-1024sq2.jpg";
         } else if (xq == "找室友") {
-            weixin.wxData.imgUrl = "http://haoshiyou.org/img/logo-v1-yellow-1024sq2.jpg";
+            dataAndCallBack.imgUrl = "http://haoshiyou.org/img/logo-v1-yellow-1024sq2.jpg";
         }
         weixin.wxData.title = model.getFieldData("xq", guid) +
             model.getFieldData("qy", guid) + "，时间是"
             model.getFieldData("qssj", guid) + "左右开始，求分享！";
 
-        weixin.wxData.link = guidLink;
-        weixin.wxData.desc = model.getFieldData("grjs", guid);
+        dataAndCallBack.link = guidLink;
+        dataAndCallBack.desc = model.getFieldData("grjs", guid);
 
         zHelper.log("XXX set wechat", "INFO", weixin.wxData);
-        weixin.wxCallbacks.confirm = function() {
+        dataAndCallBack.success = function() {
             zHelper.log("分享成功", "INFO", guidLink);
             zHelper.track("wechat share succeeded.");
             $.notify("分享成功", "success");
         };
-        weixin.wxCallbacks.fail = function() {
+        dataAndCallBack.fail = function() {
             zHelper.log("分享失败", "WARNING", guidLink);
             zHelper.track("Wechat share failed");
             $.notify("分享失败", "danger");
         };
+        wx.onMenuShareTimeline(dataAndCallBack);
+        wx.onMenuShareAppMessage(dataAndCallBack);
+        zHelper.log("finished setting onMenuShareTimeline and onMenuShareAppMessage", "INFO", dataAndCallBack);
     };
 
     /**
@@ -239,4 +251,4 @@ var PostItemMVC = (function ($, weixin, zHelper) {
     return {
         Controller: Controller
     };
-})($, weixin, zHelper);
+})($, wx, zHelper);
