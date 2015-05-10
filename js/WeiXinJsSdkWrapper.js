@@ -8,7 +8,7 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
     var JS_API_TICKET_CACHE_KEY = "JSAPI_TICKET";
     var Authenticator = function() {
         this.cacheDb_ = new ParseJsGlobalCache.CacheDb(CACHE_DB_NAME, 600);
-
+        this.nonceStr_ = "85NRI02249025822X184ndd"; //TODO(zzn): use random string each time
     };
 
     Authenticator.prototype.getAccessTokenAsync_ = function(cb) {
@@ -90,6 +90,10 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
         });
 
         that.getJsApiTokenAsync_(function(jsApiToken) {
+            zHelper.assert(jsApiToken, "jsApiToken should exist" );
+            zHelper.assert(nonceStr, "nonceStr should exist" );
+            zHelper.assert(timestamp, "timestamp should exist" );
+            zHelper.assert(url, "url should exist" );
             var msg = [
                 "jsapi_ticket=" + jsApiToken,
                 "noncestr="  + nonceStr,
@@ -97,6 +101,7 @@ var WeiXinJsSdkWrapper = (function($, CryptoJS, wx, zHelper, ParseJsGlobalCache)
                 "url=" + url,
             ].join('&');
             var signature = CryptoJS.SHA1(msg);
+            console.log(msg);
             wx.config({
                 debug: zHelper.isDebug(), // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                 appId: CONST_APPID, // 必填，公众号的唯一标识
