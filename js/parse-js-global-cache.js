@@ -68,8 +68,8 @@ var ParseJsGlobalCache = (function(zHelper, Parse/*initiated before call*/){
             cacheObj.set(CONST_CACHE_VALUE_COLUMN_NAME, value);
             cacheObj.set(CONST_CACHE_EXPIRE_AT_COLUMN_NAME, Date.now() + timeToExpireMilli);
             cacheObj.save()
-                .then(function(){
-                    cb();
+                .then(function(anothercacheObj){
+                    cb(anothercacheObj.get(CONST_CACHE_VALUE_COLUMN_NAME));
                 }).fail(function(ret){
                     zHelper.log("cache write failed", zHelper.LOG_LEVELS.ERROR, ret);
                 });
