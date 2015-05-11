@@ -209,6 +209,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         };
         alert("wxData: " + JSON.stringify(wxData));
         wx.onMenuShareAppMessage(wxData);
+        alert('已注册获取“发送给朋友”状态事件');
 
     };
     PanelView.prototype.addChild = function (item) {
