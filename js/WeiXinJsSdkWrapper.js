@@ -127,9 +127,8 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
                 // 则可以直接调用，不需要放在ready函数中。
             });
 
-            wx.error(function(res){
-                zHelper.log("error in wx.config", "ERROR", res);
-                cb(null, res);
+            wx.error(function (res) {
+                alert(res.errMsg);
             });
         });
 
