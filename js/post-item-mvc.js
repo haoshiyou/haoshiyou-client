@@ -210,8 +210,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
 
-        zHelper.log("XXX set wechat", "INFO", weixin.wxData);
-        alert("test!!!");
+        zHelper.log("XXX set wechat");
         wx.onMenuShareAppMessage({
             title: title,
             link: link,
