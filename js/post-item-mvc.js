@@ -215,10 +215,8 @@ var PostItemMVC = (function ($, wx, zHelper) {
             imgUrl: imgUrl,
             desc: desc
         };
-        zHelper.log("wxData", "INFO", JSON.stringify(wxData));
-        wx.onMenuShareAppMessage(
-            wxData
-        );
+        zHelper.log("wxData: " + JSON.stringify(wxData));
+        wx.onMenuShareAppMessage(wxData);
 
     };
 
