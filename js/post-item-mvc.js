@@ -232,7 +232,6 @@ var PostItemMVC = (function ($, wx, zHelper) {
             }
         });
 
-        zHelper.log("finished setting onMenuShareTimeline and onMenuShareAppMessage", "INFO", dataAndCallBack);
     };
 
     /**
