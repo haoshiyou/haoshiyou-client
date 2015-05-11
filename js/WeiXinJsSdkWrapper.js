@@ -106,7 +106,7 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
             });
             zHelper.log("XXX before ready");
             wx.ready(function(res){
-                zHelper.log("Wechat Config OK!");
+                alert("Wechat Config OK!");
                 zHelper.log(res);
                 wx.checkJsApi({
                     jsApiList: [
@@ -114,9 +114,11 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
                         "onMenuShareAppMessage"
                     ],
                     success: function (res) {
-                        zHelper.log(JSON.stringify(res));
+                        alert("wxCheckJsApi, success");
+                        alert(JSON.stringify(res));
                     },
                     fail: function (res) {
+                        alert("wxCheckJsApi, faile");
                         zHelper.log(JSON.stringify(res));
                     }
                 });
