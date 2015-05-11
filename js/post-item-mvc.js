@@ -209,8 +209,6 @@ var PostItemMVC = (function ($, wx, zHelper) {
 
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
-        alert("test");
-        zHelper.log("XXX set wechat");
         wx.onMenuShareAppMessage({
             title: title,
             link: link,
@@ -218,16 +216,16 @@ var PostItemMVC = (function ($, wx, zHelper) {
             desc: desc,
             trigger: function (res) {
                 // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
-                alert('用户点击分享到朋友圈');
+                zHelper.log('用户点击分享到朋友圈');
             },
             success: function (res) {
-                alert('已分享');
+                zHelper.log('已分享');
             },
             cancel: function (res) {
-                alert('已取消');
+                zHelper.log('已取消');
             },
             fail: function (res) {
-                alert(JSON.stringify(res));
+                zHelper.log(JSON.stringify(res));
             }
         });
 
