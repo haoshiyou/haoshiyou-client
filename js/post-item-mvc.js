@@ -194,7 +194,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         var guidLink = this.guidLink_;
         var guid = this.guid_;
         var xq = model.getFieldData("xq", guid);
-        var title, link, imgUrl, desc,;
+        var title, link, imgUrl, desc;
 
         if (xq == "出租") {
             imgUrl = "http://haoshiyou.org/img/logo-v1-green-1024sq2.jpg";
