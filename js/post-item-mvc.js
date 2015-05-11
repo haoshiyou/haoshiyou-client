@@ -209,25 +209,16 @@ var PostItemMVC = (function ($, wx, zHelper) {
 
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
-        wx.onMenuShareAppMessage({
+        var wxData = {
             title: title,
             link: link,
             imgUrl: imgUrl,
-            desc: desc,
-            trigger: function (res) {
-                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
-                zHelper.log('用户点击分享到朋友圈');
-            },
-            success: function (res) {
-                zHelper.log('已分享');
-            },
-            cancel: function (res) {
-                zHelper.log('已取消');
-            },
-            fail: function (res) {
-                zHelper.log(JSON.stringify(res));
-            }
-        });
+            desc: desc
+        };
+        zHelper.log("wxData", "INFO", wxData);
+        wx.onMenuShareAppMessage(
+            wxData
+        );
 
     };
 
