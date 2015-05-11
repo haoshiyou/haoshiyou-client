@@ -1,9 +1,10 @@
 jQuery(function ($) {
     "use strict";
+
+    var CONST_DOMAIN_NAME = "rent.zzn.im";
     function init() {
         var CONST_PARSE_ID = "RPjt04MBMl3rzzEKBGKUpP7KHFXAsomtDbr9cS0y";
         var CONST_PARSE_KEY = "DSqWg9xElC6mI1PwtPWzzeIPQYUXPGTOC66nT82h";
-
         Parse.initialize(CONST_PARSE_ID, CONST_PARSE_KEY);
         zHelper.trackerFunctions["woopra"] = function(action, dimensions) {
             woopra.track(action, dimensions);
@@ -62,7 +63,7 @@ jQuery(function ($) {
     function initWeixin() {
         zHelper.log("Start weichat config");
         var auth = WeiXinJsSdkWrapper.authenticator;
-        auth.configAsync("http://haoshiyou.org", function(ret) {
+        auth.configAsync("http://" + CONST_DOMAIN_NAME , function(ret) {
             console.log("XXX");
             console.log(ret);
         });

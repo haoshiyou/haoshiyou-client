@@ -30,7 +30,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
 
     var CONST_VALUE_ID_PREFIX = "#value_";
     var CONST_ITEM_TEMPLATE_ID = "#value_panel_template";
-
+    var CONST_DOMAIN_NAME = "rent.zzn.im";
     /**
      * Class definition of Model
      * @constructor
@@ -47,7 +47,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
     var ItemView = function (guid) {
         this.guid_ = guid;
         this.templateClone_ = $(CONST_ITEM_TEMPLATE_ID).clone();
-        this.guidLink_ = "http://haoshiyou.org/?" + $.param({"guid": guid});
+        this.guidLink_ = "http://" + CONST_DOMAIN_NAME + "/?" + $.param({"guid": guid});
     };
 
     var PanelView = function () {
@@ -197,11 +197,11 @@ var PostItemMVC = (function ($, wx, zHelper) {
         var title, link, imgUrl, desc;
 
         if (xq == "出租") {
-            imgUrl = "http://haoshiyou.org/img/logo-v1-green-1024sq2.jpg";
+            imgUrl = "http://" + CONST_DOMAIN_NAME + "/img/logo-v1-green-1024sq2.jpg";
         } else if (xq == "求租") {
-            imgUrl = "http://haoshiyou.org/img/logo-v1-blue-1024sq2.jpg";
+            imgUrl = "http://" + CONST_DOMAIN_NAME + "/img/logo-v1-blue-1024sq2.jpg";
         } else if (xq == "找室友") {
-            imgUrl = "http://haoshiyou.org/img/logo-v1-yellow-1024sq2.jpg";
+            imgUrl = "http://" + CONST_DOMAIN_NAME +"/img/logo-v1-yellow-1024sq2.jpg";
         }
         title = model.getFieldData("xq", guid) +
             model.getFieldData("qy", guid) + "，时间是"
