@@ -9,7 +9,6 @@ var ParseJsGlobalCache = (function(zHelper, Parse/*initiated before call*/){
     var CONST_CACHE_EXPIRE_AT_COLUMN_NAME = "CACHE_EXPIRE_AT";
     var CacheDb = function(parseDbName, expireInAdvanceMilli){
         zHelper.assert(parseDbName);
-        zHelper.log("XXX parseDbName:" + parseDbName);
         this.expireInAdvanceMilli_ = expireInAdvanceMilli;
         this.parseDbName_ = parseDbName;
         this.parseDbClass_  = Parse.Object.extend(parseDbName);
