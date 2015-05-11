@@ -166,29 +166,6 @@ var PostItemMVC = (function ($, wx, zHelper) {
     ItemView.prototype.getDom = function () {
         return this.templateClone_;
     };
-    PanelView.prototype.addChild = function (item) {
-        this.panelDom_.append(item);
-    };
-
-    PanelView.prototype.clearChildren = function () {
-        this.panelDom_.empty();
-    };
-
-    Controller.prototype.initAsync = function (callback) {
-        this.model_.loadDataAsync(callback);
-    };
-
-    Controller.prototype.showAllItems = function () {
-        var that = this;
-        this.panelView_.clearChildren();
-        this.model_.getGuidArray().forEach(function (guid) {
-            var item = new ItemView(guid);
-            item.displayData(that.model_, guid);
-            item.shouldShowContactInfo(false);
-            that.panelView_.addChild(item.getDom());
-
-        });
-    };
 
     ItemView.prototype.configureWeChat_ = function(model){
         var guidLink = this.guidLink_;
@@ -205,7 +182,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         }
         title = model.getFieldData("xq", guid) +
             model.getFieldData("qy", guid) + "，时间是"
-            model.getFieldData("qssj", guid) + "左右开始，求分享！";
+        model.getFieldData("qssj", guid) + "左右开始，求分享！";
 
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
@@ -234,6 +211,30 @@ var PostItemMVC = (function ($, wx, zHelper) {
         wx.onMenuShareAppMessage(wxData);
 
     };
+    PanelView.prototype.addChild = function (item) {
+        this.panelDom_.append(item);
+    };
+
+    PanelView.prototype.clearChildren = function () {
+        this.panelDom_.empty();
+    };
+
+    Controller.prototype.initAsync = function (callback) {
+        this.model_.loadDataAsync(callback);
+    };
+
+    Controller.prototype.showAllItems = function () {
+        var that = this;
+        this.panelView_.clearChildren();
+        this.model_.getGuidArray().forEach(function (guid) {
+            var item = new ItemView(guid);
+            item.displayData(that.model_, guid);
+            item.shouldShowContactInfo(false);
+            that.panelView_.addChild(item.getDom());
+
+        });
+    };
+
 
     /**
      *
@@ -241,11 +242,30 @@ var PostItemMVC = (function ($, wx, zHelper) {
      */
     Controller.prototype.showItemByGuid = function (guid) {
         this.panelView_.clearChildren();
+        var that = this;
         var item = new ItemView(guid);
         item.displayData(this.model_, guid);
         item.shouldShowContactInfo(true);
-        zHelper.log("XXX before setting wechat");
-        item.configureWeChat_(this.model_);
+        wx.ready(function(res){
+            zHelper.log(res);
+            wx.checkJsApi({
+                jsApiList: [
+                    "onMenuShareTimeline",
+                    "onMenuShareAppMessage"
+                ],
+                success: function (res) {
+                    alert("wxCheckJsApi, success");
+                    alert(JSON.stringify(res));
+                    item.configureWeChat_(that.model_);
+                },
+                fail: function (res) {
+                    alert("wxCheckJsApi, faile");
+                    zHelper.log(JSON.stringify(res));
+                }
+            });
+
+        });
+
         zHelper.log("XXX after setting wechat");
         this.panelView_.addChild(item.getDom());
     };
