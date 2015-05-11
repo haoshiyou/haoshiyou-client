@@ -208,7 +208,14 @@ var PostItemMVC = (function ($, wx, zHelper) {
             }
         };
         alert("wxData: " + JSON.stringify(wxData));
-        wx.onMenuShareAppMessage(wxData);
+        wx.onMenuShareAppMessage(
+            {
+                title: '互联网之子',
+                desc: '在长大的过程中，我才慢慢发现，我身边的所有事，别人跟我说的所有事，那些所谓本来如此，注定如此的事，它们其实没有非得如此，事情是可以改变的。更重要的是，有些事既然错了，那就该做出改变。',
+                link: 'http://movie.douban.com/subject/25785114/',
+                imgUrl: 'http://demo.open.weixin.qq.com/jssdk/images/p2166127561.jpg',
+            }
+        );
         alert('已注册获取“发送给朋友”状态事件');
 
     };
