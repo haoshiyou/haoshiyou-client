@@ -211,7 +211,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         desc = model.getFieldData("grjs", guid);
 
         zHelper.log("XXX set wechat", "INFO", weixin.wxData);
-
+        alert("test!!!");
         wx.onMenuShareAppMessage({
             title: title,
             link: link,
