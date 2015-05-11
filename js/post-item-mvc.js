@@ -213,7 +213,22 @@ var PostItemMVC = (function ($, wx, zHelper) {
             title: title,
             link: link,
             imgUrl: imgUrl,
-            desc: desc
+            desc: desc,
+            trigger: function (res) {
+                alert('用户点击分享到微博');
+            },
+            complete: function (res) {
+                alert(JSON.stringify(res));
+            },
+            success: function (res) {
+                alert('已分享');
+            },
+            cancel: function (res) {
+                alert('已取消');
+            },
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
         };
         zHelper.log("wxData: " + JSON.stringify(wxData));
         wx.onMenuShareAppMessage(wxData);
