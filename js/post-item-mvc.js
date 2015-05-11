@@ -230,7 +230,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
                 alert(JSON.stringify(res));
             }
         };
-        zHelper.log("wxData: " + JSON.stringify(wxData));
+        alert("wxData: " + JSON.stringify(wxData));
         wx.onMenuShareAppMessage(wxData);
 
     };
