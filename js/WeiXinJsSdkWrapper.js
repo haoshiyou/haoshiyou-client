@@ -106,9 +106,10 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
                     "onMenuShareAppMessage"
                 ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
-            wx.ready(function(){
+            wx.ready(function(res){
                 zHelper.log("Wechat Config OK!");
-
+                alert("wx.ready");
+                alert(res);
                 wx.checkJsApi({
                     jsApiList: [
                         "onMenuShareTimeline",
