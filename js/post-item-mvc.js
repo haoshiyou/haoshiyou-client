@@ -203,12 +203,12 @@ var PostItemMVC = (function ($, wx, zHelper) {
         };
         alert("XXX 555");
         alert(JSON.stringify(wxData));
-        alert("XXX 666");
+        alert("XXX 666 X");
         wx.onMenuShareAppMessage({
             title: '求分享', // 分享标题
-            desc: '测试描述', // 分享描述
+            desc: '测试描述' // 分享描述
         });
-        alert("XXX 777");
+        alert("XXX 777 X");
 
     };
     PanelView.prototype.addChild = function (item) {
