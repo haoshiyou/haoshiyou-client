@@ -86,6 +86,7 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
                 "timestamp=" + timestamp,
                 "url=" + "http://rent.zzn.im/?guid=370faca8-27f1-8aa8-4b41-5e536d687ae2/", //window.location.href,
             ].join('&');
+            alert("msg = " + JSON.stringify(msg)); //XXX
             var SHA1 = new Hashes.SHA1;
             var signature = SHA1.hex(msg);
 
