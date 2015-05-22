@@ -207,6 +207,9 @@ var PostItemMVC = (function ($, wx, zHelper) {
         wx.onMenuShareAppMessage({
             title: '求分享', // 分享标题
             desc: '测试描述', // 分享描述
+            trigger: function (res) {
+                zHelper.logAlert('用户点击发送给朋友');
+            },
             success: function (ret) {
                 zHelper.logAlert("shared!");
                 zHelper.logAlert("ret=" + JSON.stringify(ret));
