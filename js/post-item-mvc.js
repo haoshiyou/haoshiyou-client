@@ -122,7 +122,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
      *
      * @param should boolean to indicate show(true) or hide(false)
      */
-    ItemView.prototype.shouldShowContactInfo = function (should) {
+    ItemView.prototype.shouldShowContactInfo = function (should, model) {
         var template = this.templateClone_;
         if (should) {
             template.find("#btn_show_wxId").hide();
@@ -140,7 +140,11 @@ var PostItemMVC = (function ($, wx, zHelper) {
                 template.find("#btn_show_dhyx").hide();
                 template.find("#value_dhyx").show();
             });
-
+            //TODO(zzn): update this to somewhere proper
+            template.find("#btn_share").click(function(){
+                alert("clicked share, setting configureWeChat");
+                that.configureWeChat_(model);
+            });
         }
     };
 
@@ -207,6 +211,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
                 alert(JSON.stringify(res));
             }
         };
+        alert(wxData);
         wx.onMenuShareAppMessage(wxData);
 
     };
@@ -245,6 +250,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         var item = new ItemView(guid);
         item.displayData(this.model_, guid);
         item.shouldShowContactInfo(true);
+
         wx.ready(function(res){
             zHelper.log(res);
             wx.checkJsApi({
@@ -253,9 +259,11 @@ var PostItemMVC = (function ($, wx, zHelper) {
                     "onMenuShareAppMessage"
                 ],
                 success: function (res) {
-                    zHelper.log("wxCheckJsApi, success");
+                    alert("wxCheckJsApi, success");
                     zHelper.log(JSON.stringify(res));
-                    item.configureWeChat_(that.model_);
+                    // TODO(zzn):
+                    // uncomment update it here
+                    // item.configureWeChat_(that.model_);
                 },
                 fail: function (res) {
                     alert("wxCheckJsApi, faile");

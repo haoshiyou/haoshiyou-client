@@ -105,8 +105,6 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
                 ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
             zHelper.log("XXX before ready");
-
-
             wx.error(function (res) {
                 zHelper.log(res.errMsg);
             });
