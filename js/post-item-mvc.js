@@ -140,12 +140,13 @@ var PostItemMVC = (function ($, wx, zHelper) {
                 template.find("#btn_show_dhyx").hide();
                 template.find("#value_dhyx").show();
             });
-            //TODO(zzn): update this to somewhere proper
-            template.find("#btn_share").click(function(){
-                alert("clicked share, setting configureWeChat");
-                that.configureWeChat_(model);
-            });
+
         }
+        //TODO(zzn): update this to somewhere proper
+        template.find("#btn_share").click(function(){
+            alert("clicked share, setting configureWeChat");
+            that.configureWeChat_(model);
+        });
     };
 
     ItemView.prototype.displayData = function (model) {
@@ -172,6 +173,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
     };
 
     ItemView.prototype.configureWeChat_ = function(model){
+        alert("clicked configure wechat!");
         var guidLink = this.guidLink_;
         var guid = this.guid_;
         var xq = model.getFieldData("xq", guid);
