@@ -77,6 +77,7 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
         var that = this;
         zHelper.log("Start configAsync");
         that.getJsApiTokenAsync_(function(jsApiToken) {
+            alert("jsApiToken=" + jsApiToken);
             zHelper.assert(jsApiToken, "jsApiToken should exist" );
             zHelper.assert(nonceStr, "nonceStr should exist" );
             zHelper.assert(timestamp, "timestamp should exist" );
