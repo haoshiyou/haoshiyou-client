@@ -62,8 +62,12 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
                                 JS_API_TICKET_CACHE_KEY,
                                 data.ticket, 7200 * 1000,
                                 function (wroteData) {
-                                    cb(wroteData);
+                                    zHelper.log("wrote Data" + JSON.stringify(wroteData));
+                                    // TODO(zzn): logic after wrote data
                                 });
+
+                            that.cachedJsapiToken_ = data.ticket;
+                            zHelper.log("cachedJsapiToken_" + that.cachedJsapiToken_);
                             cb(that.cachedJsapiToken_);
                         });
                     });
@@ -77,7 +81,7 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
         var that = this;
         zHelper.log("Start configAsync");
         that.getJsApiTokenAsync_(function(jsApiToken) {
-            alert("jsApiToken=" + jsApiToken);
+            zHelper.logAlert("jsApiToken=" + jsApiToken);
             zHelper.assert(jsApiToken, "jsApiToken should exist" );
             zHelper.assert(nonceStr, "nonceStr should exist" );
             zHelper.assert(timestamp, "timestamp should exist" );
@@ -87,8 +91,8 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
                 "timestamp=" + timestamp,
                 "url=" + window.location.href,
             ].join('&');
-            alert("msg = " + JSON.stringify(msg)); //XXX
-            alert("current window location href=" + window.location.href); //XXX
+            zHelper.logAlert("msg = " + JSON.stringify(msg)); //XXX
+            zHelper.logAlert("current window location href=" + window.location.href); //XXX
             var SHA1 = new Hashes.SHA1;
             var signature = SHA1.hex(msg);
 
@@ -109,9 +113,9 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
             });
             zHelper.log("XXX before ready");
             wx.error(function (res) {
-                alert("wx error");
-                alert(location.href.split('#')[0]);
-                alert("wx error = " + JSON.stringify(res));
+                zHelper.logAlert("wx error");
+                zHelper.logAlert(location.href.split('#')[0]);
+                zHelper.logAlert("wx error = " + JSON.stringify(res));
                 zHelper.log(res.errMsg);
             });
         });

@@ -145,7 +145,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         }
         //TODO(zzn): update this to somewhere proper
         template.find("#btn_share").click(function(){
-            alert("clicked share, setting configureWeChat");
+            zHelper.logAlert("clicked share, setting configureWeChat");
             that.configureWeChat_(model);
         });
     };
@@ -174,12 +174,12 @@ var PostItemMVC = (function ($, wx, zHelper) {
     };
 
     ItemView.prototype.configureWeChat_ = function(model){
-        alert("clicked configure wechat!");
+        zHelper.logAlert("clicked configure wechat!");
         var guidLink = this.guidLink_;
         var guid = this.guid_;
         var xq = model.getFieldData("xq", guid);
         var title, link, imgUrl, desc;
-        alert("XXX 111");
+        zHelper.logAlert("XXX 111");
         if (xq == "出租") {
             imgUrl = "http://" + CONST_DOMAIN_NAME + "/img/logo-v1-green-1024sq2.jpg";
         } else if (xq == "求租") {
@@ -187,28 +187,28 @@ var PostItemMVC = (function ($, wx, zHelper) {
         } else if (xq == "找室友") {
             imgUrl = "http://" + CONST_DOMAIN_NAME +"/img/logo-v1-yellow-1024sq2.jpg";
         }
-        alert("XXX 222");
+        zHelper.logAlert("XXX 222");
         title = model.getFieldData("xq", guid) +
             model.getFieldData("qy", guid) + "，时间是"
         model.getFieldData("qssj", guid) + "左右开始，求分享！";
-        alert("XXX 333");
+        zHelper.logAlert("XXX 333");
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
-        alert("XXX 444");
+        zHelper.logAlert("XXX 444");
         var wxData = {
             title: title,
             link: link,
             imgUrl: imgUrl,
             desc: desc,
         };
-        alert("XXX 555");
-        alert(JSON.stringify(wxData));
-        alert("XXX 666 X");
+        zHelper.logAlert("XXX 555");
+        zHelper.logAlert(JSON.stringify(wxData));
+        zHelper.logAlert("XXX 666 X");
         wx.onMenuShareAppMessage({
             title: '求分享', // 分享标题
             desc: '测试描述' // 分享描述
         });
-        alert("XXX 777 X");
+        zHelper.logAlert("XXX 777 X");
 
     };
     PanelView.prototype.addChild = function (item) {
@@ -255,14 +255,14 @@ var PostItemMVC = (function ($, wx, zHelper) {
                     "onMenuShareAppMessage"
                 ],
                 success: function (res) {
-                    alert("wxCheckJsApi, success");
+                    zHelper.logAlert("wxCheckJsApi, success");
                     zHelper.log(JSON.stringify(res));
                     // TODO(zzn):
                     // uncomment update it here
                     // item.configureWeChat_(that.model_);
                 },
                 fail: function (res) {
-                    alert("wxCheckJsApi, faile");
+                    zHelper.logAlert("wxCheckJsApi, faile");
                     zHelper.log(JSON.stringify(res));
                 }
             });

@@ -46,7 +46,11 @@ var zHelper = (function($) {
             return false;
         }
     }
-
+    function isAlertOn() {
+        if ($.url().param("alert") == 1) {
+            return true;
+        } else return false;
+    }
     if (isDebug()) {
         console.log("zHelper turns on debug mode.");
     }
@@ -83,6 +87,12 @@ var zHelper = (function($) {
 
     }
 
+    function logAlert(msg) {
+        if (isDebug() && isAlertOn())
+            alert(msg);
+        zHelper.log(msg);
+    }
+
     return {
         // A dict{} which key is name of logger, value is logging function to call, same format of log
         loggerFunctions: loggerFunctions,
@@ -97,6 +107,7 @@ var zHelper = (function($) {
         track: track,
         isDebug: isDebug,
         assert: assert,
+        logAlert: logAlert,
         LOG_LEVELS: LOG_LEVELS
     };
 })($);
