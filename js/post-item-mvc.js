@@ -217,8 +217,9 @@ var PostItemMVC = (function ($, wx, zHelper) {
             cancel: function (ret) {
                 zHelper.logAlert("cancel share!");
                 zHelper.logAlert("ret=" + JSON.stringify(ret));
-            },
+            }
         });
+        zHelper.logAlert('已注册获取“分享到朋友圈”状态事件');
         zHelper.logAlert("XXX 777 X");
 
     };
