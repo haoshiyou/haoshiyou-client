@@ -61,9 +61,9 @@ jQuery(function ($) {
         });
     };
     function initWeixin() {
-        zHelper.log("Start weichat config");
+        alert("Start weichat config");
         var auth = WeiXinJsSdkWrapper.authenticator;
-        auth.configAsync("http://" + CONST_DOMAIN_NAME , function(ret) {
+        auth.configAsync(function(ret) {
             console.log("XXX");
             console.log(ret);
         });
