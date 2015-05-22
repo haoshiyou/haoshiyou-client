@@ -123,6 +123,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
      * @param should boolean to indicate show(true) or hide(false)
      */
     ItemView.prototype.shouldShowContactInfo = function (should, model) {
+        var that = this;
         var template = this.templateClone_;
         if (should) {
             template.find("#btn_show_wxId").hide();
@@ -216,7 +217,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
             }
         };
         alert("XXX 555");
-        alert(wxData);
+        alert(JSON.stringify(wxData));
         alert("XXX 666");
         wx.onMenuShareAppMessage(wxData);
         alert("XXX 777");
@@ -240,7 +241,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         this.model_.getGuidArray().forEach(function (guid) {
             var item = new ItemView(guid);
             item.displayData(that.model_, guid);
-            item.shouldShowContactInfo(false);
+            item.shouldShowContactInfo(false, this.model_);
             that.panelView_.addChild(item.getDom());
 
         });
@@ -256,7 +257,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         var that = this;
         var item = new ItemView(guid);
         item.displayData(this.model_, guid);
-        item.shouldShowContactInfo(true);
+        item.shouldShowContactInfo(true, this.model_);
 
         wx.ready(function(res){
             zHelper.log(res);
