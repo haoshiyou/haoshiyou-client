@@ -106,6 +106,9 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
             });
             zHelper.log("XXX before ready");
             wx.error(function (res) {
+                alert("wx error");
+                alert(location.href.split('#')[0]);
+                alert("wx error = " + JSON.stringify(res));
                 zHelper.log(res.errMsg);
             });
         });
