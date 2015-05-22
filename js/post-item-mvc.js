@@ -200,26 +200,14 @@ var PostItemMVC = (function ($, wx, zHelper) {
             link: link,
             imgUrl: imgUrl,
             desc: desc,
-            trigger: function (res) {
-                alert('用户点击分享到微博');
-            },
-            complete: function (res) {
-                alert(JSON.stringify(res));
-            },
-            success: function (res) {
-                alert('已分享');
-            },
-            cancel: function (res) {
-                alert('已取消');
-            },
-            fail: function (res) {
-                alert(JSON.stringify(res));
-            }
         };
         alert("XXX 555");
         alert(JSON.stringify(wxData));
         alert("XXX 666");
-        wx.onMenuShareAppMessage(wxData);
+        wx.onMenuShareAppMessage({
+            title: '求分享', // 分享标题
+            desc: '测试描述', // 分享描述
+        });
         alert("XXX 777");
 
     };
