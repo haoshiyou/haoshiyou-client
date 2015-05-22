@@ -206,7 +206,15 @@ var PostItemMVC = (function ($, wx, zHelper) {
         zHelper.logAlert("XXX 666 X");
         wx.onMenuShareAppMessage({
             title: '求分享', // 分享标题
-            desc: '测试描述' // 分享描述
+            desc: '测试描述', // 分享描述
+            success: function (ret) {
+                zHelper.logAlert("shared!");
+                zHelper.logAlert("ret=" + JSON.stringify(ret));
+            },
+            cancel: function (ret) {
+                zHelper.logAlert("cancel share!");
+                zHelper.logAlert("ret=" + JSON.stringify(ret));
+            },
         });
         zHelper.logAlert("XXX 777 X");
 
