@@ -179,7 +179,6 @@ var PostItemMVC = (function ($, wx, zHelper) {
         var guid = this.guid_;
         var xq = model.getFieldData("xq", guid);
         var title, link, imgUrl, desc;
-        zHelper.logAlert("XXX 111");
         if (xq == "出租") {
             imgUrl = "http://" + CONST_DOMAIN_NAME + "/img/logo-v1-green-1024sq2.jpg";
         } else if (xq == "求租") {
@@ -187,14 +186,11 @@ var PostItemMVC = (function ($, wx, zHelper) {
         } else if (xq == "找室友") {
             imgUrl = "http://" + CONST_DOMAIN_NAME +"/img/logo-v1-yellow-1024sq2.jpg";
         }
-        zHelper.logAlert("XXX 222");
         title = model.getFieldData("xq", guid) +
             model.getFieldData("qy", guid) + "，时间是"
         model.getFieldData("qssj", guid) + "左右开始，求分享！";
-        zHelper.logAlert("XXX 333");
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
-        zHelper.logAlert("XXX 444");
         var wxData = {
             title: title,
             link: link,
