@@ -143,7 +143,7 @@ var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
                     'openCard'
                 ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
-            zHelper.log("XXX before ready");
+            zHelper.logAlert("XXX before ready");
             wx.error(function (res) {
                 zHelper.logAlert("wx error");
                 zHelper.logAlert(location.href.split('#')[0]);
