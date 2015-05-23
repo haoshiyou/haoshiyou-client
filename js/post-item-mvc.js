@@ -200,8 +200,8 @@ var PostItemMVC = (function ($, wx, zHelper) {
         zHelper.logAlert("XXX 555 123");
         zHelper.logAlert(JSON.stringify(wxData));
         zHelper.logAlert("XXX 666 X");
-        zHelper.logAlert("wx=" + JSON.stringify(wx));
-        zHelper.logAlert("wx.onMenuShareAppMessage" + JSON.stringify(wx.onMenuShareAppMessage));
+        zHelper.logAlert("111 wx=" + JSON.stringify(wx));
+        zHelper.logAlert("wx.onMenuShareAppMessage = " + JSON.stringify(wx.onMenuShareAppMessage));
         wx.onMenuShareAppMessage({
             title: '求分享', // 分享标题
             desc: '测试描述', // 分享描述
