@@ -204,8 +204,6 @@ var PostItemMVC = (function ($, wx, zHelper) {
         };
         wx.onMenuShareAppMessage(wxData);
         wx.onMenuShareTimeline(wxData);
-        zHelper.logAlert('已注册获取“分享到朋友圈”状态事件');
-        zHelper.logAlert("XXX 777 X");
 
     };
     PanelView.prototype.addChild = function (item) {
