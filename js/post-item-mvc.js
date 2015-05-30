@@ -191,20 +191,11 @@ var PostItemMVC = (function ($, wx, zHelper) {
         model.getFieldData("qssj", guid) + "左右开始，求分享！";
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
-        var wxData = {
+        wx.onMenuShareAppMessage({
             title: title,
             link: link,
             imgUrl: imgUrl,
             desc: desc,
-        };
-        zHelper.logAlert("XXX 555 123");
-        zHelper.logAlert(JSON.stringify(wxData));
-        zHelper.logAlert("XXX 666 X");
-        zHelper.logAlert("111 wx=" + JSON.stringify(wx));
-        zHelper.logAlert("wx.onMenuShareAppMessage = " + JSON.stringify(wx.onMenuShareAppMessage));
-        wx.onMenuShareAppMessage({
-            title: '求分享', // 分享标题
-            desc: '测试描述', // 分享描述
             trigger: function (res) {
                 zHelper.logAlert('用户点击发送给朋友');
             },
