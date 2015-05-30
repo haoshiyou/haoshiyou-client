@@ -181,10 +181,10 @@ var PostItemMVC = (function ($, wx, zHelper) {
         } else if (xq == "找室友") {
             imgUrl = "http://" + CONST_DOMAIN_NAME +"/img/logo-v1-yellow-1024sq2.jpg";
         }
-        title = "[湾区好室友]" + model.getFieldData("qy", guid)  + xq;
+        title = "湾区好室友 - " + model.getFieldData("qy", guid) + xq;
         link = guidLink;
         desc = "时间是" + model.getFieldData("qssj", guid) + "左右开始。\r\n"
-            + "情况介绍：" + model.getFieldData("grjs", guid);
+            + "情况简介：" + model.getFieldData("grjs", guid);
         var wxData = {
             title: title,
             link: link,
