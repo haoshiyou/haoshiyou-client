@@ -185,7 +185,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
             model.getFieldData("qy", guid) + "，时间是" +
             model.getFieldData("qssj", guid) + "左右开始，求分享！";
         link = guidLink;
-        desc = model.getFieldData("grjs", guid);
+        desc = "情况介绍：" + model.getFieldData("grjs", guid);
         var wxData = {
             title: title,
             link: link,
