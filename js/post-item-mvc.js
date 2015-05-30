@@ -143,11 +143,6 @@ var PostItemMVC = (function ($, wx, zHelper) {
             });
 
         }
-        //TODO(zzn): update this to somewhere proper
-        template.find("#btn_share").click(function(){
-            zHelper.logAlert("clicked share, setting configureWeChat");
-            that.configureWeChat_(model);
-        });
     };
 
     ItemView.prototype.displayData = function (model) {
@@ -258,11 +253,11 @@ var PostItemMVC = (function ($, wx, zHelper) {
                     "onMenuShareAppMessage"
                 ],
                 success: function (res) {
-                    zHelper.logAlert("wxCheckJsApi, success");
+                    zHelper.logAlert("wxCheckJsApi, success, configuring WeChat");
                     zHelper.log(JSON.stringify(res));
                     // TODO(zzn):
                     // uncomment update it here
-                    // item.configureWeChat_(that.model_);
+                    item.configureWeChat_(that.model_);
                 },
                 fail: function (res) {
                     zHelper.logAlert("wxCheckJsApi, faile");
