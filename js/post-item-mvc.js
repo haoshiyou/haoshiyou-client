@@ -239,7 +239,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         this.model_.getGuidArray().forEach(function (guid) {
             var item = new ItemView(guid);
             item.displayData(that.model_, guid);
-            item.shouldShowContactInfo(false, this.model_);
+            item.shouldShowContactInfo(false, that.model_);
             that.panelView_.addChild(item.getDom());
 
         });
