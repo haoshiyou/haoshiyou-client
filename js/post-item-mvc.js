@@ -203,6 +203,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
             }
         };
         wx.onMenuShareAppMessage(wxData);
+        wxData.title = wxData.title + "\r\n" + wxData.desc;
         wx.onMenuShareTimeline(wxData);
 
     };
