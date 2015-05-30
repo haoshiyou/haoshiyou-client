@@ -191,7 +191,7 @@ var PostItemMVC = (function ($, wx, zHelper) {
         model.getFieldData("qssj", guid) + "左右开始，求分享！";
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
-        wx.onMenuShareAppMessage({
+        var wxData = {
             title: title,
             link: link,
             imgUrl: imgUrl,
@@ -207,7 +207,9 @@ var PostItemMVC = (function ($, wx, zHelper) {
                 zHelper.logAlert("cancel share!");
                 zHelper.logAlert("ret=" + JSON.stringify(ret));
             }
-        });
+        };
+        wx.onMenuShareAppMessage(wxData);
+        wx.onMenuShareTimeline(wxData);
         zHelper.logAlert('已注册获取“分享到朋友圈”状态事件');
         zHelper.logAlert("XXX 777 X");
 
