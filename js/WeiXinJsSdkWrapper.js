@@ -1,8 +1,8 @@
 
 var WeiXinJsSdkWrapper = (function($, Hashes, wx, zHelper, ParseJsGlobalCache){
     //TODO(zzn): to be replaced by a real secret after development.
-    var CONST_APPID = "wx4bf3130f55a3352d";
-    var CONST_APPSECRET = "d15f5121f0047d288f1ba81dd0fe7cca";
+    var CONST_APPID = "wx7ae4deab928f12fa";
+    var CONST_APPSECRET = "bf1a43de360366574a5547e07d267f51";
     var CACHE_DB_NAME = "AuthCache";
     var ACCESS_TOKEN_CACHE_KEY = "ACCESS_TOKEN";
     var JS_API_TICKET_CACHE_KEY = "JSAPI_TICKET";
