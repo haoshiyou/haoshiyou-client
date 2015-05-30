@@ -181,11 +181,10 @@ var PostItemMVC = (function ($, wx, zHelper) {
         } else if (xq == "找室友") {
             imgUrl = "http://" + CONST_DOMAIN_NAME +"/img/logo-v1-yellow-1024sq2.jpg";
         }
-        title = model.getFieldData("xq", guid) +
-            model.getFieldData("qy", guid) + "，时间是" +
-            model.getFieldData("qssj", guid) + "左右开始，求分享！";
+        title = "[湾区好室友]" + model.getFieldData("qy", guid)  + xq;
         link = guidLink;
-        desc = "情况介绍：" + model.getFieldData("grjs", guid);
+        desc = "时间是" + model.getFieldData("qssj", guid) + "左右开始。\r\n"
+            + "情况介绍：" + model.getFieldData("grjs", guid);
         var wxData = {
             title: title,
             link: link,
