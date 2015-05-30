@@ -183,8 +183,8 @@ var PostItemMVC = (function ($, wx, zHelper) {
         }
         title = "湾区好室友 - " + model.getFieldData("qy", guid) + xq;
         link = guidLink;
-        desc = "时间是" + model.getFieldData("qssj", guid) + "左右开始。\r\n"
-            + "情况简介：" + model.getFieldData("grjs", guid);
+        desc = model.getFieldData("qssj", guid) + "左右开始。\r\n"
+            + "简介：" + model.getFieldData("grjs", guid);
         var wxData = {
             title: title,
             link: link,
