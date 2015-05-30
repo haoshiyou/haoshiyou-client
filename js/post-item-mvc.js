@@ -187,8 +187,8 @@ var PostItemMVC = (function ($, wx, zHelper) {
             imgUrl = "http://" + CONST_DOMAIN_NAME +"/img/logo-v1-yellow-1024sq2.jpg";
         }
         title = model.getFieldData("xq", guid) +
-            model.getFieldData("qy", guid) + "，时间是"
-        model.getFieldData("qssj", guid) + "左右开始，求分享！";
+            model.getFieldData("qy", guid) + "，时间是" +
+            model.getFieldData("qssj", guid) + "左右开始，求分享！";
         link = guidLink;
         desc = model.getFieldData("grjs", guid);
         var wxData = {
