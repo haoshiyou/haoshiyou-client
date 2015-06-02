@@ -1,5 +1,6 @@
 .idea
 # -*- mode: gitignore; -*-
+*.iml
 *~
 \#*\#
 /.emacs.desktop
