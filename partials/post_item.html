@@ -1,0 +1,74 @@
+<div class="panel" ng-model="item">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <span><i class="fa fa-crosshairs"></i> </span>
+        <span class="zzn-content"> {{item.xq}} </span>
+        <span class="pull-right"><a href="{{ item.url }}"><i class="fa fa-link"></i></a></span>
+    </div>
+    <table class="table ">
+        <tr class="detail">
+            <td><i class="fa fa-clock-o"></i> 发布时间</td>
+            <td class="zzn-content">{{item.fbsj}}</td>
+        </tr>
+        <tr>
+            <td><i class="fa fa-clock-o"></i> 起始时间</td>
+            <td class="zzn-content">{{item.qssj}}</td>
+        </tr>
+        <tr class="detail">
+            <td><i class="fa fa-clock-o"></i> 短租长租</td>
+            <td class="zzn-content"> {{item.stlt}} </td>
+        </tr>
+        <tr>
+            <td><i class="fa fa-location-arrow"></i> 区域</td>
+            <td id="value_qy" class="zzn-content">{{item.qy}}</td>
+        </tr>
+        <tr>
+            <td><i class="fa fa-location-arrow"></i> 邮编或者城市</td>
+            <td id="value_ybhzcs" class="zzn-content">{{item.ybhzcs}}</td>
+        </tr>
+        <tr>
+            <td><i class="fa fa-calculator"></i> 预期价格</td>
+            <td id="value_yqjg" class="zzn-content"> {{item.yqjg}}</td>
+        </tr>
+        <tr class="detail">
+            <td><i class="fa fa-child"></i> 性别</td>
+            <td id="value_xb" class="zzn-content">{{item.xb}}</td>
+        </tr>
+        <tr class="detail">
+            <td><i class="fa fa-weixin"></i> 微信号</td>
+            <td class="zzn-content">
+                <span id="value_wxId"> </span>
+                <button class="btn btn-success btn-xs" id="btn_show_wxId">显示 <i
+                        class="glyphicon glyphicon-eye-open"></i></button>
+            </td>
+        </tr>
+        <tr class="detail">
+            <td><i class="fa fa-mail-forward"></i> 电话邮箱</td>
+            <td class="zzn-content">
+                <span id="value_dhyx"></span>
+                <button class="btn btn-success btn-xs" id="btn_show_dhyx">显示 <i
+                        class="glyphicon glyphicon-eye-open"></i></button>
+            </td>
+        </tr>
+        <tr class="detail">
+            <td colspan="2"><i class="fa fa-user"></i> 个人介绍</td>
+        </tr>
+        <tr class="detail">
+            <td colspan="2">
+                <p><span id="value_grjs"></span></p>
+            </td>
+        </tr>
+        <tr class="detail">
+            <td colspan="2" style="text-align: center">
+                <div id="qrcode"></div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="panel-footer">
+        <span id="btn_like" class="zzn-panel-footer-button" data-track-action="like"><i
+                class="fa fa-thumbs-up"></i></span>
+        <span id="btn_share" class="zzn-panel-footer-button" data-track-action="share"><i
+                class="fa fa-share-alt"></i></span>
+    </div>
+</div>
