@@ -5,7 +5,7 @@ var services = angular.module('haoshiyou.services', []);
 services.factory('HaoshiyouService', function ($q) {
     var fakeData = [
         { xq: "求租", fbsj: "2015-01-01"},
-        { xq: "招租", fbsj: "2015-02-01"},
+        { xq: "招租", fbsj: "2015-02-01"}
     ];
     return {
         post: function (id) {
