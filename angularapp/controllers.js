@@ -2,14 +2,22 @@
 
 var ctrls = angular.module('haoshiyou.controllers', []);
 
+ctrls.controller('EntranceCtrl', function($http) {
+
+});
+
 ctrls.controller('PostListCtrl', function ($scope, HaoshiyouService) {
-    $scope.list = HaoshiyouService.posts();
+    HaoshiyouService.postsP()
+        .then(function(data) {
+            console.log(data);
+            $scope.items = data;
+        });
 });
 
 ctrls.controller('PostItemCtrl', function ($scope, $http, $routeParams, HaoshiyouService) {
-    var id = $routeParams.id;
-    $scope.item = HaoshiyouService.post(id);
-
+    var guid = $routeParams.guid;
+    $scope.item = HaoshiyouService.post(guid);
+    $scope.guid = guid;
     $scope.STYLES = {
         "a": "panel-success",
         "求租": "panel-primary",
@@ -17,7 +25,7 @@ ctrls.controller('PostItemCtrl', function ($scope, $http, $routeParams, Haoshiyo
     };
 });
 
-ctrls.controller('GroupsCtrl', function ($scope, $http, $routeParams, HaoshiyouService) {
+ctrls.controller('GroupsCtrl', function ($scope) {
 
     $scope.groups = {
         "dz": "短租",

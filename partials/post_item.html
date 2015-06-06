@@ -1,9 +1,9 @@
-<div class="panel {{STYLES.a}}" ng-model="item">
+<div class="panel panel-success" ng-model="item">
     <!-- Default panel contents -->
     <div class="panel-heading">
         <span><i class="fa fa-crosshairs"></i> </span>
         <span class="zzn-content"> {{item.xq}} </span>
-        <span class="pull-right"><a href="{{ item.url }}"><i class="fa fa-link"></i></a></span>
+        <span class="pull-right"><a href="#/post/{{item.guid}}"><i class="fa fa-link"></i></a></span>
     </div>
     <table class="table ">
         <tr ng-show="item.fbsj">
@@ -40,7 +40,7 @@
         </tr>
         <tr ng-show="item.dhyx">
             <td><i class="fa fa-mail-forward"></i> 电话邮箱</td>
-            <td>{{item.dhyx}}</td>
+            <td class="zzn-content">{{item.dhyx}}</td>
         </tr>
         <tr ng-show="item.grjs">
             <td colspan="2"><i class="fa fa-user"></i> 个人介绍</td>
