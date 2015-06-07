@@ -3,12 +3,30 @@
 var ctrls = angular.module('haoshiyou.controllers', []);
 
 ctrls.controller('DashCtrl', function($log, $scope, HaoshiyouService) {
+
+
   HaoshiyouService.postsP()
       .then(function(data) {
         $log.info("XXXX Got data!");
-        $log.info(data);
         $scope.posts = data;
+
       });
+
+  // TODO(zzn) remove the following test data
+  $scope.posts = { "a928e935-1c42-b162-77a0-614865b67446" :{
+    "xq": "求租",
+    "qssj": "7/1/1980",
+    "qy": "南湾",
+    "ybhzcs": "sunnyvale / mtv/ santa clara / curpertino",
+    "yqjg": "N/A",
+    "grjs": "女生，少做饭。想找一个 一室一厅，或者带卫生间的主卧。 长租半年到一年左右。希望找有车库，有洗衣机，烘干机，禁烟的房子。",
+    "wxId": "irisyiying",
+    "xb": "Female",
+    "dhyx": "N/A",
+    "fbsj": "5/7/2015 19:48:11",
+    "ltst": "Long Term (more than 6 months)",
+    "guid": "a928e935-1c42-b162-77a0-614865b67446"
+  }};
 });
 
 ctrls.controller('TeamCtrl', function($scope) {
@@ -65,6 +83,7 @@ ctrls.controller('DetailCtrl', function($log, $scope, $stateParams, HaoshiyouSer
     ['ybhzcs', 'ion-location'],
     ['yqjg', 'ion-cash'],
   ];
+
   //$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
   $scope.post = HaoshiyouService.post($stateParams.guid);
   $scope.showMap = false;
@@ -95,6 +114,7 @@ ctrls.controller('DetailCtrl', function($log, $scope, $stateParams, HaoshiyouSer
           }
         });
     }
+
   });
 
 });

@@ -6,12 +6,7 @@
 -->
 <ion-view view-title="Detail">
   <ion-content class="padding">
-    <div class="list card">
-      <ui-gmap-google-map center='map.center' zoom='map.zoom' ng-show="showMap">
-        <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
-        </ui-gmap-marker>
-      </ui-gmap-google-map>
-    </div>
+
     <div class="list card">
       <ion-list>
         <ion-item class="item item-icon-left" ng-repeat="col_and_icon in SHOW_COLUMNS_AND_ICONS" ng-show="post[col_and_icon[0]]">
@@ -24,6 +19,13 @@
           {{post.grjs}}
         </p>
       </div>
+    </div>
+
+    <div class="list card" ng-show="showMap">
+      <ui-gmap-google-map center='map.center' zoom='map.zoom' >
+        <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
+        </ui-gmap-marker>
+      </ui-gmap-google-map>
     </div>
   </ion-content>
 </ion-view>
