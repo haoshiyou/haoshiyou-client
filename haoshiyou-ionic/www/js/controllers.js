@@ -26,28 +26,33 @@ ctrls.controller('TeamCtrl', function($scope) {
   {
     id: 1,
     name: 'Shasha',
-    intro: 'Community Manager'
+    intro: 'Community Manager',
+    face: 'img/shasha.jpg'
   },
   {
     id: 2,
     name: 'Xudong',
-    intro: 'Community Manager'
+    intro: 'Community Manager',
+    face: 'img/xudong.jpg'
   },
   {
     id: 3,
     name: 'Gengchao',
-    intro: 'Community Manager'
+    intro: 'Community Manager',
+    face: 'img/gengchao.jpg'
 
   },
   {
     id: 4,
     name: 'Xiaohan',
-    intro: 'UX Designer'
+    intro: 'UX Designer',
+    face: 'img/xiaohan.jpg'
   },
   {
     id: 4,
     name: 'Lin',
-    intro: 'Visual Designer'
+    intro: 'Visual Designer',
+    face: 'img/lin.jpg'
   }];
   $scope.$on('$ionicView.enter', function(e) {
     $scope.team = TEAM_DATA;
@@ -94,8 +99,6 @@ ctrls.controller('DetailCtrl', function($log, $scope, $stateParams, HaoshiyouSer
 
 });
 
-ctrls.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
+ctrls.controller('QrCodeCtrl', function($scope) {
+  $scope.qrcodes = ['dw', 'dz', 'nw', 'sf', 'zbd'];
 });

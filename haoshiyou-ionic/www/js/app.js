@@ -67,12 +67,12 @@ angular.module('haoshiyou', [
     }
   })
 
-  .state('tab.account', {
-    url: '/account',
+  .state('tab.qrcode', {
+    url: '/qrcode',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      'tab-qrcode': {
+        templateUrl: 'templates/tab-qrcode.html',
+        controller: 'QrCodeCtrl'
       }
     }
   });
