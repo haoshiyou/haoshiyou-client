@@ -61,7 +61,7 @@ ctrls.controller('TeamCtrl', function($scope) {
 
 ctrls.controller('DetailCtrl', function($log, $scope, $stateParams, HaoshiyouService, uiGmapGoogleMapApi) {
   $scope.SHOW_COLUMNS_AND_ICONS = [
-    ['kssj', 'ion-calendar'],
+    ['qssj', 'ion-calendar'],
     ['ybhzcs', 'ion-location'],
     ['yqjg', 'ion-cash'],
   ];
