@@ -1,5 +1,5 @@
 {
-  "name": "haoshiyou-ionic",
+  "name": "haoshiyou",
   "app_id": "38193d5b",
   "gulpStartupTasks": [
     "sass",
