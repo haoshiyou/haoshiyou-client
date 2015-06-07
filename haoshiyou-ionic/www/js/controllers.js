@@ -54,13 +54,44 @@ ctrls.controller('TeamCtrl', function($scope) {
   });
 });
 
-ctrls.controller('DetailCtrl', function($scope, $stateParams, HaoshiyouService) {
+ctrls.controller('DetailCtrl', function($log, $scope, $stateParams, HaoshiyouService, uiGmapGoogleMapApi) {
   $scope.SHOW_COLUMNS_AND_ICONS = [
     ['kssj', 'ion-calendar'],
     ['ybhzcs', 'ion-location'],
     ['yqjg', 'ion-cash'],
   ];
+  //$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
   $scope.post = HaoshiyouService.post($stateParams.guid);
+  $scope.showMap = false;
+  $scope.$watch("post.ybhzcs", function(newValue){
+    if (newValue) {
+        console.log("xxx map api ready");
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({
+          "address": newValue
+        }, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            $log.info("address: " + newValue);
+            var location = results[0].geometry.location;
+            $scope.map = {center: {latitude: location.lat(), longitude: location.lng() }, zoom: 14 };
+            $scope.options = {scrollwheel: false};
+            $scope.marker = {
+              id: 0,
+              coords: {
+                latitude: location.lat(),
+                longitude: location.lng()
+              },
+              options: { draggable: false }
+            };
+            $scope.showMap = true;
+          }
+          else {
+            $scope.showMap = false;
+          }
+        });
+    }
+  });
+
 });
 
 ctrls.controller('AccountCtrl', function($scope) {

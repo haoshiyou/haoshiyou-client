@@ -1,9 +1,9 @@
 angular.module('haoshiyou', [
   'ionic',
   'haoshiyou.controllers',
-  'haoshiyou.services'])
+  'haoshiyou.services', 'uiGmapgoogle-maps'])
 
-.run(function($ionicPlatform, $rootScope) {
+.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,8 +17,12 @@ angular.module('haoshiyou', [
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
-
+.config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+      key: 'AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es',
+      v: '3.17',
+      libraries: 'weather,geometry,visualization'
+    });
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
