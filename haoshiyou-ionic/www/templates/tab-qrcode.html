@@ -1,10 +1,10 @@
-<ion-view view-title="QR-code">
+<ion-view view-title="QR-Code">
   <ion-content>
     <ion-slide-box on-slide-changed="slideHasChanged($index)">
       <ion-slide ng-repeat="qrcode in qrcodes">
         <div class="list card">
-          <div class="item item-image">
-            <img ng-src="img/wechat-group-{{qrcode}}.jpg"/>
+          <div class="item item-body">
+            <img class="full-image" ng-src="img/wechat-group-{{qrcode}}.jpg"/>
           </div>
         </div>
       </ion-slide>
