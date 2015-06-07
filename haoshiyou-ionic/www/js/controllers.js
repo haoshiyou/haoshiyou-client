@@ -65,7 +65,7 @@ ctrls.controller('DetailCtrl', function($log, $scope, $stateParams, HaoshiyouSer
   $scope.showMap = false;
   $scope.$watch("post.ybhzcs", function(newValue){
     if (newValue) {
-        console.log("xxx map api ready");
+        $log.info("map api ready");
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode({
           "address": newValue
