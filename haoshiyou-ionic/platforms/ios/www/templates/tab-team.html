@@ -1,0 +1,12 @@
+<ion-view view-title="Team">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-avatar item-icon-right" ng-repeat="member in team"
+                type="item-text-wrap">
+        <img ng-src="{{member.face}}" />
+        <h2>{{member.name}}</h2>
+        <p> {{member.intro}} </p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
