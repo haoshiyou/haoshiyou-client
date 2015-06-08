@@ -1,6 +1,13 @@
 'use strict';
 
-var ctrls = angular.module('haoshiyou.controllers', []);
+var ctrls = angular.module('haoshiyou.controllers', ['ngResource', 'lbServices']);
+
+ctrls.controller('HeaderCtrl', function($log, $scope, HaoshiyouService) {
+  $scope.add = function() {
+
+  };
+});
+
 
 ctrls.controller('DashCtrl', function($log, $scope, HaoshiyouService) {
   HaoshiyouService.postsP()
@@ -103,3 +110,16 @@ ctrls.controller('DetailCtrl', function($log, $scope, $stateParams, HaoshiyouSer
 ctrls.controller('QrCodeCtrl', function($scope) {
   $scope.qrcodes = ['dw', 'dz', 'nw', 'sf', 'zbd'];
 });
+
+ctrls.controller('EditCtrl', ['$scope', 'HsyPost', function($scope, HsyPost) {
+  alert("Edit!!");
+  $scope.create = function() {
+    alert("Create!");
+    HsyPost.create({ start_date : "2015-08-01", expect_price: "800", location: "Sunnyvale" })
+        .$promise
+        .then(function(data) {
+          console.log("Success!" + data);
+        });
+  };
+
+}]);

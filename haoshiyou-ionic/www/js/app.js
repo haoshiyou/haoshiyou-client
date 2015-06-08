@@ -3,7 +3,7 @@ angular.module('haoshiyou', [
   'haoshiyou.controllers',
   'haoshiyou.services', 'uiGmapgoogle-maps'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,  $rootScope, $log) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -14,6 +14,30 @@ angular.module('haoshiyou', [
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
     }
+
+
+  });
+
+  $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
+    $log.debug('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
+  });
+
+  $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
+    $log.debug('$stateChangeError - fired when an error occurs during transition.');
+    $log.debug(arguments);
+  });
+
+  $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
+    $log.debug('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
+  });
+
+  $rootScope.$on('$viewContentLoaded',function(event){
+    $log.debug('$viewContentLoaded - fired after dom rendered',event);
+  });
+
+  $rootScope.$on('$stateNotFound',function(event, unfoundState, fromState, fromParams){
+    console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
+    $log.debug(unfoundState, fromState, fromParams);
   });
 })
 
@@ -75,9 +99,23 @@ angular.module('haoshiyou', [
         controller: 'QrCodeCtrl'
       }
     }
+  })
+  .state('tab.add', {
+    url: '/add',
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/edit.html',
+        controller: 'EditCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
+
+}).config(function(LoopBackResourceProvider){
+
+    // Change the URL where to access the LoopBack REST API server
+    LoopBackResourceProvider.setUrlBase('http://0.0.0.0:3000/api');
 
 });

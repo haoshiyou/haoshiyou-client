@@ -1,0 +1,24 @@
+{
+  "name": "HsyPost",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "start_date": {
+      "type": "date",
+      "required": true
+    },
+    "expect_price": {
+      "type": "number"
+    },
+    "original_location": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
