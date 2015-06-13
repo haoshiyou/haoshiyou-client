@@ -75,6 +75,7 @@ jQuery(function ($) {
         zHelper.log("track view");
         zHelper.track("view");
 
+        /*
         var controller = new PostItemMVC.Controller();
         var guid = $.url().param("guid");
         $("#loading_panel").show();
@@ -92,7 +93,9 @@ jQuery(function ($) {
             }
             $("#loading_panel").hide();
         });
+        */
 
+        $("#loading_panel").hide();
         setFooterButtons();
         setDownloadScreenshot();
     };
