@@ -8,7 +8,6 @@ ctrls.controller('HeaderCtrl', function($log, $scope, HaoshiyouService) {
   };
 });
 
-
 ctrls.controller('DashCtrl', function($log, $scope, HaoshiyouService) {
   HaoshiyouService.postsP()
       .then(function(data) {
@@ -111,15 +110,24 @@ ctrls.controller('QrCodeCtrl', function($scope) {
   $scope.qrcodes = ['dw', 'dz', 'nw', 'sf', 'zbd'];
 });
 
-ctrls.controller('EditCtrl', ['$scope', 'HsyPost', function($scope, HsyPost) {
-  alert("Edit!!");
+ctrls.controller('EditCtrl', function($scope, HsyPost, $log) {
+  $scope.editData = {};
+  $scope.rows = [
+    {key: 'start_date', icon:'ion-calendar', placeholder: 'Start Date'},
+    {key: 'location', icon:'ion-location', placeholder: 'Location'},
+    {key: 'price', icon:'ion-cash', placeholder: 'Price'},
+    {key: 'intro', icon:'ion-ios-compose', placeholder: 'Introduction'}
+  ];
   $scope.create = function() {
-    alert("Create!");
-    HsyPost.create({ start_date : "2015-08-01", expect_price: "800", location: "Sunnyvale" })
+    HsyPost.create($scope.editData)
         .$promise
         .then(function(data) {
-          console.log("Success!" + data);
+          $log.info("Success posting");
+          $log.info(data);
+        })
+        .catch(function(err) {
+          $log.error(err);
         });
   };
 
-}]);
+});

@@ -10,10 +10,10 @@
       "type": "date",
       "required": true
     },
-    "expect_price": {
+    "price": {
       "type": "number"
     },
-    "original_location": {
+    "location": {
       "type": "string"
     }
   },

@@ -1,26 +1,19 @@
 <ion-view view-title="Add">
     <ion-content>
-        <div class="list card">
-            <a href="#" class="item item-icon-left">
-                <i class="icon ion-calendar"></i>
-                Enter approximate start date
-            </a>
-
-            <a href="#" class="item item-icon-left">
-                <i class="icon ion-location"></i>
-                Enter location
-            </a>
-
-            <a href="#" class="item item-icon-left">
-                <i class="icon ion-cash"></i>
-                Enter price [optional]
-            </a>
-
-            <a href="#" class="item item-icon-left">
-                <i class="icon icon-document"></i>
-                Enter more information
-            </a>
-
+        <div class="list">
+            <div ng-repeat="row in rows">
+                <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
+                    <i class="icon {{row.icon}}"></i>
+                    {{ editData[row.key] || "Enter " + row.placeholder }}
+                </a>
+                <label class="item item-input" ng-show="$parent.editPicker == row.key">
+                    <input type="text" placeholder="{{row.placeholder}}" ng-model="$parent.editData[row.key]">
+                </label>
+            </div>
+            <ion-toggle class="item item-icon-left" ng-model="makeContactPublic" toggle-class="toggle-calm">
+                <i class="icon ion-android-contact"></i>
+                Make My Contact Info Public
+            </ion-toggle>
         </div>
         <button class="button button-full button-positive" ng-click="create()">
             Post
