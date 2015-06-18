@@ -145,3 +145,25 @@ ctrls.controller('EditCtrl', function($scope, HsyPost, $log) {
   };
 
 });
+
+ctrls.controller('LoginCtrl', function($scope, User) {
+  $scope.data = {};
+
+  $scope.login = function() {
+    User.login({email: 'foo@bar.com', password: 'bar'})
+        .$promise
+        .then(function(accessToken) {
+      console.log(accessToken);
+    }).catch(function(err) {
+      console.log(err);
+    });
+  };
+  $scope.register = function() {
+    User.create({email: 'foo@bar.com', password: 'bar'})
+        .$promise.then(function(user) {
+          console.log(user);
+        }).catch(function(err) {
+          console.log(err);
+        });
+  };
+});

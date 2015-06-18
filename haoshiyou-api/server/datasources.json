@@ -1,8 +1,4 @@
 {
-  "db": {
-    "name": "db",
-    "connector": "memory"
-  },
   "MongoDB-test": {
     "host": "ds047812.mongolab.com",
     "port": 4781,

@@ -56,8 +56,9 @@ angular.module('haoshiyou', [
   // setup an abstract state for the tabs directive
   .state('login', {
       url: '/login',
-      templateUrl: 'templates/login.html'
-    })
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+  })
   .state('tab', {
     url: "/tab",
     abstract: true,
