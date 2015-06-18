@@ -54,6 +54,10 @@ angular.module('haoshiyou', [
   $stateProvider
 
   // setup an abstract state for the tabs directive
+  .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html'
+    })
   .state('tab', {
     url: "/tab",
     abstract: true,
@@ -70,7 +74,15 @@ angular.module('haoshiyou', [
       }
     }
   })
-
+  .state('tab.my', {
+    url: '/my',
+    views: {
+      'tab-my': {
+        templateUrl: 'templates/tab-my.html',
+        controller: 'MyCtrl'
+      }
+    }
+  })
   .state('tab.team', {
       url: '/team',
       views: {

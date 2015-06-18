@@ -2,5 +2,15 @@
   "db": {
     "name": "db",
     "connector": "memory"
+  },
+  "MongoDB-test": {
+    "host": "ds047812.mongolab.com",
+    "port": 4781,
+    "url": "mongodb://admin:admin@ds047812.mongolab.com:47812/heroku_vw54584c",
+    "database": "heroku_vw54584c",
+    "password": "admin",
+    "name": "MongoDB-test",
+    "connector": "mongodb",
+    "user": "admin"
   }
 }

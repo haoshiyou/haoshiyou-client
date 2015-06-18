@@ -33,7 +33,7 @@
     "public": false
   },
   "HsyPost": {
-    "dataSource": "db",
+    "dataSource": "MongoDB-test",
     "public": true,
     "$promise": {},
     "$resolved": true

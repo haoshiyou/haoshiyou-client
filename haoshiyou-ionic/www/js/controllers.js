@@ -9,12 +9,26 @@ ctrls.controller('HeaderCtrl', function($log, $scope, HaoshiyouService) {
 });
 
 ctrls.controller('DashCtrl', function($log, $scope, HaoshiyouService) {
+  $scope.title = "Home";
   HaoshiyouService.postsP()
       .then(function(data) {
         $scope.posts = data;
-
       });
-  });
+});
+
+ctrls.controller('MyCtrl', function($log, $scope, HsyPost) {
+  $scope.title = "My";
+  HsyPost.find()
+      .$promise
+      .then(function(results) {
+        $log.info("xxx getting my!");
+        $scope.posts = results;
+
+        $log.info("xxx error  getting my!");
+      }).catch(function(err) {
+        $log.error(JSON.stringify(err));
+      });
+});
 
 ctrls.controller('TeamCtrl', function($scope) {
   // With the new view caching in Ionic, Controllers are only called
