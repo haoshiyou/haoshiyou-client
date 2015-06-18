@@ -2,10 +2,19 @@
 
 var ctrls = angular.module('haoshiyou.controllers', ['ngResource', 'lbServices']);
 
-ctrls.controller('HeaderCtrl', function($log, $scope, HaoshiyouService) {
-  $scope.add = function() {
+ctrls.controller('MainCtrl', function($log, $rootScope, User, $scope) {
 
-  };
+  $scope.logout = function() {
+    console.log("Logout!");
+    User.logout()
+        .$promise
+        .then(function () {
+          $rootScope.session = null;
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+  }
 });
 
 ctrls.controller('DashCtrl', function($log, $scope, HaoshiyouService) {
@@ -146,14 +155,15 @@ ctrls.controller('EditCtrl', function($scope, HsyPost, $log) {
 
 });
 
-ctrls.controller('LoginCtrl', function($scope, User) {
+ctrls.controller('LoginCtrl', function($scope, User, $rootScope) {
   $scope.data = {};
 
   $scope.login = function() {
     User.login({email: 'foo@bar.com', password: 'bar'})
         .$promise
-        .then(function(accessToken) {
-      console.log(accessToken);
+        .then(function(session) {
+          console.log(session);
+          $rootScope.session = session;
     }).catch(function(err) {
       console.log(err);
     });
