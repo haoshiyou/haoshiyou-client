@@ -8,5 +8,9 @@
     "name": "MongoDB-test",
     "connector": "mongodb",
     "user": "admin"
+  },
+  "InMemory-test": {
+    "name": "InMemory-test",
+    "connector": "memory"
   }
 }

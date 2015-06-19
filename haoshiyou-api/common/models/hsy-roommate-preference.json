@@ -1,0 +1,33 @@
+{
+  "name": "HsyRoommatePreference",
+  "base": "HsyPreference",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "noPet": {
+      "type": "string"
+    },
+    "noCooking": {
+      "type": "string"
+    },
+    "noOvernightGuest": {
+      "type": "string"
+    },
+    "noCouple": {
+      "type": "string"
+    },
+    "noParty": {
+      "type": "string"
+    },
+    "noLoudNoise": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

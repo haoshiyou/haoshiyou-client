@@ -1,0 +1,27 @@
+{
+  "name": "HsyHouseReference",
+  "base": "HsyPreference",
+  "strict": true,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "separeteBath": {
+      "type": "boolean",
+      "comments": ""
+    },
+    "designatedParking": {
+      "type": "boolean",
+      "comments": ""
+    },
+    "laundryInUnit": {
+      "type": "boolean",
+      "comments": ""
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

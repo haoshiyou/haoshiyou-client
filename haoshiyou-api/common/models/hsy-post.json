@@ -6,19 +6,63 @@
     "validateUpsert": true
   },
   "properties": {
-    "start_date": {
+    "startDate": {
       "type": "date",
       "required": true
     },
-    "price": {
-      "type": "number"
-    },
     "location": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "comments": "original location filled by user"
+    },
+    "geopointFromLocation": {
+      "type": "geopoint",
+      "required": false,
+      "comments": "geopoint generated from location"
+    },
+    "needType": {
+      "type": "string",
+      "required": true,
+      "comments": "enum of 招租, 求租, 找室友"
+    },
+    "areaType": {
+      "type": "string",
+      "required": true,
+      "comments": "enum of 三番, 东湾, 南湾, 中半岛"
+    },
+    "price": {
+      "type": "number",
+      "comments": "expecting price"
+    },
+    "leaseLength": {
+      "type": "string",
+      "required": false,
+      "comments": "expecting lease length by days"
+    },
+    "createdBySessionId": {
+      "type": "string",
+      "required": true
+    },
+    "takenDown": {
+      "type": "boolean",
+      "comments": "weather the post has been taken down"
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "owner": {
+      "type": "belongsTo",
+      "model": "HsyUser"
+    },
+    "hsyRoommatePreferences": {
+      "type": "hasOne",
+      "model": "HsyRoommatePreference"
+    },
+    "hsyHouseReferences": {
+      "type": "hasOne",
+      "model": "HsyHouseReference"
+    }
+  },
   "acls": [],
   "methods": []
 }

@@ -37,5 +37,29 @@
     "public": true,
     "$promise": {},
     "$resolved": true
+  },
+  "HsyUser": {
+    "dataSource": "MongoDB-test",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "HsyPreference": {
+    "dataSource": "MongoDB-test",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "HsyRoommatePreference": {
+    "dataSource": "MongoDB-test",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "HsyHouseReference": {
+    "dataSource": "MongoDB-test",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
   }
 }

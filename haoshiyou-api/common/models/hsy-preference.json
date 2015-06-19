@@ -1,0 +1,19 @@
+{
+  "name": "HsyPreference",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "isPreferenceOrFeature": {
+      "type": "string",
+      "comments": "enum of \"preference\" and \"feature\""
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
