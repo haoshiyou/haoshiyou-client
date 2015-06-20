@@ -15,6 +15,7 @@
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="lib/angular-resource/angular-resource.min.js"></script>
+    <script src="lib/ionic-wizard/dist/ion-wizard.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
@@ -36,11 +37,7 @@
     <ion-nav-bar class="bar-stable" ng-controller="MainCtrl">
       <ion-nav-back-button>
       </ion-nav-back-button>
-      <ion-nav-buttons side="primary">
-        <a class="button" ng-href="#/tab/dash">
-          Home
-        </a>
-      </ion-nav-buttons>
+
       <ion-nav-buttons side="secondary">
         <a class="button" ng-href="#/login" ng-hide="session">
           Login

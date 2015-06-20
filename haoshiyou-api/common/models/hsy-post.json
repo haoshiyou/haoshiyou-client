@@ -34,10 +34,10 @@
       "type": "number",
       "comments": "expecting price"
     },
-    "leaseLength": {
+    "leaseType": {
       "type": "string",
       "required": false,
-      "comments": "expecting lease length by days"
+      "comments": "enum of 长租(半年或以上), 短租(半年以下)"
     },
     "createdBySessionId": {
       "type": "string",
@@ -46,6 +46,11 @@
     "takenDown": {
       "type": "boolean",
       "comments": "weather the post has been taken down"
+    },
+    "introduction": {
+      "type": "string",
+      "required": true,
+      "comments": "introduction of the post"
     }
   },
   "validations": [],
@@ -54,11 +59,11 @@
       "type": "belongsTo",
       "model": "HsyUser"
     },
-    "hsyRoommatePreferences": {
+    "hsyRoommatePreference": {
       "type": "hasOne",
       "model": "HsyRoommatePreference"
     },
-    "hsyHouseReferences": {
+    "hsyHouseReference": {
       "type": "hasOne",
       "model": "HsyHouseReference"
     }

@@ -56,10 +56,8 @@
     "$promise": {},
     "$resolved": true
   },
-  "HsyHouseReference": {
+  "HsyHousePreference": {
     "dataSource": "MongoDB-test",
-    "public": true,
-    "$promise": {},
-    "$resolved": true
+    "public": true
   }
 }

@@ -22,6 +22,9 @@
     },
     "phone": {
       "type": "string"
+    },
+    "contactEmail": {
+      "type": "string"
     }
   },
   "validations": [],

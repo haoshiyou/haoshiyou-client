@@ -1,5 +1,5 @@
 angular.module('haoshiyou', [
-  'ionic',
+  'ionic', 'ionic.wizard',
   'haoshiyou.controllers',
   'haoshiyou.services', 'uiGmapgoogle-maps'])
 

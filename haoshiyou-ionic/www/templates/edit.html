@@ -1,22 +1,115 @@
-<ion-view view-title="Add">
-    <ion-content>
-        <div class="list">
-            <div ng-repeat="row in rows">
-                <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
-                    <i class="icon {{row.icon}}"></i>
-                    {{ editData[row.key] || "Enter " + row.placeholder }}
-                </a>
-                <label class="item item-input" ng-show="$parent.editPicker == row.key">
-                    <input type="text" placeholder="{{row.placeholder}}" ng-model="$parent.editData[row.key]">
-                </label>
-            </div>
-            <ion-toggle class="item item-icon-left" ng-model="makeContactPublic" toggle-class="toggle-calm">
-                <i class="icon ion-android-contact"></i>
-                Make My Contact Info Public
-            </ion-toggle>
-        </div>
-        <button class="button button-full button-positive" ng-click="create()">
-            Post
+<ion-view view-title="">
+    <ion-nav-buttons side="left">
+        <button class="button button-light no-animation" ion-wizard-previous>
+            Back
         </button>
-    </ion-content>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-light no-animation" ion-wizard-next>
+            Next
+        </button>
+    </ion-nav-buttons>
+    <ion-slide-box ion-wizard>
+        <ion-slide ion-wizard-step class="has-header" ng-repeat="type in postInfoTypes">
+            <div class="bar bar-header">
+                <h1 class="title">请选择{{ type.enumType }}</h1>
+            </div>
+            <ion-content>
+            <div class="list">
+                <ion-radio ng-repeat="enumValue in type.enumValues"
+                           ng-model="$parent.postInfoInputs[type.key]" name="{{type.key}}" ng-value="enumValue">
+                    {{ enumValue }}
+                </ion-radio>
+            </div>
+            </ion-content>
+        </ion-slide>
+
+        <ion-slide ion-wizard-step class="has-header">
+            <div class="bar bar-header">
+                <h1 class="title" > 基本情况 </h1>
+            </div>
+            <ion-content>
+            <div class="list">
+                <!-- Post Info -->
+                <div ng-repeat="row in postInfoRows">
+                    <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
+                        <i class="icon {{row.icon}}"></i>
+                        {{ postInfoRows[row.key] || "请输入" + row.placeholder }}
+                    </a>
+                    <label class="item item-input" ng-show="$parent.editPicker == row.key">
+                        <input type="text" placeholder="{{row.placeholder}}" ng-model="$parent.postInfoInputs[row.key]">
+                    </label>
+                </div>
+            </div>
+            </ion-content>
+        </ion-slide>
+        <ion-slide ion-wizard-step class="has-header">
+            <div class="bar bar-header">
+                <h1 class="title" ng-if="postInfoInputs['needType'] == '招租'">{{ "我希望租客" }}</h1>
+                <h1 class="title" ng-if="postInfoInputs['needType'] == '求租'">{{ "我" }}</h1>
+                <h1 class="title" ng-if="postInfoInputs['needType'] == '找室友'">{{ "我希望室友" }}</h1>
+            </div>
+
+            <ion-content>
+            <div class="list">
+                <!-- Roommate Info -->
+                <div ng-repeat="row in roommatePreferenceRows">
+                    <ion-toggle class="item item-icon-left"
+                                ng-model="$parent.roommatePreferenceInputs[row.key]"
+                                toggle-class="toggle-calm">
+                        <i class="icon ion-help"></i>
+                        {{ row.text }}
+                    </ion-toggle>
+                </div>
+            </div>
+            </ion-content>
+        </ion-slide>
+        <ion-slide ion-wizard-step class="has-header">
+            <div class="bar bar-header">
+                <h1 class="title" ng-if="postInfoInputs['needType'] == '招租'">我房子的情况</h1>
+                <h1 class="title" ng-if="postInfoInputs['needType'] == '求租'">我希望房子</h1>
+                <h1 class="title" ng-if="postInfoInputs['needType'] == '找室友'">我希望房子</h1>
+            </div>
+
+            <ion-content>
+                <div class="list">
+                    <!-- House Info -->
+                    <div ng-repeat="row in housePreferenceRows">
+                        <ion-toggle class="item item-icon-left"
+                                    ng-model="$parent.housePreferenceInputs[row.key]"
+                                    toggle-class="toggle-calm">
+                            <i class="icon ion-help"></i>
+                            {{ row.text }}
+                        </ion-toggle>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-slide>
+        <ion-slide ion-wizard-step class="has-header">
+            <div class="bar bar-header">
+                <h1 class="title" > 我的联络方式 </h1>
+            </div>
+            <ion-content>
+                <div class="list">
+                    <!-- Contact Info if needed -->
+                    <div ng-repeat="row in contactInfoRows">
+                        <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
+                            <i class="icon {{row.icon}}"></i>
+                            {{ editData[row.key] || "请输入" + row.placeholder }}
+                        </a>
+                        <label class="item item-input" ng-show="$parent.editPicker == row.key">
+                            <input type="text" placeholder="{{row.placeholder}}" ng-model="$parent.editData[row.key]">
+                        </label>
+                    </div>
+                    <ion-toggle class="item item-icon-left" ng-model="makeContactPublic" toggle-class="toggle-calm">
+                        <i class="icon ion-android-contact"></i>
+                        允许其他用户通过这些联系方式跟我联系
+                    </ion-toggle>
+                </div>
+            </ion-content>
+        </ion-slide>
+    </ion-slide-box>
+    <button class="button button-full button-positive" ng-click="create()">
+        Post
+    </button>
 </ion-view>

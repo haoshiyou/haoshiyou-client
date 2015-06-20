@@ -133,24 +133,63 @@ ctrls.controller('QrCodeCtrl', function($scope) {
   $scope.qrcodes = ['dw', 'dz', 'nw', 'sf', 'zbd'];
 });
 
-ctrls.controller('EditCtrl', function($scope, HsyPost, $log) {
-  $scope.editData = {};
-  $scope.rows = [
-    {key: 'start_date', icon:'ion-calendar', placeholder: 'Start Date'},
-    {key: 'location', icon:'ion-location', placeholder: 'Location'},
-    {key: 'price', icon:'ion-cash', placeholder: 'Price'},
-    {key: 'intro', icon:'ion-ios-compose', placeholder: 'Introduction'}
+ctrls.controller('EditCtrl', function($scope, $log, $q,
+    HsyPost, HsyRoommatePreference, HsyHousePreference, HsyUser) {
+  // TODO(zzn): consider move these schema related information to the schema or some where extending schema
+  $scope.postInfoTypes = [
+    { key: 'needType', enumType: "需求", enumValues: ['招租', '求租', '找室友'] },
+    { key: 'leaseType', enumType: "租期", enumValues: ['长租(半年或以上)', '短租(半年以下)'] },
+    { key: 'areaType', enumType: "需求", enumValues: ['南湾', '三番', '中半岛', '东湾'] }
   ];
+
+  $scope.postInfoRows = [
+    {key: 'startDate', icon:'ion-calendar', placeholder: '开始时间'},
+    {key: 'location', icon:'ion-location', placeholder: '地址'},
+    {key: 'price', icon:'ion-cash', placeholder: '价格'},
+    {key: 'introduction', icon:'ion-ios-compose', placeholder: '情况介绍'}
+  ];
+
+  $scope.roommatePreferenceRows = [
+    {key: 'noPets', icon:'ion-help', text: '不带宠物'},
+    {key: 'noCooking', icon:'ion-help', text: '少炊'}
+  ];
+
+  $scope.housePreferenceRows = [
+    {key: 'separatedBath', icon:'ion-help', text: '有独立卫生间'},
+    {key: 'designatedParking', icon:'ion-help', text: '有停车位'},
+    {key: 'laundryInUnit', icon:'ion-help', text: '屋内有洗衣机和烘干机'}
+  ];
+
+  $scope.contactInfoRows = [
+    {key: 'wechat', icon:'ion-help', placeholder: '微信号'},
+    {key: 'phone', icon:'ion-help', placeholder: '电话'},
+    {key: 'contactEmail', icon:'ion-help', placeholder: 'Email'}
+  ];
+
+  $scope.postInfoInputs = {};
+  $scope.roommatePreferenceInputs = {};
+  $scope.housePreferenceInputs = {};
+  $scope.contactInfoInputs = {};
+
   $scope.create = function() {
-    HsyPost.create($scope.editData)
-        .$promise
-        .then(function(data) {
-          $log.info("Success posting");
-          $log.info(data);
-        })
-        .catch(function(err) {
-          $log.error(err);
-        });
+    HsyUser.create($scope.contactInfoInputs)
+      .$promise
+      .then(function(hsyUser) {
+          var post = angular.copy($scope.postInfoInputs);
+          post.owner = hsyUser.id;
+          return HsyPost.create(post).$promise;
+      })
+      .then(function(hsyPost) {
+        return $q.all([
+          hsyPost.hsyRoommatePreference.create($scope.roommatePreferenceInputs),
+          hsyPost.hsyHouseReference.create($scope.housePreferenceInputs)
+            ]);
+      })
+      .catch(function(err){
+          //TODO(zzn) handle error here
+          //TODO(zzn): add validation, transaction and rollback
+          console.log(err);
+      });
   };
 
 });

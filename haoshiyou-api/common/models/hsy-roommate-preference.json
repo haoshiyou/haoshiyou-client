@@ -7,23 +7,11 @@
     "validateUpsert": true
   },
   "properties": {
-    "noPet": {
-      "type": "string"
+    "noPets": {
+      "type": "boolean"
     },
     "noCooking": {
-      "type": "string"
-    },
-    "noOvernightGuest": {
-      "type": "string"
-    },
-    "noCouple": {
-      "type": "string"
-    },
-    "noParty": {
-      "type": "string"
-    },
-    "noLoudNoise": {
-      "type": "string"
+      "type": "boolean"
     }
   },
   "validations": [],
