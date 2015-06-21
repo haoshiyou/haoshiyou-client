@@ -51,6 +51,18 @@
       "type": "string",
       "required": true,
       "comments": "introduction of the post"
+    },
+    "wechat": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "contactEmail": {
+      "type": "string"
+    },
+    "contactInfoPublic": {
+      "type": "boolean"
     }
   },
   "validations": [],

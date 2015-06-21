@@ -1,33 +1,37 @@
-<ion-view view-title="">
+<ion-view view-title="{{ stepTitle }}">
     <ion-nav-buttons side="left">
         <button class="button button-light no-animation" ion-wizard-previous>
             Back
         </button>
     </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-        <button class="button button-light no-animation" ion-wizard-next>
-            Next
-        </button>
-    </ion-nav-buttons>
-    <ion-slide-box ion-wizard>
-        <ion-slide ion-wizard-step class="has-header" ng-repeat="type in postInfoTypes">
+    <ion-slide-box ion-wizard show-pager="">
+
+        <ion-slide ion-wizard-step class="has-header"
+                   ng-repeat="type in postInfoTypes">
             <div class="bar bar-header">
                 <h1 class="title">请选择{{ type.enumType }}</h1>
             </div>
+
             <ion-content>
-            <div class="list">
-                <ion-radio ng-repeat="enumValue in type.enumValues"
-                           ng-model="$parent.postInfoInputs[type.key]" name="{{type.key}}" ng-value="enumValue">
-                    {{ enumValue }}
-                </ion-radio>
-            </div>
+                <div class="list">
+                    <ion-radio ng-repeat="enumValue in type.enumValues"
+                               ng-model="$parent.postInfoInputs[type.key]"
+                               name="{{type.key}}"
+                               ng-value="enumValue"
+                               ion-wizard-next>
+                        {{ enumValue }}
+                    </ion-radio>
+                </div>
             </ion-content>
         </ion-slide>
+        <ion-slide ion-wizard-step class="has-header has-subfooter">
 
-        <ion-slide ion-wizard-step class="has-header">
             <div class="bar bar-header">
                 <h1 class="title" > 基本情况 </h1>
             </div>
+            <button class="bar bar-subfooter bar-balanced" ion-wizard-next>
+                <div class="title">Next</div>
+            </button>
             <ion-content>
             <div class="list">
                 <!-- Post Info -->
@@ -37,19 +41,22 @@
                         {{ postInfoInputs[row.key] || "请输入" + row.placeholder }}
                     </a>
                     <label class="item item-input" ng-show="$parent.editPicker == row.key">
-                        <input type="text" placeholder="{{row.placeholder}}" ng-model="postInfoInputs[row.key]">
+                        <input type="text" ng-required="row.required" placeholder="{{row.placeholder}}" ng-model="postInfoInputs[row.key]">
                     </label>
                 </div>
             </div>
             </ion-content>
+
         </ion-slide>
-        <ion-slide ion-wizard-step class="has-header">
+        <ion-slide ion-wizard-step class="has-header has-subfooter">
             <div class="bar bar-header">
                 <h1 class="title" ng-if="postInfoInputs['needType'] == '招租'">{{ "我希望租客" }}</h1>
                 <h1 class="title" ng-if="postInfoInputs['needType'] == '求租'">{{ "我" }}</h1>
                 <h1 class="title" ng-if="postInfoInputs['needType'] == '找室友'">{{ "我希望室友" }}</h1>
             </div>
-
+            <button class="bar bar-subfooter bar-balanced" ion-wizard-next>
+                <div class="title">Next</div>
+            </button>
             <ion-content>
             <div class="list">
                 <!-- Roommate Info -->
@@ -63,13 +70,15 @@
             </div>
             </ion-content>
         </ion-slide>
-        <ion-slide ion-wizard-step class="has-header">
+        <ion-slide ion-wizard-step class="has-header has-subfooter">
             <div class="bar bar-header">
                 <h1 class="title" ng-if="postInfoInputs['needType'] == '招租'">我房子的情况</h1>
                 <h1 class="title" ng-if="postInfoInputs['needType'] == '求租'">我希望房子</h1>
                 <h1 class="title" ng-if="postInfoInputs['needType'] == '找室友'">我希望房子</h1>
             </div>
-
+            <button class="bar bar-subfooter bar-balanced" ion-wizard-next>
+                <div class="title">Next</div>
+            </button>
             <ion-content>
                 <div class="list">
                     <!-- House Info -->
@@ -83,10 +92,13 @@
                 </div>
             </ion-content>
         </ion-slide>
-        <ion-slide ion-wizard-step class="has-header">
+        <ion-slide ion-wizard-step class="has-header has-subfooter">
             <div class="bar bar-header">
                 <h1 class="title" > 我的联络方式 </h1>
             </div>
+            <button class="bar bar-subfooter bar-positive">
+                <div class="title">Submit</div>
+            </button>
             <ion-content>
                 <div class="list">
                     <!-- Contact Info if needed -->
@@ -96,18 +108,16 @@
                             {{ contactInfoInputs[row.key] || "请输入" + row.placeholder }}
                         </a>
                         <label class="item item-input" ng-show="$parent.editPicker == row.key">
-                            <input type="text" placeholder="{{row.placeholder}}" ng-model="$parent.contactInfoInputs[row.key]">
+                            <input type="text" ng-required="row.required" placeholder="{{row.placeholder}}" ng-model="$parent.postInfoInputs[row.key]">
                         </label>
                     </div>
-                    <ion-toggle class="item item-icon-left" ng-model="makeContactPublic" toggle-class="toggle-calm">
+                    <ion-toggle class="item item-icon-left" ng-model="$parent.postInfoInputs['contactInfoPublic']" toggle-class="toggle-calm">
                         <i class="icon ion-android-contact"></i>
-                        允许其他用户通过这些联系方式跟我联系
+                        公开我的联系方式
                     </ion-toggle>
                 </div>
             </ion-content>
         </ion-slide>
     </ion-slide-box>
-    <button class="button button-full button-positive" ng-click="create()">
-        Post
-    </button>
+
 </ion-view>

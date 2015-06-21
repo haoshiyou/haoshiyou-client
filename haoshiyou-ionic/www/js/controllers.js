@@ -91,7 +91,7 @@ ctrls.controller('DetailCtrl', function($log, $scope, $stateParams, HaoshiyouSer
   $scope.SHOW_COLUMNS_AND_ICONS = [
     ['qssj', 'ion-calendar'],
     ['ybhzcs', 'ion-location'],
-    ['yqjg', 'ion-cash'],
+    ['yqjg', 'ion-cash']
   ];
 
   //$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
@@ -137,16 +137,16 @@ ctrls.controller('EditCtrl', function($scope, $log, $q,
     HsyPost, HsyRoommatePreference, HsyHousePreference, HsyUser) {
   // TODO(zzn): consider move these schema related information to the schema or some where extending schema
   $scope.postInfoTypes = [
-    { key: 'needType', enumType: "需求", enumValues: ['招租', '求租', '找室友'] },
-    { key: 'leaseType', enumType: "租期", enumValues: ['长租(半年或以上)', '短租(半年以下)'] },
-    { key: 'areaType', enumType: "需求", enumValues: ['南湾', '三番', '中半岛', '东湾'] }
+    { key: 'needType',  enumType: "需求", required: true, enumValues: ['招租', '求租', '找室友'], },
+    { key: 'leaseType', enumType: "租期", required: true, enumValues: ['长租(半年或以上)', '短租(半年以下)'], },
+    { key: 'areaType',  enumType: "区域", required: true, enumValues: ['南湾', '三番', '中半岛', '东湾'], }
   ];
 
   $scope.postInfoRows = [
-    {key: 'startDate', icon:'ion-calendar', placeholder: '开始时间'},
-    {key: 'location', icon:'ion-location', placeholder: '地址'},
-    {key: 'price', icon:'ion-cash', placeholder: '价格'},
-    {key: 'introduction', icon:'ion-ios-compose', placeholder: '情况介绍'}
+    {key: 'startDate',    icon:'ion-calendar',    required: true, placeholder: '开始时间'},
+    {key: 'location',     icon:'ion-location',    placeholder: '地址'},
+    {key: 'price',        icon:'ion-cash',        placeholder: '价格'},
+    {key: 'introduction', icon:'ion-ios-compose', required: true, placeholder: '情况介绍'}
   ];
 
   $scope.roommatePreferenceRows = [
@@ -161,8 +161,8 @@ ctrls.controller('EditCtrl', function($scope, $log, $q,
   ];
 
   $scope.contactInfoRows = [
-    {key: 'wechat', icon:'fa fa-wechat', placeholder: '微信号'},
-    {key: 'phone', icon:'fa fa-phone', placeholder: '电话'},
+    {key: 'wechat',       icon:'fa fa-wechat',   placeholder: '微信号'},
+    {key: 'phone',        icon:'fa fa-phone',    placeholder: '电话'},
     {key: 'contactEmail', icon:'fa fa-envelope', placeholder: 'Email'}
   ];
 
@@ -171,7 +171,8 @@ ctrls.controller('EditCtrl', function($scope, $log, $q,
   $scope.housePreferenceInputs = {};
   $scope.contactInfoInputs = {};
 
-  $scope.create = function() {
+  $scope.submit = function() {
+    $log.log("Submiting");
     HsyUser.create($scope.contactInfoInputs)
       .$promise
       .then(function(hsyUser) {
@@ -181,9 +182,12 @@ ctrls.controller('EditCtrl', function($scope, $log, $q,
       })
       .then(function(hsyPost) {
         return $q.all([
-          hsyPost.hsyRoommatePreference.create($scope.roommatePreferenceInputs),
-          hsyPost.hsyHouseReference.create($scope.housePreferenceInputs)
-            ]);
+            hsyPost.hsyRoommatePreference.create($scope.roommatePreferenceInputs),
+            hsyPost.hsyHouseReference.create($scope.housePreferenceInputs)
+          ]);
+      })
+      .then(function(results) {
+        console.log(results);
       })
       .catch(function(err){
           //TODO(zzn) handle error here
@@ -191,7 +195,6 @@ ctrls.controller('EditCtrl', function($scope, $log, $q,
           console.log(err);
       });
   };
-
 });
 
 ctrls.controller('LoginCtrl', function($scope, User, $rootScope) {
@@ -215,4 +218,12 @@ ctrls.controller('LoginCtrl', function($scope, User, $rootScope) {
           console.log(err);
         });
   };
+});
+
+ctrls.controller('ViewPostCtrl', function($scope) {
+  $scope.SHOW_COLUMNS_AND_ICONS = [
+    ['qssj', 'ion-calendar'],
+    ['ybhzcs', 'ion-location'],
+    ['yqjg', 'ion-cash']
+  ];
 });

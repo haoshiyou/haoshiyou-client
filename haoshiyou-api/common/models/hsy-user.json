@@ -16,15 +16,6 @@
     "lastActive": {
       "type": "date",
       "required": true
-    },
-    "wechat": {
-      "type": "string"
-    },
-    "phone": {
-      "type": "string"
-    },
-    "contactEmail": {
-      "type": "string"
     }
   },
   "validations": [],

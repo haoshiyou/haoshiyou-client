@@ -1,0 +1,17 @@
+<ion-view view-title="Detail" ng-controller="ViewPostCtrl">
+    <ion-content class="padding">
+        <div class="list">
+            <ion-list>
+                <ion-item class="item item-icon-left" ng-repeat="col_and_icon in SHOW_COLUMNS_AND_ICONS" ng-show="post[col_and_icon[0]]">
+                    <i class="icon {{col_and_icon[1]}}"></i>
+                    <h2>{{post[col_and_icon[0]]}}</h2>
+                </ion-item>
+            </ion-list>
+            <div class="item item-body">
+                <p>
+                    {{post.grjs}}
+                </p>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

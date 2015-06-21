@@ -59,11 +59,17 @@ angular.module('haoshiyou', [
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
   })
+  .state('add', {
+    url: '/add',
+    templateUrl: 'templates/post-create-flow.html',
+    controller: 'EditCtrl'
+  })
   .state('tab', {
     url: "/tab",
     abstract: true,
     templateUrl: "templates/tabs.html"
   })
+
 
   // Each tab has its own nav history stack:
   .state('tab.dash', {
@@ -112,16 +118,8 @@ angular.module('haoshiyou', [
         controller: 'QrCodeCtrl'
       }
     }
-  })
-  .state('tab.add', {
-    url: '/add',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/edit.html',
-        controller: 'EditCtrl'
-      }
-    }
   });
+
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
