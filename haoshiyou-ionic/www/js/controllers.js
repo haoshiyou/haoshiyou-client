@@ -161,7 +161,7 @@ ctrls.controller('EditCtrl', function($scope, $log, $q,
   ];
 
   $scope.contactInfoRows = [
-    {key: 'wechat', icon:'ion-help', placeholder: '微信号'},
+    {key: 'wechat', icon:'fa fa-wechat', placeholder: '微信号'},
     {key: 'phone', icon:'ion-help', placeholder: '电话'},
     {key: 'contactEmail', icon:'ion-help', placeholder: 'Email'}
   ];

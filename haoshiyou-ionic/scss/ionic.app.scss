@@ -21,3 +21,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+// Include fontawesome
+// http://robferguson.org/2015/01/06/add-font-awesome-to-your-ionic-project/
+@import "www/lib/fontawesome/scss/font-awesome";

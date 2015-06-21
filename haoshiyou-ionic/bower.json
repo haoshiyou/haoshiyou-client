@@ -3,5 +3,12 @@
   "private": "true",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.0.0"
+  },
+  "dependencies": {
+    "fontawesome": "~4.3.0",
+    "angular-ui-router": "~0.2.15",
+    "angular-google-maps": "~2.1.5",
+    "lodash": "~3.9.3",
+    "ionic-wizard": "~1.0.2"
   }
 }
