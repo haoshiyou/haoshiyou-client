@@ -34,10 +34,10 @@
                 <div ng-repeat="row in postInfoRows">
                     <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
                         <i class="icon {{row.icon}}"></i>
-                        {{ postInfoRows[row.key] || "请输入" + row.placeholder }}
+                        {{ postInfoInputs[row.key] || "请输入" + row.placeholder }}
                     </a>
                     <label class="item item-input" ng-show="$parent.editPicker == row.key">
-                        <input type="text" placeholder="{{row.placeholder}}" ng-model="$parent.postInfoInputs[row.key]">
+                        <input type="text" placeholder="{{row.placeholder}}" ng-model="postInfoInputs[row.key]">
                     </label>
                 </div>
             </div>
@@ -57,7 +57,6 @@
                     <ion-toggle class="item item-icon-left"
                                 ng-model="$parent.roommatePreferenceInputs[row.key]"
                                 toggle-class="toggle-calm">
-                        <i class="icon ion-help"></i>
                         {{ row.text }}
                     </ion-toggle>
                 </div>
@@ -78,7 +77,6 @@
                         <ion-toggle class="item item-icon-left"
                                     ng-model="$parent.housePreferenceInputs[row.key]"
                                     toggle-class="toggle-calm">
-                            <i class="icon ion-help"></i>
                             {{ row.text }}
                         </ion-toggle>
                     </div>
@@ -95,10 +93,10 @@
                     <div ng-repeat="row in contactInfoRows">
                         <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
                             <i class="icon {{row.icon}}"></i>
-                            {{ editData[row.key] || "请输入" + row.placeholder }}
+                            {{ contactInfoInputs[row.key] || "请输入" + row.placeholder }}
                         </a>
                         <label class="item item-input" ng-show="$parent.editPicker == row.key">
-                            <input type="text" placeholder="{{row.placeholder}}" ng-model="$parent.editData[row.key]">
+                            <input type="text" placeholder="{{row.placeholder}}" ng-model="$parent.contactInfoInputs[row.key]">
                         </label>
                     </div>
                     <ion-toggle class="item item-icon-left" ng-model="makeContactPublic" toggle-class="toggle-calm">

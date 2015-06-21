@@ -150,20 +150,20 @@ ctrls.controller('EditCtrl', function($scope, $log, $q,
   ];
 
   $scope.roommatePreferenceRows = [
-    {key: 'noPets', icon:'ion-help', text: '不带宠物'},
-    {key: 'noCooking', icon:'ion-help', text: '少炊'}
+    {key: 'noPets', text: '不带宠物'},
+    {key: 'noCooking', text: '少炊'}
   ];
 
   $scope.housePreferenceRows = [
-    {key: 'separatedBath', icon:'ion-help', text: '有独立卫生间'},
-    {key: 'designatedParking', icon:'ion-help', text: '有停车位'},
-    {key: 'laundryInUnit', icon:'ion-help', text: '屋内有洗衣机和烘干机'}
+    {key: 'separatedBath', text: '有独立卫生间'},
+    {key: 'designatedParking', text: '有停车位'},
+    {key: 'laundryInUnit', text: '屋内有洗衣机和烘干机'}
   ];
 
   $scope.contactInfoRows = [
     {key: 'wechat', icon:'fa fa-wechat', placeholder: '微信号'},
-    {key: 'phone', icon:'ion-help', placeholder: '电话'},
-    {key: 'contactEmail', icon:'ion-help', placeholder: 'Email'}
+    {key: 'phone', icon:'fa fa-phone', placeholder: '电话'},
+    {key: 'contactEmail', icon:'fa fa-envelope', placeholder: 'Email'}
   ];
 
   $scope.postInfoInputs = {};
