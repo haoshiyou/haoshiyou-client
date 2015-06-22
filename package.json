@@ -1,10 +1,13 @@
 {
   "name" : "Haoshiyou",
   "version" : "2.0.1",
+  "description": "Haoshiyou（好室友） is a project for San Francisco friends to match up for house renting.",
   "scripts": {
     "pretest": "jshint ."
   },
-  "description": "Haoshiyou（好室友） is a project for San Francisco friends to match up for house renting.",
+  "engines": {
+    "node": "0.12.x"
+  },
   "dependencies" : {
     "express" : "3.x",
     "compression": "^1.0.3",
