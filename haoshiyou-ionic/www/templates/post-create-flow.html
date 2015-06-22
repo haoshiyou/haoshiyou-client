@@ -7,7 +7,8 @@
     <ion-slide-box ion-wizard show-pager="">
 
         <ion-slide ion-wizard-step class="has-header"
-                   ng-repeat="type in postInfoTypes">
+                   ng-repeat="type in postInfoTypes"
+                   condition="$parent.postInfoInputs[type.key]">
             <div class="bar bar-header">
                 <h1 class="title">请选择{{ type.enumType }}</h1>
             </div>
@@ -24,7 +25,8 @@
                 </div>
             </ion-content>
         </ion-slide>
-        <ion-slide ion-wizard-step class="has-header has-subfooter">
+        <ion-slide ion-wizard-step
+                   class="has-header has-subfooter">
 
             <div class="bar bar-header">
                 <h1 class="title" > 基本情况 </h1>
@@ -33,7 +35,7 @@
                 <div class="title">Next</div>
             </button>
             <ion-content>
-            <div class="list">
+            <form class="list">
                 <!-- Post Info -->
                 <div ng-repeat="row in postInfoRows">
                     <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
@@ -41,10 +43,13 @@
                         {{ postInfoInputs[row.key] || "请输入" + row.placeholder }}
                     </a>
                     <label class="item item-input" ng-show="$parent.editPicker == row.key">
-                        <input type="text" ng-required="row.required" placeholder="{{row.placeholder}}" ng-model="postInfoInputs[row.key]">
+                        <input type="text" ng-required='row.required'
+                               ng-invalid="button-outline"
+                               placeholder="{{row.placeholder}}"
+                               ng-model="postInfoInputs[row.key]">
                     </label>
                 </div>
-            </div>
+            </form>
             </ion-content>
 
         </ion-slide>
