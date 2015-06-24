@@ -1,11 +1,11 @@
 {
   "name": "ionic-wizard",
   "description": "A set of Angular/Ionic directives to create a wizard using Ionic's slide box component",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://github.com/arielfaur/ionic-wizard",
   "license": "MIT",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.0.0-rc.1"
+    "ionic": "driftyco/ionic-bower#1.0.0"
   },
   "dependencies": {
     "angular": "1.3.x",
@@ -28,14 +28,14 @@
     "test",
     "tests"
   ],
-  "_release": "1.0.2",
+  "_release": "1.0.3",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.2",
-    "commit": "3926a5f52ce69c5bd93b6319589a5be6314496ff"
+    "tag": "v1.0.3",
+    "commit": "9d84ee61f281c33eec207d81ae3c586701cc339d"
   },
   "_source": "git://github.com/arielfaur/ionic-wizard.git",
-  "_target": "~1.0.2",
+  "_target": "~1.0.3",
   "_originalSource": "ionic-wizard",
   "_direct": true
 }
