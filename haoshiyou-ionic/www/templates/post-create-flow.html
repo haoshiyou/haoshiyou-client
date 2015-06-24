@@ -3,12 +3,13 @@
         <button class="button button-light no-animation" ion-wizard-previous>
             Back
         </button>
+        <button class="button button-light no-animation" ion-wizard-next>
+            Next
+        </button>
     </ion-nav-buttons>
     <ion-slide-box ion-wizard show-pager="">
-
         <ion-slide ion-wizard-step class="has-header"
-                   ng-repeat="type in postInfoTypes"
-                   condition="$parent.postInfoInputs[type.key]">
+                   ng-repeat="type in postInfoTypes">
             <div class="bar bar-header">
                 <h1 class="title">请选择{{ type.enumType }}</h1>
             </div>
@@ -19,6 +20,7 @@
                                ng-model="$parent.postInfoInputs[type.key]"
                                name="{{type.key}}"
                                ng-value="enumValue"
+                               condition="1"
                                ion-wizard-next>
                         {{ enumValue }}
                     </ion-radio>
@@ -101,7 +103,7 @@
             <div class="bar bar-header">
                 <h1 class="title" > 我的联络方式 </h1>
             </div>
-            <button class="bar bar-subfooter bar-positive">
+            <button class="bar bar-subfooter bar-positive" ng-click="submit()">
                 <div class="title">Submit</div>
             </button>
             <ion-content>
@@ -110,7 +112,7 @@
                     <div ng-repeat="row in contactInfoRows">
                         <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
                             <i class="icon {{row.icon}}"></i>
-                            {{ contactInfoInputs[row.key] || "请输入" + row.placeholder }}
+                            {{ postInfoInputs[row.key] || "请输入" + row.placeholder }}
                         </a>
                         <label class="item item-input" ng-show="$parent.editPicker == row.key">
                             <input type="text" ng-required="row.required" placeholder="{{row.placeholder}}" ng-model="$parent.postInfoInputs[row.key]">

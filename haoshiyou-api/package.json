@@ -1,0 +1,23 @@
+{
+  "name" : "Haoshiyou-api-dev",
+  "version" : "2.0.1",
+  "description": "Haoshiyou（好室友） is a project for San Francisco friends to match up for house renting.",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "scripts": {
+    "pretest": "jshint ."
+  },
+  "dependencies" : {
+    "loopback": "^2.14.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-connector-mongodb": "^1.11.1",
+    "loopback-datasource-juggler": "^2.19.0",
+    "loopback-explorer": "^1.1.0",
+    "compression": "^1.0.3",
+    "cors": "^2.5.2",
+    "errorhandler": "^1.1.1",
+    "serve-favicon": "^2.0.1",
+    "jshint": "^2.5.6"
+  }
+}

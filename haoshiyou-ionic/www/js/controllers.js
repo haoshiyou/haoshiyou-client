@@ -133,8 +133,8 @@ ctrls.controller('QrCodeCtrl', function($scope) {
   $scope.qrcodes = ['dw', 'dz', 'nw', 'sf', 'zbd'];
 });
 
-ctrls.controller('EditCtrl', function($scope, $log, $q,
-    HsyPost, HsyRoommatePreference, HsyHousePreference, HsyUser) {
+ctrls.controller('EditCtrl', function($scope, $log, $q, $rootScope,
+    HsyPost, HsyRoommatePreference, HsyHousePreference) {
   // TODO(zzn): consider move these schema related information to the schema or some where extending schema
   $scope.postInfoTypes = [
     { key: 'needType',  enumType: "需求", required: true, enumValues: ['招租', '求租', '找室友'], },
@@ -170,30 +170,42 @@ ctrls.controller('EditCtrl', function($scope, $log, $q,
   $scope.roommatePreferenceInputs = {};
   $scope.housePreferenceInputs = {};
   $scope.contactInfoInputs = {};
-
+  $scope.i = 0;
+  $rootScope.$on("wizard:StepFailed", function(event) {
+    console.log("XXX wizard:StepFailed");
+    console.log(event);
+    console.log("XXX wizard:StepFailed done");
+  });
+  $scope.postInfoRequired = function() {
+    for (var i in $scope.postInfoRows) {
+      var item = $scope.postInfoRows[i];
+      if (item.required && !$scope.postInfoInputs[item.key]) {
+        return false;
+      }
+    };
+  };
   $scope.submit = function() {
     $log.log("Submiting");
-    HsyUser.create($scope.contactInfoInputs)
-      .$promise
-      .then(function(hsyUser) {
-          var post = angular.copy($scope.postInfoInputs);
-          post.owner = hsyUser.id;
-          return HsyPost.create(post).$promise;
-      })
-      .then(function(hsyPost) {
-        return $q.all([
-            hsyPost.hsyRoommatePreference.create($scope.roommatePreferenceInputs),
-            hsyPost.hsyHouseReference.create($scope.housePreferenceInputs)
-          ]);
-      })
-      .then(function(results) {
-        console.log(results);
-      })
-      .catch(function(err){
-          //TODO(zzn) handle error here
-          //TODO(zzn): add validation, transaction and rollback
-          console.log(err);
-      });
+
+    $q.all([
+      HsyRoommatePreference.create($scope.roommatePreferenceInputs),
+      HsyHousePreference.create($scope.housePreferenceInputs),
+      HsyPost.create($scope.postInfoInputs)
+    ])
+    .then(function(results) {
+      $log.info(results);
+      var hsyPost = results[2];
+      hsyPost.hsyRoommatePreference = results[0].id;
+      hsyPost.hsyHousePreference = results[1].id;
+      return HsyPost.save(hsyPost).$promise;
+    })
+    .catch(function(err){
+        //TODO(zzn) handle error here
+        //TODO(zzn): add validation, transaction and rollback
+        console.log("error!");
+        $log.error(err);
+        console.log("error 2!");
+    });
   };
 });
 

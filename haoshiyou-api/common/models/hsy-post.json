@@ -41,7 +41,7 @@
     },
     "createdBySessionId": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "takenDown": {
       "type": "boolean",
