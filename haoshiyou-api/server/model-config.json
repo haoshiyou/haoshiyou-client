@@ -14,22 +14,22 @@
     ]
   },
   "User": {
-    "dataSource": "MongoDB-test"
+    "dataSource": "PostgreSQL"
   },
   "AccessToken": {
-    "dataSource": "MongoDB-test",
+    "dataSource": "PostgreSQL",
     "public": false
   },
   "ACL": {
-    "dataSource": "MongoDB-test",
+    "dataSource": "PostgreSQL",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "MongoDB-test",
+    "dataSource": "PostgreSQL",
     "public": false
   },
   "Role": {
-    "dataSource": "MongoDB-test",
+    "dataSource": "PostgreSQL",
     "public": false
   },
   "HsyPost": {
