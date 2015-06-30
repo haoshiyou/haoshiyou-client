@@ -211,11 +211,12 @@ ctrls.controller('EditCtrl', function($log, $scope, $ionicModal, $q, $ionicPopup
     return HsyPost.create(post).$promise // XXX remove this
         .then(function(hsyPost) {
           $log.info(hsyPost);
-          roommatePreference.postId = hsyPost.id;
-          housePreference.postId = hsyPost.id;
+          $log.info("444");
+          //roommatePreference.postId = hsyPost.id;
+          //housePreference.postId = hsyPost.id;
           return $q.all([
-            HsyRoommatePreference.create(roommatePreference).$promise,
-            HsyHousePreference.create(housePreference).$promise
+            hsyPost.$prototype$__create__hsyRoommatePreference(roommatePreference),
+            hsyPost.$prototype$__create__hsyHousePreference(housePreference)
           ]);
         });
 
