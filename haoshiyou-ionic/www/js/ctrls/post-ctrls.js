@@ -1,36 +1,12 @@
-var ctrls = angular.module('haoshiyou.editCtrls', ['ngResource', 'lbServices']);
+var ctrls = angular.module('haoshiyou.PostCtrls', ['ngResource', 'lbServices']);
 
-function EditCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state, HsyPost) {
+function EditOrCreateCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state, HsyPost, ConstantService) {
+    $scope.title = "创建";
     $scope.postInput = {};
     $scope.dirty = {};
-    $scope.FIELDS = [
-        { key: 'needType', label:'需求类型', icon: 'ion-star',
-            required: true, type: 'radio', options: ['招租', '求租']
-        },
-        { key: 'location', label:'位置', icon: 'ion-location', required: true,
-            type: 'location' },
-        { key: 'startDate', label:'起始时间', icon: 'ion-calendar', required: true,
-            type: 'date'
-        },
-        { key: 'price', label:'预期价格', icon: 'ion-cash',
-            type: 'number' },
-        { key: 'house', label:'房屋', icon: 'ion-ios-home-outline',
-            type: 'checkbox', options: [
-            { key: 'privateBath', label: '独立卫生间' },
-            { key: 'designatedParking' , label :'专用停车位' }
-        ]
-        },
-        { key: 'roommate', label: '室友', icon: 'ion-person',
-            type: 'checkbox', options: [
-            { key: 'lessCooking', label: '少炊' },
-            { key: 'noPets', label: '不带宠物' }
-        ]},
-        { key: 'introduction', label:'情况简介', icon: 'ion-document', required: true,
-            type: 'text'
-        }
-    ];
+    $scope.FIELDS = ConstantService.FIELDS;
     // Load the add / change dialog from the given template URL
-    $ionicModal.fromTemplateUrl('templates/edit-entry.html', function(modal) {
+    $ionicModal.fromTemplateUrl('templates/edit-field.html', function(modal) {
         $scope.modal = modal;
     }, {
         scope: $scope
@@ -107,8 +83,7 @@ function EditCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state, HsyPost) {
         });
     }
 }
-
-ctrls.controller('EditCtrl', EditCtrl);
+ctrls.controller('EditOrCreateCtrl', EditOrCreateCtrl);
 
 function EditEntryCtrl($log, $scope, uiGmapGoogleMapApi) {
     uiGmapGoogleMapApi.then(function(maps){
@@ -126,3 +101,9 @@ function EditEntryCtrl($log, $scope, uiGmapGoogleMapApi) {
     };
 }
 ctrls.controller('EditEntryCtrl', EditEntryCtrl);
+
+function ViewCtrl($scope, ConstantService) {
+  $scope.FIELDS = ConstantService.FIELDS;
+}
+ctrls.controller('ViewCtrl', ViewCtrl);
+

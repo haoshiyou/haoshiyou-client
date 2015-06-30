@@ -1,10 +1,4 @@
-<ion-view>
-    <ion-nav-bar class="bar-dark">
-        <ion-nav-title >
-            <h1 class="title">创建</h1>
-        </ion-nav-title>
-    </ion-nav-bar>
-
+<ion-view view-title="{{ title }}">
     <ion-content ng-init="">
         <div class="item item-icon-left item-icon-right"
              ng-repeat="field in FIELDS" ng-click="showModal(field.key)">

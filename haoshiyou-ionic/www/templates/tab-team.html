@@ -1,6 +1,43 @@
-<ion-view view-title="Team">
+<ion-view view-title="好室友团队">
   <ion-content>
-    <ion-list>
+    <ion-list ng-init="
+      team = [{
+        id: 0,
+        name: 'Zainan',
+        intro: 'Developer',
+        face: 'img/zainan.jpg'
+      },
+      {
+        id: 1,
+        name: 'Shasha',
+        intro: 'Community Manager',
+        face: 'img/shasha.jpg'
+      },
+      {
+        id: 2,
+        name: 'Xudong',
+        intro: 'Community Manager',
+        face: 'img/xudong.jpg'
+      },
+      {
+        id: 3,
+        name: 'Gengchao',
+        intro: 'Community Manager',
+        face: 'img/gengchao.jpg'
+
+      },
+      {
+        id: 4,
+        name: 'Xiaohan',
+        intro: 'UX Designer',
+        face: 'img/xiaohan.jpg'
+      },
+      {
+        id: 4,
+        name: 'Lin',
+        intro: 'Visual Designer',
+        face: 'img/lin.jpg'
+      }]">
       <ion-item class="item-avatar item-icon-right" ng-repeat="member in team"
                 type="item-text-wrap">
         <img ng-src="{{member.face}}" />

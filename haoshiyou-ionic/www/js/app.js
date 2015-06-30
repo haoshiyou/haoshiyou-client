@@ -1,6 +1,7 @@
 angular.module('haoshiyou', [
   'ionic',
   'haoshiyou.controllers',
+  'haoshiyou.PostCtrls',
   'haoshiyou.services',
   'uiGmapgoogle-maps'])
 
@@ -60,11 +61,7 @@ angular.module('haoshiyou', [
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
   })
-  .state('edit', {
-    url: '/edit',
-    templateUrl: 'templates/post-create-flow.html',
-    controller: 'EditCtrl'
-  })
+
   .state('tab', {
     url: "/tab",
     abstract: true,
@@ -82,6 +79,7 @@ angular.module('haoshiyou', [
       }
     }
   })
+
   .state('tab.my', {
     url: '/my',
     views: {
@@ -91,12 +89,20 @@ angular.module('haoshiyou', [
       }
     }
   })
+  .state('tab.add', {
+    url: '/add',
+    views: {
+      'tab-my': {
+        templateUrl: 'templates/edit.html',
+        controller: 'EditOrCreateCtrl'
+      }
+    }
+  })
   .state('tab.team', {
       url: '/team',
       views: {
         'tab-team': {
-          templateUrl: 'templates/tab-team.html',
-          controller: 'TeamCtrl'
+          templateUrl: 'templates/tab-team.html'
         }
       }
     })
@@ -116,7 +122,6 @@ angular.module('haoshiyou', [
     views: {
       'tab-qrcode': {
         templateUrl: 'templates/tab-qrcode.html',
-        controller: 'QrCodeCtrl'
       }
     }
   });

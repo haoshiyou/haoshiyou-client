@@ -1,0 +1,15 @@
+<ion-view>
+    <ion-nav-bar class="bar-dark">
+        <ion-nav-title >
+            <h1 class="title">{{ post.needType }}</h1>
+        </ion-nav-title>
+    </ion-nav-bar>
+
+    <ion-content>
+        <div class="item item-icon-left item-icon-right"
+             ng-repeat="field in FIELDS">
+            <i class="icon {{ field.icon }}"></i>
+            <span>{{ field.label }}</span>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,5 +1,7 @@
 <ion-view view-title="QR-Code">
-  <ion-content>
+  <ion-content ng-init="
+    qrcodes =  ['dw', 'dz', 'nw', 'sf', 'zbd'];
+  ">
     <ion-slide-box on-slide-changed="slideHasChanged($index)">
       <ion-slide ng-repeat="qrcode in qrcodes">
         <div class="list card">

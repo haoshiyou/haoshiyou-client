@@ -1,5 +1,9 @@
 <ion-view view-title="{{ title }}">
-
+    <ion-nav-buttons side="secondary">
+        <a class="button button-clear " href="#/tab/add">
+            <i class="icon ion-ios-plus-outline"></i>
+        </a>
+    </ion-nav-buttons>
     <ion-content>
         <ion-list can-swipe="true">
             <ion-item class="item-avatar item-icon-right" ng-repeat="post in posts"
@@ -11,8 +15,8 @@
                 <p> {{ post.introduction }}</p>
 
                 <i class="icon ion-chevron-right icon-accessory"></i>
-                <ion-option-button class="button-assertive"><i class="fa fa-minus-circle"></i> 删除</ion-option-button>
-                <ion-option-button class="button-positive"><i class="fa fa-pencil"></i> 分享</ion-option-button>
+                <ion-option-button class="button-assertive"><i class="icon ion-close-circled"></i></ion-option-button>
+                <ion-option-button class="button-positive"><i class="icon ion-edit"></i></ion-option-button>
             </ion-item>
         </ion-list>
     </ion-content>

@@ -2,6 +2,38 @@
 
 var services = angular.module('haoshiyou.services', []);
 
+function ConstantSerivce() {
+  return {
+    FIELDS: [
+      { key: 'needType', label:'需求类型', icon: 'ion-star',
+        required: true, type: 'radio', options: ['招租', '求租']
+      },
+      { key: 'location', label:'位置', icon: 'ion-location', required: true,
+        type: 'location' },
+      { key: 'startDate', label:'起始时间', icon: 'ion-calendar', required: true,
+        type: 'date'
+      },
+      { key: 'price', label:'预期价格', icon: 'ion-cash',
+        type: 'number' },
+      { key: 'house', label:'房屋', icon: 'ion-ios-home-outline',
+        type: 'checkbox', options: [
+        { key: 'privateBath', label: '独立卫生间' },
+        { key: 'designatedParking' , label :'专用停车位' }
+      ]
+      },
+      { key: 'roommate', label: '室友', icon: 'ion-person',
+        type: 'checkbox', options: [
+        { key: 'lessCooking', label: '少炊' },
+        { key: 'noPets', label: '不带宠物' }
+      ]},
+      { key: 'introduction', label:'情况简介', icon: 'ion-document', required: true,
+        type: 'text'
+      }
+    ]
+  }
+}
+services.factory('ConstantService', ConstantSerivce);
+
 services.factory('HaoshiyouService', function ($log, $cacheFactory, $http, $q) {
   var CONST_SPREADSHEET_URL = "https://spreadsheets.google.com/feeds/list/1vzugrYLpgXmFODqysSx331Lhq8LpDQGJ4sQtwSMrtV4/1/public/values?alt=json&callback=JSON_CALLBACK";
   var CONST_FIELD_KEYS = {

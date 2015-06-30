@@ -26,67 +26,20 @@ function DashCtrl($scope, HaoshiyouService) {
 }
 ctrls.controller('DashCtrl', DashCtrl);
 
-ctrls.controller('MyCtrl', function($log, $scope, HsyPost) {
-  $scope.title = "My";
+function MyCtrl($log, $scope, HsyPost) {
+  $scope.title = "我的帖子";
   HsyPost.find()
       .$promise
       .then(function(results) {
-        $log.info("xxx getting my posts:" + results.length);
+        $log.info("Getting my posts:" + results.length);
         $log.info(results);
         $scope.posts = results;
       }).catch(function(err) {
-        $log.info("xxx error  getting my!");
+        $log.error("Error getting my posts!");
         $log.error(JSON.stringify(err));
       });
-});
-function TeamCtrl($scope) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-
-  var TEAM_DATA = [{
-    id: 0,
-    name: 'Zainan',
-    intro: 'Developer',
-    face: 'img/zainan.jpg'
-  },
-    {
-      id: 1,
-      name: 'Shasha',
-      intro: 'Community Manager',
-      face: 'img/shasha.jpg'
-    },
-    {
-      id: 2,
-      name: 'Xudong',
-      intro: 'Community Manager',
-      face: 'img/xudong.jpg'
-    },
-    {
-      id: 3,
-      name: 'Gengchao',
-      intro: 'Community Manager',
-      face: 'img/gengchao.jpg'
-
-    },
-    {
-      id: 4,
-      name: 'Xiaohan',
-      intro: 'UX Designer',
-      face: 'img/xiaohan.jpg'
-    },
-    {
-      id: 4,
-      name: 'Lin',
-      intro: 'Visual Designer',
-      face: 'img/lin.jpg'
-    }];
-  $scope.$on('$ionicView.enter', function(e) {
-    $scope.team = TEAM_DATA;
-  });
 }
-ctrls.controller('TeamCtrl', TeamCtrl);
+ctrls.controller('MyCtrl', MyCtrl);
 
 function DetailCtrl($log, $scope, $stateParams, HaoshiyouService, uiGmapGoogleMapApi) {
   $scope.SHOW_COLUMNS_AND_ICONS = [
@@ -130,11 +83,6 @@ function DetailCtrl($log, $scope, $stateParams, HaoshiyouService, uiGmapGoogleMa
 }
 ctrls.controller('DetailCtrl', DetailCtrl);
 
-function QrCodeCtrl($scope) {
-  $scope.qrcodes = ['dw', 'dz', 'nw', 'sf', 'zbd'];
-}
-ctrls.controller('QrCodeCtrl', QrCodeCtrl);
-
 function LoginCtrl($scope, User, $rootScope) {
   $scope.data = {};
 
@@ -167,4 +115,3 @@ function ViewPostCtrl($scope) {
   ];
 }
 ctrls.controller('ViewPostCtrl', ViewPostCtrl);
-
