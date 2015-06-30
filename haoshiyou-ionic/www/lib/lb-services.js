@@ -1115,6 +1115,30 @@ module.factory(
           method: "DELETE"
         },
 
+        // INTERNAL. Use HsyPost.hsyHousePreference() instead.
+        "prototype$__get__hsyHousePreference": {
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "GET"
+        },
+
+        // INTERNAL. Use HsyPost.hsyHousePreference.create() instead.
+        "prototype$__create__hsyHousePreference": {
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "POST"
+        },
+
+        // INTERNAL. Use HsyPost.hsyHousePreference.update() instead.
+        "prototype$__update__hsyHousePreference": {
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use HsyPost.hsyHousePreference.destroy() instead.
+        "prototype$__destroy__hsyHousePreference": {
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "DELETE"
+        },
+
         /**
          * @ngdoc method
          * @name lbServices.HsyPost#create
@@ -1862,6 +1886,201 @@ module.factory(
         R.hsyRoommatePreference.update = function() {
           var TargetResource = $injector.get("HsyRoommatePreference");
           var action = TargetResource["::update::HsyPost::hsyRoommatePreference"];
+          return action.apply(R, arguments);
+        };
+    /**
+     * @ngdoc object
+     * @name lbServices.HsyPost.hsyHousePreference
+     * @header lbServices.HsyPost.hsyHousePreference
+     * @object
+     * @description
+     *
+     * The object `HsyPost.hsyHousePreference` groups methods
+     * manipulating `HsyHousePreference` instances related to `HsyPost`.
+     *
+     * Call {@link lbServices.HsyPost#hsyHousePreference HsyPost.hsyHousePreference()}
+     * to query all related instances.
+     */
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.HsyPost#hsyHousePreference
+         * @methodOf lbServices.HsyPost
+         *
+         * @description
+         *
+         * Fetches hasOne relation hsyHousePreference.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `HsyHousePreference` object.)
+         * </em>
+         */
+        R.hsyHousePreference = function() {
+          var TargetResource = $injector.get("HsyHousePreference");
+          var action = TargetResource["::get::HsyPost::hsyHousePreference"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.HsyPost.hsyHousePreference#create
+         * @methodOf lbServices.HsyPost.hsyHousePreference
+         *
+         * @description
+         *
+         * Creates a new instance in hsyHousePreference of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `HsyHousePreference` object.)
+         * </em>
+         */
+        R.hsyHousePreference.create = function() {
+          var TargetResource = $injector.get("HsyHousePreference");
+          var action = TargetResource["::create::HsyPost::hsyHousePreference"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.HsyPost.hsyHousePreference#createMany
+         * @methodOf lbServices.HsyPost.hsyHousePreference
+         *
+         * @description
+         *
+         * Creates a new instance in hsyHousePreference of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `HsyHousePreference` object.)
+         * </em>
+         */
+        R.hsyHousePreference.createMany = function() {
+          var TargetResource = $injector.get("HsyHousePreference");
+          var action = TargetResource["::createMany::HsyPost::hsyHousePreference"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.HsyPost.hsyHousePreference#destroy
+         * @methodOf lbServices.HsyPost.hsyHousePreference
+         *
+         * @description
+         *
+         * Deletes hsyHousePreference of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.hsyHousePreference.destroy = function() {
+          var TargetResource = $injector.get("HsyHousePreference");
+          var action = TargetResource["::destroy::HsyPost::hsyHousePreference"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.HsyPost.hsyHousePreference#update
+         * @methodOf lbServices.HsyPost.hsyHousePreference
+         *
+         * @description
+         *
+         * Update hsyHousePreference of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `HsyHousePreference` object.)
+         * </em>
+         */
+        R.hsyHousePreference.update = function() {
+          var TargetResource = $injector.get("HsyHousePreference");
+          var action = TargetResource["::update::HsyPost::hsyHousePreference"];
           return action.apply(R, arguments);
         };
 
@@ -4450,6 +4669,37 @@ module.factory(
         "prototype$updateAttributes": {
           url: urlBase + "/HsyHousePreferences/:id",
           method: "PUT"
+        },
+
+        // INTERNAL. Use HsyPost.hsyHousePreference() instead.
+        "::get::HsyPost::hsyHousePreference": {
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "GET"
+        },
+
+        // INTERNAL. Use HsyPost.hsyHousePreference.create() instead.
+        "::create::HsyPost::hsyHousePreference": {
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "POST"
+        },
+
+        // INTERNAL. Use HsyPost.hsyHousePreference.createMany() instead.
+        "::createMany::HsyPost::hsyHousePreference": {
+          isArray: true,
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "POST"
+        },
+
+        // INTERNAL. Use HsyPost.hsyHousePreference.update() instead.
+        "::update::HsyPost::hsyHousePreference": {
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use HsyPost.hsyHousePreference.destroy() instead.
+        "::destroy::HsyPost::hsyHousePreference": {
+          url: urlBase + "/HsyPosts/:id/hsyHousePreference",
+          method: "DELETE"
         },
       }
     );

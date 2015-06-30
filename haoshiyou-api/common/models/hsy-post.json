@@ -74,11 +74,13 @@
     },
     "hsyRoommatePreference": {
       "type": "hasOne",
-      "model": "HsyRoommatePreference"
+      "model": "HsyRoommatePreference",
+      "foreignKey": "postId"
     },
-    "hsyHouseReference": {
+    "hsyHousePreference": {
       "type": "hasOne",
-      "model": "HsyHouseReference"
+      "model": "HsyHousePreference",
+      "foreignKey": "postId"
     }
   },
   "acls": [],

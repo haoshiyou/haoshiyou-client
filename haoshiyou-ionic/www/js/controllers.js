@@ -195,46 +195,30 @@ ctrls.controller('EditCtrl', function($log, $scope, $ionicModal, $q, $ionicPopup
     }
     return valid;
   }
-  function submitToDataStore() {
+  function submitToDataStorePromise() {
     $log.info("submit!");
     $log.info($scope.postInput);
     $log.log("submiting");
 
     var post = _.omit($scope.postInput, [
+      // TODO(zzn): use a better solution instead of hardcoding them here.
       'privateBath', 'designatedParking',
-      'lessCooking', 'noPets' // TODO(zzn): use a better solution instead of hardcoding them here.
+      'lessCooking', 'noPets'
     ]);
     var roommatePreference = _.pick($scope.postInput, ['lessCooking', 'noPets']);
     var housePreference = _.pick($scope.postInput, ['privateBath', 'designatedParking']);
-    $log.info("xxx log to submit");
-    $log.info(post);
-    $log.info(housePreference);
-    $log.info(roommatePreference);
-    $log.info("xxx done log to submit");
 
-    $q.all([
-      HsyRoommatePreference.create(roommatePreference),
-      HsyHousePreference.create(housePreference),
-      HsyPost.create(post)
-    ])
-        .then(function(results) {
-          $log.info(results);
-          var hsyPost = results[2];
-          hsyPost.hsyRoommatePreference = results[0].id;
-          hsyPost.hsyHousePreference = results[1].id;
-          return HsyPost.save(hsyPost).$promise;
-        })
-        .then(function(saved) {
-          $log.info("save succeeded!");
-          $log.info(saved);
-        })
-        .catch(function(err){
-          //TODO(zzn) handle error here
-          //TODO(zzn): add validation, transaction and rollback
-          console.log("error!");
-          $log.error(err);
-          console.log("error 2!");
+    return HsyPost.create(post).$promise // XXX remove this
+        .then(function(hsyPost) {
+          $log.info(hsyPost);
+          roommatePreference.postId = hsyPost.id;
+          housePreference.postId = hsyPost.id;
+          return $q.all([
+            HsyRoommatePreference.create(roommatePreference).$promise,
+            HsyHousePreference.create(housePreference).$promise
+          ]);
         });
+
   }
   $scope.onSubmit = function() {
     var confirmPopup = $ionicPopup.confirm({
@@ -244,8 +228,9 @@ ctrls.controller('EditCtrl', function($log, $scope, $ionicModal, $q, $ionicPopup
       if(res) {
         $scope.attempted = true;
         if (validate()) {
-          submitToDataStore();
-          $state.go('tab.my');
+          submitToDataStorePromise().then(function(){
+            $state.go('tab.my');
+          });
         } else {
           // Do nothing
           $log.info("invalid, not submiting");
