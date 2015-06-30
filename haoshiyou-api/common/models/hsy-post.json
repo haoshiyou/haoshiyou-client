@@ -1,6 +1,7 @@
 {
   "name": "HsyPost",
   "base": "PersistedModel",
+  "strict": true,
   "idInjection": true,
   "options": {
     "validateUpsert": true
@@ -27,7 +28,7 @@
     },
     "areaType": {
       "type": "string",
-      "required": true,
+      "required": false,
       "comments": "enum of 三番, 东湾, 南湾, 中半岛"
     },
     "price": {

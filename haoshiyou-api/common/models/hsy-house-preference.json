@@ -1,8 +1,7 @@
 {
   "name": "HsyHousePreference",
   "base": "HsyPreference",
-  "strict": true,
-  "idInjection": false,
+  "idInjection": true,
   "options": {
     "validateUpsert": true
   },
@@ -11,7 +10,7 @@
       "type": "boolean",
       "comments": ""
     },
-    "separatedBath": {
+    "privateBath": {
       "type": "boolean",
       "comments": ""
     },

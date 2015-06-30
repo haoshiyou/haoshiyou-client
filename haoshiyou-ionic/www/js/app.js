@@ -1,7 +1,8 @@
 angular.module('haoshiyou', [
-  'ionic', 'ionic.wizard',
+  'ionic',
   'haoshiyou.controllers',
-  'haoshiyou.services', 'uiGmapgoogle-maps'])
+  'haoshiyou.services',
+  'uiGmapgoogle-maps'])
 
 .run(function($ionicPlatform,  $rootScope, $log) {
   $ionicPlatform.ready(function() {
@@ -59,8 +60,8 @@ angular.module('haoshiyou', [
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
   })
-  .state('add', {
-    url: '/add',
+  .state('edit', {
+    url: '/edit',
     templateUrl: 'templates/post-create-flow.html',
     controller: 'EditCtrl'
   })

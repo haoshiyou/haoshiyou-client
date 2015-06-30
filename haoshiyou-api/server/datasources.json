@@ -12,5 +12,15 @@
   "InMemory-test": {
     "name": "InMemory-test",
     "connector": "memory"
+  },
+  "PostgreSQL": {
+    "host": "ec2-107-20-223-116.compute-1.amazonaws.com",
+    "port": 5432,
+    "url": "postgres://xicnfxcaajlrwh:2eM1kDdcNpBh1El3Ep0n-GPeum@ec2-107-20-223-116.compute-1.amazonaws.com:5432/dah3icus3nkf30",
+    "database": "dah3icus3nkf30",
+    "password": "2eM1kDdcNpBh1El3Ep0n",
+    "name": "PostgreSQL",
+    "user": "xicnfxcaajlrwh",
+    "connector": "postgresql"
   }
 }

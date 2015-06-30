@@ -13,5 +13,17 @@ xiaohan: updated the logo design
 2. Update the form to add "areas"
 3. Update the form to add "city or zip code"
 4. Update the site
+** <2015-06-27 Sat>
+Starts working
+
+* Development Plan 2.0
+** Add/Edit
+** View detail
+** View table
+** Upload photo
+** Share on WeChat
+* Knowledge
+** ui-gmap-google-map
+http://angular-ui.github.io/angular-google-maps/#!/
 * Wish list
 

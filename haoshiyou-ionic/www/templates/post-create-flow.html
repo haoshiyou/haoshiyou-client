@@ -1,130 +1,25 @@
-<ion-view view-title="{{ stepTitle }}">
-    <ion-nav-buttons side="left">
-        <button class="button button-light no-animation" ion-wizard-previous>
-            Back
-        </button>
-        <button class="button button-light no-animation" ion-wizard-next>
-            Next
-        </button>
-    </ion-nav-buttons>
-    <ion-slide-box ion-wizard show-pager="">
-        <ion-slide ion-wizard-step class="has-header"
-                   ng-repeat="type in postInfoTypes">
-            <div class="bar bar-header">
-                <h1 class="title">请选择{{ type.enumType }}</h1>
-            </div>
+<ion-view>
+    <ion-nav-bar class="bar-dark">
+        <ion-nav-title >
+            <h1 class="title">创建</h1>
+        </ion-nav-title>
+    </ion-nav-bar>
 
-            <ion-content>
-                <div class="list">
-                    <ion-radio ng-repeat="enumValue in type.enumValues"
-                               ng-model="$parent.postInfoInputs[type.key]"
-                               name="{{type.key}}"
-                               ng-value="enumValue"
-                               condition="1"
-                               ion-wizard-next>
-                        {{ enumValue }}
-                    </ion-radio>
-                </div>
-            </ion-content>
-        </ion-slide>
-        <ion-slide ion-wizard-step
-                   class="has-header has-subfooter">
+    <ion-content ng-init="">
+        <div class="item item-icon-left item-icon-right"
+             ng-repeat="field in FIELDS" ng-click="showModal(field.key)">
+            <i class="icon {{ field.icon }}"></i>
+            <span>{{ field.label }}</span>
+            <span class="badge badge-assertive"
+                  ng-if="attempted && field.required && !(postInput.hasOwnProperty(field.key) && postInput[field.key])"> 必填 </span>
 
-            <div class="bar bar-header">
-                <h1 class="title" > 基本情况 </h1>
-            </div>
-            <button class="bar bar-subfooter bar-balanced" ion-wizard-next>
-                <div class="title">Next</div>
-            </button>
-            <ion-content>
-            <form class="list">
-                <!-- Post Info -->
-                <div ng-repeat="row in postInfoRows">
-                    <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
-                        <i class="icon {{row.icon}}"></i>
-                        {{ postInfoInputs[row.key] || "请输入" + row.placeholder }}
-                    </a>
-                    <label class="item item-input" ng-show="$parent.editPicker == row.key">
-                        <input type="text" ng-required='row.required'
-                               ng-invalid="button-outline"
-                               placeholder="{{row.placeholder}}"
-                               ng-model="postInfoInputs[row.key]">
-                    </label>
-                </div>
-            </form>
-            </ion-content>
-
-        </ion-slide>
-        <ion-slide ion-wizard-step class="has-header has-subfooter">
-            <div class="bar bar-header">
-                <h1 class="title" ng-if="postInfoInputs['needType'] == '招租'">{{ "我希望租客" }}</h1>
-                <h1 class="title" ng-if="postInfoInputs['needType'] == '求租'">{{ "我" }}</h1>
-                <h1 class="title" ng-if="postInfoInputs['needType'] == '找室友'">{{ "我希望室友" }}</h1>
-            </div>
-            <button class="bar bar-subfooter bar-balanced" ion-wizard-next>
-                <div class="title">Next</div>
-            </button>
-            <ion-content>
-            <div class="list">
-                <!-- Roommate Info -->
-                <div ng-repeat="row in roommatePreferenceRows">
-                    <ion-toggle class="item item-icon-left"
-                                ng-model="$parent.roommatePreferenceInputs[row.key]"
-                                toggle-class="toggle-calm">
-                        {{ row.text }}
-                    </ion-toggle>
-                </div>
-            </div>
-            </ion-content>
-        </ion-slide>
-        <ion-slide ion-wizard-step class="has-header has-subfooter">
-            <div class="bar bar-header">
-                <h1 class="title" ng-if="postInfoInputs['needType'] == '招租'">我房子的情况</h1>
-                <h1 class="title" ng-if="postInfoInputs['needType'] == '求租'">我希望房子</h1>
-                <h1 class="title" ng-if="postInfoInputs['needType'] == '找室友'">我希望房子</h1>
-            </div>
-            <button class="bar bar-subfooter bar-balanced" ion-wizard-next>
-                <div class="title">Next</div>
-            </button>
-            <ion-content>
-                <div class="list">
-                    <!-- House Info -->
-                    <div ng-repeat="row in housePreferenceRows">
-                        <ion-toggle class="item item-icon-left"
-                                    ng-model="$parent.housePreferenceInputs[row.key]"
-                                    toggle-class="toggle-calm">
-                            {{ row.text }}
-                        </ion-toggle>
-                    </div>
-                </div>
-            </ion-content>
-        </ion-slide>
-        <ion-slide ion-wizard-step class="has-header has-subfooter">
-            <div class="bar bar-header">
-                <h1 class="title" > 我的联络方式 </h1>
-            </div>
-            <button class="bar bar-subfooter bar-positive" ng-click="submit()">
-                <div class="title">Submit</div>
-            </button>
-            <ion-content>
-                <div class="list">
-                    <!-- Contact Info if needed -->
-                    <div ng-repeat="row in contactInfoRows">
-                        <a href="#" class="item item-icon-left" ng-hide="$parent.editPicker == row.key" ng-click="$parent.editPicker=row.key">
-                            <i class="icon {{row.icon}}"></i>
-                            {{ postInfoInputs[row.key] || "请输入" + row.placeholder }}
-                        </a>
-                        <label class="item item-input" ng-show="$parent.editPicker == row.key">
-                            <input type="text" ng-required="row.required" placeholder="{{row.placeholder}}" ng-model="$parent.postInfoInputs[row.key]">
-                        </label>
-                    </div>
-                    <ion-toggle class="item item-icon-left" ng-model="$parent.postInfoInputs['contactInfoPublic']" toggle-class="toggle-calm">
-                        <i class="icon ion-android-contact"></i>
-                        公开我的联系方式
-                    </ion-toggle>
-                </div>
-            </ion-content>
-        </ion-slide>
-    </ion-slide-box>
-
+            <span class="badge badge-balanced"
+               ng-if="postInput.hasOwnProperty(field.key) && postInput[field.key]">
+                <i class="fa fa-check"></i>
+            </span>
+        </div>
+    </ion-content>
+    <div class="bar bar-footer bar-positive" ng-click="onSubmit()">
+        <h1 class="title" >提交</h1>
+    </div>
 </ion-view>

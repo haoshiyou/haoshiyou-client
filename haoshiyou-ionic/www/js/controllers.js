@@ -30,11 +30,11 @@ ctrls.controller('MyCtrl', function($log, $scope, HsyPost) {
   HsyPost.find()
       .$promise
       .then(function(results) {
-        $log.info("xxx getting my!");
+        $log.info("xxx getting my posts:" + results.length);
+        $log.info(results);
         $scope.posts = results;
-
-        $log.info("xxx error  getting my!");
       }).catch(function(err) {
+        $log.info("xxx error  getting my!");
         $log.error(JSON.stringify(err));
       });
 });
@@ -133,80 +133,128 @@ ctrls.controller('QrCodeCtrl', function($scope) {
   $scope.qrcodes = ['dw', 'dz', 'nw', 'sf', 'zbd'];
 });
 
-ctrls.controller('EditCtrl', function($scope, $log, $q, $rootScope,
-    HsyPost, HsyRoommatePreference, HsyHousePreference) {
-  // TODO(zzn): consider move these schema related information to the schema or some where extending schema
-  $scope.postInfoTypes = [
-    { key: 'needType',  enumType: "需求", required: true, enumValues: ['招租', '求租', '找室友'], },
-    { key: 'leaseType', enumType: "租期", required: true, enumValues: ['长租(半年或以上)', '短租(半年以下)'], },
-    { key: 'areaType',  enumType: "区域", required: true, enumValues: ['南湾', '三番', '中半岛', '东湾'], }
-  ];
+ctrls.controller('EditCtrl', function($log, $scope, $ionicModal, $q, $ionicPopup, $state,
+    HsyRoommatePreference, HsyHousePreference, HsyPost) {
+  $scope.postInput = {};
+  $scope.dirty = {};
 
-  $scope.postInfoRows = [
-    {key: 'startDate',    icon:'ion-calendar',    required: true, placeholder: '开始时间'},
-    {key: 'location',     icon:'ion-location',    placeholder: '地址'},
-    {key: 'price',        icon:'ion-cash',        placeholder: '价格'},
-    {key: 'introduction', icon:'ion-ios-compose', required: true, placeholder: '情况介绍'}
+  $scope.FIELDS = [
+    { key: 'needType', label:'需求类型', icon: 'ion-star',
+      required: true, type: 'radio', options: ['招租', '求租']
+    },
+    { key: 'location', label:'位置', icon: 'ion-location', required: true,
+      type: 'location' },
+    { key: 'startDate', label:'起始时间', icon: 'ion-calendar', required: true,
+      type: 'date'
+    },
+    { key: 'price', label:'预期价格', icon: 'ion-cash',
+      type: 'number' },
+    { key: 'house', label:'房屋', icon: 'ion-ios-home-outline',
+      type: 'checkbox', options: [
+        { key: 'privateBath', label: '独立卫生间' },
+        { key: 'designatedParking' , label :'专用停车位' }
+      ]
+    },
+    { key: 'roommate', label: '室友', icon: 'ion-person',
+      type: 'checkbox', options: [
+        { key: 'lessCooking', label: '少炊' },
+        { key: 'noPets', label: '不带宠物' }
+    ]},
+    { key: 'introduction', label:'情况简介', icon: 'ion-document', required: true,
+      type: 'text'
+    }
   ];
-
-  $scope.roommatePreferenceRows = [
-    {key: 'noPets', text: '不带宠物'},
-    {key: 'noCooking', text: '少炊'}
-  ];
-
-  $scope.housePreferenceRows = [
-    {key: 'separatedBath', text: '有独立卫生间'},
-    {key: 'designatedParking', text: '有停车位'},
-    {key: 'laundryInUnit', text: '屋内有洗衣机和烘干机'}
-  ];
-
-  $scope.contactInfoRows = [
-    {key: 'wechat',       icon:'fa fa-wechat',   placeholder: '微信号'},
-    {key: 'phone',        icon:'fa fa-phone',    placeholder: '电话'},
-    {key: 'contactEmail', icon:'fa fa-envelope', placeholder: 'Email'}
-  ];
-
-  $scope.postInfoInputs = {};
-  $scope.roommatePreferenceInputs = {};
-  $scope.housePreferenceInputs = {};
-  $scope.contactInfoInputs = {};
-  $scope.i = 0;
-  $rootScope.$on("wizard:StepFailed", function(event) {
-    console.log("XXX wizard:StepFailed");
-    console.log(event);
-    console.log("XXX wizard:StepFailed done");
+  // Load the add / change dialog from the given template URL
+  $ionicModal.fromTemplateUrl('templates/edit-entry.html', function(modal) {
+    $scope.modal = modal;
+  }, {
+    scope: $scope
   });
-  $scope.postInfoRequired = function() {
-    for (var i in $scope.postInfoRows) {
-      var item = $scope.postInfoRows[i];
-      if (item.required && !$scope.postInfoInputs[item.key]) {
-        return false;
-      }
-    };
+
+  $scope.showModal = function(action) {
+    $log.info("modalAction = " + action);
+    $scope.modalField = $scope.FIELDS.filter(function(field) {
+      return field.key == action;
+    })[0];
+    $scope.modal.show();
   };
-  $scope.submit = function() {
-    $log.log("Submiting");
+
+  $scope.done = function() {
+    $scope.modal.hide();
+  };
+  function validate () {
+    var valid = true;
+    for (var i in $scope.FIELDS) {
+      var field = $scope.FIELDS[i];
+      if (!field.required || $scope.postInput[field.key]) {
+        // Do nothing
+        $log.info("field = " + JSON.stringify(field));
+      } else {
+        valid = false;
+      }
+    }
+    return valid;
+  }
+  function submitToDataStore() {
+    $log.info("submit!");
+    $log.info($scope.postInput);
+    $log.log("submiting");
+
+    var post = _.omit($scope.postInput, [
+      'privateBath', 'designatedParking',
+      'lessCooking', 'noPets' // TODO(zzn): use a better solution instead of hardcoding them here.
+    ]);
+    var roommatePreference = _.pick($scope.postInput, ['lessCooking', 'noPets']);
+    var housePreference = _.pick($scope.postInput, ['privateBath', 'designatedParking']);
+    $log.info("xxx log to submit");
+    $log.info(post);
+    $log.info(housePreference);
+    $log.info(roommatePreference);
+    $log.info("xxx done log to submit");
 
     $q.all([
-      HsyRoommatePreference.create($scope.roommatePreferenceInputs),
-      HsyHousePreference.create($scope.housePreferenceInputs),
-      HsyPost.create($scope.postInfoInputs)
+      HsyRoommatePreference.create(roommatePreference),
+      HsyHousePreference.create(housePreference),
+      HsyPost.create(post)
     ])
-    .then(function(results) {
-      $log.info(results);
-      var hsyPost = results[2];
-      hsyPost.hsyRoommatePreference = results[0].id;
-      hsyPost.hsyHousePreference = results[1].id;
-      return HsyPost.save(hsyPost).$promise;
-    })
-    .catch(function(err){
-        //TODO(zzn) handle error here
-        //TODO(zzn): add validation, transaction and rollback
-        console.log("error!");
-        $log.error(err);
-        console.log("error 2!");
+        .then(function(results) {
+          $log.info(results);
+          var hsyPost = results[2];
+          hsyPost.hsyRoommatePreference = results[0].id;
+          hsyPost.hsyHousePreference = results[1].id;
+          return HsyPost.save(hsyPost).$promise;
+        })
+        .then(function(saved) {
+          $log.info("save succeeded!");
+          $log.info(saved);
+        })
+        .catch(function(err){
+          //TODO(zzn) handle error here
+          //TODO(zzn): add validation, transaction and rollback
+          console.log("error!");
+          $log.error(err);
+          console.log("error 2!");
+        });
+  }
+  $scope.onSubmit = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      title: '确认提交'
     });
-  };
+    confirmPopup.then(function(res) {
+      if(res) {
+        $scope.attempted = true;
+        if (validate()) {
+          submitToDataStore();
+          $state.go('tab.my');
+        } else {
+          // Do nothing
+          $log.info("invalid, not submiting");
+        }
+      } else {
+        $log.info("cancel on submit, not submiting");
+      }
+    });
+  }
 });
 
 ctrls.controller('LoginCtrl', function($scope, User, $rootScope) {
@@ -238,4 +286,20 @@ ctrls.controller('ViewPostCtrl', function($scope) {
     ['ybhzcs', 'ion-location'],
     ['yqjg', 'ion-cash']
   ];
+});
+
+ctrls.controller('EditEntryCtrl', function($log, $scope, uiGmapGoogleMapApi) {
+  uiGmapGoogleMapApi.then(function(maps){
+    $log.info("loaded maps");
+    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+  });
+  $scope.currentDate = new Date();
+
+  $scope.datePickerCallback = function (val) {
+    if(typeof(val)==='undefined'){
+      console.log('Date not selected');
+    }else{
+      console.log('Selected date is : ', val);
+    }
+  };
 });

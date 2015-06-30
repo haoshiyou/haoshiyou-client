@@ -1,17 +1,19 @@
 <ion-view view-title="{{ title }}">
-  <ion-content class="padding">
-      <a class="button button-full button-positive" ng-href="#/add">
-          Add New
-      </a>
-      <ion-list>
-        <ion-item class="item-avatar item-icon-right" ng-repeat="(guid, post) in posts"
-                  href="#/tab/detail/{{guid}}"
-                  type="item-text-wrap">
-          <img ng-src="{{post.face || 'img/logo-v1-blue-1024sq2.jpg'}}" style="width: 64px; height: 64px"/>
-          <h2>{{post.price}}</h2>
-          <p> {{post.start_date}} </p>
-            <i class="icon ion-chevron-right icon-accessory"></i>
-        </ion-item>
-      </ion-list>
-  </ion-content>
+
+    <ion-content>
+        <ion-list can-swipe="true">
+            <ion-item class="item-avatar item-icon-right" ng-repeat="post in posts"
+                      href="#/tab/detail/{{post.id}}"
+                      type="item-text-wrap">
+                <img ng-src="{{post.face || 'img/logo-v1-blue-1024sq2.jpg'}}" style="width: 64px; height: 64px"/>
+                <h2>{{post.needType}} {{post.location}}附近，起始时间：{{post.startDate | date:'yyyy-MM-dd'}}
+                    <span ng-if="post.price">价格：{{post.price}}</span></h2>
+                <p> {{ post.introduction }}</p>
+
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                <ion-option-button class="button-assertive"><i class="fa fa-minus-circle"></i> 删除</ion-option-button>
+                <ion-option-button class="button-positive"><i class="fa fa-pencil"></i> 分享</ion-option-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
 </ion-view>

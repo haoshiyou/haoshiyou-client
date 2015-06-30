@@ -33,31 +33,33 @@
     "public": false
   },
   "HsyPost": {
-    "dataSource": "MongoDB-test",
+    "dataSource": "PostgreSQL",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "HsyUser": {
-    "dataSource": "MongoDB-test",
+    "dataSource": "PostgreSQL",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "HsyPreference": {
-    "dataSource": "MongoDB-test",
+    "dataSource": "PostgreSQL",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "HsyRoommatePreference": {
-    "dataSource": "MongoDB-test",
+    "dataSource": "PostgreSQL",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "HsyHousePreference": {
-    "dataSource": "MongoDB-test",
-    "public": true
+    "dataSource": "PostgreSQL",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
   }
 }

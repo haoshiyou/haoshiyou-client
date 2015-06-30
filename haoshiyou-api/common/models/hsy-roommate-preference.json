@@ -1,8 +1,7 @@
 {
   "name": "HsyRoommatePreference",
   "base": "HsyPreference",
-  "strict": false,
-  "idInjection": false,
+  "idInjection": true,
   "options": {
     "validateUpsert": true
   },
@@ -10,7 +9,7 @@
     "noPets": {
       "type": "boolean"
     },
-    "noCooking": {
+    "lessCooking": {
       "type": "boolean"
     }
   },

@@ -1,0 +1,59 @@
+<!-- Sample from http://plnkr.co/edit/KAYJtHD4LJ18aXqgUoI7?p=preview -->
+<div class="modal" ng-controller="EditEntryCtrl">
+    <div class="bar bar-header bar-dark">
+        <ion-button class="button icon-left ion-chevron-left button-clear" ng-click="done()"></ion-button>
+        <h1 class="title">
+            <i ng-class="models.class"></i> {{modal.title}}
+        </h1>
+    </div>
+    <ion-content class="has-header" scroll="false">
+        <ion-list ng-if="modalField.type == 'radio'" >
+            <ion-radio  class="item item-radio" ng-repeat="option in modalField.options"
+                    name="modalField.key" ng-model="postInput[modalField.key]"
+                    ng-value="option">
+                {{ option }}
+            </ion-radio>
+        </ion-list>
+        <ion-list ng-if="modalField.type == 'location'">
+            <li class="item item-input" >
+                <input type="text" placeholder="请输入城市，地址，邮编等" ng-model="postInput[modalField.key]" />
+            </li>
+        </ion-list>
+        <ion-list ng-if="modalField.type == 'date'">
+            <li class="item item-input">
+                <input type="date" ng-model="postInput[modalField.key]"
+                       placeholder="Select Date"
+                       ng-model="postInput[modalField.key]"/>
+            </li>
+        </ion-list>
+        <ion-list ng-if="modalField.type == 'number'">
+            <li class="item item-input" >
+                <input type="number" ng-model="selectedDate"
+                       placeholder="Price"
+                       ng-model="postInput[modalField.key]"/>
+            </li>
+        </ion-list>
+        <ion-list ng-if="modalField.type == 'text'">
+            <li class="item item-input item-stacked-label">
+                <span class="input-label">情况介绍</span>
+                <input type="text" placeholder="" name="description"
+                       ng-model="postInput[modalField.key]" />
+            </li>
+        </ion-list>
+        <ion-list ng-if="modalField.type == 'checkbox'">
+            <ion-checkbox class="item item-checkbox" ng-repeat="option in modalField.options"
+                          name="option.key" ng-model="postInput[option.key]">
+                {{ option.label }}
+            </ion-checkbox>
+        </ion-list>
+    </ion-content>
+    <div style="height: 100%" ng-if="modalField.type == 'location'">
+        <ui-gmap-google-map id="mapView" center='map.center' zoom='map.zoom' style="height: 100%">
+            <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
+            </ui-gmap-marker>
+        </ui-gmap-google-map>
+    </div>
+    <div class="bar bar-footer bar-positive" ng-click="done()">
+        <h1 class="title" >OK</h1>
+    </div>
+</div>
