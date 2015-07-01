@@ -1,5 +1,6 @@
 angular.module('haoshiyou', [
   'ionic',
+  'lbServices',
   'haoshiyou.controllers',
   'haoshiyou.PostCtrls',
   'haoshiyou.services',
@@ -89,8 +90,8 @@ angular.module('haoshiyou', [
       }
     }
   })
-  .state('tab.add', {
-    url: '/add',
+  .state('tab.edit', {
+    url: '/edit/:postId?',
     views: {
       'tab-my': {
         templateUrl: 'templates/edit.html',

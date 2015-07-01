@@ -26,7 +26,7 @@ function DashCtrl($scope, HaoshiyouService) {
 }
 ctrls.controller('DashCtrl', DashCtrl);
 
-function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, HsyRoommatePreference, HsyHousePreference, $q) {
+function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, $q, $state) {
   $scope.title = "我的帖子";
 
   $scope.delete = function(postId){
@@ -41,8 +41,8 @@ function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, HsyRoommatePr
                       $log.info(hsyPost);
                       return $q.all([
                           hsyPost,
-                          hsyPost.$prototype$__destroy__hsyHousePreference(),
-                          hsyPost.$prototype$__destroy__hsyRoommatePreference(),
+                          HsyPost.hsyHousePreference.destroy({id: postId}, housePreference),
+                          HsyPost.hsyRoommatePreference.destroy({id: postId}, roommatePreference),
                       ]);
                   }).then(function(results){
                       var hsyPost = results[0];
@@ -71,6 +71,10 @@ function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, HsyRoommatePr
       });
   };
 
+  $scope.edit = function(postId){
+    $log.info("edit " + postId);
+    $state.go("tab.edit", {postId: postId});
+  };
   $scope.reload = function () {
       return HsyPost.find()
           .$promise
