@@ -15,13 +15,28 @@ xiaohan: updated the logo design
 4. Update the site
 ** <2015-06-27 Sat>
 Starts working
+** <2015-06-30 Tue>
+Finished basic edit
+Tomorrow: 
+- add view table,
+- add view detail
+- load from old data
+The day after tomorrow
+
 
 * Development Plan 2.0
-** Add/Edit
+** DONE Add
+** DONE Edit
+** DONE Delete
 ** View detail
 ** View table
+** Load from old data
+** Date picker
+** Map Picker
 ** Upload photo
 ** Share on WeChat
+** Login
+
 * Knowledge
 ** ui-gmap-google-map
 http://angular-ui.github.io/angular-google-maps/#!/
