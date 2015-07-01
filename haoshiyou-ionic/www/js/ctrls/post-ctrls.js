@@ -1,6 +1,7 @@
 var ctrls = angular.module('haoshiyou.PostCtrls', ['ngResource', 'lbServices']);
 
-function EditOrCreateCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state, HsyPost, ConstantService) {
+function EditOrCreateCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state, HsyPost,
+                          ConstantService, $ionicLoading) {
     $scope.title = "创建";
     $scope.postInput = {};
     $scope.dirty = {};
@@ -64,7 +65,7 @@ function EditOrCreateCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state, Hs
     }
     $scope.onSubmit = function() {
         var confirmPopup = $ionicPopup.confirm({
-            title: '确认提交'
+            title: '确认发布'
         });
         confirmPopup.then(function(res) {
             if(res) {
@@ -72,9 +73,12 @@ function EditOrCreateCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state, Hs
                 if (validate()) {
                     submitToDataStorePromise().then(function(){
                         $state.go('tab.my');
+                        $ionicLoading.show({ template: '帖子发布成功', noBackdrop: true, duration: 1500 });
                     });
                 } else {
                     // Do nothing
+
+                    $ionicLoading.show({ template: '帖子没有发布成功', noBackdrop: true, duration: 1500 });
                     $log.info("invalid, not submiting");
                 }
             } else {

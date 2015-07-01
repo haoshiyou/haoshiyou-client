@@ -4,7 +4,7 @@
             <i class="icon ion-ios-plus-outline"></i>
         </a>
     </ion-nav-buttons>
-    <ion-content>
+    <ion-content ng-init="reload()">
         <ion-list can-swipe="true">
             <ion-item class="item-avatar item-icon-right" ng-repeat="post in posts"
                       href="#/tab/detail/{{post.id}}"
@@ -15,8 +15,8 @@
                 <p> {{ post.introduction }}</p>
 
                 <i class="icon ion-chevron-right icon-accessory"></i>
-                <ion-option-button class="button-assertive"><i class="icon ion-close-circled"></i></ion-option-button>
-                <ion-option-button class="button-positive"><i class="icon ion-edit"></i></ion-option-button>
+                <ion-option-button class="button-assertive" ng-click="delete(post.id)"><i class="icon ion-close-circled"></i></ion-option-button>
+                <ion-option-button class="button-positive" ng-click="edit(post.id)"><i class="icon ion-edit"></i></ion-option-button>
             </ion-item>
         </ion-list>
     </ion-content>

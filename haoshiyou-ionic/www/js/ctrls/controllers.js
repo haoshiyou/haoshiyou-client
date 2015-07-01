@@ -26,18 +26,63 @@ function DashCtrl($scope, HaoshiyouService) {
 }
 ctrls.controller('DashCtrl', DashCtrl);
 
-function MyCtrl($log, $scope, HsyPost) {
+function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, HsyRoommatePreference, HsyHousePreference, $q) {
   $scope.title = "我的帖子";
-  HsyPost.find()
-      .$promise
-      .then(function(results) {
-        $log.info("Getting my posts:" + results.length);
-        $log.info(results);
-        $scope.posts = results;
-      }).catch(function(err) {
-        $log.error("Error getting my posts!");
-        $log.error(JSON.stringify(err));
+
+  $scope.delete = function(postId){
+      var confirmPopup = $ionicPopup.confirm({
+          title: '确认删除'
       });
+      confirmPopup.then(function(res) {
+          if(res) {
+              console.log("postId=" + postId);
+              HsyPost.findById({id: postId}).$promise.
+                  then(function(hsyPost){
+                      $log.info(hsyPost);
+                      return $q.all([
+                          hsyPost,
+                          hsyPost.$prototype$__destroy__hsyHousePreference(),
+                          hsyPost.$prototype$__destroy__hsyRoommatePreference(),
+                      ]);
+                  }).then(function(results){
+                      var hsyPost = results[0];
+                      $log.info(results);
+                      return hsyPost.$delete();
+                  }).then(function(){
+                      $ionicLoading.show({ template: '已删除', noBackdrop: true, duration: 1500 });
+                      $scope.reload(); // no chaining
+                  })
+                  .catch(function(err){
+                      $log.error(err);
+                      $ionicLoading.show({ template: '删除失败', noBackdrop: true, duration: 1500 });
+                  });
+              //$q.all([
+              //    HsyPost.deleteById({id: postId}).$promise,
+              //    HsyPost.hsyRoommatePreference.destroyAll({postId: postId}).$promise,
+              //    HsyPost.hsyHousePreference.destroyAll({postId: postId}).$promise,
+              //]).then(function(){
+              //      $ionicLoading.show({ template: '已删除', noBackdrop: true, duration: 1500 });
+              //      $scope.reload(); // no chaining
+              //    }).catch(function(err){
+              //        $log.error(err);
+              //    });
+          } else {
+          }
+      });
+  };
+
+  $scope.reload = function () {
+      return HsyPost.find()
+          .$promise
+          .then(function (results) {
+              $log.info("Getting my posts:" + results.length);
+              $log.info(results);
+              $scope.posts = results;
+          }).catch(function (err) {
+              $log.error("Error getting my posts!");
+              $log.error(JSON.stringify(err));
+          });
+  };
 }
 ctrls.controller('MyCtrl', MyCtrl);
 
