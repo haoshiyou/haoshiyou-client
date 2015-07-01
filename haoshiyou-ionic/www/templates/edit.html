@@ -4,7 +4,14 @@
              ng-repeat="field in FIELDS" ng-click="showModal(field.key)">
             <i class="icon {{ field.icon }}"></i>
             <span>{{ field.label }}</span>
-            <span class="pull-right" ng-if="field.type != 'date'">{{ postInput[field.key] }}</span>
+            <span class="pull-right" ng-if="field.type != 'date' && field.type != 'checkbox'">
+                {{ postInput[field.key] | limitTo: 16 }}
+                <span ng-if="postInput[field.key].toString().length > 16">...</span>
+            </span>
+
+            <span class="pull-right" ng-if="field.type == 'checkbox'">
+                <span ng-repeat="option in field.options" ng-if="postInput[option.key]">{{ option.label }} </span>
+            </span>
             <span class="pull-right" ng-if="field.type == 'date'">{{ postInput[field.key] | date:'yyyy-MM-dd' }}</span>
             <span class="badge badge-assertive"
                   ng-if="attempted && field.required && !(postInput.hasOwnProperty(field.key) && postInput[field.key])"> 必填 </span>
