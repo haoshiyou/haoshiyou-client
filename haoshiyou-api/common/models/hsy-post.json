@@ -51,19 +51,16 @@
     "introduction": {
       "type": "string",
       "required": true,
-      "comments": "introduction of the post"
+      "comments": "introduction of the post",
+      "postgresql": {
+        "dataType": "character varying",
+        "dataLength": null
+      }
     },
-    "wechat": {
-      "type": "string"
-    },
-    "phone": {
-      "type": "string"
-    },
-    "contactEmail": {
-      "type": "string"
-    },
-    "contactInfoPublic": {
-      "type": "boolean"
+    "guid": {
+      "type": "string",
+      "required": true,
+      "comments": "Globally Unique ID for the post"
     }
   },
   "validations": [],
