@@ -24,18 +24,51 @@ Tomorrow:
 The day after tomorrow
 
 
-* Development Plan 2.0
-** DONE Add
-** DONE Edit
-** DONE Delete
-** View detail
-** View table
-** Load from old data
-** Date picker
-** Map Picker
-** Upload photo
-** Share on WeChat
-** Login
+* Development Plan
+** Feature 3.0
+*** Editing
+**** DONE Add
+**** DONE Edit
+**** DONE Delete
+
+**** View detail 2h
+**** View table 2h
+**** Load from old data 2h
+**** Date picker 2h
+
+
+**** Filter by start date 2h
+**** Filter by area 2h
+*** Map
+**** Map Picker
+**** Range Area?
+
+
+*** Photo
+**** Upload photo
+**** Store photo
+**** Delete photo
+**** Better caching and faster loading
+
+**** Thumbnails generation
+***** Long photo
+*****
+*** WeChat Sharing
+**** Login in WeChat
+**** Share on WeChat
+*** Basic Identificaiton
+**** Add device and session identifier
+
+*** Authentication
+**** Basic login flow
+**** ACL rules in database
+
+** Bug
+*** UI tweak
+**** Loading indicators
+**** Failure Handling
+**** Back Button Visibility, Direct Link case
+
 
 * Knowledge
 ** ui-gmap-google-map
