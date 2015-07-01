@@ -135,5 +135,5 @@ angular.module('haoshiyou', [
 
     // Change the URL where to access the LoopBack REST API server
     // LoopBackResourceProvider.setUrlBase('http://0.0.0.0:3000/api');
-
+    LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
 });
