@@ -22,7 +22,8 @@ Tomorrow:
 - add view detail
 - load from old data
 The day after tomorrow
-
+** <2015-07-01 Wed>
+- add load from load data
 
 * Development Plan
 ** Feature 3.0
@@ -33,7 +34,7 @@ The day after tomorrow
 
 **** View detail 2h
 **** View table 2h
-**** Load from old data 2h
+**** DONE Load from old data 2h
 **** Date picker 2h
 
 
