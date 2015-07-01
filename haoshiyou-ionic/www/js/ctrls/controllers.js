@@ -56,16 +56,6 @@ function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, $q, $state) {
                       $log.error(err);
                       $ionicLoading.show({ template: '删除失败', noBackdrop: true, duration: 1500 });
                   });
-              //$q.all([
-              //    HsyPost.deleteById({id: postId}).$promise,
-              //    HsyPost.hsyRoommatePreference.destroyAll({postId: postId}).$promise,
-              //    HsyPost.hsyHousePreference.destroyAll({postId: postId}).$promise,
-              //]).then(function(){
-              //      $ionicLoading.show({ template: '已删除', noBackdrop: true, duration: 1500 });
-              //      $scope.reload(); // no chaining
-              //    }).catch(function(err){
-              //        $log.error(err);
-              //    });
           } else {
           }
       });

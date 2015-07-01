@@ -122,7 +122,7 @@ angular.module('haoshiyou', [
     url: '/qrcode',
     views: {
       'tab-qrcode': {
-        templateUrl: 'templates/tab-qrcode.html',
+        templateUrl: 'templates/tab-qrcode.html'
       }
     }
   });
