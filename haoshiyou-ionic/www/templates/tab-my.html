@@ -5,7 +5,7 @@
         </a>
     </ion-nav-buttons>
     <ion-content ng-init="reload()">
-        <ion-list can-swipe="true">
+        <ion-list can-swipe="canEdit">
             <ion-item class="item-avatar item-icon-right" ng-repeat="post in posts"
                       href="#/tab/detail/{{post.id}}"
                       type="item-text-wrap">

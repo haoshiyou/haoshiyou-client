@@ -16,7 +16,7 @@ var CONST_FIELDS = {
 
 var path = require('path');
 var app = require(path.resolve(__dirname, '../server'));
-var ds = app.dataSources.PostgreSQL;
+var ds = app.dataSources["MySQL-RDS"];
 ds.automigrate(['User', 'Role', 'ACL', 'RoleMapping', 'AccessToken',
   'HsyPost', 'HsyRoommatePreference', 'HsyHousePreference'
 ], function(err) {
@@ -38,19 +38,30 @@ ds.automigrate(['User', 'Role', 'ACL', 'RoleMapping', 'AccessToken',
             hsyPost[key] = parseInt(col) || 0;
           } else hsyPost[key] = col
         }
+        hsyPost.createdBySessionId = "before-migration-session-id";
         allPosts.push(hsyPost);
       });
       var HsyPost = app.models.HsyPost;
 
       console.log("Creating " + allPosts.length);
       for(var i in allPosts) {
-        HsyPost.create(allPosts[i], function (err, objs) {
-          if (err) {
-            console.log(err);
-            console.log("objs!" + JSON.stringify(objs));
-          }
-          else console.log("DONE");
-        })
+        (function(INDEX) {
+          HsyPost.create(allPosts[INDEX], function (err, hsyPost) {
+            if (err) {
+              console.log(err);
+
+              console.log("objs!" + JSON.stringify(objs));
+            }
+            else {
+              hsyPost.hsyRoommatePreference
+                .create({}, function(err){if (err) console.error(err);});
+              hsyPost.hsyHousePreference
+                .create({}, function(err){if (err) console.error(err);});
+              console.log("DONE " + INDEX);
+            }
+          })
+        })(i);
+
       }
     });
 

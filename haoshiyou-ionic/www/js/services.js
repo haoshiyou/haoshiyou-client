@@ -1,12 +1,12 @@
 'use strict';
 
-var services = angular.module('haoshiyou.services', []);
+var services = angular.module('haoshiyou.services', ['ngResource', 'lbServices']);
 
 function ConstantSerivce() {
   return {
     FIELDS: [
       { key: 'needType', label:'需求类型', icon: 'ion-star',
-        required: true, type: 'radio', options: ['招租', '求租']
+        required: true, type: 'radio', options: ['招租', '求租', '找室友']
       },
       { key: 'location', label:'位置', icon: 'ion-location', required: true,
         type: 'location' },
@@ -29,7 +29,8 @@ function ConstantSerivce() {
       { key: 'introduction', label:'情况简介', icon: 'ion-document', required: true,
         type: 'text'
       }
-    ]
+    ],
+    BEFORE_MIGRATION_SESSION_ID: "before-migration-session-id"
   }
 }
 services.factory('ConstantService', ConstantSerivce);
@@ -135,4 +136,20 @@ services.factory('PagedResult', function (HaoshiyouService) {
       return this;
     }
   }
+});
+
+
+services.factory('SessionService', function(){
+  var sessionId;
+    function getSessionId() {
+      if (sessionId) {
+        return sessionId;
+      } else {
+        sessionId = "debug-session-id";
+        return sessionId;
+      }
+    };
+    return {
+      getSessionId: getSessionId
+    };
 });

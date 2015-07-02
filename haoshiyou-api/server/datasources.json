@@ -22,5 +22,15 @@
     "name": "PostgreSQL",
     "user": "xicnfxcaajlrwh",
     "connector": "postgresql"
+  },
+  "MySQL-RDS": {
+    "host": "haoshiyou-mysql.cvkga76rfb4v.us-west-2.rds.amazonaws.com",
+    "port": 3306,
+    "url": "",
+    "database": "haoshiyoudb",
+    "password": "nu839r3ad",
+    "name": "MySQL-RDS",
+    "user": "haoshiyou",
+    "connector": "mysql"
   }
 }

@@ -4,7 +4,8 @@ angular.module('haoshiyou', [
   'haoshiyou.controllers',
   'haoshiyou.PostCtrls',
   'haoshiyou.services',
-  'uiGmapgoogle-maps'])
+  'uiGmapgoogle-maps',
+  "uuid4"])
 
 .run(function($ionicPlatform,  $rootScope, $log) {
   $ionicPlatform.ready(function() {
@@ -75,8 +76,8 @@ angular.module('haoshiyou', [
     url: '/dash',
     views: {
       'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+        templateUrl: 'templates/tab-my.html',
+        controller: 'PostListCtrl'
       }
     }
   })
@@ -86,7 +87,7 @@ angular.module('haoshiyou', [
     views: {
       'tab-my': {
         templateUrl: 'templates/tab-my.html',
-        controller: 'MyCtrl'
+        controller: 'PostListCtrl'
       }
     }
   })
@@ -117,7 +118,15 @@ angular.module('haoshiyou', [
       }
     }
   })
-
+  .state('tab.view', {
+    url: '/view/:postId',
+    views: {
+      'tab-my': {
+        templateUrl: 'templates/view.html',
+        controller: 'ViewCtrl'
+      }
+    }
+  })
   .state('tab.qrcode', {
     url: '/qrcode',
     views: {
@@ -135,5 +144,5 @@ angular.module('haoshiyou', [
 
     // Change the URL where to access the LoopBack REST API server
     // LoopBackResourceProvider.setUrlBase('http://0.0.0.0:3000/api');
-    LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
+    // LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
 });

@@ -1,8 +1,8 @@
 var ctrls = angular.module('haoshiyou.PostCtrls', ['ngResource', 'lbServices']);
 
-function EditOrCreateCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state,
-                          HsyPost, HsyHousePreference, HsyRoommatePreference,
-                          ConstantService, $ionicLoading, $stateParams) {
+function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
+                          $ionicLoading, $ionicModal,  $ionicPopup,
+                          HsyPost, ConstantService, SessionService, uuid4) {
     $scope.postInput = {};
     $scope.dirty = {};
     if ($stateParams.postId) {
@@ -19,8 +19,10 @@ function EditOrCreateCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state,
                 $log.info(hsyPost);
                 $log.info(HsyPost);
                 return $q.all([hsyPost,
-                    HsyPost.hsyHousePreference({id: $stateParams.postId}).$promise,
-                    HsyPost.hsyRoommatePreference({id: $stateParams.postId}).$promise
+                    HsyPost.hsyHousePreference({id: $stateParams.postId})
+                        .$promise,
+                    HsyPost.hsyRoommatePreference({id: $stateParams.postId})
+                        .$promise
                 ]);
             }).then(function(results) {
                 $log.info(results);
@@ -94,6 +96,9 @@ function EditOrCreateCtrl($log, $scope, $ionicModal, $q, $ionicPopup, $state,
             'privateBath', 'designatedParking',
             'lessCooking', 'noPets'
         ]);
+        post.guid = uuid4.generate();
+        post.createdBySessionId = SessionService.getSessionId();
+        $log.info("new guid = " + post.guid);
         var roommatePreference = _.pick($scope.postInput, ['lessCooking', 'noPets']);
         var housePreference = _.pick($scope.postInput, ['privateBath', 'designatedParking']);
         if ($stateParams.postId) {

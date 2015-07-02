@@ -14,50 +14,50 @@
     ]
   },
   "User": {
-    "dataSource": "PostgreSQL"
+    "dataSource": "MySQL-RDS"
   },
   "AccessToken": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": false
   },
   "ACL": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": false
   },
   "Role": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": false
   },
   "HsyPost": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "HsyUser": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "HsyPreference": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "HsyRoommatePreference": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "HsyHousePreference": {
-    "dataSource": "PostgreSQL",
+    "dataSource": "MySQL-RDS",
     "public": true,
     "$promise": {},
     "$resolved": true

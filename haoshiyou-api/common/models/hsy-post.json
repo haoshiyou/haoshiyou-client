@@ -42,7 +42,7 @@
     },
     "createdBySessionId": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "takenDown": {
       "type": "boolean",

@@ -26,8 +26,22 @@ function DashCtrl($scope, HaoshiyouService) {
 }
 ctrls.controller('DashCtrl', DashCtrl);
 
-function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, $q, $state) {
-  $scope.title = "我的帖子";
+function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
+                      $q, $state, SessionService) {
+  // TODO(zzn): Change it once we have id set up
+  var filter = {};
+  if ($state.is("tab.dash")) {
+
+      filter = {};
+      $scope.title = "浏览帖子";
+      $scope.canEdit = false;
+  } else if ($state.is("tab.my")) {
+      filter = {
+          where: {createdBySessionId: SessionService.getSessionId()}
+      };
+      $scope.title = "我的帖子";
+      $scope.canEdit = true;
+  }
 
   $scope.delete = function(postId){
       var confirmPopup = $ionicPopup.confirm({
@@ -66,7 +80,10 @@ function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, $q, $state) {
     $state.go("tab.edit", {postId: postId});
   };
   $scope.reload = function () {
-      return HsyPost.find()
+      return HsyPost.find(
+          { filter:
+            filter
+          })
           .$promise
           .then(function (results) {
               $log.info("Getting my posts:" + results.length);
@@ -78,7 +95,7 @@ function MyCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup, $q, $state) {
           });
   };
 }
-ctrls.controller('MyCtrl', MyCtrl);
+ctrls.controller('PostListCtrl', PostListCtrl);
 
 function DetailCtrl($log, $scope, $stateParams, HaoshiyouService, uiGmapGoogleMapApi) {
   $scope.SHOW_COLUMNS_AND_ICONS = [
