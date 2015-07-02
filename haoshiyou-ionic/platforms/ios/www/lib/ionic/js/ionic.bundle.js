@@ -12102,7 +12102,7 @@ HashMap.prototype = {
  * it into the current AngularJS scope.
  *
  * ```js
- * var $div = $('<div ng-controller="MyCtrl">{{content.label}}</div>');
+ * var $div = $('<div ng-controller="PostListCtrl">{{content.label}}</div>');
  * $(document.body).append($div);
  *
  * angular.element(document).injector().invoke(function($compile) {
@@ -44575,7 +44575,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
  * @usage
  *
  * ```html
- * <body ng-controller="MyCtrl">
+ * <body ng-controller="PostListCtrl">
  *   <ion-nav-bar>
  *     <button ng-click="setNavTitle('banana')">
  *       Set title to banana!
@@ -44584,7 +44584,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
  * </body>
  * ```
  * ```js
- * function MyCtrl($scope, $ionicNavBarDelegate) {
+ * function PostListCtrl($scope, $ionicNavBarDelegate) {
  *   $scope.setNavTitle = function(title) {
  *     $ionicNavBarDelegate.title(title);
  *   }
@@ -45937,7 +45937,7 @@ IonicModule
  * </ion-view>
  * ```
  * ```js
- * function MyCtrl($scope, $ionicSlideBoxDelegate) {
+ * function PostListCtrl($scope, $ionicSlideBoxDelegate) {
  *   $scope.nextSlide = function() {
  *     $ionicSlideBoxDelegate.next();
  *   }
@@ -46040,7 +46040,7 @@ IonicModule
  * @usage
  *
  * ```html
- * <body ng-controller="MyCtrl">
+ * <body ng-controller="PostListCtrl">
  *   <ion-tabs>
  *
  *     <ion-tab title="Tab 1">
@@ -46053,7 +46053,7 @@ IonicModule
  * </body>
  * ```
  * ```js
- * function MyCtrl($scope, $ionicTabsDelegate) {
+ * function PostListCtrl($scope, $ionicTabsDelegate) {
  *   $scope.selectTabWithIndex = function(index) {
  *     $ionicTabsDelegate.select(index);
  *   }
@@ -47368,7 +47368,7 @@ function($scope, $attrs, $element, $timeout) {
  * @usage
  *
  * ````html
- * <ion-content ng-controller="MyCtrl">
+ * <ion-content ng-controller="PostListCtrl">
  *   <button class="button" ng-click="showDeleteButtons()"></button>
  *   <ion-list>
  *     <ion-item ng-repeat="i in items">
@@ -47379,7 +47379,7 @@ function($scope, $attrs, $element, $timeout) {
  * </ion-content>
  * ```
  * ```js
- * function MyCtrl($scope, $ionicListDelegate) {
+ * function PostListCtrl($scope, $ionicListDelegate) {
  *   $scope.showDeleteButtons = function() {
  *     $ionicListDelegate.showDelete(true);
  *   };
@@ -52344,7 +52344,7 @@ var ITEM_TPL_REORDER_BUTTON =
 * @usage
 *
 * ```html
-* <ion-list ng-controller="MyCtrl" show-reorder="true">
+* <ion-list ng-controller="PostListCtrl" show-reorder="true">
 *   <ion-item ng-repeat="item in items">
 *     Item {{item}}
 *     <ion-reorder-button class="ion-navicon"
@@ -52354,7 +52354,7 @@ var ITEM_TPL_REORDER_BUTTON =
 * </ion-list>
 * ```
 * ```js
-* function MyCtrl($scope) {
+* function PostListCtrl($scope) {
 *   $scope.items = [1, 2, 3, 4];
 *   $scope.moveItem = function(item, fromIndex, toIndex) {
 *     //Move the item in the array
@@ -52526,7 +52526,7 @@ function keyboardAttachGetClientHeight(element) {
 * Advanced Usage: Thumbnails, Delete buttons, Reordering, Swiping
 *
 * ```html
-* <ion-list ng-controller="MyCtrl"
+* <ion-list ng-controller="PostListCtrl"
 *           show-delete="shouldShowDelete"
 *           show-reorder="shouldShowReorder"
 *           can-swipe="listCanSwipe">
@@ -52556,7 +52556,7 @@ function keyboardAttachGetClientHeight(element) {
 * ```
 *
 *```javascript
-* app.controller('MyCtrl', function($scope) {
+* app.controller('PostListCtrl', function($scope) {
 *  $scope.shouldShowDelete = false;
 *  $scope.shouldShowReorder = false;
 *  $scope.listCanSwipe = true
@@ -52854,7 +52854,7 @@ IonicModule
  * With custom inner markup and custom click action, using {@link ionic.service:$ionicHistory}:
  *
  * ```html
- * <ion-nav-bar ng-controller="MyCtrl">
+ * <ion-nav-bar ng-controller="PostListCtrl">
  *   <ion-nav-back-button class="button-clear"
  *     ng-click="myGoBack()">
  *     <i class="ion-arrow-left-c"></i> Back
@@ -52862,7 +52862,7 @@ IonicModule
  * </ion-nav-bar>
  * ```
  * ```js
- * function MyCtrl($scope, $ionicHistory) {
+ * function PostListCtrl($scope, $ionicHistory) {
  *   $scope.myGoBack = function() {
  *     $ionicHistory.goBack();
  *   };
