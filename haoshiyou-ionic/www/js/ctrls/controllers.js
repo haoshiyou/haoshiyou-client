@@ -30,6 +30,7 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
                       $q, $state, SessionService) {
   // TODO(zzn): Change it once we have id set up
   var filter = {};
+  $scope.$state = $state;
   if ($state.is("tab.dash")) {
 
       filter = {};
@@ -42,7 +43,10 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
       $scope.title = "我的帖子";
       $scope.canEdit = true;
   }
-
+  $scope.viewOrEdit = function(postId) {
+        $state.go($state.is('tab.my') ?
+            "tab.edit" : "tab.view", {postId: postId});
+    }
   $scope.delete = function(postId){
       var confirmPopup = $ionicPopup.confirm({
           title: '确认删除'
@@ -75,10 +79,6 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
       });
   };
 
-  $scope.edit = function(postId){
-    $log.info("edit " + postId);
-    $state.go("tab.edit", {postId: postId});
-  };
   $scope.reload = function () {
       return HsyPost.find(
           { filter:

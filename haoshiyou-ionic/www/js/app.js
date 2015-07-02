@@ -109,17 +109,18 @@ angular.module('haoshiyou', [
       }
     })
   .state('tab.view', {
-    url: '/view/:postId',
+    params: {postId: null},
     views: {
-      'tab-my': {
-        templateUrl: 'templates/view.html',
-        controller: 'ViewCtrl'
-      },
       'tab-dash': {
         templateUrl: 'templates/view.html',
         controller: 'ViewCtrl'
-      }
+      },
     }
+  })
+  .state('view', {
+    url: '/view/:postId',
+    templateUrl: 'templates/view.html',
+    controller: 'ViewCtrl'
   })
   .state('tab.qrcode', {
     url: '/qrcode',

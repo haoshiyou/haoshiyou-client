@@ -173,9 +173,11 @@ function EditEntryCtrl($log, $scope, uiGmapGoogleMapApi) {
 }
 ctrls.controller('EditEntryCtrl', EditEntryCtrl);
 
-function ViewCtrl($scope, ConstantService, HsyPost, $stateParams, $log, $q) {
+function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, $q) {
+  $scope.$state = $state;
   $scope.FIELDS = ConstantService.FIELDS;
     $scope.postInput = {};
+  $log.info("view post id = " + $stateParams.postId);
     HsyPost.findById({id: $stateParams.postId}).$promise
         .then(function(hsyPost){
             $log.info("Fetched!");
