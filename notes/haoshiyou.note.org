@@ -33,7 +33,7 @@ The day after tomorrow
 **** DONE Delete
 
 **** View detail 2h
-**** View table 2h
+**** DONE View table 2h
 **** DONE Load from old data 2h
 **** Date picker 2h
 
@@ -58,7 +58,8 @@ The day after tomorrow
 **** Login in WeChat
 **** Share on WeChat
 *** Basic Identificaiton
-**** Add device and session identifier
+**** DONE Add device and session identifier
+
 
 *** Authentication
 **** Basic login flow

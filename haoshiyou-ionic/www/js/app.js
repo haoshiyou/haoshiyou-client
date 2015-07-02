@@ -108,20 +108,14 @@ angular.module('haoshiyou', [
         }
       }
     })
-
-  .state('tab.detail', {
-    url: '/detail/:guid',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-detail.html',
-        controller: 'DetailCtrl'
-      }
-    }
-  })
   .state('tab.view', {
     url: '/view/:postId',
     views: {
       'tab-my': {
+        templateUrl: 'templates/view.html',
+        controller: 'ViewCtrl'
+      },
+      'tab-dash': {
         templateUrl: 'templates/view.html',
         controller: 'ViewCtrl'
       }

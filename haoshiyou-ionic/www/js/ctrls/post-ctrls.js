@@ -173,8 +173,44 @@ function EditEntryCtrl($log, $scope, uiGmapGoogleMapApi) {
 }
 ctrls.controller('EditEntryCtrl', EditEntryCtrl);
 
-function ViewCtrl($scope, ConstantService) {
+function ViewCtrl($scope, ConstantService, HsyPost, $stateParams, $log, $q) {
   $scope.FIELDS = ConstantService.FIELDS;
+    $scope.postInput = {};
+    HsyPost.findById({id: $stateParams.postId}).$promise
+        .then(function(hsyPost){
+            $log.info("Fetched!");
+            $log.info(hsyPost);
+            $log.info(HsyPost);
+            return $q.all([hsyPost,
+                HsyPost.hsyHousePreference({id: $stateParams.postId})
+                    .$promise,
+                HsyPost.hsyRoommatePreference({id: $stateParams.postId})
+                    .$promise
+            ]);
+        }).then(function(results) {
+            $log.info(results);
+            var hsyPost = results[0];
+            var housePref = results[1];
+            var roommatePref = results[2];
+            for (var i in $scope.FIELDS) {
+                var field = $scope.FIELDS[i];
+                if (field.type === "date") {
+                    $scope.postInput[field.key] = new Date(hsyPost[field.key]);
+                } else {
+                    $scope.postInput[field.key] = hsyPost[field.key];
+                }
+            }
+
+            ['privateBath', 'designatedParking'].forEach(function(key) {
+                $scope.postInput[key] = housePref[key];
+            });
+            ['lessCooking', 'noPets'].forEach(function(key) {
+                $scope.postInput[key] = roommatePref[key];
+            });
+        })
+        .catch(function(err){
+            //TODO(zzn): handle error when no postId found
+        });
 }
 ctrls.controller('ViewCtrl', ViewCtrl);
 

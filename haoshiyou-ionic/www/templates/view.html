@@ -1,15 +1,44 @@
 <ion-view>
     <ion-nav-bar class="bar-dark">
         <ion-nav-title >
-            <h1 class="title">{{ post.needType }}</h1>
+            <h1 class="title">{{ postInput.needType }}</h1>
         </ion-nav-title>
     </ion-nav-bar>
 
     <ion-content>
-        <div class="item item-icon-left item-icon-right"
-             ng-repeat="field in FIELDS">
-            <i class="icon {{ field.icon }}"></i>
-            <span>{{ field.label }}</span>
+        <div class="list">
+
+            <div ng-repeat="field in FIELDS">
+                <div class="item item-divider" >
+                    {{ field.label}}
+                </div>
+                <div class="item item-text-wrap"
+                     ng-if="['radio', 'number', 'location'].
+                     indexOf(field.type) >= 0">
+                    {{ postInput[field.key] }}
+                </div>
+                <div class="item item-text-wrap"
+                     ng-if="'date' == field.type ">
+                    {{ postInput[field.key] | date:'yyyy-MM-dd' }}
+                </div>
+                <div ng-if="'checkbox' == field.type ">
+
+                    <ion-checkbox class="item item-checkbox" ng-repeat="option in field.options"
+                                  ng-if="postInput[option.key]"
+                                  name="option.key" ng-model="postInput[option.key]" ng-checked="postInput[option.key]">
+                        {{ option.label }}
+                    </ion-checkbox>
+                </div>
+                <div class="item item-body"
+                     ng-if="field.type == 'text'">
+                    <p>
+                        {{ postInput[option.key] || "无" }}
+                    </p>
+                </div>
+            </div>
+
+
         </div>
     </ion-content>
+
 </ion-view>

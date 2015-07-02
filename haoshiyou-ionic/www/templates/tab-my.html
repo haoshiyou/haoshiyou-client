@@ -7,7 +7,7 @@
     <ion-content ng-init="reload()">
         <ion-list can-swipe="canEdit">
             <ion-item class="item-avatar item-icon-right" ng-repeat="post in posts"
-                      href="#/tab/detail/{{post.id}}"
+                      href="#/tab/view/{{post.id}}"
                       type="item-text-wrap">
                 <img ng-src="{{post.face || 'img/logo-v1-blue-1024sq2.jpg'}}" style="width: 64px; height: 64px"/>
                 <h2>{{post.needType}} {{post.location}}附近，起始时间：{{post.startDate | date:'yyyy-MM-dd'}}
