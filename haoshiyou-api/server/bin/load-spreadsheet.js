@@ -7,7 +7,7 @@ var CONST_FIELDS = {
   introduction: "gsx$租房需求介绍和自我介绍",
   guid: "gsx$entryid"
   //qy: "gsx$区域",
-  //wxId: "gsx$微信号",
+  wechat: "gsx$微信号",
   //xb: "gsx$性别",
   //dhyx: "gsx$其他联系方式电话邮箱等",
   //fbsj: "gsx$timestamp",
