@@ -28,25 +28,31 @@ ctrls.controller('DashCtrl', DashCtrl);
 
 function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
                       $q, $state, SessionService) {
-  // TODO(zzn): Change it once we have id set up
-  var filter = {};
+
+  // TODO(zzn): Change filter once we have id set up
+  var filter = {
+      limit: 40,
+      order: 'startDate ASC',
+      skip: 0
+  };
+  var skip = 0;
   $scope.$state = $state;
+  $scope.posts = [];
+  $scope.canLoadMore = true;
   if ($state.is("tab.dash")) {
 
-      filter = {};
+
       $scope.title = "浏览帖子";
       $scope.canEdit = false;
   } else if ($state.is("tab.my")) {
-      filter = {
-          where: {createdBySessionId: SessionService.getSessionId()}
-      };
+      filter.where = {createdBySessionId: SessionService.getSessionId()};
       $scope.title = "我的帖子";
       $scope.canEdit = true;
   }
   $scope.viewOrEdit = function(postId) {
         $state.go($state.is('tab.my') ?
             "tab.edit" : "tab.view", {postId: postId});
-    }
+    };
   $scope.delete = function(postId){
       var confirmPopup = $ionicPopup.confirm({
           title: '确认删除'
@@ -80,20 +86,27 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
   };
 
   $scope.reload = function () {
-      return HsyPost.find(
-          { filter:
-            filter
-          })
-          .$promise
-          .then(function (results) {
-              $log.info("Getting my posts:" + results.length);
-              $log.info(results);
-              $scope.posts = results;
-          }).catch(function (err) {
-              $log.error("Error getting my posts!");
-              $log.error(JSON.stringify(err));
-          });
+    $scope.posts = []; // clean up
+    return $scope.loadMore();
   };
+  $scope.loadMore = function () {
+      $log.info("loadMore triggered, current skip = " +  filter.skip);
+      return HsyPost.find({ filter: filter})
+      .$promise
+      .then(function (results) {
+          $log.info("Getting my posts:" + results.length);
+          $log.info(results);
+          $scope.posts = $scope.posts.concat(results);
+          filter.skip = $scope.posts.length;
+          if (results.length < filter.limit) $scope.canLoadMore = false;
+          $scope.$broadcast('scroll.infiniteScrollComplete');
+
+      }).catch(function (err) {
+          $log.error("Error getting my posts!");
+          $log.error(JSON.stringify(err));
+      });
+  };
+  $scope.moreDataCanBeLoaded = function() { return true; }
 }
 ctrls.controller('PostListCtrl', PostListCtrl);
 
