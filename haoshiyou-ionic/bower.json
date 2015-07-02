@@ -9,6 +9,8 @@
     "angular-ui-router": "~0.2.15",
     "angular-google-maps": "~2.1.5",
     "lodash": "~3.9.3",
-    "angular-resource": "~1.4.1"
+    "angular-resource": "~1.4.1",
+    "angular-uuid": "~0.1.0",
+    "angular-uuid4": "~0.3.0"
   }
 }

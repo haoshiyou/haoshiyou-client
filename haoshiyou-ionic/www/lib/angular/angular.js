@@ -3660,7 +3660,7 @@ var $$HashMapProvider = [function() {
  * it into the current AngularJS scope.
  *
  * ```js
- * var $div = $('<div ng-controller="MyCtrl">{{content.label}}</div>');
+ * var $div = $('<div ng-controller="PostListCtrl">{{content.label}}</div>');
  * $(document.body).append($div);
  *
  * angular.element(document).injector().invoke(function($compile) {
