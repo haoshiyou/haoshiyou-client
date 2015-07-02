@@ -57,9 +57,6 @@
         "dataLength": null
       }
     },
-    "wechat": {
-      "type": "string"
-    },
     "guid": {
       "type": "string",
       "required": true,
