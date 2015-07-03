@@ -51,7 +51,7 @@ angular.module('haoshiyou', [
       url: '/team',
       views: {
         'tab-team': {
-          templateUrl: 'templates/tab-team.html',
+          templateUrl: 'templates/team.html',
           controller: 'TeamCtrl'
         }
       }
@@ -71,7 +71,7 @@ angular.module('haoshiyou', [
     url: '/qrcode',
     views: {
       'tab-qrcode': {
-        templateUrl: 'templates/tab-qrcode.html',
+        templateUrl: 'templates/qrcode.html',
         controller: 'QrCodeCtrl'
       }
     }

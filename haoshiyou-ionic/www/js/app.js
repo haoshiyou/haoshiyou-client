@@ -101,21 +101,14 @@ angular.module('haoshiyou', [
       }
     }
   })
-  .state('tab.team', {
-      url: '/team',
-      views: {
-        'tab-team': {
-          templateUrl: 'templates/tab-team.html'
-        }
-      }
-    })
+
   .state('tab.view', {
     params: {postId: null},
     views: {
       'tab-dash': {
         templateUrl: 'templates/view.html',
         controller: 'ViewCtrl'
-      },
+      }
     }
   })
   .state('view', {
@@ -123,11 +116,24 @@ angular.module('haoshiyou', [
     templateUrl: 'templates/view.html',
     controller: 'ViewCtrl'
   })
-  .state('tab.qrcode', {
-    url: '/qrcode',
+  .state('tab.info', {
+    url: '/info',
     views: {
-      'tab-qrcode': {
-        templateUrl: 'templates/tab-qrcode.html'
+      'tab-info': {
+        templateUrl: 'templates/tab-info.html'
+      }
+    }
+  })
+  .state('tab.qrcode',{
+    views: {
+      'tab-info': {
+        templateUrl: 'templates/qrcode.html'
+      }
+    }
+  }).state('tab.team', {
+    views: {
+      'tab-info': {
+        templateUrl: 'templates/team.html'
       }
     }
   });
