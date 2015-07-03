@@ -27,25 +27,35 @@ function DashCtrl($scope, HaoshiyouService) {
 ctrls.controller('DashCtrl', DashCtrl);
 
 function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
-                      $q, $state, SessionService) {
-
-  // TODO(zzn): Change filter once we have id set up
+                      $q, $state, SessionService, $ionicModal, ConstantService, $filter) {
+  $scope.NEED_TYPE_COLOR = ConstantService.NEED_TYPE_COLOR;
   var filter = {
-      limit: 40,
+      limit: 10,
       order: 'startDate ASC',
-      skip: 0
+      skip: 0,
+      where: {}
   };
+  $scope.needTypeFilter = {
+      "招租": true,
+      "求租": true,
+      "找室友": true
+  };
+    $scope.getPostTitle = function(post) {
+        var location = post.location + '附近';
+        var startDate = "，起始时间：" + $filter('date')(post.startDate, "yyyy-MM-dd");
+        var price = post.price ? "，价格：" + post.price : "" ;
+        return location + startDate + price
+    };
   var skip = 0;
   $scope.$state = $state;
   $scope.posts = [];
   $scope.canLoadMore = true;
   if ($state.is("tab.dash")) {
-
-
       $scope.title = "浏览帖子";
       $scope.canEdit = false;
   } else if ($state.is("tab.my")) {
-      filter.where = {createdBySessionId: SessionService.getSessionId()};
+      // TODO(zzn): Change session filter once we have id set up
+      filter.where.createdBySessionId = SessionService.getSessionId();
       $scope.title = "我的帖子";
       $scope.canEdit = true;
   }
@@ -106,7 +116,22 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
           $log.error(JSON.stringify(err));
       });
   };
-  $scope.moreDataCanBeLoaded = function() { return true; }
+  $ionicModal.fromTemplateUrl('templates/filter.html', function(modal) {
+      $scope.filterModal = modal;
+  }, {
+      scope: $scope
+  });
+  $scope.filterModelDone = function() {
+      var needTypeList = [];
+      for (var needType in $scope.needTypeFilter) {
+          if ($scope.needTypeFilter[needType]) {
+              needTypeList.push(needType);
+          }
+      }
+      filter.where.needType = {inq: needTypeList};
+      $scope.filterModal.hide();
+      $scope.reload();
+  };
 }
 ctrls.controller('PostListCtrl', PostListCtrl);
 

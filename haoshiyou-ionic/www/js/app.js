@@ -4,6 +4,7 @@ angular.module('haoshiyou', [
   'haoshiyou.controllers',
   'haoshiyou.PostCtrls',
   'haoshiyou.services',
+  'haoshiyou.filters',
   'uiGmapgoogle-maps',
   "uuid4"])
 

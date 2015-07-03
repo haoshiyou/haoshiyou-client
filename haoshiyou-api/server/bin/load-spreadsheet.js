@@ -5,7 +5,7 @@ var CONST_FIELDS = {
   location: "gsx$邮编或者城市",
   price: "gsx$预期价格美元每月",
   introduction: "gsx$租房需求介绍和自我介绍",
-  guid: "gsx$entryid"
+  guid: "gsx$entryid",
   //qy: "gsx$区域",
   wechat: "gsx$微信号",
   //xb: "gsx$性别",

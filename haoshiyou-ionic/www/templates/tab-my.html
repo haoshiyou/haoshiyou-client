@@ -3,16 +3,22 @@
         <a class="button button-clear " ng-if="$state.is('tab.my')" ui-sref="tab.edit()">
             <i class="icon ion-ios-plus-outline"></i>
         </a>
+        <a class="button " ng-if="!$state.is('tab.my')" ng-click="filterModal.show()">
+            <i class="icon ion-ios-settings-strong"></i>
+        </a>
     </ion-nav-buttons>
+
     <ion-content>
         <ion-list can-swipe="canEdit">
             <ion-item class="item-avatar item-icon-right" ng-repeat="post in posts"
                       ng-click="viewOrEdit(post.id)"
                       type="item-text-wrap">
                 <img ng-src="{{post.face || 'img/logo-v1-blue-1024sq2.jpg'}}" style="width: 64px; height: 64px"/>
-                <h2>{{post.needType}} {{post.location}}附近，起始时间：{{post.startDate | date:'yyyy-MM-dd'}}
-                    <span ng-if="post.price">价格：{{post.price}}</span></h2>
+
+                <h2>{{ getPostTitle(post) |cut:false:20:' ...' }}</h2>
+
                 <p> {{ post.introduction }}</p>
+                <span class="badge" ng-class="'badge-' + NEED_TYPE_COLOR[post.needType]">{{post.needType}}</span>
 
                 <i class="icon ion-chevron-right icon-accessory"></i>
                 <ion-option-button class="button-assertive" ng-click="delete(post.id)"><i class="icon ion-close-circled"></i></ion-option-button>

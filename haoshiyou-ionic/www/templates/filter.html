@@ -1,0 +1,18 @@
+<ion-modal-view class="full-screen-modal">
+    <div class="bar bar-header bar-dark">
+        <h1 class="title">
+            筛选
+        </h1>
+    </div>
+    <ion-content class="has-header" >
+        <ion-list>
+            <ion-checkbox class="item item-checkbox" ng-repeat="option in ['招租', '求租', '找室友']"
+                        name="needTypeFilter" ng-model="needTypeFilter[option]">
+                {{ option }}
+            </ion-checkbox>
+        </ion-list>
+    </ion-content>
+    <div class="bar bar-footer bar-positive" ng-click="filterModelDone()">
+        <h1 class="title" >OK</h1>
+    </div>
+</ion-modal-view>

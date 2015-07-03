@@ -30,7 +30,12 @@ function ConstantSerivce() {
         type: 'text'
       }
     ],
-    BEFORE_MIGRATION_SESSION_ID: "before-migration-session-id"
+    BEFORE_MIGRATION_SESSION_ID: "before-migration-session-id",
+    NEED_TYPE_COLOR: {
+      "招租" : "balanced",
+      "求租" : "positive",
+      "找室友": "energized"
+    }
   }
 }
 services.factory('ConstantService', ConstantSerivce);
@@ -141,15 +146,15 @@ services.factory('PagedResult', function (HaoshiyouService) {
 
 services.factory('SessionService', function(){
   var sessionId;
-    function getSessionId() {
-      if (sessionId) {
-        return sessionId;
-      } else {
-        sessionId = "debug-session-id";
-        return sessionId;
-      }
-    };
-    return {
-      getSessionId: getSessionId
-    };
+  function getSessionId() {
+    if (sessionId) {
+      return sessionId;
+    } else {
+      sessionId = "debug-session-id";
+      return sessionId;
+    }
+  };
+  return {
+    getSessionId: getSessionId
+  };
 });

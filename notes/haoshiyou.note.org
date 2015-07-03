@@ -38,8 +38,7 @@ The day after tomorrow
 **** Date picker 2h
 
 
-**** Filter by start date 2h
-**** Filter by area 2h
+**** DONE Filter by need type
 *** Map
 **** Map Picker
 **** Range Area?
@@ -67,7 +66,7 @@ The day after tomorrow
 
 ** Bug
 *** UI tweak
-**** Loading indicators
+**** DONE Loading indicators
 **** Failure Handling
 **** DONE Back Button Visibility, Direct Link case
 
