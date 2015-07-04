@@ -28,6 +28,10 @@ function ConstantSerivce() {
       ]},
       { key: 'introduction', label:'情况简介', icon: 'ion-document', required: true,
         type: 'text'
+      },
+      { key: 'geopointFromLocation', hide: true,
+      },
+      { key: 'radiusInMiles', hide: true,
       }
     ],
     BEFORE_MIGRATION_SESSION_ID: "before-migration-session-id",

@@ -74,11 +74,11 @@
                                     bounds='map.bounds'
                                     options='map.options'
                                     control='map.control'>
-                    <ui-gmap-marker idKey="marker.id" ng-if="!pending"
+                    <ui-gmap-marker idKey="marker.id"
                                     coords="marker.coords"
                                     options="marker.options">
                     </ui-gmap-marker>
-                    <ui-gmap-circle center="marker.coords" ng-if="!pending"
+                    <ui-gmap-circle center="marker.coords"
                                     radius="postInput['radiusInMiles'] * 1609"
                                     fill="{'color': 'blue', 'opacity': '0.3'}"
                                     visible="true">

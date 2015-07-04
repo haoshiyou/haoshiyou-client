@@ -227,7 +227,7 @@ function EditLocationCtrl($log, $scope, uiGmapGoogleMapApi) {
     $scope.autocomplete = { details: null };
 
     $scope.$watch("postInput.location", function(newValue, oldValue){
-        if (oldValue) {
+        if (newValue && oldValue && newValue !== oldValue) {
             console.log("set pending to true");
             $scope.pending = true;
         }
@@ -240,8 +240,17 @@ function EditLocationCtrl($log, $scope, uiGmapGoogleMapApi) {
         },
         options: { draggable: false }
     };
-    
+
     $scope.postInput['radiusInMiles'] = $scope.postInput['radiusInMiles'] || 0;
+
+    console.log("geopointFromLocation = " + JSON.stringify($scope.postInput['geopointFromLocation'])); // XXX
+    if ($scope.postInput['geopointFromLocation']) {
+
+        console.log("!!! = " + JSON.stringify($scope.postInput['geopointFromLocation'])); // XXX
+        $scope.marker.coords.latitude = $scope.postInput['geopointFromLocation'].lat;
+        $scope.marker.coords.longitude = $scope.postInput['geopointFromLocation'].lng
+
+    }
     $scope.$watch(
         "autocomplete.details",
         function( newValue ) {

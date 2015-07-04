@@ -1,7 +1,8 @@
 <ion-view view-title="{{ title }}">
     <ion-content ng-init="">
         <div class="item item-icon-left item-icon-right"
-             ng-repeat="field in FIELDS" ng-click="showModal(field.key)">
+             ng-repeat="field in FIELDS" ng-click="showModal(field.key)"
+             ng-hide="field.hide">
             <i class="icon {{ field.icon }}"></i>
             <span>{{ field.label }}</span>
             <span class="pull-right" ng-if="field.type != 'date' && field.type != 'checkbox'">
