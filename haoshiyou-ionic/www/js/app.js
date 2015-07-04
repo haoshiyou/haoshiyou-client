@@ -6,6 +6,7 @@ angular.module('haoshiyou', [
   'haoshiyou.services',
   'haoshiyou.filters',
   'uiGmapgoogle-maps',
+  'ionic-datepicker',
   "uuid4"])
 
 .run(function($ionicPlatform,  $rootScope, $log) {

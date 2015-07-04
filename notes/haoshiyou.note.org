@@ -59,6 +59,11 @@ The day after tomorrow
 *** Basic Identificaiton
 **** DONE Add device and session identifier
 
+*** Analytics
+**** Add parse, event logging
+**** Add google analytics
+
+
 
 *** Authentication
 **** Basic login flow

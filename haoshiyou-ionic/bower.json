@@ -10,7 +10,7 @@
     "angular-google-maps": "~2.1.5",
     "lodash": "~3.9.3",
     "angular-resource": "~1.4.1",
-    "angular-uuid": "~0.1.0",
-    "angular-uuid4": "~0.3.0"
+    "angular-uuid4": "~0.3.0",
+    "ionic-datepicker": "~0.4.0"
   }
 }

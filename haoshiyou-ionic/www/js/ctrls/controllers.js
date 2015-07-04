@@ -119,7 +119,8 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
   $ionicModal.fromTemplateUrl('templates/filter.html', function(modal) {
       $scope.filterModal = modal;
   }, {
-      scope: $scope
+      scope: $scope,
+      backdropClickToClose: false
   });
   $scope.filterModelDone = function() {
       var needTypeList = [];

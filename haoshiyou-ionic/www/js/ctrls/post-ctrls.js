@@ -59,7 +59,8 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
     $ionicModal.fromTemplateUrl('templates/edit-field.html', function(modal) {
         $scope.modal = modal;
     }, {
-        scope: $scope
+        scope: $scope,
+        backdropClickToClose: false
     });
 
     $scope.showModal = function(action) {
@@ -156,23 +157,6 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
 }
 ctrls.controller('EditOrCreateCtrl', EditOrCreateCtrl);
 
-function EditEntryCtrl($log, $scope, uiGmapGoogleMapApi) {
-    uiGmapGoogleMapApi.then(function(maps){
-        $log.info("loaded maps");
-        $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
-    });
-    $scope.currentDate = new Date();
-
-    $scope.datePickerCallback = function (val) {
-        if(typeof(val)==='undefined'){
-            console.log('Date not selected');
-        }else{
-            console.log('Selected date is : ', val);
-        }
-    };
-}
-ctrls.controller('EditEntryCtrl', EditEntryCtrl);
-
 function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, $q) {
   $scope.$state = $state;
   $scope.FIELDS = ConstantService.FIELDS;
@@ -216,3 +200,19 @@ function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, 
 }
 ctrls.controller('ViewCtrl', ViewCtrl);
 
+
+function EditStartDateCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, $q) {
+    $scope.currentDate = new Date();
+
+    $scope.datePickerCallback = function (val) {
+        if(typeof(val)==='undefined'){
+            console.log('Date not selected');
+        }else{
+            console.log('Selected date is : ', val);
+        }
+    };
+
+    $scope.isIOS = ionic.Platform.isIOS();
+}
+
+ctrls.controller('EditStartDateCtrl', EditStartDateCtrl);

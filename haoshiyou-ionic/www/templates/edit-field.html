@@ -1,8 +1,8 @@
 <!-- Sample from http://plnkr.co/edit/KAYJtHD4LJ18aXqgUoI7?p=preview -->
-<div class="modal full-screen-modal" ng-controller="EditEntryCtrl">
+<div class="modal full-screen-modal">
     <div class="bar bar-header bar-dark">
         <h1 class="title">
-            <i ng-class="models.class"></i> {{modal.title}}
+            <i ng-class="models.class"></i> {{modalField.label}}
         </h1>
     </div>
     <ion-content class="has-header" scroll="false">
@@ -18,11 +18,17 @@
                 <input type="text" placeholder="请输入城市，地址，邮编等" ng-model="postInput[modalField.key]" />
             </li>
         </ion-list>
-        <ion-list ng-if="modalField.type == 'date'">
+        <ion-list ng-if="modalField.type == 'date'" ng-controller="EditStartDateCtrl">
             <li class="item item-input">
-                <input type="date" ng-model="postInput[modalField.key]"
+                <input type="date" ng-if="isIOS" ng-model="postInput[modalField.key]"
                        placeholder="Select Date"
                        ng-model="postInput[modalField.key]"/>
+                <ionic-datepicker ng-if="!isIOS" idate="postInput[modalField.key]"
+                                  callback="datePickerCallback">
+                    <input type="date" ng-model="postInput[modalField.key]"
+                           placeholder="Select Date"
+                           ng-model="postInput[modalField.key]"/>
+                </ionic-datepicker>
             </li>
         </ion-list>
         <ion-list ng-if="modalField.type == 'number'">
