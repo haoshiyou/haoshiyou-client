@@ -27,7 +27,7 @@ The day after tomorrow
 
 * Development Plan
 ** Feature 3.0
-*** Editing
+*** DONE Editing
 **** DONE Add
 **** DONE Edit
 **** DONE Delete
@@ -35,16 +35,17 @@ The day after tomorrow
 **** DONE View detail 2h
 **** DONE View table 2h
 **** DONE Load from old data 2h
-**** Date picker 2h
+**** DONE Date picker 2h
 
 
 **** DONE Filter by need type
-*** Map
-**** Map Picker
-**** Range Area?
+*** DONE Map
+**** DONE Map Picker
+**** DONE Range Area?
 
 
 *** Photo
+**** Pick Photo
 **** Upload photo
 **** Store photo
 **** Delete photo
@@ -59,10 +60,14 @@ The day after tomorrow
 *** Basic Identificaiton
 **** DONE Add device and session identifier
 
-*** Analytics
-**** Add parse, event logging
-**** Add google analytics
 
+*** Go to production
+**** Analytics
+***** logging
+***** analytics
+**** Testing
+***** Unit Testing 8h
+***** Set up selenium test
 
 
 *** Authentication
@@ -75,7 +80,10 @@ The day after tomorrow
 **** Failure Handling
 **** DONE Back Button Visibility, Direct Link case
 
-
+**** Map View Size to fill the entire page
+**** Edit page lazy loading
+  
+  
 * Knowledge
 ** ui-gmap-google-map
 http://angular-ui.github.io/angular-google-maps/#!/
