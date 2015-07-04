@@ -23,8 +23,8 @@ module.exports = (grunt) ->
     'grunt-debug-task'
     'grunt-curl'
     'grunt-verbosity'
-    'grunt-release'
     'grunt-webpack'
+    'grunt-angular-architecture-graph'
     ].forEach (gruntLib) ->
       grunt.loadNpmTasks gruntLib
 
@@ -83,7 +83,7 @@ module.exports = (grunt) ->
   grunt.registerTask "mappAll", [
     'bower', 'curl',
     "clean:dist", "jshint", "mkdir", "coffee", "concat:libs", "replace", "webpack", "concat", "uglify"
-    "copy", "jasmine:spec"]
+    "copy", "jasmine:spec", "graph"]
 
   grunt.registerTask "build-street-view", ['clean:streetview','mkdir','coffee', 'concat:libs', 'replace',
     'concat:streetview', 'concat:streetviewMapped', 'uglify:streetview', 'uglify:streetviewMapped']
@@ -93,12 +93,13 @@ module.exports = (grunt) ->
   # Run the example page by creating a local copy of angular-google-maps.js
   # and running a webserver on port 3100 with livereload. Web page is opened
   # automatically in the default browser.
+  grunt.registerTask 'graph', ['angular_architecture_graph']
 
-  grunt.registerTask 'bump-@-preminor', ['bump-only:preminor', 'mappAll', 'bump-commit']
-  grunt.registerTask 'bump-@-prerelease', ['bump-only:prerelease', 'mappAll', 'bump-commit']
-  grunt.registerTask 'bump-@', ['bump-only', 'mappAll', 'bump-commit']
-  grunt.registerTask 'bump-@-minor', ['bump-only:minor', 'mappAll', 'bump-commit']
-  grunt.registerTask 'bump-@-major', ['bump-only:major', 'mappAll', 'bump-commit']
+  grunt.registerTask 'bump-@-preminor', ['changelog', 'bump-only:preminor', 'mappAll', 'bump-commit']
+  grunt.registerTask 'bump-@-prerelease', ['changelog','bump-only:prerelease', 'mappAll', 'bump-commit']
+  grunt.registerTask 'bump-@', ['changelog','bump-only', 'mappAll', 'bump-commit']
+  grunt.registerTask 'bump-@-minor', ['changelog','bump-only:minor', 'mappAll', 'bump-commit']
+  grunt.registerTask 'bump-@-major', ['changelog','bump-only:major', 'mappAll', 'bump-commit']
 
   exampleOpenTasks = []
 
@@ -130,5 +131,6 @@ module.exports = (grunt) ->
     listWithQuotes exampleOpenTasks
 
   grunt.registerTask 'allExamples', allExamplesTaskToRun
+
 
 #to see all tasks available don't forget "grunt --help" !!!

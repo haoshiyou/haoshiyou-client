@@ -3,37 +3,47 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <meta http-equiv="Content-Security-Policy"
-          content="default-src *; style-src 'self' 'unsafe-inline' *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src &apos;self&apos; &apos;unsafe-inline&apos; *; script-src &apos;self&apos; &apos;unsafe-inline&apos; &apos;unsafe-eval&apos; *">
 
     <title></title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css">
-
+    <link rel="stylesheet" href="lib/fontawesome/css/font-awesome.min.css">
     <!-- compiled css output -->
     <link href="css/ionic.app.css" rel="stylesheet">
 
+    <link href="lib/ionic-datepicker/dist/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/angular-resource/angular-resource.min.js"></script>
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
     <script src="lib/lodash/lodash.min.js"></script>
+    <script src="lib/underscore/underscore-min.js"></script>
+    <script src="lib/angular-uuid4/angular-uuid4.min.js"></script>
     <script src="lib/angular-google-maps/dist/angular-google-maps.min.js"></script>
+    <script src="lib/ionic-datepicker/dist/templates.js"></script>
+    <script src="lib/ionic-datepicker/dist/ionic-datepicker.js"></script>
+    <script src="lib/ngAutocomplete/src/ngAutocomplete.js"></script>
     <!-- google maps javascript -->
-    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&amp;sensor=false"></script>
-
+    <script src="//maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&amp;sensor=false"></script>
+    <script src="lib/lb-services.js"></script>
     <!-- your app's js -->
     <script src="js/app.js"></script>
-    <script src="js/controllers.js"></script>
+    <script src="js/ctrls/controllers.js"></script>
+    <script src="js/ctrls/post-ctrls.js"></script>
+    <script src="js/filters.js"></script>
     <script src="js/services.js"></script>
   </head>
   <body ng-app="haoshiyou" class="platform-ios platform-cordova platform-webview">
     <!--
       The nav bar that will be updated as we navigate between views.
     -->
-    <ion-nav-bar class="bar-stable">
+    <ion-nav-bar class="bar-positive" ng-controller="MainCtrl">
       <ion-nav-back-button>
       </ion-nav-back-button>
     </ion-nav-bar>

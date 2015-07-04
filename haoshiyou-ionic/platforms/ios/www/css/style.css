@@ -1,1 +1,30 @@
-.angular-google-map-container { height: 400px; }
+.angular-google-map,
+.angular-google-map-container {
+    height: 400px;
+}
+
+
+.full-screen-modal {
+width: 100%;
+height: 100%;
+top: 0%;
+left: 0%;
+right: 0%;
+bottom: 0%;
+}
+
+
+#form {
+
+    margin-left: 50px;
+    width: 500px
+}
+
+.indent {
+
+    margin-left: 50px;
+}
+
+.move-down {
+    margin-top: 100px;
+}

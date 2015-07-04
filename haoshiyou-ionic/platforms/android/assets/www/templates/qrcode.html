@@ -1,0 +1,25 @@
+<ion-view view-title="QR-Code">
+  <!--<ion-content>-->
+  <!--<div class="item" ng-repeat="qrcode in ['dw','nw','zbd','sf','dz']"-->
+       <!--style="-->
+       <!--background: url('img/wechat-group-{{qrcode}}.jpg') no-repeat;-->
+       <!--background-size: contain;-->
+       <!--">-->
+  <!--</div>-->
+  <!--</ion-content>-->
+  <!--<ion-content>-->
+  <!--<div class="item item-image" ng-repeat="qrcode in ['dw','nw','zbd','sf','dz']">-->
+    <!--<img src="img/wechat-group-{{qrcode}}.jpg" style="max-width:300px"/>-->
+  <!--</div>-->
+  <!--</ion-content>-->
+
+  <ion-content>
+  <ion-slide-box on-slide-changed="slideHasChanged($index)">
+    <ion-slide ng-repeat="qrcode in ['dw','nw','zbd','sf','dz']">
+        <div class="item item-image">
+          <img src="img/wechat-group-{{qrcode}}.jpg" style="max-width:400px;"/>
+        </div>
+    </ion-slide>
+  </ion-slide-box>
+  </ion-content>
+</ion-view>
