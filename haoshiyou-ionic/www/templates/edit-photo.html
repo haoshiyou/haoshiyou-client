@@ -1,0 +1,20 @@
+<div class="modal full-screen-modal" ng-controller="PhotoCtrl">
+    <ion-content>
+        <div class="item item-icon-left item-icon-right"
+             ng-disabled="!ready"
+             ng-click="getPhotos()"
+             >
+            <i class="icon ion-image"></i>
+            <span> 选择图片 </span>
+        </div>
+        <div class="item item-thumbnail" ng-repeat="image in images">
+            <img ng-src="{{image}}"/>
+        </div>
+
+    </ion-content>
+
+    <button class="bar bar-footer" ng-class="{ 'bar-positive': !pending, 'bar-stable': pending }" ng-click="done()"
+            ng-disabled="pending" >
+        <h1 class="title" >OK</h1>
+    </button>
+</div>

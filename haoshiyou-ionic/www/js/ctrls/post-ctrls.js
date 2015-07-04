@@ -65,8 +65,20 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
         $scope.modal.show();
     };
 
+    $ionicModal.fromTemplateUrl('templates/edit-photo.html', function(modal) {
+        $scope.photoModal = modal;
+    }, {
+        scope: $scope,
+        backdropClickToClose: false
+    });
+
+    $scope.showPhotoModal = function() {
+        $scope.photoModal.show();
+    };
+
     $scope.done = function() {
         $scope.modal.hide();
+        $scope.photoModal.hide();
     };
     function validate () {
         var valid = true;
@@ -148,8 +160,43 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
             }
         });
     }
+
 }
 ctrls.controller('EditOrCreateCtrl', EditOrCreateCtrl);
+
+
+function PhotoCtrl($scope, $cordovaCamera, $rootScope) {
+    $scope.images = [];
+
+    $scope.ready = false;
+
+    $rootScope.$watch('appReady.status', function() {
+        console.log('watch fired '+$rootScope.appReady.status);
+        if($rootScope.appReady.status) $scope.ready = true;
+    });
+
+    $scope.getPhotos = function() {
+        var options = {
+            quality: 100,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            targetWidth: 100,
+            targetHeight: 100
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageUri) {
+            console.log('img', imageUri);
+            $scope.images.push(imageUri);
+            console.log($scope.images);
+            //$scope.images.push("data:image/jpeg;base64," + imageData);
+
+        }, function(err) {
+            // error
+            console.error(err);
+        });
+    }
+}
+ctrls.controller('PhotoCtrl', PhotoCtrl);
 
 function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, $q) {
   $scope.$state = $state;

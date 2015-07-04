@@ -83,6 +83,11 @@ The day after tomorrow
 **** Map View Size to fill the entire page
 **** Edit page lazy loading
   
+* Troubleshooting
+** No valid signing identities
+need to have certificate
+need to add device in Member Center
+https://developer.apple.com/account/ios/device/deviceCreate.action?formID=47009298
   
 * Knowledge
 ** ui-gmap-google-map

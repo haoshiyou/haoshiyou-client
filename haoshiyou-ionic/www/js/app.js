@@ -1,5 +1,6 @@
 angular.module('haoshiyou', [
   'ionic',
+  'ngCordova',
   'lbServices',
   'haoshiyou.controllers',
   'haoshiyou.PostCtrls',
@@ -11,7 +12,14 @@ angular.module('haoshiyou', [
   "uuid4"])
 
 .run(function($ionicPlatform,  $rootScope, $log) {
+
+  $rootScope.appReady = {status:false};
   $ionicPlatform.ready(function() {
+
+    console.log('ionic Ready');
+    $rootScope.appReady.status = true;
+
+    $rootScope.$apply();
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -144,9 +152,14 @@ angular.module('haoshiyou', [
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
-}).config(function(LoopBackResourceProvider){
+
+}).config(function(LoopBackResourceProvider, $compileProvider){
 
     // Change the URL where to access the LoopBack REST API server
     // LoopBackResourceProvider.setUrlBase('http://0.0.0.0:3000/api');
-    // LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
+    LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
+
+    // TODO(zzn): is the imgSrcSanitizationWhitelist really needed
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|content|file|assets-library):/);
+
 });
