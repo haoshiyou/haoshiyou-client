@@ -8,14 +8,8 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
     if ($stateParams.postId) {
         $scope.title = "编辑";
         $scope.submitLabel = "更新";
-        HsyPost.findById({id: $stateParams.postId}, function(hsyPost){
-
-            $log.info("original!");
-            $log.info(hsyPost);
-        }, function(err){});
         HsyPost.findById({id: $stateParams.postId}).$promise
             .then(function(hsyPost){
-                $log.info("Fetched!");
                 $log.info(hsyPost);
                 $log.info(HsyPost);
                 return $q.all([hsyPost,
@@ -201,18 +195,69 @@ function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, 
 ctrls.controller('ViewCtrl', ViewCtrl);
 
 
-function EditStartDateCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, $q) {
-    $scope.currentDate = new Date();
-
-    $scope.datePickerCallback = function (val) {
-        if(typeof(val)==='undefined'){
-            console.log('Date not selected');
-        }else{
-            console.log('Selected date is : ', val);
-        }
-    };
-
+function EditStartDateCtrl($scope) {
     $scope.isIOS = ionic.Platform.isIOS();
+    $scope.datePickerCallback = function(){};
 }
 
 ctrls.controller('EditStartDateCtrl', EditStartDateCtrl);
+
+function EditLocationCtrl($log, $scope, uiGmapGoogleMapApi) {
+
+    $scope.pending = false;
+    var southWest = new google.maps.LatLng( 37.196011, -122.569317 );
+    var northEast = new google.maps.LatLng( 38.071471, -121.570935 );
+    var bayAreaBounds = new google.maps.LatLngBounds( southWest, northEast );
+    uiGmapGoogleMapApi.then(function(maps){
+        $log.info("loaded maps");
+        $scope.map = {
+            center: { latitude: 37.565396, longitude: -122.166257 }, zoom: 9,
+            bounds: {}, // use bounds to set init view does not work
+        };
+    });
+
+    $scope.options = {
+        country: 'us',
+        types: 'address',
+        bounds: bayAreaBounds,
+        watchEnter: true
+    };
+
+    // details has to be wrapped in an object, here 'autocomplete for it to be watched
+    $scope.autocomplete = { details: null };
+
+    $scope.$watch("postInput.location", function(newValue, oldValue){
+        if (oldValue) {
+            console.log("set pending to true");
+            $scope.pending = true;
+        }
+    }, true);
+    $scope.marker = {
+        id: 0,
+        coords: {
+            latitude: 37.565396,
+            longitude: -122.166257
+        },
+        options: { draggable: false }
+    };
+    
+    $scope.postInput['radiusInMiles'] = $scope.postInput['radiusInMiles'] || 0;
+    $scope.$watch(
+        "autocomplete.details",
+        function( newValue ) {
+            if (newValue && newValue.geometry) {
+                $log.debug(newValue);
+                var location = newValue.geometry.location;
+                $scope.postInput['geopointFromLocation'] = {lat: location.lat(), lng: location.lng()};
+                $scope.marker.coords.latitude = location.lat();
+                $scope.marker.coords.longitude = location.lng();
+                $log.info('update geopointFromLocation: ' + JSON.stringify($scope.postInput['geopointFromLocation']));
+                $scope.pending = false;
+                console.log("set pending to false");
+            }
+        }
+        ,true);
+
+}
+ctrls.controller('EditLocationCtrl', EditLocationCtrl);
+

@@ -21,6 +21,11 @@
       "required": false,
       "comments": "geopoint generated from location"
     },
+    "radiusInMiles": {
+      "type": "number",
+      "required": false,
+      "comments": "radius in miles"
+    },
     "needType": {
       "type": "string",
       "required": true,

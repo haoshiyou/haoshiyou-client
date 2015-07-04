@@ -7,6 +7,7 @@ angular.module('haoshiyou', [
   'haoshiyou.filters',
   'uiGmapgoogle-maps',
   'ionic-datepicker',
+  'ngAutocomplete',
   "uuid4"])
 
 .run(function($ionicPlatform,  $rootScope, $log) {

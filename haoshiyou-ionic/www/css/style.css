@@ -1,6 +1,6 @@
 .angular-google-map,
 .angular-google-map-container {
-    height: 100%;
+    height: 400px;
 }
 
 
@@ -11,4 +11,20 @@ top: 0%;
 left: 0%;
 right: 0%;
 bottom: 0%;
+}
+
+
+#form {
+
+    margin-left: 50px;
+    width: 500px
+}
+
+.indent {
+
+    margin-left: 50px;
+}
+
+.move-down {
+    margin-top: 100px;
 }

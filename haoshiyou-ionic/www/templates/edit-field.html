@@ -5,60 +5,90 @@
             <i ng-class="models.class"></i> {{modalField.label}}
         </h1>
     </div>
-    <ion-content class="has-header" scroll="false">
-        <ion-list ng-if="modalField.type == 'radio'" >
-            <ion-radio  class="item item-radio" ng-repeat="option in modalField.options"
-                    name="modalField.key" ng-model="postInput[modalField.key]"
-                    ng-value="option">
-                {{ option }}
-            </ion-radio>
-        </ion-list>
-        <ion-list ng-if="modalField.type == 'location'">
-            <li class="item item-input" >
-                <input type="text" placeholder="请输入城市，地址，邮编等" ng-model="postInput[modalField.key]" />
-            </li>
-        </ion-list>
-        <ion-list ng-if="modalField.type == 'date'" ng-controller="EditStartDateCtrl">
-            <li class="item item-input">
-                <input type="date" ng-if="isIOS" ng-model="postInput[modalField.key]"
-                       placeholder="Select Date"
-                       ng-model="postInput[modalField.key]"/>
-                <ionic-datepicker ng-if="!isIOS" idate="postInput[modalField.key]"
-                                  callback="datePickerCallback">
-                    <input type="date" ng-model="postInput[modalField.key]"
+    <div ng-if="modalField.type != 'location'">
+        <ion-content class="has-header" scroll="false">
+            <ion-list ng-if="modalField.type == 'radio'" >
+                <ion-radio  class="item item-radio" ng-repeat="option in modalField.options"
+                        name="modalField.key" ng-model="postInput[modalField.key]"
+                        ng-value="option">
+                    {{ option }}
+                </ion-radio>
+            </ion-list>
+
+            <ion-list ng-if="modalField.type == 'date'" ng-controller="EditStartDateCtrl">
+                <li class="item item-input">
+                    <input type="date" ng-if="isIOS" ng-model="postInput[modalField.key]"
                            placeholder="Select Date"
                            ng-model="postInput[modalField.key]"/>
-                </ionic-datepicker>
-            </li>
-        </ion-list>
-        <ion-list ng-if="modalField.type == 'number'">
-            <li class="item item-input" >
-                <input type="number"
-                       placeholder="Price"
-                       ng-model="postInput[modalField.key]"/>
-            </li>
-        </ion-list>
-        <ion-list ng-if="modalField.type == 'text'">
-            <li class="item item-input item-stacked-label">
-                <span class="input-label">情况介绍</span>
-                <input type="text" placeholder="" name="description"
-                       ng-model="postInput[modalField.key]" />
-            </li>
-        </ion-list>
-        <ion-list ng-if="modalField.type == 'checkbox'">
-            <ion-checkbox class="item item-checkbox" ng-repeat="option in modalField.options"
-                          name="option.key" ng-model="postInput[option.key]">
-                {{ option.label }}
-            </ion-checkbox>
-        </ion-list>
-    </ion-content>
-    <div style="height: 100%" ng-if="modalField.type == 'location'">
-        <ui-gmap-google-map id="mapView" center='map.center' zoom='map.zoom' style="height: 100%">
-            <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
-            </ui-gmap-marker>
-        </ui-gmap-google-map>
+                    <ionic-datepicker ng-if="!isIOS" idate="postInput[modalField.key]"
+                                      callback="datePickerCallback">
+                        <input type="date" ng-model="postInput[modalField.key]"
+                               placeholder="Select Date"
+                               ng-model="postInput[modalField.key]"/>
+                    </ionic-datepicker>
+                </li>
+            </ion-list>
+            <ion-list ng-if="modalField.type == 'number'">
+                <li class="item item-input" >
+                    <input type="number"
+                           placeholder="Price"
+                           ng-model="postInput[modalField.key]"/>
+                </li>
+            </ion-list>
+            <ion-list ng-if="modalField.type == 'text'">
+                <li class="item item-input item-stacked-label">
+                    <span class="input-label">情况介绍</span>
+                    <input type="text" placeholder="" name="description"
+                           ng-model="postInput[modalField.key]" />
+                </li>
+            </ion-list>
+            <ion-list ng-if="modalField.type == 'checkbox'">
+                <ion-checkbox class="item item-checkbox" ng-repeat="option in modalField.options"
+                              name="option.key" ng-model="postInput[option.key]">
+                    {{ option.label }}
+                </ion-checkbox>
+            </ion-list>
+        </ion-content>
+        <button class="bar bar-footer bar-positive" ng-click="done()">
+            <h1 class="title" >OK</h1>
+        </button>
     </div>
-    <div class="bar bar-footer bar-positive" ng-click="done()">
-        <h1 class="title" >OK</h1>
+    <div style="height: 100%" ng-if="modalField.type == 'location'" ng-controller="EditLocationCtrl">
+        <ion-content class="has-header" scroll="false">
+            <ion-list >
+                <li class="item item-input" >
+                    <input placeholder="请输入城市，地址，邮编等" ng-model="postInput[modalField.key]"
+                           type="text" id="Autocomplete"
+                           class="form-control" ng-autocomplete
+                           details="autocomplete.details" options="options"/>
+                </li>
+                <div class="item item-stacked-label range range-positive">
+                    <label> 半径 </label>
+                    <input type="range" min="0" max="50"
+                           ng-model="postInput['radiusInMiles']" >
+                    {{ postInput['radiusInMiles'] }} (英里)
+                </div>
+                <ui-gmap-google-map id="mapView"
+                                    center='map.center'
+                                    zoom='map.zoom'
+                                    bounds='map.bounds'
+                                    options='map.options'
+                                    control='map.control'>
+                    <ui-gmap-marker idKey="marker.id" ng-if="!pending"
+                                    coords="marker.coords"
+                                    options="marker.options">
+                    </ui-gmap-marker>
+                    <ui-gmap-circle center="marker.coords" ng-if="!pending"
+                                    radius="postInput['radiusInMiles'] * 1609"
+                                    fill="{'color': 'blue', 'opacity': '0.3'}"
+                                    visible="true">
+                    </ui-gmap-circle>
+                </ui-gmap-google-map>
+            </ion-list>
+        </ion-content>
+        <button class="bar bar-footer" ng-class="{ 'bar-positive': !pending, 'bar-stable': pending }" ng-click="done()"
+                ng-disabled="pending" >
+            <h1 class="title" >OK</h1>
+        </button>
     </div>
 </div>
