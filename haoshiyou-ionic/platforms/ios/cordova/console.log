@@ -1457,3 +1457,179 @@ http://10.0.0.21:8100/lib/ionic/js/ionic.bundle.js:13984:33
 2015-07-04 19:33:40.240 haoshiyou-ionic[97804:1111956] Resetting plugins due to page load.
 2015-07-04 19:33:40.469 haoshiyou-ionic[97804:1111956] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/D4F2D445-9F2C-4E57-95B1-2EE5005AAD9C/haoshiyou-ionic.app/www/index.html#/tab/dash
 2015-07-04 19:33:40.736 haoshiyou-ionic[97804:1111956] ionic Ready xxx
+2015-07-04 19:37:20.372 haoshiyou-ionic[98675:1116618] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/7D4B4909-ECE9-4A03-8A6A-239609569D09/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:37:20.516 haoshiyou-ionic[98675:1116618] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:37:20.516 haoshiyou-ionic[98675:1116618] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:37:20.518 haoshiyou-ionic[98675:1116618] Unlimited access to network resources
+2015-07-04 19:37:20.630 haoshiyou-ionic[98675:1116618] [CDVTimer][keyboard] 0.104964ms
+2015-07-04 19:37:20.646 haoshiyou-ionic[98675:1116618] [CDVTimer][splashscreen] 15.757024ms
+2015-07-04 19:37:20.649 haoshiyou-ionic[98675:1116618] [CDVTimer][file] 3.207982ms
+2015-07-04 19:37:20.649 haoshiyou-ionic[98675:1116618] [CDVTimer][TotalPluginStartup] 19.609034ms
+2015-07-04 19:37:20.732 haoshiyou-ionic[98675:1116618] Resetting plugins due to page load.
+2015-07-04 19:37:21.053 haoshiyou-ionic[98675:1116618] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/0780139F-B3F5-4A6D-BB99-097BE58ABC1F/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:37:21.180 haoshiyou-ionic[98675:1116618] ionic Ready xxx
+2015-07-04 19:37:32.919 haoshiyou-ionic[98675:1116618] 111
+2015-07-04 19:37:32.919 haoshiyou-ionic[98675:1116618] watch fired true
+2015-07-04 19:37:34.307 haoshiyou-ionic[98675:1116618] 111
+2015-07-04 19:37:34.307 haoshiyou-ionic[98675:1116618] watch fired true
+2015-07-04 19:37:35.950 haoshiyou-ionic[98675:1116618] 222 
+2015-07-04 19:37:35.961 haoshiyou-ionic[98675:1116618] THREAD WARNING: ['ImagePicker'] took '11.127930' ms. Plugin should use a background thread.
+2015-07-04 19:37:37.830 haoshiyou-ionic[98675:1116618] 333 
+2015-07-04 19:37:37.830 haoshiyou-ionic[98675:1116618] Start upload XXX
+2015-07-04 19:37:37.830 haoshiyou-ionic[98675:1116618] End upload XXX
+2015-07-04 19:37:42.468 haoshiyou-ionic[98675:1116618] 222 
+2015-07-04 19:37:46.088 haoshiyou-ionic[98675:1116618] 333 
+2015-07-04 19:37:46.088 haoshiyou-ionic[98675:1116618] 444 0
+2015-07-04 19:37:46.089 haoshiyou-ionic[98675:1116618] 444 1
+2015-07-04 19:37:46.090 haoshiyou-ionic[98675:1116618] 444 2
+2015-07-04 19:37:47.682 haoshiyou-ionic[98675:1116938] File Transfer Finished with response code 200
+2015-07-04 19:37:47.914 haoshiyou-ionic[98675:1117032] File Transfer Finished with response code 200
+2015-07-04 19:37:48.470 haoshiyou-ionic[98675:1116938] File Transfer Finished with response code 200
+2015-07-04 19:37:48.475 haoshiyou-ionic[98675:1116618] Start upload XXX
+2015-07-04 19:37:48.475 haoshiyou-ionic[98675:1116618] {"public_id":"gzmr2f9dtp3d9uquocxs","version":1436063867,"signature":"c76aa3dff2d5d629dddfbe8d31a071465b59f3e0","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:37:47Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436063867/gzmr2f9dtp3d9uquocxs.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436063867/gzmr2f9dtp3d9uquocxs.jpg","original_filename":"no-filename"}
+2015-07-04 19:37:48.475 haoshiyou-ionic[98675:1116618] {"line":213,"column":44,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/0780139F-B3F5-4A6D-BB99-097BE58ABC1F/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:38:12.167 haoshiyou-ionic[98675:1116618] 222 
+2015-07-04 19:38:14.363 haoshiyou-ionic[98675:1116618] 333 
+2015-07-04 19:38:14.363 haoshiyou-ionic[98675:1116618] 444 0
+2015-07-04 19:38:15.843 haoshiyou-ionic[98675:1117477] File Transfer Finished with response code 200
+2015-07-04 19:38:15.847 haoshiyou-ionic[98675:1116618] Start upload XXX
+2015-07-04 19:38:15.847 haoshiyou-ionic[98675:1116618] {"public_id":"lyz22v69fkww4hv818mq","version":1436063895,"signature":"d63e86837e164457f006694498928f7813966993","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:38:15Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436063895/lyz22v69fkww4hv818mq.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436063895/lyz22v69fkww4hv818mq.jpg","original_filename":"no-filename"}
+2015-07-04 19:38:15.847 haoshiyou-ionic[98675:1116618] {"line":213,"column":44,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/0780139F-B3F5-4A6D-BB99-097BE58ABC1F/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:39:37.067 haoshiyou-ionic[99343:1120199] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/3A3B3C09-C38C-46F4-91D0-CCC22A6BF32D/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:39:37.195 haoshiyou-ionic[99343:1120199] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:39:37.196 haoshiyou-ionic[99343:1120199] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:39:37.198 haoshiyou-ionic[99343:1120199] Unlimited access to network resources
+2015-07-04 19:39:37.299 haoshiyou-ionic[99343:1120199] [CDVTimer][keyboard] 0.054002ms
+2015-07-04 19:39:37.313 haoshiyou-ionic[99343:1120199] [CDVTimer][splashscreen] 14.384031ms
+2015-07-04 19:39:37.316 haoshiyou-ionic[99343:1120199] [CDVTimer][file] 2.471030ms
+2015-07-04 19:39:37.316 haoshiyou-ionic[99343:1120199] [CDVTimer][TotalPluginStartup] 17.313957ms
+2015-07-04 19:39:37.387 haoshiyou-ionic[99343:1120199] Resetting plugins due to page load.
+2015-07-04 19:39:37.609 haoshiyou-ionic[99343:1120199] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/D863CAC4-41B2-4688-9B64-13EB757A531C/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:39:37.864 haoshiyou-ionic[99343:1120199] ionic Ready xxx
+2015-07-04 19:40:09.528 haoshiyou-ionic[99343:1120199] 111
+2015-07-04 19:40:09.528 haoshiyou-ionic[99343:1120199] watch fired true
+2015-07-04 19:40:11.155 haoshiyou-ionic[99343:1120199] 222 
+2015-07-04 19:40:11.168 haoshiyou-ionic[99343:1120199] THREAD WARNING: ['ImagePicker'] took '12.486816' ms. Plugin should use a background thread.
+2015-07-04 19:40:13.995 haoshiyou-ionic[99343:1120199] 333 
+2015-07-04 19:40:13.995 haoshiyou-ionic[99343:1120199] 444 0
+2015-07-04 19:40:13.996 haoshiyou-ionic[99343:1120199] 444 1
+2015-07-04 19:40:16.402 haoshiyou-ionic[99343:1120807] File Transfer Finished with response code 200
+2015-07-04 19:40:16.675 haoshiyou-ionic[99343:1120762] File Transfer Finished with response code 200
+2015-07-04 19:40:16.684 haoshiyou-ionic[99343:1120199] Start upload XXX
+2015-07-04 19:40:16.684 haoshiyou-ionic[99343:1120199] null
+2015-07-04 19:40:16.684 haoshiyou-ionic[99343:1120199] {"line":213,"column":44,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/D863CAC4-41B2-4688-9B64-13EB757A531C/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:43:40.467 haoshiyou-ionic[252:1126092] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/CF3125C9-7A83-4FA1-83FF-79578017CF0B/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:43:40.599 haoshiyou-ionic[252:1126092] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:43:40.599 haoshiyou-ionic[252:1126092] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:43:40.600 haoshiyou-ionic[252:1126092] Unlimited access to network resources
+2015-07-04 19:43:40.709 haoshiyou-ionic[252:1126092] [CDVTimer][keyboard] 0.061035ms
+2015-07-04 19:43:40.724 haoshiyou-ionic[252:1126092] [CDVTimer][splashscreen] 14.719009ms
+2015-07-04 19:43:40.726 haoshiyou-ionic[252:1126092] [CDVTimer][file] 2.282977ms
+2015-07-04 19:43:40.726 haoshiyou-ionic[252:1126092] [CDVTimer][TotalPluginStartup] 17.490983ms
+2015-07-04 19:43:40.799 haoshiyou-ionic[252:1126092] Resetting plugins due to page load.
+2015-07-04 19:43:41.014 haoshiyou-ionic[252:1126092] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/74B6BBF6-66E9-46FE-B4C3-572D815BD365/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:43:41.265 haoshiyou-ionic[252:1126092] ionic Ready xxx
+2015-07-04 19:43:44.725 haoshiyou-ionic[252:1126092] []
+2015-07-04 19:43:44.725 haoshiyou-ionic[252:1126092] 111
+2015-07-04 19:43:44.725 haoshiyou-ionic[252:1126092] watch fired true
+2015-07-04 19:43:46.551 haoshiyou-ionic[252:1126092] 222 
+2015-07-04 19:43:46.562 haoshiyou-ionic[252:1126092] THREAD WARNING: ['ImagePicker'] took '10.449951' ms. Plugin should use a background thread.
+2015-07-04 19:43:49.620 haoshiyou-ionic[252:1126092] 333 
+2015-07-04 19:43:49.620 haoshiyou-ionic[252:1126092] 444 0
+2015-07-04 19:43:49.621 haoshiyou-ionic[252:1126092] 444 1
+2015-07-04 19:43:51.867 haoshiyou-ionic[252:1126134] File Transfer Finished with response code 200
+2015-07-04 19:43:52.055 haoshiyou-ionic[252:1126144] File Transfer Finished with response code 200
+2015-07-04 19:43:52.063 haoshiyou-ionic[252:1126092] Start upload XXX
+2015-07-04 19:43:52.063 haoshiyou-ionic[252:1126092] images:null
+2015-07-04 19:43:52.063 haoshiyou-ionic[252:1126092] data:{"public_id":"lo5qzyjwelvvyhn2jw1o","version":1436064231,"signature":"6f822483f67fc051bb1b3c37bf96a1a8407aa87e","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:43:51Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436064231/lo5qzyjwelvvyhn2jw1o.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436064231/lo5qzyjwelvvyhn2jw1o.jpg","original_filename":"no-filename"}
+2015-07-04 19:43:52.063 haoshiyou-ionic[252:1126092] null
+2015-07-04 19:43:52.063 haoshiyou-ionic[252:1126092] {"line":216,"column":44,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/74B6BBF6-66E9-46FE-B4C3-572D815BD365/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:45:05.065 haoshiyou-ionic[1013:1128859] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/719AE90F-638F-4094-A665-EE3E5FE4828C/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:45:05.194 haoshiyou-ionic[1013:1128859] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:45:05.195 haoshiyou-ionic[1013:1128859] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:45:05.196 haoshiyou-ionic[1013:1128859] Unlimited access to network resources
+2015-07-04 19:45:05.301 haoshiyou-ionic[1013:1128859] [CDVTimer][keyboard] 0.060022ms
+2015-07-04 19:45:05.316 haoshiyou-ionic[1013:1128859] [CDVTimer][splashscreen] 14.772952ms
+2015-07-04 19:45:05.319 haoshiyou-ionic[1013:1128859] [CDVTimer][file] 2.279997ms
+2015-07-04 19:45:05.319 haoshiyou-ionic[1013:1128859] [CDVTimer][TotalPluginStartup] 17.553985ms
+2015-07-04 19:45:05.390 haoshiyou-ionic[1013:1128859] Resetting plugins due to page load.
+2015-07-04 19:45:05.606 haoshiyou-ionic[1013:1128859] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/427EAFBE-3D86-4ACC-A4F6-98BDAB41A4C3/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:45:05.862 haoshiyou-ionic[1013:1128859] ionic Ready xxx
+2015-07-04 19:45:10.667 haoshiyou-ionic[1013:1128859] 111
+2015-07-04 19:45:10.667 haoshiyou-ionic[1013:1128859] watch fired true
+2015-07-04 19:45:12.047 haoshiyou-ionic[1013:1128859] 222 
+2015-07-04 19:45:14.870 haoshiyou-ionic[1013:1128859] 333 
+2015-07-04 19:45:14.870 haoshiyou-ionic[1013:1128859] 444 0
+2015-07-04 19:45:14.872 haoshiyou-ionic[1013:1128859] 444 1
+2015-07-04 19:45:14.872 haoshiyou-ionic[1013:1128859] 444 2
+2015-07-04 19:45:16.429 haoshiyou-ionic[1013:1128920] File Transfer Finished with response code 200
+2015-07-04 19:45:16.835 haoshiyou-ionic[1013:1129130] File Transfer Finished with response code 200
+2015-07-04 19:45:16.889 haoshiyou-ionic[1013:1129126] File Transfer Finished with response code 200
+2015-07-04 19:45:16.895 haoshiyou-ionic[1013:1128859] Start upload XXX
+2015-07-04 19:45:16.895 haoshiyou-ionic[1013:1128859] images:null
+2015-07-04 19:45:16.895 haoshiyou-ionic[1013:1128859] data:{"public_id":"ajysxwydzxpiyvk5zbwr","version":1436064316,"signature":"41bd9fc1aaf393cbe3592eb46c5e2c0f0af150d4","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:45:16Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436064316/ajysxwydzxpiyvk5zbwr.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436064316/ajysxwydzxpiyvk5zbwr.jpg","original_filename":"no-filename"}
+2015-07-04 19:45:16.895 haoshiyou-ionic[1013:1128859] null
+2015-07-04 19:45:16.896 haoshiyou-ionic[1013:1128859] {"line":216,"column":44,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/427EAFBE-3D86-4ACC-A4F6-98BDAB41A4C3/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:46:07.565 haoshiyou-ionic[1702:1131508] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/F6572D38-62D2-4E84-A57F-380AB392F02B/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:46:07.704 haoshiyou-ionic[1702:1131508] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:46:07.705 haoshiyou-ionic[1702:1131508] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:46:07.708 haoshiyou-ionic[1702:1131508] Unlimited access to network resources
+2015-07-04 19:46:07.839 haoshiyou-ionic[1702:1131508] [CDVTimer][keyboard] 0.056028ms
+2015-07-04 19:46:07.856 haoshiyou-ionic[1702:1131508] [CDVTimer][splashscreen] 16.243994ms
+2015-07-04 19:46:07.858 haoshiyou-ionic[1702:1131508] [CDVTimer][file] 2.183020ms
+2015-07-04 19:46:07.858 haoshiyou-ionic[1702:1131508] [CDVTimer][TotalPluginStartup] 18.989980ms
+2015-07-04 19:46:07.952 haoshiyou-ionic[1702:1131508] Resetting plugins due to page load.
+2015-07-04 19:46:08.415 haoshiyou-ionic[1702:1131508] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/84920D6E-9DFA-4622-AFD7-0E978B4AC2D6/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:46:08.430 haoshiyou-ionic[1702:1131508] ionic Ready xxx
+2015-07-04 19:46:11.382 haoshiyou-ionic[1702:1131508] 111
+2015-07-04 19:46:11.382 haoshiyou-ionic[1702:1131508] watch fired true
+2015-07-04 19:46:12.905 haoshiyou-ionic[1702:1131508] 222 
+2015-07-04 19:46:15.454 haoshiyou-ionic[1702:1131508] 333 
+2015-07-04 19:46:15.454 haoshiyou-ionic[1702:1131508] 444 0
+2015-07-04 19:46:15.455 haoshiyou-ionic[1702:1131508] 444 1
+2015-07-04 19:46:18.184 haoshiyou-ionic[1702:1131559] File Transfer Finished with response code 200
+2015-07-04 19:46:18.184 haoshiyou-ionic[1702:1131563] File Transfer Finished with response code 200
+2015-07-04 19:46:18.190 haoshiyou-ionic[1702:1131508] Start upload XXX
+2015-07-04 19:46:18.191 haoshiyou-ionic[1702:1131508] images:null
+2015-07-04 19:46:18.191 haoshiyou-ionic[1702:1131508] images:[]
+2015-07-04 19:46:18.191 haoshiyou-ionic[1702:1131508] data:{"public_id":"tmtoksvwodkuto2s2grp","version":1436064377,"signature":"b881bd4497e002f16d381d64b1a6fb962728bbfb","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:46:17Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436064377/tmtoksvwodkuto2s2grp.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436064377/tmtoksvwodkuto2s2grp.jpg","original_filename":"no-filename"}
+2015-07-04 19:46:18.191 haoshiyou-ionic[1702:1131508] []
+2015-07-04 19:46:18.191 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp"]
+2015-07-04 19:46:18.192 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp"]
+2015-07-04 19:46:18.192 haoshiyou-ionic[1702:1131508] data:{"public_id":"uxfmg8hz9z7hbsycfoj1","version":1436064377,"signature":"a3c440e5435d9e09d3f15312715ce928cdb0658b","width":1068,"height":1600,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:46:17Z","tags":[],"bytes":431638,"type":"upload","etag":"93a902d51b9cd3a16c3c20b113209bcf","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436064377/uxfmg8hz9z7hbsycfoj1.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436064377/uxfmg8hz9z7hbsycfoj1.jpg","original_filename":"no-filename"}
+2015-07-04 19:46:18.192 haoshiyou-ionic[1702:1131508] ["tmtoksvwodkuto2s2grp"]
+2015-07-04 19:46:18.192 haoshiyou-ionic[1702:1131508] End upload XXX
+2015-07-04 19:46:32.010 haoshiyou-ionic[1702:1131508] 222 
+2015-07-04 19:46:34.412 haoshiyou-ionic[1702:1131508] 333 
+2015-07-04 19:46:34.412 haoshiyou-ionic[1702:1131508] 444 0
+2015-07-04 19:46:34.412 haoshiyou-ionic[1702:1131508] 444 1
+2015-07-04 19:46:37.149 haoshiyou-ionic[1702:1132306] File Transfer Finished with response code 200
+2015-07-04 19:46:38.529 haoshiyou-ionic[1702:1132302] File Transfer Finished with response code 200
+2015-07-04 19:46:38.534 haoshiyou-ionic[1702:1131508] Start upload XXX
+2015-07-04 19:46:38.534 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1"]
+2015-07-04 19:46:38.534 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1"]
+2015-07-04 19:46:38.534 haoshiyou-ionic[1702:1131508] data:{"public_id":"eapap4docadth3imilcv","version":1436064398,"signature":"f530a70ad2dbdfc2a75a5e5295cc49d9ecd883eb","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:46:38Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436064398/eapap4docadth3imilcv.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436064398/eapap4docadth3imilcv.jpg","original_filename":"no-filename"}
+2015-07-04 19:46:38.534 haoshiyou-ionic[1702:1131508] ["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1"]
+2015-07-04 19:46:38.534 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv"]
+2015-07-04 19:46:38.535 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv"]
+2015-07-04 19:46:38.535 haoshiyou-ionic[1702:1131508] data:{"public_id":"pnyq4dfxse2ymaodyw8k","version":1436064396,"signature":"8e0aee3761b6cecba7e93ff738cf7e108ad8bd81","width":1068,"height":1600,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:46:36Z","tags":[],"bytes":431638,"type":"upload","etag":"93a902d51b9cd3a16c3c20b113209bcf","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436064396/pnyq4dfxse2ymaodyw8k.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436064396/pnyq4dfxse2ymaodyw8k.jpg","original_filename":"no-filename"}
+2015-07-04 19:46:38.535 haoshiyou-ionic[1702:1131508] ["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv"]
+2015-07-04 19:46:38.535 haoshiyou-ionic[1702:1131508] End upload XXX
+2015-07-04 19:47:00.908 haoshiyou-ionic[1702:1131508] 222 
+2015-07-04 19:47:03.711 haoshiyou-ionic[1702:1131508] 333 
+2015-07-04 19:47:03.711 haoshiyou-ionic[1702:1131508] 444 0
+2015-07-04 19:47:03.711 haoshiyou-ionic[1702:1131508] 444 1
+2015-07-04 19:47:06.985 haoshiyou-ionic[1702:1133146] File Transfer Finished with response code 200
+2015-07-04 19:47:07.007 haoshiyou-ionic[1702:1133143] File Transfer Finished with response code 200
+2015-07-04 19:47:07.015 haoshiyou-ionic[1702:1131508] Start upload XXX
+2015-07-04 19:47:07.015 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv","pnyq4dfxse2ymaodyw8k"]
+2015-07-04 19:47:07.015 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv","pnyq4dfxse2ymaodyw8k"]
+2015-07-04 19:47:07.016 haoshiyou-ionic[1702:1131508] data:{"public_id":"q5dag2rshqrmxk4w0wjk","version":1436064426,"signature":"9d8b2e282ba64648b8402a961e9452789ab60d08","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:47:06Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436064426/q5dag2rshqrmxk4w0wjk.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436064426/q5dag2rshqrmxk4w0wjk.jpg","original_filename":"no-filename"}
+2015-07-04 19:47:07.016 haoshiyou-ionic[1702:1131508] ["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv","pnyq4dfxse2ymaodyw8k"]
+2015-07-04 19:47:07.016 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv","pnyq4dfxse2ymaodyw8k","q5dag2rshqrmxk4w0wjk"]
+2015-07-04 19:47:07.016 haoshiyou-ionic[1702:1131508] images:["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv","pnyq4dfxse2ymaodyw8k","q5dag2rshqrmxk4w0wjk"]
+2015-07-04 19:47:07.016 haoshiyou-ionic[1702:1131508] data:{"public_id":"nrhxhshfawskcovwt4ay","version":1436064426,"signature":"b640e176acb1a0d6eeba3247f2412fa74e83cb6a","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:47:06Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436064426/nrhxhshfawskcovwt4ay.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436064426/nrhxhshfawskcovwt4ay.jpg","original_filename":"no-filename"}
+2015-07-04 19:47:07.016 haoshiyou-ionic[1702:1131508] ["tmtoksvwodkuto2s2grp","uxfmg8hz9z7hbsycfoj1","eapap4docadth3imilcv","pnyq4dfxse2ymaodyw8k","q5dag2rshqrmxk4w0wjk"]
+2015-07-04 19:47:07.016 haoshiyou-ionic[1702:1131508] End upload XXX
+2015-07-04 19:49:40.153 haoshiyou-ionic[1702:1131508] 111
+2015-07-04 19:49:40.155 haoshiyou-ionic[1702:1131508] watch fired true

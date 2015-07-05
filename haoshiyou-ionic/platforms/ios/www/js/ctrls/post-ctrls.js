@@ -181,8 +181,8 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $http, $q, $cordovaF
         quality: 80
     };
 
-    $scope.postInput.images =  $scope.postInput.images || [];
 
+    console.log($scope.postInput.images);
     console.log("111");
     $scope.getPhotos = function() {
 
@@ -209,7 +209,12 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $http, $q, $cordovaF
                 for (var i in postResults) {
                     var postResult = postResults[i];
                     var data = JSON.parse(postResult.response);
-                    console.log(data);
+
+                    console.log("images:" + JSON.stringify($scope.postInput.images));
+                    $scope.postInput.images = $scope.postInput.images === null ? [] : $scope.postInput.images;
+                    console.log("images:" + JSON.stringify($scope.postInput.images));
+                    console.log("data:" + JSON.stringify(data));
+                    console.log($scope.postInput.images);
                     $scope.postInput.images.push(data.public_id);
                 }
                 console.log($scope.imagePublicIds);
@@ -217,7 +222,7 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $http, $q, $cordovaF
             }).catch(function(error) {
                 console.log(error);
             });
-    }
+    };
     $scope.delete = function(imageId) {
         var i = $scope.postInput.images.indexOf(imageId);
         if (i > -1) {
