@@ -228,11 +228,16 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $q, $cordovaFileTran
 }
 ctrls.controller('PhotoCtrl', PhotoCtrl);
 
-function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, $q) {
+function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams,
+                  $log, $q, WeChatService,
+                  Logger) {
+
+  Logger.log("entering ViewCtrl!");
   $scope.$state = $state;
   $scope.FIELDS = ConstantService.FIELDS;
     $scope.postInput = {};
-  $log.info("view post id = " + $stateParams.postId);
+    WeChatService.share($stateParams.postId);
+    $log.info("view post id = " + $stateParams.postId);
     HsyPost.findById({id: $stateParams.postId}).$promise
         .then(function(hsyPost){
             $log.info("Fetched!");

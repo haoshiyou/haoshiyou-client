@@ -48,7 +48,7 @@ function ConstantSerivce() {
 }
 services.factory('ConstantService', ConstantSerivce);
 
-function WeChatService($http, $log, $q, $location, BACKEND) {
+function WeChatService($http, $log, $q, $location, BACKEND, Logger) {
   var ready = false;
   function init() {
     var signatureServer= "http://" + BACKEND + "/wechatsig";
@@ -97,9 +97,34 @@ function WeChatService($http, $log, $q, $location, BACKEND) {
       $log.error(err);
     });
   }
+
+  function share(postId) {
+    var wxData = {
+      title: "湾区好室友",
+      link: "http://dev.haoshiyou.org/#/view/" + postId, // XXX
+      imgUrl: "http://dev.haoshiyou.org/img/logo-v1-blue-1024sq2.jpg",
+      trigger: function (res) {
+        Logger.logAlert('用户点击发送给朋友');
+      },
+      success: function (ret) {
+        Logger.logAlert("shared!");
+        Logger.logAlert("ret=" + JSON.stringify(ret));
+      },
+      cancel: function (ret) {
+        Logger.logAlert("cancel share!");
+        Logger.logAlert("ret=" + JSON.stringify(ret));
+      }
+    };
+    Logger.log("before share set up postId = " + postId); // XX
+    wx.onMenuShareAppMessage(wxData);
+    wxData.title = wxData.title + "\r\n" + wxData.desc;
+    wx.onMenuShareTimeline(wxData);
+    Logger.log("after share set up postId = " + postId ); // XXX
+  }
   return {
     init: init,
-    ready: ready
+    ready: ready,
+    share: share
   };
 }
 services.factory('WeChatService', WeChatService);
