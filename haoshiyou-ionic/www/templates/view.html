@@ -7,7 +7,7 @@
     <ion-content>
         <div class="list">
 
-            <div ng-repeat="field in FIELDS">
+            <div ng-repeat="field in FIELDS" ng-if="!field.hide">
                 <div class="item item-divider" >
                     {{ field.label}}
                 </div>
@@ -35,7 +35,11 @@
                     </p>
                 </div>
             </div>
-
+            <div class="item item-image" ng-repeat="imageId in postInput.images">
+                <img src="http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{imageId}}.JPG"
+                        style="max-width: 540px;"
+                        />
+            </div>
 
         </div>
     </ion-content>
