@@ -45,15 +45,16 @@ The day after tomorrow
 
 
 *** Photo
-**** Pick Photo
-**** Upload photo
-**** Store photo
-**** Delete photo
-**** Better caching and faster loading
+**** DONE Pick Photo
+**** DONE Upload photo
+**** DONE Store photo
+**** DONE Delete photo
+**** DONE Better caching and faster loading
 
-**** Thumbnails generation
+**** DONE Thumbnails generation
 ***** Long photo
 *****
+
 *** WeChat Sharing
 **** Login in WeChat
 **** Share on WeChat
