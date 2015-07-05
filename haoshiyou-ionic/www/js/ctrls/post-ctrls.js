@@ -268,6 +268,7 @@ function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams, $log, 
         .catch(function(err){
             //TODO(zzn): handle error when no postId found
         });
+
 }
 ctrls.controller('ViewCtrl', ViewCtrl);
 

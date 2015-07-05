@@ -2,7 +2,7 @@
 
 var ctrls = angular.module('haoshiyou.controllers', ['ngResource', 'lbServices']);
 
-function MainCtrl($rootScope, User, $scope) {
+function MainCtrl($rootScope, User, $scope, Logger) {
   $scope.logout = function() {
     console.log("Logout!");
     User.logout()
@@ -13,7 +13,8 @@ function MainCtrl($rootScope, User, $scope) {
         .catch(function (err) {
           console.log(err);
         });
-  }
+  };
+  Logger.log("v3 start!");
 }
 ctrls.controller('MainCtrl', MainCtrl);
 

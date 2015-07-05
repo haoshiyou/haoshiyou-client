@@ -163,7 +163,7 @@ angular.module('haoshiyou', [
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|content|file|assets-library):/);
 
 
-}).constant("BACKEND", "0.0.0.0:5000")
+}).constant("BACKEND", "haoshiyou-dev.herokuapp.com")
 .run(function(Logger){
   var CONST_PARSE_ID = "RPjt04MBMl3rzzEKBGKUpP7KHFXAsomtDbr9cS0y";
   var CONST_PARSE_KEY = "DSqWg9xElC6mI1PwtPWzzeIPQYUXPGTOC66nT82h";
