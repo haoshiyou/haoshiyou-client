@@ -60,7 +60,7 @@ function WeChatService($http, $q, $location, BACKEND, Logger, SessionService, $f
       }
     }).then(function (result) {
       var options = result.data.data;
-      options.debug = true;
+      options.debug = false;
       options.jsApiList = [
         'checkJsApi',
         "onMenuShareTimeline",
@@ -106,6 +106,7 @@ function WeChatService($http, $q, $location, BACKEND, Logger, SessionService, $f
       title: $filter('date')(hsyPost.startDate, "yyyy-MM-dd") + "起" + hsyPost.needType,
       link: "http://dev.haoshiyou.org/#/view/" + hsyPost.id + "?sharedBy=" + SessionService.getSessionId(),
       imgUrl: imgUrl,
+      desc: hsyPost.introduction,
       trigger: function (res) {
         Logger.log('用户点击发送给朋友');
       },
