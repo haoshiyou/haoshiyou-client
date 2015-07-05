@@ -227,7 +227,6 @@ function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams,
   $scope.$state = $state;
   $scope.FIELDS = ConstantService.FIELDS;
     $scope.postInput = {};
-    WeChatService.share($stateParams.postId);
     Logger.log("view post id = " + $stateParams.postId);
     HsyPost.findById({id: $stateParams.postId}).$promise
         .then(function(hsyPost){
@@ -256,6 +255,8 @@ function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams,
             ['lessCooking', 'noPets'].forEach(function(key) {
                 $scope.postInput[key] = roommatePref[key];
             });
+
+            WeChatService.share(hsyPost);
         })
         .catch(function(err){
             //TODO(zzn): handle error when no postId found

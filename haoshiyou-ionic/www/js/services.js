@@ -48,7 +48,7 @@ function ConstantSerivce() {
 }
 services.factory('ConstantService', ConstantSerivce);
 
-function WeChatService($http, $q, $location, BACKEND, Logger) {
+function WeChatService($http, $q, $location, BACKEND, Logger, SessionService, $filter) {
   var ready = false;
   function init() {
     var signatureServer= "http://" + BACKEND + "/wechatsig";
@@ -96,32 +96,31 @@ function WeChatService($http, $q, $location, BACKEND, Logger) {
     });
   }
 
-  function share(postId) {
-    try {
-      var wxData = {
-        title: "湾区好室友",
-        link: "http://dev.haoshiyou.org/#/view/" + postId, // XXX
-        imgUrl: "http://dev.haoshiyou.org/img/logo-v1-blue-1024sq2.jpg",
-        trigger: function (res) {
-          Logger.log('用户点击发送给朋友');
-        },
-        success: function (ret) {
-          Logger.log("shared!");
-          Logger.log("ret=" + JSON.stringify(ret));
-        },
-        cancel: function (ret) {
-          Logger.log("cancel share!");
-          Logger.log("ret=" + JSON.stringify(ret));
-        }
-      };
-      Logger.log("before share set up postId = " + postId); // XX
-      wx.onMenuShareAppMessage(wxData);
-      wxData.title = wxData.title + "\r\n" + wxData.desc;
-      wx.onMenuShareTimeline(wxData);
-      Logger.log("after share set up postId = " + postId); // XXX
-    } catch (error) {
-      Logger.log("error!", "ERROR", error);
+  function share(hsyPost) {
+    var imgUrl = "http://dev.haoshiyou.org/img/logo-v1-blue-1024sq2.jpg";
+    hsyPost.images = hsyPost.images || [];
+    if (hsyPost.images.length > 0) {
+      imgUrl = "http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{imageId}}.JPG";
     }
+    var wxData = {
+      title: $filter('date')(hsyPost.startDate, "yyyy-MM-dd") + "起" + hsyPost.needType,
+      link: "http://dev.haoshiyou.org/#/view/" + hsyPost.id + "?sharedBy=" + SessionService.getSessionId(),
+      imgUrl: imgUrl,
+      trigger: function (res) {
+        Logger.log('用户点击发送给朋友');
+      },
+      success: function (ret) {
+        Logger.log("shared!");
+        Logger.log("ret=" + JSON.stringify(ret));
+      },
+      cancel: function (ret) {
+        Logger.log("cancel share!");
+        Logger.log("ret=" + JSON.stringify(ret));
+      }
+    };
+    wx.onMenuShareAppMessage(wxData);
+    wxData.title = wxData.title + "\r\n" + wxData.desc;
+    wx.onMenuShareTimeline(wxData);
   }
   return {
     init: init,

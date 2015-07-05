@@ -10,8 +10,8 @@
             </ion-item>
             <ion-item class="item item-thumbnail item-icon-right"
                  ng-repeat="imageId in postInput['images']">
-                <img src="http://res.cloudinary.com/xinbenlv/image/upload/{{imageId}}.JPG"
-                        style="width:50px;height: 50px"/>
+                <img src="http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{imageId}}.JPG"
+                        style="width:150px;height: 150px"/>
                 <ion-option-button class="button-assertive" ng-click="delete(imageId)">
                     <i class="icon ion-close-circled"></i></ion-option-button>
             </ion-item>
