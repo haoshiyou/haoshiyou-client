@@ -272,7 +272,7 @@ function EditStartDateCtrl($scope) {
 
 ctrls.controller('EditStartDateCtrl', EditStartDateCtrl);
 
-function EditLocationCtrl($scope, uiGmapGoogleMapApi) {
+function EditLocationCtrl($scope, uiGmapGoogleMapApi, Logger) {
 
     $scope.pending = false;
     var southWest = new google.maps.LatLng( 37.196011, -122.569317 );

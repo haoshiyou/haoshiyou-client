@@ -71,26 +71,6 @@ angular.module('haoshiyou', [
       }
     }
   })
-
-  .state('tab.my', {
-    url: '/my',
-    views: {
-      'tab-my': {
-        templateUrl: 'templates/tab-my.html',
-        controller: 'PostListCtrl'
-      }
-    }
-  })
-  .state('tab.edit', {
-    url: '/edit/:postId?',
-    views: {
-      'tab-my': {
-        templateUrl: 'templates/edit.html',
-        controller: 'EditOrCreateCtrl'
-      }
-    },
-  })
-
   .state('tab.view', {
     params: {postId: null},
     views: {
@@ -100,6 +80,27 @@ angular.module('haoshiyou', [
       }
     },
   })
+  .state('tab.my', {
+
+    url: '/my',
+    views: {
+      'tab-my': {
+        templateUrl: 'templates/tab-my.html',
+        controller: 'PostListCtrl'
+      }
+    }
+  })
+  .state('tab.edit', {
+    params: {postId: null},
+    views: {
+      'tab-my': {
+        templateUrl: 'templates/edit.html',
+        controller: 'EditOrCreateCtrl'
+      }
+    },
+  })
+
+
   .state('view', {
     url: '/view/:postId',
     templateUrl: 'templates/view.html',
