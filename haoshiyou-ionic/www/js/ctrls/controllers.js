@@ -27,7 +27,7 @@ function DashCtrl($scope, HaoshiyouService) {
 }
 ctrls.controller('DashCtrl', DashCtrl);
 
-function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
+function PostListCtrl($scope, HsyPost, $ionicLoading, $ionicPopup,
                       $q, $state, SessionService, $ionicModal,
                       ConstantService, $filter, Logger) {
   $scope.NEED_TYPE_COLOR = ConstantService.NEED_TYPE_COLOR;
@@ -75,7 +75,6 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
               console.log("postId=" + postId);
               HsyPost.findById({id: postId}).$promise.
                   then(function(hsyPost){
-                      $log.info(hsyPost);
                       return $q.all([
                           hsyPost,
                           HsyPost.hsyHousePreference.destroy({id: postId}, housePreference),
@@ -83,14 +82,13 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
                       ]);
                   }).then(function(results){
                       var hsyPost = results[0];
-                      $log.info(results);
                       return hsyPost.$delete();
                   }).then(function(){
                       $ionicLoading.show({ template: '已删除', noBackdrop: true, duration: 1500 });
                       $scope.reload(); // no chaining
                   })
                   .catch(function(err){
-                      $log.error(err);
+                      Logger.log('Error,删除失败', Logger.ERROR, err);
                       $ionicLoading.show({ template: '删除失败', noBackdrop: true, duration: 1500 });
                   });
           } else {
@@ -103,20 +101,18 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
     return $scope.loadMore();
   };
   $scope.loadMore = function () {
-      $log.info("loadMore triggered, current skip = " +  filter.skip);
+      Logger.log("loadMore triggered, current skip = " +  filter.skip);
       return HsyPost.find({ filter: filter})
       .$promise
       .then(function (results) {
-          $log.info("Getting my posts:" + results.length);
-          $log.info(results);
+          Logger.log("Getting my posts:" + results.length);
           $scope.posts = $scope.posts.concat(results);
           filter.skip = $scope.posts.length;
           if (results.length < filter.limit) $scope.canLoadMore = false;
           $scope.$broadcast('scroll.infiniteScrollComplete');
 
       }).catch(function (err) {
-          $log.error("Error getting my posts!");
-          $log.error(JSON.stringify(err));
+          Logger.log("Error getting my posts!", Logger.ERROR, err);
       });
   };
   $ionicModal.fromTemplateUrl('templates/filter.html', function(modal) {

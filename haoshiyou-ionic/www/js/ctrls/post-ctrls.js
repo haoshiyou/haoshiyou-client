@@ -1,7 +1,7 @@
 var ctrls = angular.module('haoshiyou.PostCtrls', ['ngResource', 'lbServices']);
 
-function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
-                          $ionicLoading, $ionicModal,  $ionicPopup, $http,
+function EditOrCreateCtrl(Logger, $scope, $q, $state, $stateParams,
+                          $ionicLoading, $ionicModal,  $ionicPopup,
                           HsyPost, ConstantService, SessionService, uuid4) {
     $scope.postInput = {};
     $scope.dirty = {};
@@ -10,8 +10,6 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
         $scope.submitLabel = "更新";
         HsyPost.findById({id: $stateParams.postId}).$promise
             .then(function(hsyPost){
-                $log.info(hsyPost);
-                $log.info(HsyPost);
                 return $q.all([hsyPost,
                     HsyPost.hsyHousePreference({id: $stateParams.postId})
                         .$promise,
@@ -19,7 +17,6 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
                         .$promise
                 ]);
             }).then(function(results) {
-                $log.info(results);
                 var hsyPost = results[0];
                 var housePref = results[1];
                 var roommatePref = results[2];
@@ -58,7 +55,6 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
     });
 
     $scope.showModal = function(action) {
-        $log.info("modalAction = " + action);
         $scope.modalField = $scope.FIELDS.filter(function(field) {
             return field.key == action;
         })[0];
@@ -86,7 +82,7 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
             var field = $scope.FIELDS[i];
             if (!field.required || $scope.postInput[field.key]) {
                 // Do nothing
-                $log.info("field = " + JSON.stringify(field));
+                Logger.log("field = " + JSON.stringify(field));
             } else {
                 valid = false;
             }
@@ -94,9 +90,7 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
         return valid;
     }
     function submitToDataStorePromise() {
-        $log.info("submit!");
-        $log.info($scope.postInput);
-        $log.log("submiting");
+        Logger.log("submiting");
 
         var post = _.omit($scope.postInput, [
             // TODO(zzn): use a better solution instead of hardcoding them here.
@@ -105,13 +99,12 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
         ]);
         post.guid = uuid4.generate();
         post.createdBySessionId = SessionService.getSessionId();
-        $log.info("new guid = " + post.guid);
+        Logger.log("new guid = " + post.guid);
         var roommatePreference = _.pick($scope.postInput, ['lessCooking', 'noPets']);
         var housePreference = _.pick($scope.postInput, ['privateBath', 'designatedParking']);
         if ($stateParams.postId) {
             return HsyPost.findById({id: $stateParams.postId}).$promise
                 .then(function(hsyPost) {
-                    $log.info(hsyPost);
                     for (var i in $scope.FIELDS) {
                         var field = $scope.FIELDS[i];
                         hsyPost[field.key] = $scope.postInput[field.key];
@@ -122,14 +115,12 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
                         HsyPost.hsyRoommatePreference.update({id: $stateParams.postId}, roommatePreference),
                     ]);
                 }).catch(function(err) {
-                    $log.error(err);
+                    Logger.log("Error", Logger.ERROR, err);
                 });
         } else {
             return HsyPost.create(post).$promise
                 .then(function (hsyPost) {
-                    $log.info(hsyPost);
                     return $q.all([
-
                         HsyPost.hsyHousePreference.create({id: hsyPost.id}, housePreference),
                         HsyPost.hsyRoommatePreference.create({id: hsyPost.id}, roommatePreference),
                     ]);
@@ -153,10 +144,10 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
                     // Do nothing
 
                     $ionicLoading.show({ template: $scope.submitLabel + '失败', noBackdrop: true, duration: 1500 });
-                    $log.info("invalid, not submiting");
+                    Logger.log("invalid, not submiting");
                 }
             } else {
-                $log.info("cancel on submit, not submiting");
+                Logger.log("cancel on submit, not submiting");
             }
         });
     }
@@ -229,7 +220,7 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $q, $cordovaFileTran
 ctrls.controller('PhotoCtrl', PhotoCtrl);
 
 function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams,
-                  $log, $q, WeChatService,
+                  $q, WeChatService,
                   Logger) {
 
   Logger.log("entering ViewCtrl!");
@@ -237,12 +228,9 @@ function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams,
   $scope.FIELDS = ConstantService.FIELDS;
     $scope.postInput = {};
     WeChatService.share($stateParams.postId);
-    $log.info("view post id = " + $stateParams.postId);
+    Logger.log("view post id = " + $stateParams.postId);
     HsyPost.findById({id: $stateParams.postId}).$promise
         .then(function(hsyPost){
-            $log.info("Fetched!");
-            $log.info(hsyPost);
-            $log.info(HsyPost);
             return $q.all([hsyPost,
                 HsyPost.hsyHousePreference({id: $stateParams.postId})
                     .$promise,
@@ -250,7 +238,6 @@ function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams,
                     .$promise
             ]);
         }).then(function(results) {
-            $log.info(results);
             var hsyPost = results[0];
             var housePref = results[1];
             var roommatePref = results[2];
@@ -285,14 +272,14 @@ function EditStartDateCtrl($scope) {
 
 ctrls.controller('EditStartDateCtrl', EditStartDateCtrl);
 
-function EditLocationCtrl($log, $scope, uiGmapGoogleMapApi) {
+function EditLocationCtrl($scope, uiGmapGoogleMapApi) {
 
     $scope.pending = false;
     var southWest = new google.maps.LatLng( 37.196011, -122.569317 );
     var northEast = new google.maps.LatLng( 38.071471, -121.570935 );
     var bayAreaBounds = new google.maps.LatLngBounds( southWest, northEast );
     uiGmapGoogleMapApi.then(function(maps){
-        $log.info("loaded maps");
+        Logger.log("loaded maps");
         $scope.map = {
             center: { latitude: 37.565396, longitude: -122.166257 }, zoom: 9,
             bounds: {}, // use bounds to set init view does not work
@@ -325,25 +312,19 @@ function EditLocationCtrl($log, $scope, uiGmapGoogleMapApi) {
     };
 
     $scope.postInput['radiusInMiles'] = $scope.postInput['radiusInMiles'] || 0;
-
-    console.log("geopointFromLocation = " + JSON.stringify($scope.postInput['geopointFromLocation'])); // XXX
     if ($scope.postInput['geopointFromLocation']) {
-
-        console.log("!!! = " + JSON.stringify($scope.postInput['geopointFromLocation'])); // XXX
         $scope.marker.coords.latitude = $scope.postInput['geopointFromLocation'].lat;
         $scope.marker.coords.longitude = $scope.postInput['geopointFromLocation'].lng
-
     }
     $scope.$watch(
         "autocomplete.details",
         function( newValue ) {
             if (newValue && newValue.geometry) {
-                $log.debug(newValue);
                 var location = newValue.geometry.location;
                 $scope.postInput['geopointFromLocation'] = {lat: location.lat(), lng: location.lng()};
                 $scope.marker.coords.latitude = location.lat();
                 $scope.marker.coords.longitude = location.lng();
-                $log.info('update geopointFromLocation: ' + JSON.stringify($scope.postInput['geopointFromLocation']));
+                Logger.log('update geopointFromLocation: ' + JSON.stringify($scope.postInput['geopointFromLocation']));
                 $scope.pending = false;
                 console.log("set pending to false");
             }
