@@ -857,3 +857,603 @@ http://10.0.0.21:8100/lib/ionic/js/ionic.bundle.js:13984:33
 2015-07-04 13:19:16.248 haoshiyou-ionic[63128:816407] ["file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/3750F105-D497-4504-A11D-AE85973A55C7/tmp/cdv_photo_025.jpg","file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/3750F105-D497-4504-A11D-AE85973A55C7/tmp/cdv_photo_026.jpg"]
 2015-07-04 13:19:19.136 haoshiyou-ionic[63128:816407] img file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/3750F105-D497-4504-A11D-AE85973A55C7/tmp/cdv_photo_027.jpg
 2015-07-04 13:19:19.136 haoshiyou-ionic[63128:816407] ["file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/3750F105-D497-4504-A11D-AE85973A55C7/tmp/cdv_photo_025.jpg","file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/3750F105-D497-4504-A11D-AE85973A55C7/tmp/cdv_photo_026.jpg","file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/3750F105-D497-4504-A11D-AE85973A55C7/tmp/cdv_photo_027.jpg"]
+2015-07-04 13:31:53.816 haoshiyou-ionic[64569:830401] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 13:31:53.817 haoshiyou-ionic[64569:830401] Multi-tasking -> Device: YES, App: YES
+2015-07-04 13:31:53.819 haoshiyou-ionic[64569:830401] Unlimited access to network resources
+2015-07-04 13:31:53.922 haoshiyou-ionic[64569:830401] [CDVTimer][keyboard] 0.055015ms
+2015-07-04 13:31:53.938 haoshiyou-ionic[64569:830401] [CDVTimer][splashscreen] 15.797973ms
+2015-07-04 13:31:53.939 haoshiyou-ionic[64569:830401] [CDVTimer][TotalPluginStartup] 16.152978ms
+2015-07-04 13:31:54.009 haoshiyou-ionic[64569:830401] Resetting plugins due to page load.
+2015-07-04 13:31:54.357 haoshiyou-ionic[64569:830401] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/DB78C3BC-42CA-475C-A794-D62D09E11CA7/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 13:31:54.371 haoshiyou-ionic[64569:830401] ionic Ready
+2015-07-04 13:31:57.586 haoshiyou-ionic[64569:830401] watch fired true
+2015-07-04 13:32:56.515 haoshiyou-ionic[65047:833116] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 13:32:56.515 haoshiyou-ionic[65047:833116] Multi-tasking -> Device: YES, App: YES
+2015-07-04 13:32:56.517 haoshiyou-ionic[65047:833116] Unlimited access to network resources
+2015-07-04 13:32:56.621 haoshiyou-ionic[65047:833116] [CDVTimer][keyboard] 0.052989ms
+2015-07-04 13:32:56.636 haoshiyou-ionic[65047:833116] [CDVTimer][splashscreen] 14.741004ms
+2015-07-04 13:32:56.636 haoshiyou-ionic[65047:833116] [CDVTimer][TotalPluginStartup] 15.111029ms
+2015-07-04 13:32:56.702 haoshiyou-ionic[65047:833116] Resetting plugins due to page load.
+2015-07-04 13:32:57.026 haoshiyou-ionic[65047:833116] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/AEE988A8-048C-4E8F-B557-DF0FAE87150B/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 13:32:57.029 haoshiyou-ionic[65047:833116] ionic Ready
+2015-07-04 13:32:59.590 haoshiyou-ionic[65047:833116] watch fired true
+2015-07-04 13:33:03.978 haoshiyou-ionic[65047:833116] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/628A2B6A-8AD6-43CC-8E5D-51FFC0E1A2F7/tmp/cdv_photo_038.jpg
+2015-07-04 13:33:03.978 haoshiyou-ionic[65047:833116] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/628A2B6A-8AD6-43CC-8E5D-51FFC0E1A2F7/tmp/cdv_photo_039.jpg
+2015-07-04 13:34:15.699 haoshiyou-ionic[65495:835738] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 13:34:15.700 haoshiyou-ionic[65495:835738] Multi-tasking -> Device: YES, App: YES
+2015-07-04 13:34:15.701 haoshiyou-ionic[65495:835738] Unlimited access to network resources
+2015-07-04 13:34:15.800 haoshiyou-ionic[65495:835738] [CDVTimer][keyboard] 0.054955ms
+2015-07-04 13:34:15.811 haoshiyou-ionic[65495:835738] [CDVTimer][splashscreen] 10.657966ms
+2015-07-04 13:34:15.811 haoshiyou-ionic[65495:835738] [CDVTimer][TotalPluginStartup] 11.014998ms
+2015-07-04 13:34:15.886 haoshiyou-ionic[65495:835738] Resetting plugins due to page load.
+2015-07-04 13:34:18.428 haoshiyou-ionic[65495:835738] Finished load of: http://10.0.0.21:8100/#/tab/dash
+2015-07-04 13:34:18.439 haoshiyou-ionic[65495:835738] ionic Ready
+2015-07-04 13:34:27.000 haoshiyou-ionic[65920:836781] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 13:34:27.000 haoshiyou-ionic[65920:836781] Multi-tasking -> Device: YES, App: YES
+2015-07-04 13:34:27.002 haoshiyou-ionic[65920:836781] Unlimited access to network resources
+2015-07-04 13:34:27.106 haoshiyou-ionic[65920:836781] [CDVTimer][keyboard] 0.055015ms
+2015-07-04 13:34:27.120 haoshiyou-ionic[65920:836781] [CDVTimer][splashscreen] 14.319003ms
+2015-07-04 13:34:27.120 haoshiyou-ionic[65920:836781] [CDVTimer][TotalPluginStartup] 14.737964ms
+2015-07-04 13:34:27.190 haoshiyou-ionic[65920:836781] Resetting plugins due to page load.
+2015-07-04 13:34:27.439 haoshiyou-ionic[65920:836781] Finished load of: http://10.0.0.21:8100/#/tab/dash
+2015-07-04 13:34:27.488 haoshiyou-ionic[65920:836781] ionic Ready
+2015-07-04 13:34:30.229 haoshiyou-ionic[65920:836781] watch fired true
+2015-07-04 13:34:35.820 haoshiyou-ionic[65920:836781] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C5399180-DB2D-4E02-8D8E-62BD0C069E2F/tmp/cdv_photo_040.jpg
+2015-07-04 13:34:35.820 haoshiyou-ionic[65920:836781] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C5399180-DB2D-4E02-8D8E-62BD0C069E2F/tmp/cdv_photo_041.jpg
+2015-07-04 13:34:49.747 haoshiyou-ionic[66338:837964] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 13:34:49.748 haoshiyou-ionic[66338:837964] Multi-tasking -> Device: YES, App: YES
+2015-07-04 13:34:49.750 haoshiyou-ionic[66338:837964] Unlimited access to network resources
+2015-07-04 13:34:49.849 haoshiyou-ionic[66338:837964] [CDVTimer][keyboard] 0.051022ms
+2015-07-04 13:34:49.860 haoshiyou-ionic[66338:837964] [CDVTimer][splashscreen] 10.945022ms
+2015-07-04 13:34:49.860 haoshiyou-ionic[66338:837964] [CDVTimer][TotalPluginStartup] 11.269987ms
+2015-07-04 13:34:49.920 haoshiyou-ionic[66338:837964] Resetting plugins due to page load.
+2015-07-04 13:34:50.089 haoshiyou-ionic[66338:837964] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/8F09AB63-E3BC-4A6F-8E1A-B01ABA876A10/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 13:34:50.255 haoshiyou-ionic[66338:837964] ionic Ready
+2015-07-04 13:34:53.295 haoshiyou-ionic[66338:837964] watch fired true
+2015-07-04 13:34:57.648 haoshiyou-ionic[66338:837964] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/030CAA02-CD8B-4D26-AD62-F922713B6DE9/tmp/cdv_photo_042.jpg
+2015-07-04 13:34:57.648 haoshiyou-ionic[66338:837964] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/030CAA02-CD8B-4D26-AD62-F922713B6DE9/tmp/cdv_photo_043.jpg
+2015-07-04 13:34:57.648 haoshiyou-ionic[66338:837964] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/030CAA02-CD8B-4D26-AD62-F922713B6DE9/tmp/cdv_photo_044.jpg
+2015-07-04 13:35:22.205 haoshiyou-ionic[66762:839630] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 13:35:22.206 haoshiyou-ionic[66762:839630] Multi-tasking -> Device: YES, App: YES
+2015-07-04 13:35:22.208 haoshiyou-ionic[66762:839630] Unlimited access to network resources
+2015-07-04 13:35:22.303 haoshiyou-ionic[66762:839630] [CDVTimer][keyboard] 0.050008ms
+2015-07-04 13:35:22.317 haoshiyou-ionic[66762:839630] [CDVTimer][splashscreen] 14.420033ms
+2015-07-04 13:35:22.317 haoshiyou-ionic[66762:839630] [CDVTimer][TotalPluginStartup] 14.773965ms
+2015-07-04 13:35:22.385 haoshiyou-ionic[66762:839630] Resetting plugins due to page load.
+2015-07-04 13:35:22.570 haoshiyou-ionic[66762:839630] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/12A64807-766C-42EC-A9E1-193888D0E2F9/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 13:35:22.755 haoshiyou-ionic[66762:839630] ionic Ready
+2015-07-04 13:35:25.788 haoshiyou-ionic[66762:839630] watch fired true
+2015-07-04 13:35:30.319 haoshiyou-ionic[66762:839630] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/F2177A9A-0888-4539-9A15-C0FBC312F777/tmp/cdv_photo_045.jpg
+2015-07-04 13:35:30.320 haoshiyou-ionic[66762:839630] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/F2177A9A-0888-4539-9A15-C0FBC312F777/tmp/cdv_photo_046.jpg
+2015-07-04 13:35:34.372 haoshiyou-ionic[66762:839630] geopointFromLocation = {"lat":37.7667881,"lng":-122.39052950000001}
+2015-07-04 13:35:34.372 haoshiyou-ionic[66762:839630] !!! = {"lat":37.7667881,"lng":-122.39052950000001}
+2015-07-04 16:06:09.341 haoshiyou-ionic[71685:900035] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/EEAB565E-6FE1-4DD0-8384-3AD020DEA9CE/Library/Cookies/Cookies.binarycookies
+2015-07-04 16:06:09.551 haoshiyou-ionic[71685:900035] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 16:06:09.552 haoshiyou-ionic[71685:900035] Multi-tasking -> Device: YES, App: YES
+2015-07-04 16:06:09.554 haoshiyou-ionic[71685:900035] Unlimited access to network resources
+2015-07-04 16:06:09.673 haoshiyou-ionic[71685:900035] [CDVTimer][keyboard] 0.075996ms
+2015-07-04 16:06:09.694 haoshiyou-ionic[71685:900035] [CDVTimer][splashscreen] 21.149039ms
+2015-07-04 16:06:09.694 haoshiyou-ionic[71685:900035] [CDVTimer][TotalPluginStartup] 21.586955ms
+2015-07-04 16:06:10.101 haoshiyou-ionic[71685:900035] Resetting plugins due to page load.
+2015-07-04 16:06:10.247 haoshiyou-ionic[71685:900035] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/7925A9E8-A310-4204-A289-0359C73417BA/haoshiyou-ionic.app/www/index.html
+2015-07-04 16:14:10.529 haoshiyou-ionic[72549:909018] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C11CB100-66B1-484A-8584-A76F967C1524/Library/Cookies/Cookies.binarycookies
+2015-07-04 16:14:10.671 haoshiyou-ionic[72549:909018] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 16:14:10.672 haoshiyou-ionic[72549:909018] Multi-tasking -> Device: YES, App: YES
+2015-07-04 16:14:10.673 haoshiyou-ionic[72549:909018] Unlimited access to network resources
+2015-07-04 16:14:10.775 haoshiyou-ionic[72549:909018] [CDVTimer][keyboard] 0.050962ms
+2015-07-04 16:14:10.790 haoshiyou-ionic[72549:909018] [CDVTimer][splashscreen] 14.800012ms
+2015-07-04 16:14:10.790 haoshiyou-ionic[72549:909018] [CDVTimer][TotalPluginStartup] 15.145004ms
+2015-07-04 16:14:10.859 haoshiyou-ionic[72549:909018] Resetting plugins due to page load.
+2015-07-04 16:14:11.063 haoshiyou-ionic[72549:909018] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/16736BA5-3B1A-4CE0-96BB-A6695CBD7678/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 16:14:11.296 haoshiyou-ionic[72549:909018] ionic Ready
+2015-07-04 16:30:09.521 haoshiyou-ionic[72549:909018] watch fired true
+2015-07-04 16:30:11.371 haoshiyou-ionic[72549:909018] THREAD WARNING: ['ImagePicker'] took '18.888916' ms. Plugin should use a background thread.
+2015-07-04 16:30:16.260 haoshiyou-ionic[72549:909018] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C11CB100-66B1-484A-8584-A76F967C1524/tmp/cdv_photo_001.jpg
+2015-07-04 16:30:16.260 haoshiyou-ionic[72549:909018] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C11CB100-66B1-484A-8584-A76F967C1524/tmp/cdv_photo_002.jpg
+2015-07-04 16:30:16.260 haoshiyou-ionic[72549:909018] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C11CB100-66B1-484A-8584-A76F967C1524/tmp/cdv_photo_003.jpg
+2015-07-04 16:30:16.260 haoshiyou-ionic[72549:909018] Image URI: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C11CB100-66B1-484A-8584-A76F967C1524/tmp/cdv_photo_004.jpg
+2015-07-04 16:45:51.776 haoshiyou-ionic[72549:929501] Communications error: <OS_xpc_error: <error: 0x317b5f4> { count = 1, contents =
+	"XPCErrorDescription" => <string: 0x317b83c> { length = 22, contents = "Connection interrupted" }
+}>
+2015-07-04 17:53:56.543 haoshiyou-ionic[76803:982390] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/4D172490-A837-4A08-B186-2D59A6062DFF/Library/Cookies/Cookies.binarycookies
+2015-07-04 17:53:56.837 haoshiyou-ionic[76803:982390] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 17:53:56.838 haoshiyou-ionic[76803:982390] Multi-tasking -> Device: YES, App: YES
+2015-07-04 17:53:56.856 haoshiyou-ionic[76803:982390] Unlimited access to network resources
+2015-07-04 17:53:57.234 haoshiyou-ionic[76803:982390] [CDVTimer][keyboard] 0.063002ms
+2015-07-04 17:53:57.410 haoshiyou-ionic[76803:982390] [CDVTimer][splashscreen] 176.165044ms
+2015-07-04 17:53:57.410 haoshiyou-ionic[76803:982390] [CDVTimer][TotalPluginStartup] 176.795006ms
+2015-07-04 17:53:57.566 haoshiyou-ionic[76803:982390] Resetting plugins due to page load.
+2015-07-04 17:53:57.924 haoshiyou-ionic[76803:982390] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/75495D81-019F-4229-852B-F046DD908883/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 17:53:58.166 haoshiyou-ionic[76803:982390] ionic Ready
+2015-07-04 17:54:01.689 haoshiyou-ionic[76803:982390] watch fired true
+2015-07-04 17:54:03.399 haoshiyou-ionic[76803:982390] THREAD WARNING: ['ImagePicker'] took '20.952881' ms. Plugin should use a background thread.
+2015-07-04 17:55:48.571 haoshiyou-ionic[77517:985507] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/B7077516-D4C4-4361-A62D-885A4168786B/Library/Cookies/Cookies.binarycookies
+2015-07-04 17:55:48.643 haoshiyou-ionic[77517:985507] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 17:55:48.643 haoshiyou-ionic[77517:985507] Multi-tasking -> Device: YES, App: YES
+2015-07-04 17:55:48.645 haoshiyou-ionic[77517:985507] Unlimited access to network resources
+2015-07-04 17:55:48.757 haoshiyou-ionic[77517:985507] [CDVTimer][keyboard] 0.052989ms
+2015-07-04 17:55:48.783 haoshiyou-ionic[77517:985507] [CDVTimer][splashscreen] 26.308954ms
+2015-07-04 17:55:48.784 haoshiyou-ionic[77517:985507] [CDVTimer][TotalPluginStartup] 26.673019ms
+2015-07-04 17:55:48.864 haoshiyou-ionic[77517:985507] Resetting plugins due to page load.
+2015-07-04 17:55:49.079 haoshiyou-ionic[77517:985507] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/CF520108-1B61-4D22-96EE-B21EF4FD064C/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 17:55:49.303 haoshiyou-ionic[77517:985507] ionic Ready xxx
+2015-07-04 18:00:08.780 haoshiyou-ionic[78216:990299] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/DE2A8250-81AE-4F74-9395-0E2946EAE433/Library/Cookies/Cookies.binarycookies
+2015-07-04 18:00:08.857 haoshiyou-ionic[78216:990299] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 18:00:08.857 haoshiyou-ionic[78216:990299] Multi-tasking -> Device: YES, App: YES
+2015-07-04 18:00:08.859 haoshiyou-ionic[78216:990299] Unlimited access to network resources
+2015-07-04 18:00:08.969 haoshiyou-ionic[78216:990299] [CDVTimer][keyboard] 0.051975ms
+2015-07-04 18:00:08.993 haoshiyou-ionic[78216:990299] [CDVTimer][splashscreen] 23.965001ms
+2015-07-04 18:00:08.994 haoshiyou-ionic[78216:990299] [CDVTimer][TotalPluginStartup] 24.333954ms
+2015-07-04 18:00:09.070 haoshiyou-ionic[78216:990299] Resetting plugins due to page load.
+2015-07-04 18:00:09.294 haoshiyou-ionic[78216:990299] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/7C52B35A-1DD6-4183-A4F7-71B8CB8A3A5D/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 18:00:09.561 haoshiyou-ionic[78216:990299] ionic Ready xxx
+2015-07-04 18:00:15.762 haoshiyou-ionic[78216:990299] 111
+2015-07-04 18:00:15.762 haoshiyou-ionic[78216:990299] watch fired true
+2015-07-04 18:00:17.703 haoshiyou-ionic[78216:990299] 222 
+2015-07-04 18:00:21.047 haoshiyou-ionic[78216:990299] 333 
+2015-07-04 18:00:21.047 haoshiyou-ionic[78216:990299] 444 0
+2015-07-04 18:00:21.047 haoshiyou-ionic[78216:990299] 444 1
+2015-07-04 18:01:37.443 haoshiyou-ionic[78931:993840] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/EB948A5F-0388-4AF3-BB46-6EFC409A27EE/Library/Cookies/Cookies.binarycookies
+2015-07-04 18:01:37.507 haoshiyou-ionic[78931:993840] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 18:01:37.507 haoshiyou-ionic[78931:993840] Multi-tasking -> Device: YES, App: YES
+2015-07-04 18:01:37.509 haoshiyou-ionic[78931:993840] Unlimited access to network resources
+2015-07-04 18:01:37.613 haoshiyou-ionic[78931:993840] [CDVTimer][keyboard] 0.054002ms
+2015-07-04 18:01:37.631 haoshiyou-ionic[78931:993840] [CDVTimer][splashscreen] 17.670035ms
+2015-07-04 18:01:37.631 haoshiyou-ionic[78931:993840] [CDVTimer][TotalPluginStartup] 18.023968ms
+2015-07-04 18:01:37.704 haoshiyou-ionic[78931:993840] Resetting plugins due to page load.
+2015-07-04 18:01:38.005 haoshiyou-ionic[78931:993840] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/098E9011-8176-4CCD-8F1E-A6AF3D72AFDA/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 18:01:38.115 haoshiyou-ionic[78931:993840] ionic Ready xxx
+2015-07-04 18:01:41.745 haoshiyou-ionic[78931:993840] 111
+2015-07-04 18:01:41.745 haoshiyou-ionic[78931:993840] watch fired true
+2015-07-04 18:01:43.334 haoshiyou-ionic[78931:993840] 222 
+2015-07-04 18:01:46.640 haoshiyou-ionic[78931:993840] 333 
+2015-07-04 18:01:46.640 haoshiyou-ionic[78931:993840] 444 0
+2015-07-04 18:01:46.640 haoshiyou-ionic[78931:993840] 444 1
+2015-07-04 18:01:46.640 haoshiyou-ionic[78931:993840] 444 2
+2015-07-04 18:03:26.477 haoshiyou-ionic[79606:997394] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C09EAD71-A2F4-4B7A-8CC9-AEA49461A6AB/Library/Cookies/Cookies.binarycookies
+2015-07-04 18:03:26.540 haoshiyou-ionic[79606:997394] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 18:03:26.540 haoshiyou-ionic[79606:997394] Multi-tasking -> Device: YES, App: YES
+2015-07-04 18:03:26.542 haoshiyou-ionic[79606:997394] Unlimited access to network resources
+2015-07-04 18:03:26.650 haoshiyou-ionic[79606:997394] [CDVTimer][keyboard] 0.047982ms
+2015-07-04 18:03:26.671 haoshiyou-ionic[79606:997394] [CDVTimer][splashscreen] 20.160019ms
+2015-07-04 18:03:26.671 haoshiyou-ionic[79606:997394] [CDVTimer][TotalPluginStartup] 20.501971ms
+2015-07-04 18:03:26.745 haoshiyou-ionic[79606:997394] Resetting plugins due to page load.
+2015-07-04 18:03:27.133 haoshiyou-ionic[79606:997394] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/8D83F9E4-EA20-4703-BAFE-F17F71BB0C8C/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 18:03:27.134 haoshiyou-ionic[79606:997394] ionic Ready xxx
+2015-07-04 18:03:29.431 haoshiyou-ionic[79606:997394] 111
+2015-07-04 18:03:29.431 haoshiyou-ionic[79606:997394] watch fired true
+2015-07-04 18:03:30.777 haoshiyou-ionic[79606:997394] 222 
+2015-07-04 18:03:34.370 haoshiyou-ionic[79606:997394] 333 
+2015-07-04 18:03:34.370 haoshiyou-ionic[79606:997394] 444 0
+2015-07-04 18:03:34.370 haoshiyou-ionic[79606:997394] 444 1
+2015-07-04 18:03:34.370 haoshiyou-ionic[79606:997394] 444 2
+2015-07-04 18:03:34.855 haoshiyou-ionic[79606:997394] {"data":{"error":{"message":"Unsupported source URL: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C09EAD71-A2F4-4B7A-8CC9-AEA49461A6AB/tmp/cdv_photo_016.jpg"}},"status":400,"config":{"method":"POST","transformRequest":[null],"transformResponse":[null],"url":"https://api.cloudinary.com/v1_1/xinbenlv/image/upload","data":{"upload_preset":"haoshiyou-dev","file":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C09EAD71-A2F4-4B7A-8CC9-AEA49461A6AB/tmp/cdv_photo_016.jpg"},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json;charset=utf-8"}},"statusText":"Bad Request"}
+2015-07-04 18:30:38.204 haoshiyou-ionic[81617:1019814] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/A28F8CE6-A9D7-4C47-AD36-598F094E153F/Library/Cookies/Cookies.binarycookies
+2015-07-04 18:30:38.271 haoshiyou-ionic[81617:1019814] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 18:30:38.271 haoshiyou-ionic[81617:1019814] Multi-tasking -> Device: YES, App: YES
+2015-07-04 18:30:38.273 haoshiyou-ionic[81617:1019814] Unlimited access to network resources
+2015-07-04 18:30:38.377 haoshiyou-ionic[81617:1019814] [CDVTimer][keyboard] 0.048995ms
+2015-07-04 18:30:38.404 haoshiyou-ionic[81617:1019814] [CDVTimer][splashscreen] 26.741982ms
+2015-07-04 18:30:38.407 haoshiyou-ionic[81617:1019814] [CDVTimer][file] 2.547979ms
+2015-07-04 18:30:38.407 haoshiyou-ionic[81617:1019814] [CDVTimer][TotalPluginStartup] 29.741943ms
+2015-07-04 18:30:38.486 haoshiyou-ionic[81617:1019814] Resetting plugins due to page load.
+2015-07-04 18:30:38.666 haoshiyou-ionic[81617:1019814] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/ED75D7C0-C516-4DA1-82DD-F2C5DD5508ED/haoshiyou-ionic.app/www/index.html
+2015-07-04 18:31:35.857 haoshiyou-ionic[82265:1022241] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/B8604AE8-9CD7-4B0C-9CE3-D2D50509390E/Library/Cookies/Cookies.binarycookies
+2015-07-04 18:31:35.923 haoshiyou-ionic[82265:1022241] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 18:31:35.923 haoshiyou-ionic[82265:1022241] Multi-tasking -> Device: YES, App: YES
+2015-07-04 18:31:35.925 haoshiyou-ionic[82265:1022241] Unlimited access to network resources
+2015-07-04 18:31:36.026 haoshiyou-ionic[82265:1022241] [CDVTimer][keyboard] 0.064015ms
+2015-07-04 18:31:36.045 haoshiyou-ionic[82265:1022241] [CDVTimer][splashscreen] 19.443989ms
+2015-07-04 18:31:36.047 haoshiyou-ionic[82265:1022241] [CDVTimer][file] 1.975000ms
+2015-07-04 18:31:36.048 haoshiyou-ionic[82265:1022241] [CDVTimer][TotalPluginStartup] 21.898985ms
+2015-07-04 18:31:36.128 haoshiyou-ionic[82265:1022241] Resetting plugins due to page load.
+2015-07-04 18:31:36.347 haoshiyou-ionic[82265:1022241] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/2FB18B27-0899-4489-AF6B-C504FB4EAEDD/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 18:31:36.612 haoshiyou-ionic[82265:1022241] ionic Ready xxx
+2015-07-04 18:31:40.103 haoshiyou-ionic[82265:1022241] 111
+2015-07-04 18:31:40.103 haoshiyou-ionic[82265:1022241] watch fired true
+2015-07-04 18:31:41.615 haoshiyou-ionic[82265:1022241] 222 
+2015-07-04 18:31:45.083 haoshiyou-ionic[82265:1022241] 333 
+2015-07-04 18:31:45.083 haoshiyou-ionic[82265:1022241] 444 0
+2015-07-04 18:33:09.691 haoshiyou-ionic[82950:1025981] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/79A34462-0DBD-46D5-95FA-11CDB2555ECC/Library/Cookies/Cookies.binarycookies
+2015-07-04 18:33:09.762 haoshiyou-ionic[82950:1025981] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 18:33:09.762 haoshiyou-ionic[82950:1025981] Multi-tasking -> Device: YES, App: YES
+2015-07-04 18:33:09.764 haoshiyou-ionic[82950:1025981] Unlimited access to network resources
+2015-07-04 18:33:09.867 haoshiyou-ionic[82950:1025981] [CDVTimer][keyboard] 0.046015ms
+2015-07-04 18:33:09.888 haoshiyou-ionic[82950:1025981] [CDVTimer][splashscreen] 20.845950ms
+2015-07-04 18:33:09.891 haoshiyou-ionic[82950:1025981] [CDVTimer][file] 2.467036ms
+2015-07-04 18:33:09.891 haoshiyou-ionic[82950:1025981] [CDVTimer][TotalPluginStartup] 23.814023ms
+2015-07-04 18:33:09.973 haoshiyou-ionic[82950:1025981] Resetting plugins due to page load.
+2015-07-04 18:33:10.205 haoshiyou-ionic[82950:1025981] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/CC32AD6D-2317-4474-9BB8-132DDBE5C6DD/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 18:33:10.596 haoshiyou-ionic[82950:1025981] ionic Ready xxx
+2015-07-04 18:33:17.933 haoshiyou-ionic[82950:1025981] 111
+2015-07-04 18:33:17.933 haoshiyou-ionic[82950:1025981] watch fired true
+2015-07-04 18:33:21.649 haoshiyou-ionic[82950:1025981] 222 
+2015-07-04 18:33:24.806 haoshiyou-ionic[82950:1025981] 333 
+2015-07-04 18:33:24.806 haoshiyou-ionic[82950:1025981] 444 0
+2015-07-04 18:33:24.807 haoshiyou-ionic[82950:1025981] ERROR: {"line":203,"column":41,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/CC32AD6D-2317-4474-9BB8-132DDBE5C6DD/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 18:33:24.808 haoshiyou-ionic[82950:1025981] 444 1
+2015-07-04 18:33:24.808 haoshiyou-ionic[82950:1025981] ERROR: {"line":203,"column":41,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/CC32AD6D-2317-4474-9BB8-132DDBE5C6DD/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 18:33:24.808 haoshiyou-ionic[82950:1025981] 444 2
+2015-07-04 18:33:24.809 haoshiyou-ionic[82950:1025981] ERROR: {"line":203,"column":41,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/CC32AD6D-2317-4474-9BB8-132DDBE5C6DD/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 18:33:24.809 haoshiyou-ionic[82950:1025981] Start upload XXX
+2015-07-04 18:33:24.809 haoshiyou-ionic[82950:1025981] []
+2015-07-04 18:33:24.809 haoshiyou-ionic[82950:1025981] End upload XXX
+2015-07-04 18:34:27.492 haoshiyou-ionic[83638:1028679] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/25BB1092-5252-4C4A-9F9B-A569824FC58D/Library/Cookies/Cookies.binarycookies
+2015-07-04 18:34:27.557 haoshiyou-ionic[83638:1028679] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 18:34:27.557 haoshiyou-ionic[83638:1028679] Multi-tasking -> Device: YES, App: YES
+2015-07-04 18:34:27.559 haoshiyou-ionic[83638:1028679] Unlimited access to network resources
+2015-07-04 18:34:27.658 haoshiyou-ionic[83638:1028679] [CDVTimer][keyboard] 0.051975ms
+2015-07-04 18:34:27.681 haoshiyou-ionic[83638:1028679] [CDVTimer][splashscreen] 23.037016ms
+2015-07-04 18:34:27.684 haoshiyou-ionic[83638:1028679] [CDVTimer][file] 2.875030ms
+2015-07-04 18:34:27.685 haoshiyou-ionic[83638:1028679] [CDVTimer][TotalPluginStartup] 26.437044ms
+2015-07-04 18:34:27.754 haoshiyou-ionic[83638:1028679] Resetting plugins due to page load.
+2015-07-04 18:34:27.973 haoshiyou-ionic[83638:1028679] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/29DECE1B-5740-4DFA-9CAC-4DE75ACDC6F4/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 18:34:28.225 haoshiyou-ionic[83638:1028679] ionic Ready xxx
+2015-07-04 18:34:30.979 haoshiyou-ionic[83638:1028679] 111
+2015-07-04 18:34:30.979 haoshiyou-ionic[83638:1028679] watch fired true
+2015-07-04 18:34:32.422 haoshiyou-ionic[83638:1028679] 222 
+2015-07-04 18:34:35.019 haoshiyou-ionic[83638:1028679] 333 
+2015-07-04 18:34:35.019 haoshiyou-ionic[83638:1028679] 444 0
+2015-07-04 18:34:35.019 haoshiyou-ionic[83638:1028679] {"line":203,"column":41,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/29DECE1B-5740-4DFA-9CAC-4DE75ACDC6F4/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 18:34:35.020 haoshiyou-ionic[83638:1028679] 444 1
+2015-07-04 18:34:35.020 haoshiyou-ionic[83638:1028679] {"line":203,"column":41,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/29DECE1B-5740-4DFA-9CAC-4DE75ACDC6F4/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 18:34:35.020 haoshiyou-ionic[83638:1028679] Start upload XXX
+2015-07-04 18:34:35.020 haoshiyou-ionic[83638:1028679] []
+2015-07-04 18:34:35.020 haoshiyou-ionic[83638:1028679] End upload XXX
+2015-07-04 18:35:26.490 haoshiyou-ionic[84298:1031312] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C71F14E4-08EC-4620-959D-14E1308EA3BB/Library/Cookies/Cookies.binarycookies
+2015-07-04 18:35:26.558 haoshiyou-ionic[84298:1031312] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 18:35:26.558 haoshiyou-ionic[84298:1031312] Multi-tasking -> Device: YES, App: YES
+2015-07-04 18:35:26.560 haoshiyou-ionic[84298:1031312] Unlimited access to network resources
+2015-07-04 18:35:26.664 haoshiyou-ionic[84298:1031312] [CDVTimer][keyboard] 0.048995ms
+2015-07-04 18:35:26.687 haoshiyou-ionic[84298:1031312] [CDVTimer][splashscreen] 23.530960ms
+2015-07-04 18:35:26.690 haoshiyou-ionic[84298:1031312] [CDVTimer][file] 2.471030ms
+2015-07-04 18:35:26.690 haoshiyou-ionic[84298:1031312] [CDVTimer][TotalPluginStartup] 26.549995ms
+2015-07-04 18:35:26.763 haoshiyou-ionic[84298:1031312] Resetting plugins due to page load.
+2015-07-04 18:35:26.983 haoshiyou-ionic[84298:1031312] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/A85F09BF-D459-402C-B1F5-81DF5D2E45AF/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 18:35:27.252 haoshiyou-ionic[84298:1031312] ionic Ready xxx
+2015-07-04 18:35:31.812 haoshiyou-ionic[84298:1031312] 111
+2015-07-04 18:35:31.812 haoshiyou-ionic[84298:1031312] watch fired true
+2015-07-04 18:35:33.589 haoshiyou-ionic[84298:1031312] 222 
+2015-07-04 18:35:36.282 haoshiyou-ionic[84298:1031312] 333 
+2015-07-04 18:35:36.282 haoshiyou-ionic[84298:1031312] 444 0
+2015-07-04 18:35:36.283 haoshiyou-ionic[84298:1031312] 444 1
+2015-07-04 18:35:36.293 haoshiyou-ionic[84298:1031312] {"code":5,"message":"ENCODING_ERR"}
+2015-07-04 19:01:38.244 haoshiyou-ionic[85505:1049027] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/9060CFED-8032-4DE0-AA0F-31C4CB8C90D3/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:01:38.310 haoshiyou-ionic[85505:1049027] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:01:38.311 haoshiyou-ionic[85505:1049027] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:01:38.312 haoshiyou-ionic[85505:1049027] Unlimited access to network resources
+2015-07-04 19:01:38.429 haoshiyou-ionic[85505:1049027] [CDVTimer][keyboard] 0.059009ms
+2015-07-04 19:01:38.449 haoshiyou-ionic[85505:1049027] [CDVTimer][splashscreen] 19.777954ms
+2015-07-04 19:01:38.453 haoshiyou-ionic[85505:1049027] [CDVTimer][file] 3.652990ms
+2015-07-04 19:01:38.454 haoshiyou-ionic[85505:1049027] [CDVTimer][TotalPluginStartup] 24.158001ms
+2015-07-04 19:01:38.504 haoshiyou-ionic[85505:1049027] Resetting plugins due to page load.
+2015-07-04 19:01:38.732 haoshiyou-ionic[85505:1049027] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/E7FBE9E9-6433-467D-B83B-09AE2CF8B35C/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:01:39.007 haoshiyou-ionic[85505:1049027] ionic Ready xxx
+2015-07-04 19:02:13.877 haoshiyou-ionic[85505:1049027] 111
+2015-07-04 19:02:13.877 haoshiyou-ionic[85505:1049027] watch fired true
+2015-07-04 19:02:15.260 haoshiyou-ionic[85505:1049027] 222 
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] 333 
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] 444 0
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] {"line":199,"column":49,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/E7FBE9E9-6433-467D-B83B-09AE2CF8B35C/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] 444 1
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] {"line":199,"column":49,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/E7FBE9E9-6433-467D-B83B-09AE2CF8B35C/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] 444 2
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] {"line":199,"column":49,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/E7FBE9E9-6433-467D-B83B-09AE2CF8B35C/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] Start upload XXX
+2015-07-04 19:02:19.401 haoshiyou-ionic[85505:1049027] []
+2015-07-04 19:02:19.402 haoshiyou-ionic[85505:1049027] End upload XXX
+2015-07-04 19:03:13.403 haoshiyou-ionic[86186:1052554] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/C04F9D8D-9F56-4238-8090-90CA10347979/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:03:13.469 haoshiyou-ionic[86186:1052554] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:03:13.469 haoshiyou-ionic[86186:1052554] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:03:13.471 haoshiyou-ionic[86186:1052554] Unlimited access to network resources
+2015-07-04 19:03:13.571 haoshiyou-ionic[86186:1052554] [CDVTimer][keyboard] 0.051975ms
+2015-07-04 19:03:13.590 haoshiyou-ionic[86186:1052554] [CDVTimer][splashscreen] 19.501030ms
+2015-07-04 19:03:13.593 haoshiyou-ionic[86186:1052554] [CDVTimer][file] 2.728999ms
+2015-07-04 19:03:13.593 haoshiyou-ionic[86186:1052554] [CDVTimer][TotalPluginStartup] 22.736013ms
+2015-07-04 19:03:13.658 haoshiyou-ionic[86186:1052554] Resetting plugins due to page load.
+2015-07-04 19:03:13.869 haoshiyou-ionic[86186:1052554] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/FB0D3054-486C-4783-ADCD-4C94F56D55D9/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:03:14.127 haoshiyou-ionic[86186:1052554] ionic Ready xxx
+2015-07-04 19:03:16.713 haoshiyou-ionic[86186:1052554] 111
+2015-07-04 19:03:16.714 haoshiyou-ionic[86186:1052554] watch fired true
+2015-07-04 19:03:18.705 haoshiyou-ionic[86186:1052554] 222 
+2015-07-04 19:03:21.718 haoshiyou-ionic[86186:1052554] 333 
+2015-07-04 19:03:21.718 haoshiyou-ionic[86186:1052554] 444 0
+2015-07-04 19:03:21.718 haoshiyou-ionic[86186:1052554] {"line":199,"column":63,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/FB0D3054-486C-4783-ADCD-4C94F56D55D9/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:03:21.719 haoshiyou-ionic[86186:1052554] 444 1
+2015-07-04 19:03:21.719 haoshiyou-ionic[86186:1052554] {"line":199,"column":63,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/FB0D3054-486C-4783-ADCD-4C94F56D55D9/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:03:21.719 haoshiyou-ionic[86186:1052554] Start upload XXX
+2015-07-04 19:03:21.719 haoshiyou-ionic[86186:1052554] []
+2015-07-04 19:03:21.719 haoshiyou-ionic[86186:1052554] End upload XXX
+2015-07-04 19:06:28.939 haoshiyou-ionic[86923:1056609] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/B0477917-E053-489E-B7D7-555EB78CF63D/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:06:29.000 haoshiyou-ionic[86923:1056609] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:06:29.001 haoshiyou-ionic[86923:1056609] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:06:29.002 haoshiyou-ionic[86923:1056609] Unlimited access to network resources
+2015-07-04 19:06:29.106 haoshiyou-ionic[86923:1056609] [CDVTimer][keyboard] 0.060022ms
+2015-07-04 19:06:29.129 haoshiyou-ionic[86923:1056609] [CDVTimer][splashscreen] 22.800982ms
+2015-07-04 19:06:29.132 haoshiyou-ionic[86923:1056609] [CDVTimer][file] 3.122985ms
+2015-07-04 19:06:29.133 haoshiyou-ionic[86923:1056609] [CDVTimer][TotalPluginStartup] 26.503980ms
+2015-07-04 19:06:29.199 haoshiyou-ionic[86923:1056609] Resetting plugins due to page load.
+2015-07-04 19:06:29.419 haoshiyou-ionic[86923:1056609] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/FD5AC845-4132-45B7-ACB1-F7D32D26E015/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:06:29.685 haoshiyou-ionic[86923:1056609] ionic Ready xxx
+2015-07-04 19:06:33.187 haoshiyou-ionic[86923:1056609] 111
+2015-07-04 19:06:33.187 haoshiyou-ionic[86923:1056609] watch fired true
+2015-07-04 19:06:35.027 haoshiyou-ionic[86923:1056609] 222 
+2015-07-04 19:06:37.714 haoshiyou-ionic[86923:1056609] 333 
+2015-07-04 19:06:37.715 haoshiyou-ionic[86923:1056609] 444 0
+2015-07-04 19:06:37.717 haoshiyou-ionic[86923:1056609] 444 1
+2015-07-04 19:06:38.253 haoshiyou-ionic[86923:1056670] File Transfer Finished with response code 400
+2015-07-04 19:06:38.255 haoshiyou-ionic[86923:1056670] FileTransferError {
+    body = "{\"error\":{\"message\":\"Upload preset must be specified when using unsigned upload\"}}";
+    code = 3;
+    "http_status" = 400;
+    source = "file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/B0477917-E053-489E-B7D7-555EB78CF63D/tmp/cdv_photo_033.jpg";
+    target = "https://api.cloudinary.com/v1_1/xinbenlv/image/upload";
+}
+2015-07-04 19:06:38.262 haoshiyou-ionic[86923:1056609] {"code":3,"source":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/B0477917-E053-489E-B7D7-555EB78CF63D/tmp/cdv_photo_033.jpg","target":"https://api.cloudinary.com/v1_1/xinbenlv/image/upload","http_status":400,"body":"{\"error\":{\"message\":\"Upload preset must be specified when using unsigned upload\"}}","exception":null}
+2015-07-04 19:06:38.470 haoshiyou-ionic[86923:1056769] File Transfer Finished with response code 400
+2015-07-04 19:06:38.470 haoshiyou-ionic[86923:1056769] FileTransferError {
+    body = "{\"error\":{\"message\":\"Upload preset must be specified when using unsigned upload\"}}";
+    code = 3;
+    "http_status" = 400;
+    source = "file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/B0477917-E053-489E-B7D7-555EB78CF63D/tmp/cdv_photo_034.jpg";
+    target = "https://api.cloudinary.com/v1_1/xinbenlv/image/upload";
+}
+2015-07-04 19:08:32.143 haoshiyou-ionic[88063:1066121] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/288AA69B-9685-4325-A294-E14210427B7A/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:08:32.211 haoshiyou-ionic[88063:1066121] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:08:32.211 haoshiyou-ionic[88063:1066121] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:08:32.212 haoshiyou-ionic[88063:1066121] Unlimited access to network resources
+2015-07-04 19:08:32.314 haoshiyou-ionic[88063:1066121] [CDVTimer][keyboard] 0.051022ms
+2015-07-04 19:08:32.336 haoshiyou-ionic[88063:1066121] [CDVTimer][splashscreen] 21.771014ms
+2015-07-04 19:08:32.339 haoshiyou-ionic[88063:1066121] [CDVTimer][file] 3.122985ms
+2015-07-04 19:08:32.339 haoshiyou-ionic[88063:1066121] [CDVTimer][TotalPluginStartup] 25.364041ms
+2015-07-04 19:08:32.406 haoshiyou-ionic[88063:1066121] Resetting plugins due to page load.
+2015-07-04 19:08:32.618 haoshiyou-ionic[88063:1066121] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/D692563D-F6BA-414D-AE8D-73C010F88613/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:08:32.877 haoshiyou-ionic[88063:1066121] ionic Ready xxx
+2015-07-04 19:08:50.165 haoshiyou-ionic[88063:1066121] 111
+2015-07-04 19:08:50.165 haoshiyou-ionic[88063:1066121] watch fired true
+2015-07-04 19:08:51.648 haoshiyou-ionic[88063:1066121] 222 
+2015-07-04 19:08:54.919 haoshiyou-ionic[88063:1066121] 333 
+2015-07-04 19:08:54.919 haoshiyou-ionic[88063:1066121] 444 0
+2015-07-04 19:08:54.921 haoshiyou-ionic[88063:1066121] 444 1
+2015-07-04 19:08:56.375 haoshiyou-ionic[88063:1066623] File Transfer Finished with response code 200
+2015-07-04 19:08:56.613 haoshiyou-ionic[88063:1066623] File Transfer Finished with response code 200
+2015-07-04 19:08:56.618 haoshiyou-ionic[88063:1066121] Start upload XXX
+2015-07-04 19:08:56.618 haoshiyou-ionic[88063:1066121] {"line":212,"column":71,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/D692563D-F6BA-414D-AE8D-73C010F88613/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:09:42.182 haoshiyou-ionic[88748:1069132] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/2DAA9803-851A-4AB0-A5B8-77268CF15E0A/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:09:42.244 haoshiyou-ionic[88748:1069132] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:09:42.245 haoshiyou-ionic[88748:1069132] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:09:42.246 haoshiyou-ionic[88748:1069132] Unlimited access to network resources
+2015-07-04 19:09:42.351 haoshiyou-ionic[88748:1069132] [CDVTimer][keyboard] 0.054002ms
+2015-07-04 19:09:42.371 haoshiyou-ionic[88748:1069132] [CDVTimer][splashscreen] 19.253016ms
+2015-07-04 19:09:42.373 haoshiyou-ionic[88748:1069132] [CDVTimer][file] 1.911044ms
+2015-07-04 19:09:42.373 haoshiyou-ionic[88748:1069132] [CDVTimer][TotalPluginStartup] 21.660984ms
+2015-07-04 19:09:42.440 haoshiyou-ionic[88748:1069132] Resetting plugins due to page load.
+2015-07-04 19:09:42.650 haoshiyou-ionic[88748:1069132] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/DE2B584D-7B9F-4A56-A605-40F7C859BDF0/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:09:42.903 haoshiyou-ionic[88748:1069132] ionic Ready xxx
+2015-07-04 19:09:54.847 haoshiyou-ionic[88748:1069132] 111
+2015-07-04 19:09:54.847 haoshiyou-ionic[88748:1069132] watch fired true
+2015-07-04 19:09:56.131 haoshiyou-ionic[88748:1069132] 222 
+2015-07-04 19:09:59.105 haoshiyou-ionic[88748:1069132] 333 
+2015-07-04 19:09:59.105 haoshiyou-ionic[88748:1069132] 444 0
+2015-07-04 19:09:59.105 haoshiyou-ionic[88748:1069132] 444 1
+2015-07-04 19:10:00.292 haoshiyou-ionic[88748:1069491] File Transfer Finished with response code 200
+2015-07-04 19:10:00.721 haoshiyou-ionic[88748:1069464] File Transfer Finished with response code 200
+2015-07-04 19:10:00.727 haoshiyou-ionic[88748:1069132] Start upload XXX
+2015-07-04 19:10:00.727 haoshiyou-ionic[88748:1069132] [{"responseCode":200,"response":"{\"public_id\":\"uutr0wkllvujwekbcsmj\",\"version\":1436062200,\"signature\":\"2b8dd46148c7eba662d07a5befa3561e218feee6\",\"width\":51,\"height\":34,\"format\":\"jpg\",\"resource_type\":\"image\",\"created_at\":\"2015-07-05T02:10:00Z\",\"tags\":[],\"bytes\":2113,\"type\":\"upload\",\"etag\":\"b1d67d6a0d042fd58ae9d1e3fe2aeb1c\",\"url\":\"http://res.cloudinary.com/xinbenlv/image/upload/v1436062200/uutr0wkllvujwekbcsmj.jpg\",\"secure_url\":\"https://res.cloudinary.com/xinbenlv/image/upload/v1436062200/uutr0wkllvujwekbcsmj.jpg\",\"original_filename\":\"no-filename\"}","bytesSent":2920,"headers":{"X-Request-Id":"4996d720c81ec7a6","Transfer-Encoding":"Identity","Server":"cloudinary","Content-Type":"application/json; charset=utf-8","Connection":"keep-alive","Content-Encoding":"gzip","Status":"200 OK","Cache-Control":"max-age=0, private, must-revalidate","Date":"Sun, 05 Jul 2015 02:10:00 GMT","X-UA-Compatible":"IE=Edge,chrome=1"}},{"responseCode":200,"response":"{\"public_id\":\"o9vjunzhy8i7afzjfdfk\",\"version\":1436062200,\"signature\":\"cfaca1a491986d27fce251d3f1265f36cc8baef3\",\"width\":34,\"height\":50,\"format\":\"jpg\",\"resource_type\":\"image\",\"created_at\":\"2015-07-05T02:10:00Z\",\"tags\":[],\"bytes\":2084,\"type\":\"upload\",\"etag\":\"39e187e3e872acf602eda385474c4a26\",\"url\":\"http://res.cloudinary.com/xinbenlv/image/upload/v1436062200/o9vjunzhy8i7afzjfdfk.jpg\",\"secure_url\":\"https://res.cloudinary.com/xinbenlv/image/upload/v1436062200/o9vjunzhy8i7afzjfdfk.jpg\",\"original_filename\":\"no-filename\"}","bytesSent":2891,"headers":{"X-Request-Id":"553a5ac14fd62c4a","Transfer-Encoding":"Identity","Server":"cloudinary","Content-Type":"application/json; charset=utf-8","Connection":"keep-alive","Content-Encoding":"gzip","Status":"200 OK","Cache-Control":"max-age=0, private, must-revalidate","Date":"Sun, 05 Jul 2015 02:10:00 GMT","X-UA-Compatible":"IE=Edge,chrome=1"}}]
+2015-07-04 19:10:00.728 haoshiyou-ionic[88748:1069132] {"line":214,"column":71,"sourceURL":"file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/DE2B584D-7B9F-4A56-A605-40F7C859BDF0/haoshiyou-ionic.app/www/js/ctrls/post-ctrls.js"}
+2015-07-04 19:10:42.879 haoshiyou-ionic[89451:1071572] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/B879BE12-6C5D-4073-B00F-958D07B56C8A/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:10:42.939 haoshiyou-ionic[89451:1071572] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:10:42.939 haoshiyou-ionic[89451:1071572] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:10:42.940 haoshiyou-ionic[89451:1071572] Unlimited access to network resources
+2015-07-04 19:10:43.043 haoshiyou-ionic[89451:1071572] [CDVTimer][keyboard] 0.052035ms
+2015-07-04 19:10:43.063 haoshiyou-ionic[89451:1071572] [CDVTimer][splashscreen] 20.242989ms
+2015-07-04 19:10:43.066 haoshiyou-ionic[89451:1071572] [CDVTimer][file] 2.327979ms
+2015-07-04 19:10:43.066 haoshiyou-ionic[89451:1071572] [CDVTimer][TotalPluginStartup] 23.132026ms
+2015-07-04 19:10:43.139 haoshiyou-ionic[89451:1071572] Resetting plugins due to page load.
+2015-07-04 19:10:43.361 haoshiyou-ionic[89451:1071572] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/FC0C75CB-18B3-475C-81AC-6B4B77745940/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:10:43.613 haoshiyou-ionic[89451:1071572] ionic Ready xxx
+2015-07-04 19:10:45.970 haoshiyou-ionic[89451:1071572] 111
+2015-07-04 19:10:45.970 haoshiyou-ionic[89451:1071572] watch fired true
+2015-07-04 19:10:47.796 haoshiyou-ionic[89451:1071572] 222 
+2015-07-04 19:10:50.515 haoshiyou-ionic[89451:1071572] 333 
+2015-07-04 19:10:50.515 haoshiyou-ionic[89451:1071572] 444 0
+2015-07-04 19:10:50.516 haoshiyou-ionic[89451:1071572] 444 1
+2015-07-04 19:10:51.484 haoshiyou-ionic[89451:1071756] File Transfer Finished with response code 200
+2015-07-04 19:10:51.697 haoshiyou-ionic[89451:1071663] File Transfer Finished with response code 200
+2015-07-04 19:10:51.731 haoshiyou-ionic[89451:1071572] Start upload XXX
+2015-07-04 19:10:51.731 haoshiyou-ionic[89451:1071572] [{"responseCode":200,"response":"{\"public_id\":\"mcnohnwjjy6mnvn2azqh\",\"version\":1436062250,\"signature\":\"9533cfeeea41eb2c2bf7815cad32bd7ab2b3a06d\",\"width\":51,\"height\":34,\"format\":\"jpg\",\"resource_type\":\"image\",\"created_at\":\"2015-07-05T02:10:50Z\",\"tags\":[],\"bytes\":2113,\"type\":\"upload\",\"etag\":\"b1d67d6a0d042fd58ae9d1e3fe2aeb1c\",\"url\":\"http://res.cloudinary.com/xinbenlv/image/upload/v1436062250/mcnohnwjjy6mnvn2azqh.jpg\",\"secure_url\":\"https://res.cloudinary.com/xinbenlv/image/upload/v1436062250/mcnohnwjjy6mnvn2azqh.jpg\",\"original_filename\":\"no-filename\"}","bytesSent":2920,"headers":{"X-Request-Id":"9e24fdb7ba8b7258","Transfer-Encoding":"Identity","Server":"cloudinary","Content-Type":"application/json; charset=utf-8","Connection":"keep-alive","Content-Encoding":"gzip","Status":"200 OK","Cache-Control":"max-age=0, private, must-revalidate","Date":"Sun, 05 Jul 2015 02:10:51 GMT","X-UA-Compatible":"IE=Edge,chrome=1"}},{"responseCode":200,"response":"{\"public_id\":\"gngofupr5bphfbotd0vs\",\"version\":1436062251,\"signature\":\"1ede8cb755eeb7f479a7cf36ec3429cb25f40a01\",\"width\":34,\"height\":50,\"format\":\"jpg\",\"resource_type\":\"image\",\"created_at\":\"2015-07-05T02:10:51Z\",\"tags\":[],\"bytes\":2084,\"type\":\"upload\",\"etag\":\"39e187e3e872acf602eda385474c4a26\",\"url\":\"http://res.cloudinary.com/xinbenlv/image/upload/v1436062251/gngofupr5bphfbotd0vs.jpg\",\"secure_url\":\"https://res.cloudinary.com/xinbenlv/image/upload/v1436062251/gngofupr5bphfbotd0vs.jpg\",\"original_filename\":\"no-filename\"}","bytesSent":2891,"headers":{"X-Request-Id":"fc99d0c09dcc4677","Transfer-Encoding":"Identity","Server":"cloudinary","Content-Type":"application/json; charset=utf-8","Connection":"keep-alive","Content-Encoding":"gzip","Status":"200 OK","Cache-Control":"max-age=0, private, must-revalidate","Date":"Sun, 05 Jul 2015 02:10:51 GMT","X-UA-Compatible":"IE=Edge,chrome=1"}}]
+2015-07-04 19:10:51.732 haoshiyou-ionic[89451:1071572] End upload XXX
+2015-07-04 19:14:26.831 haoshiyou-ionic[90150:1076150] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/67234C82-CCCB-4299-B191-17194FBF8CA6/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:14:26.892 haoshiyou-ionic[90150:1076150] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:14:26.892 haoshiyou-ionic[90150:1076150] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:14:26.894 haoshiyou-ionic[90150:1076150] Unlimited access to network resources
+2015-07-04 19:14:27.004 haoshiyou-ionic[90150:1076150] [CDVTimer][keyboard] 0.051975ms
+2015-07-04 19:14:27.023 haoshiyou-ionic[90150:1076150] [CDVTimer][splashscreen] 18.395960ms
+2015-07-04 19:14:27.025 haoshiyou-ionic[90150:1076150] [CDVTimer][file] 2.604961ms
+2015-07-04 19:14:27.025 haoshiyou-ionic[90150:1076150] [CDVTimer][TotalPluginStartup] 21.450996ms
+2015-07-04 19:14:27.094 haoshiyou-ionic[90150:1076150] Resetting plugins due to page load.
+2015-07-04 19:14:27.322 haoshiyou-ionic[90150:1076150] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/34705E75-77C9-4306-9DFC-3382E38B3FF7/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:14:27.574 haoshiyou-ionic[90150:1076150] ionic Ready xxx
+2015-07-04 19:14:50.267 haoshiyou-ionic[90150:1076150] 111
+2015-07-04 19:14:50.267 haoshiyou-ionic[90150:1076150] watch fired true
+2015-07-04 19:14:52.853 haoshiyou-ionic[90150:1076150] 222 
+2015-07-04 19:14:55.682 haoshiyou-ionic[90150:1076150] 333 
+2015-07-04 19:14:55.682 haoshiyou-ionic[90150:1076150] 444 0
+2015-07-04 19:14:55.683 haoshiyou-ionic[90150:1076150] 444 1
+2015-07-04 19:14:56.580 haoshiyou-ionic[90150:1076474] File Transfer Finished with response code 200
+2015-07-04 19:14:56.920 haoshiyou-ionic[90150:1076207] File Transfer Finished with response code 200
+2015-07-04 19:14:56.928 haoshiyou-ionic[90150:1076150] Start upload XXX
+2015-07-04 19:14:56.928 haoshiyou-ionic[90150:1076150] [{"responseCode":200,"response":"{\"public_id\":\"dv22ir3cwgrslpr7gv4q\",\"version\":1436062496,\"signature\":\"499909e333a7b25222676934dcebf47c2d1fe72b\",\"width\":51,\"height\":34,\"format\":\"jpg\",\"resource_type\":\"image\",\"created_at\":\"2015-07-05T02:14:56Z\",\"tags\":[],\"bytes\":2113,\"type\":\"upload\",\"etag\":\"b1d67d6a0d042fd58ae9d1e3fe2aeb1c\",\"url\":\"http://res.cloudinary.com/xinbenlv/image/upload/v1436062496/dv22ir3cwgrslpr7gv4q.jpg\",\"secure_url\":\"https://res.cloudinary.com/xinbenlv/image/upload/v1436062496/dv22ir3cwgrslpr7gv4q.jpg\",\"original_filename\":\"no-filename\"}","bytesSent":2920,"headers":{"X-Request-Id":"95bc40f62ed2edd5","Transfer-Encoding":"Identity","Server":"cloudinary","Content-Type":"application/json; charset=utf-8","Connection":"keep-alive","Content-Encoding":"gzip","Status":"200 OK","Cache-Control":"max-age=0, private, must-revalidate","Date":"Sun, 05 Jul 2015 02:14:56 GMT","X-UA-Compatible":"IE=Edge,chrome=1"}},{"responseCode":200,"response":"{\"public_id\":\"yreuyjeolqa0jzhscrwj\",\"version\":1436062496,\"signature\":\"a95e1db90866d7ef91e5c04db8092eabdecf88c8\",\"width\":34,\"height\":50,\"format\":\"jpg\",\"resource_type\":\"image\",\"created_at\":\"2015-07-05T02:14:56Z\",\"tags\":[],\"bytes\":2084,\"type\":\"upload\",\"etag\":\"39e187e3e872acf602eda385474c4a26\",\"url\":\"http://res.cloudinary.com/xinbenlv/image/upload/v1436062496/yreuyjeolqa0jzhscrwj.jpg\",\"secure_url\":\"https://res.cloudinary.com/xinbenlv/image/upload/v1436062496/yreuyjeolqa0jzhscrwj.jpg\",\"original_filename\":\"no-filename\"}","bytesSent":2891,"headers":{"X-Request-Id":"6447935eb53a983a","Transfer-Encoding":"Identity","Server":"cloudinary","Content-Type":"application/json; charset=utf-8","Connection":"keep-alive","Content-Encoding":"gzip","Status":"200 OK","Cache-Control":"max-age=0, private, must-revalidate","Date":"Sun, 05 Jul 2015 02:14:56 GMT","X-UA-Compatible":"IE=Edge,chrome=1"}}]
+2015-07-04 19:14:56.928 haoshiyou-ionic[90150:1076150] [null,null]
+2015-07-04 19:14:56.929 haoshiyou-ionic[90150:1076150] End upload XXX
+2015-07-04 19:17:15.468 haoshiyou-ionic[90884:1080117] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/6A0D81C2-FF27-4190-B608-ABA2B507158B/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:17:15.526 haoshiyou-ionic[90884:1080117] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:17:15.527 haoshiyou-ionic[90884:1080117] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:17:15.528 haoshiyou-ionic[90884:1080117] Unlimited access to network resources
+2015-07-04 19:17:15.634 haoshiyou-ionic[90884:1080117] [CDVTimer][keyboard] 0.046015ms
+2015-07-04 19:17:15.653 haoshiyou-ionic[90884:1080117] [CDVTimer][splashscreen] 18.477976ms
+2015-07-04 19:17:15.655 haoshiyou-ionic[90884:1080117] [CDVTimer][file] 2.438009ms
+2015-07-04 19:17:15.655 haoshiyou-ionic[90884:1080117] [CDVTimer][TotalPluginStartup] 21.373034ms
+2015-07-04 19:17:15.727 haoshiyou-ionic[90884:1080117] Resetting plugins due to page load.
+2015-07-04 19:17:15.941 haoshiyou-ionic[90884:1080117] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/68A2D659-18A4-43BF-9E55-429190E14073/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:17:16.198 haoshiyou-ionic[90884:1080117] ionic Ready xxx
+2015-07-04 19:17:29.905 haoshiyou-ionic[90884:1080117] 111
+2015-07-04 19:17:29.905 haoshiyou-ionic[90884:1080117] watch fired true
+2015-07-04 19:17:31.496 haoshiyou-ionic[90884:1080117] 222 
+2015-07-04 19:17:34.032 haoshiyou-ionic[90884:1080117] 333 
+2015-07-04 19:17:34.032 haoshiyou-ionic[90884:1080117] 444 0
+2015-07-04 19:17:34.033 haoshiyou-ionic[90884:1080117] 444 1
+2015-07-04 19:17:34.766 haoshiyou-ionic[90884:1080568] File Transfer Finished with response code 200
+2015-07-04 19:17:34.812 haoshiyou-ionic[90884:1080568] File Transfer Finished with response code 200
+2015-07-04 19:17:34.821 haoshiyou-ionic[90884:1080117] Start upload XXX
+2015-07-04 19:17:34.821 haoshiyou-ionic[90884:1080117] {"public_id":"mvbopsumgrohgx0m5jqu","version":1436062654,"signature":"e69dcafb32b56c71701126133cac24c50ee1531c","width":51,"height":34,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:17:34Z","tags":[],"bytes":2113,"type":"upload","etag":"b1d67d6a0d042fd58ae9d1e3fe2aeb1c","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062654/mvbopsumgrohgx0m5jqu.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062654/mvbopsumgrohgx0m5jqu.jpg","original_filename":"no-filename"}
+2015-07-04 19:17:34.821 haoshiyou-ionic[90884:1080117] {"public_id":"plb0zpl1whgojemmmm90","version":1436062654,"signature":"9bb67e871327c4367f855fc73eb9846c23491b2f","width":51,"height":34,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:17:34Z","tags":[],"bytes":2113,"type":"upload","etag":"b1d67d6a0d042fd58ae9d1e3fe2aeb1c","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062654/plb0zpl1whgojemmmm90.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062654/plb0zpl1whgojemmmm90.jpg","original_filename":"no-filename"}
+2015-07-04 19:17:34.822 haoshiyou-ionic[90884:1080117] ["mvbopsumgrohgx0m5jqu","plb0zpl1whgojemmmm90"]
+2015-07-04 19:17:34.822 haoshiyou-ionic[90884:1080117] End upload XXX
+2015-07-04 19:18:25.719 haoshiyou-ionic[91561:1082696] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/0005BE07-7D50-4D0B-A1FB-C5A2AD13A4B8/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:18:25.780 haoshiyou-ionic[91561:1082696] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:18:25.781 haoshiyou-ionic[91561:1082696] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:18:25.783 haoshiyou-ionic[91561:1082696] Unlimited access to network resources
+2015-07-04 19:18:25.896 haoshiyou-ionic[91561:1082696] [CDVTimer][keyboard] 0.048995ms
+2015-07-04 19:18:25.921 haoshiyou-ionic[91561:1082696] [CDVTimer][splashscreen] 25.071025ms
+2015-07-04 19:18:25.924 haoshiyou-ionic[91561:1082696] [CDVTimer][file] 2.788007ms
+2015-07-04 19:18:25.924 haoshiyou-ionic[91561:1082696] [CDVTimer][TotalPluginStartup] 28.406024ms
+2015-07-04 19:18:25.991 haoshiyou-ionic[91561:1082696] Resetting plugins due to page load.
+2015-07-04 19:18:26.221 haoshiyou-ionic[91561:1082696] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/A3CC6913-5A3D-49F0-BF8C-18B10BF2056E/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:18:26.456 haoshiyou-ionic[91561:1082696] ionic Ready xxx
+2015-07-04 19:18:32.764 haoshiyou-ionic[91561:1082696] 111
+2015-07-04 19:18:32.765 haoshiyou-ionic[91561:1082696] watch fired true
+2015-07-04 19:18:34.398 haoshiyou-ionic[91561:1082696] 222 
+2015-07-04 19:18:36.823 haoshiyou-ionic[91561:1082696] 333 
+2015-07-04 19:18:36.823 haoshiyou-ionic[91561:1082696] 444 0
+2015-07-04 19:18:36.824 haoshiyou-ionic[91561:1082696] 444 1
+2015-07-04 19:18:37.415 haoshiyou-ionic[91561:1083304] File Transfer Finished with response code 200
+2015-07-04 19:18:37.517 haoshiyou-ionic[91561:1083304] File Transfer Finished with response code 200
+2015-07-04 19:18:37.526 haoshiyou-ionic[91561:1082696] Start upload XXX
+2015-07-04 19:18:37.526 haoshiyou-ionic[91561:1082696] {"public_id":"xhqwi3me4h2crlvy4nk9","version":1436062717,"signature":"d129f1dc12905d566bcc9a85e7d3ec9e1d1d0512","width":51,"height":34,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:18:37Z","tags":[],"bytes":2113,"type":"upload","etag":"b1d67d6a0d042fd58ae9d1e3fe2aeb1c","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062717/xhqwi3me4h2crlvy4nk9.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062717/xhqwi3me4h2crlvy4nk9.jpg","original_filename":"no-filename"}
+2015-07-04 19:18:37.527 haoshiyou-ionic[91561:1082696] {"public_id":"clduqfrauit7eal3sqq5","version":1436062717,"signature":"95f9eaa5637ff7ad4a04e1ab4b5fa9ea89642d0c","width":34,"height":50,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:18:37Z","tags":[],"bytes":2084,"type":"upload","etag":"39e187e3e872acf602eda385474c4a26","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062717/clduqfrauit7eal3sqq5.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062717/clduqfrauit7eal3sqq5.jpg","original_filename":"no-filename"}
+2015-07-04 19:18:37.527 haoshiyou-ionic[91561:1082696] ["xhqwi3me4h2crlvy4nk9","clduqfrauit7eal3sqq5"]
+2015-07-04 19:18:37.527 haoshiyou-ionic[91561:1082696] End upload XXX
+2015-07-04 19:19:57.057 haoshiyou-ionic[92219:1086632] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/9E864B53-2B83-4DD6-9FBD-C327BE5FFB3A/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:19:57.114 haoshiyou-ionic[92219:1086632] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:19:57.115 haoshiyou-ionic[92219:1086632] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:19:57.116 haoshiyou-ionic[92219:1086632] Unlimited access to network resources
+2015-07-04 19:19:57.218 haoshiyou-ionic[92219:1086632] [CDVTimer][keyboard] 0.072002ms
+2015-07-04 19:19:57.236 haoshiyou-ionic[92219:1086632] [CDVTimer][splashscreen] 18.097997ms
+2015-07-04 19:19:57.239 haoshiyou-ionic[92219:1086632] [CDVTimer][file] 2.353013ms
+2015-07-04 19:19:57.239 haoshiyou-ionic[92219:1086632] [CDVTimer][TotalPluginStartup] 20.946980ms
+2015-07-04 19:19:57.313 haoshiyou-ionic[92219:1086632] Resetting plugins due to page load.
+2015-07-04 19:19:57.532 haoshiyou-ionic[92219:1086632] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/EA0101F5-2E5B-4FE9-87CB-2B24B7338C33/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:19:57.788 haoshiyou-ionic[92219:1086632] ionic Ready xxx
+2015-07-04 19:20:01.499 haoshiyou-ionic[92219:1086632] 111
+2015-07-04 19:20:01.500 haoshiyou-ionic[92219:1086632] watch fired true
+2015-07-04 19:20:03.285 haoshiyou-ionic[92219:1086632] 222 
+2015-07-04 19:20:03.296 haoshiyou-ionic[92219:1086632] THREAD WARNING: ['ImagePicker'] took '10.655029' ms. Plugin should use a background thread.
+2015-07-04 19:20:06.187 haoshiyou-ionic[92219:1086632] 333 
+2015-07-04 19:20:06.187 haoshiyou-ionic[92219:1086632] 444 0
+2015-07-04 19:20:06.188 haoshiyou-ionic[92219:1086632] 444 1
+2015-07-04 19:20:06.189 haoshiyou-ionic[92219:1086632] 444 2
+2015-07-04 19:20:08.588 haoshiyou-ionic[92219:1086740] File Transfer Finished with response code 200
+2015-07-04 19:20:09.231 haoshiyou-ionic[92219:1086740] File Transfer Finished with response code 200
+2015-07-04 19:20:09.357 haoshiyou-ionic[92219:1086817] File Transfer Finished with response code 200
+2015-07-04 19:20:09.370 haoshiyou-ionic[92219:1086632] Start upload XXX
+2015-07-04 19:20:09.370 haoshiyou-ionic[92219:1086632] {"public_id":"awwvvcv5j5li9k4qpklv","version":1436062808,"signature":"f10a03ac8b5d02305067b56326a570d300144758","width":1500,"height":1001,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:20:08Z","tags":[],"bytes":1827763,"type":"upload","etag":"ecfa4429b0f8051f0820314d402bee19","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062808/awwvvcv5j5li9k4qpklv.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062808/awwvvcv5j5li9k4qpklv.jpg","original_filename":"no-filename"}
+2015-07-04 19:20:09.371 haoshiyou-ionic[92219:1086632] {"public_id":"xlemqngfm0mx8nciihl2","version":1436062809,"signature":"ad80b1c91e94b2f78f2b0244000635f03e0f21f5","width":834,"height":1250,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:20:09Z","tags":[],"bytes":942127,"type":"upload","etag":"fb4974ebfe25353a658c0e4baa6e6334","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062809/xlemqngfm0mx8nciihl2.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062809/xlemqngfm0mx8nciihl2.jpg","original_filename":"no-filename"}
+2015-07-04 19:20:09.371 haoshiyou-ionic[92219:1086632] {"public_id":"t3kgvuoufrx2qbzul01g","version":1436062809,"signature":"636d5c9faf93eceda423a91b424cc0333a60af61","width":1008,"height":669,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:20:09Z","tags":[],"bytes":523501,"type":"upload","etag":"ad813c28e5cf4a8e269e8b338d042ab6","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062809/t3kgvuoufrx2qbzul01g.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062809/t3kgvuoufrx2qbzul01g.jpg","original_filename":"no-filename"}
+2015-07-04 19:20:09.371 haoshiyou-ionic[92219:1086632] ["awwvvcv5j5li9k4qpklv","xlemqngfm0mx8nciihl2","t3kgvuoufrx2qbzul01g"]
+2015-07-04 19:20:09.371 haoshiyou-ionic[92219:1086632] End upload XXX
+2015-07-04 19:22:43.458 haoshiyou-ionic[92913:1090938] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/883C3454-237C-42BE-A6DC-5653743DACA3/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:22:43.589 haoshiyou-ionic[92913:1090938] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:22:43.589 haoshiyou-ionic[92913:1090938] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:22:43.591 haoshiyou-ionic[92913:1090938] Unlimited access to network resources
+2015-07-04 19:22:43.698 haoshiyou-ionic[92913:1090938] [CDVTimer][keyboard] 0.055969ms
+2015-07-04 19:22:43.712 haoshiyou-ionic[92913:1090938] [CDVTimer][splashscreen] 13.584971ms
+2015-07-04 19:22:43.714 haoshiyou-ionic[92913:1090938] [CDVTimer][file] 1.959980ms
+2015-07-04 19:22:43.714 haoshiyou-ionic[92913:1090938] [CDVTimer][TotalPluginStartup] 15.986979ms
+2015-07-04 19:22:43.794 haoshiyou-ionic[92913:1090938] Resetting plugins due to page load.
+2015-07-04 19:22:44.318 haoshiyou-ionic[92913:1090938] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/F9EB5FE7-0379-4C11-9534-9F7B539A2D71/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:22:44.336 haoshiyou-ionic[92913:1090938] ionic Ready xxx
+2015-07-04 19:22:53.810 haoshiyou-ionic[92913:1090938] 111
+2015-07-04 19:22:53.811 haoshiyou-ionic[92913:1090938] watch fired true
+2015-07-04 19:22:55.175 haoshiyou-ionic[92913:1090938] 222 
+2015-07-04 19:22:58.162 haoshiyou-ionic[92913:1090938] 333 
+2015-07-04 19:22:58.162 haoshiyou-ionic[92913:1090938] 444 0
+2015-07-04 19:22:58.163 haoshiyou-ionic[92913:1090938] 444 1
+2015-07-04 19:23:00.074 haoshiyou-ionic[92913:1091348] File Transfer Finished with response code 200
+2015-07-04 19:23:00.321 haoshiyou-ionic[92913:1091348] File Transfer Finished with response code 200
+2015-07-04 19:23:00.334 haoshiyou-ionic[92913:1090938] Start upload XXX
+2015-07-04 19:23:00.335 haoshiyou-ionic[92913:1090938] {"public_id":"qvwzzdmztg7v7neoaglk","version":1436062979,"signature":"78e3c05b3a84963d404f69cf83685459e0c62e24","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:22:59Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062979/qvwzzdmztg7v7neoaglk.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062979/qvwzzdmztg7v7neoaglk.jpg","original_filename":"no-filename"}
+2015-07-04 19:23:00.335 haoshiyou-ionic[92913:1090938] {"public_id":"q3iekfm3pddusdkl9l9p","version":1436062980,"signature":"8377e1f4adc9ac27d1122478b75835b4584e5d1d","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:23:00Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436062980/q3iekfm3pddusdkl9l9p.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436062980/q3iekfm3pddusdkl9l9p.jpg","original_filename":"no-filename"}
+2015-07-04 19:23:00.335 haoshiyou-ionic[92913:1090938] ["qvwzzdmztg7v7neoaglk","q3iekfm3pddusdkl9l9p"]
+2015-07-04 19:23:00.335 haoshiyou-ionic[92913:1090938] End upload XXX
+2015-07-04 19:24:10.303 haoshiyou-ionic[93650:1094328] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/2B0B8A67-498A-48BC-A569-7BF12A87E4E6/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:24:10.434 haoshiyou-ionic[93650:1094328] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:24:10.434 haoshiyou-ionic[93650:1094328] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:24:10.436 haoshiyou-ionic[93650:1094328] Unlimited access to network resources
+2015-07-04 19:24:10.536 haoshiyou-ionic[93650:1094328] [CDVTimer][keyboard] 0.055015ms
+2015-07-04 19:24:10.551 haoshiyou-ionic[93650:1094328] [CDVTimer][splashscreen] 14.277995ms
+2015-07-04 19:24:10.553 haoshiyou-ionic[93650:1094328] [CDVTimer][file] 2.197027ms
+2015-07-04 19:24:10.553 haoshiyou-ionic[93650:1094328] [CDVTimer][TotalPluginStartup] 16.959012ms
+2015-07-04 19:24:10.625 haoshiyou-ionic[93650:1094328] Resetting plugins due to page load.
+2015-07-04 19:24:11.032 haoshiyou-ionic[93650:1094328] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/9F77CB07-38CE-46AF-AACC-2CAB6B42BAD6/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:24:11.066 haoshiyou-ionic[93650:1094328] ionic Ready xxx
+2015-07-04 19:24:15.465 haoshiyou-ionic[93650:1094328] 111
+2015-07-04 19:24:15.465 haoshiyou-ionic[93650:1094328] watch fired true
+2015-07-04 19:24:16.721 haoshiyou-ionic[93650:1094328] 222 
+2015-07-04 19:24:19.400 haoshiyou-ionic[93650:1094328] 333 
+2015-07-04 19:24:19.400 haoshiyou-ionic[93650:1094328] 444 0
+2015-07-04 19:24:19.401 haoshiyou-ionic[93650:1094328] 444 1
+2015-07-04 19:24:19.401 haoshiyou-ionic[93650:1094328] 444 2
+2015-07-04 19:24:23.898 haoshiyou-ionic[93650:1094423] File Transfer Finished with response code 200
+2015-07-04 19:24:24.179 haoshiyou-ionic[93650:1094496] File Transfer Finished with response code 200
+2015-07-04 19:24:24.248 haoshiyou-ionic[93650:1094534] File Transfer Finished with response code 200
+2015-07-04 19:24:24.263 haoshiyou-ionic[93650:1094328] Start upload XXX
+2015-07-04 19:24:24.263 haoshiyou-ionic[93650:1094328] {"public_id":"pwujtlxum9waxwc0ppqm","version":1436063064,"signature":"5c0963f91e80df0f58f426577e270f77f5e94b94","width":1601,"height":1068,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:24:24Z","tags":[],"bytes":616937,"type":"upload","etag":"2434793afb057f28d7c70cc51e301fe9","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436063064/pwujtlxum9waxwc0ppqm.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436063064/pwujtlxum9waxwc0ppqm.jpg","original_filename":"no-filename"}
+2015-07-04 19:24:24.263 haoshiyou-ionic[93650:1094328] {"public_id":"lkgbdaepj64kkpj5cc6a","version":1436063063,"signature":"349bcaaceab1837df25c8b329e2431c008b2f817","width":1068,"height":1600,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:24:23Z","tags":[],"bytes":431638,"type":"upload","etag":"93a902d51b9cd3a16c3c20b113209bcf","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436063063/lkgbdaepj64kkpj5cc6a.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436063063/lkgbdaepj64kkpj5cc6a.jpg","original_filename":"no-filename"}
+2015-07-04 19:24:24.263 haoshiyou-ionic[93650:1094328] {"public_id":"san9ncvlruzleurb3r27","version":1436063063,"signature":"8ea29c07333330cd18cd2bb132f69c793a3e653d","width":1600,"height":1062,"format":"jpg","resource_type":"image","created_at":"2015-07-05T02:24:23Z","tags":[],"bytes":289139,"type":"upload","etag":"fa2bdbd2ee7e75db7178573671e52e27","url":"http://res.cloudinary.com/xinbenlv/image/upload/v1436063063/san9ncvlruzleurb3r27.jpg","secure_url":"https://res.cloudinary.com/xinbenlv/image/upload/v1436063063/san9ncvlruzleurb3r27.jpg","original_filename":"no-filename"}
+2015-07-04 19:24:24.263 haoshiyou-ionic[93650:1094328] ["pwujtlxum9waxwc0ppqm","lkgbdaepj64kkpj5cc6a","san9ncvlruzleurb3r27"]
+2015-07-04 19:24:24.263 haoshiyou-ionic[93650:1094328] End upload XXX
+2015-07-04 19:30:58.644 haoshiyou-ionic[95062:1103027] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/74902280-56F2-41C9-B8F4-5151263B5D0B/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:30:58.789 haoshiyou-ionic[95062:1103027] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:30:58.790 haoshiyou-ionic[95062:1103027] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:30:58.792 haoshiyou-ionic[95062:1103027] Unlimited access to network resources
+2015-07-04 19:30:58.964 haoshiyou-ionic[95062:1103027] [CDVTimer][keyboard] 0.194967ms
+2015-07-04 19:30:58.985 haoshiyou-ionic[95062:1103027] [CDVTimer][splashscreen] 20.925999ms
+2015-07-04 19:30:58.990 haoshiyou-ionic[95062:1103027] [CDVTimer][file] 4.226983ms
+2015-07-04 19:30:58.990 haoshiyou-ionic[95062:1103027] [CDVTimer][TotalPluginStartup] 26.175022ms
+2015-07-04 19:30:59.116 haoshiyou-ionic[95062:1103027] Resetting plugins due to page load.
+2015-07-04 19:30:59.514 haoshiyou-ionic[95062:1103027] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/2DA56200-0D5F-4862-9336-14B697CEA4AB/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:30:59.853 haoshiyou-ionic[95062:1103027] ionic Ready xxx
+2015-07-04 19:32:00.395 haoshiyou-ionic[96168:1106574] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/1E8A3D25-6ECE-41B0-A0D6-D0F0CF237137/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:32:00.536 haoshiyou-ionic[96168:1106574] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:32:00.537 haoshiyou-ionic[96168:1106574] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:32:00.538 haoshiyou-ionic[96168:1106574] Unlimited access to network resources
+2015-07-04 19:32:00.658 haoshiyou-ionic[96168:1106574] [CDVTimer][keyboard] 0.048995ms
+2015-07-04 19:32:00.673 haoshiyou-ionic[96168:1106574] [CDVTimer][splashscreen] 15.327990ms
+2015-07-04 19:32:00.677 haoshiyou-ionic[96168:1106574] [CDVTimer][file] 3.362000ms
+2015-07-04 19:32:00.677 haoshiyou-ionic[96168:1106574] [CDVTimer][TotalPluginStartup] 19.230008ms
+2015-07-04 19:32:00.758 haoshiyou-ionic[96168:1106574] Resetting plugins due to page load.
+2015-07-04 19:32:00.977 haoshiyou-ionic[96168:1106574] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/113BFF36-AA57-4E64-A03D-ED818D9D59B1/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:32:01.250 haoshiyou-ionic[96168:1106574] ionic Ready xxx
+2015-07-04 19:32:59.187 haoshiyou-ionic[97125:1109955] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/1453DC22-7A23-4CE1-818C-3C70FF12F9C2/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:32:59.341 haoshiyou-ionic[97125:1109955] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:32:59.341 haoshiyou-ionic[97125:1109955] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:32:59.343 haoshiyou-ionic[97125:1109955] Unlimited access to network resources
+2015-07-04 19:32:59.455 haoshiyou-ionic[97125:1109955] [CDVTimer][keyboard] 0.127017ms
+2015-07-04 19:32:59.470 haoshiyou-ionic[97125:1109955] [CDVTimer][splashscreen] 14.083028ms
+2015-07-04 19:32:59.472 haoshiyou-ionic[97125:1109955] [CDVTimer][file] 2.418041ms
+2015-07-04 19:32:59.472 haoshiyou-ionic[97125:1109955] [CDVTimer][TotalPluginStartup] 17.279983ms
+2015-07-04 19:32:59.552 haoshiyou-ionic[97125:1109955] Resetting plugins due to page load.
+2015-07-04 19:32:59.827 haoshiyou-ionic[97125:1109955] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/2D4276FA-7BFD-432D-9B63-82F648CD1472/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:33:00.099 haoshiyou-ionic[97125:1109955] ionic Ready xxx
+2015-07-04 19:33:39.888 haoshiyou-ionic[97804:1111956] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Data/Application/7B6CD221-C8B5-46E5-956B-19AA943E4A22/Library/Cookies/Cookies.binarycookies
+2015-07-04 19:33:40.024 haoshiyou-ionic[97804:1111956] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-04 19:33:40.024 haoshiyou-ionic[97804:1111956] Multi-tasking -> Device: YES, App: YES
+2015-07-04 19:33:40.027 haoshiyou-ionic[97804:1111956] Unlimited access to network resources
+2015-07-04 19:33:40.151 haoshiyou-ionic[97804:1111956] [CDVTimer][keyboard] 0.057042ms
+2015-07-04 19:33:40.164 haoshiyou-ionic[97804:1111956] [CDVTimer][splashscreen] 13.523996ms
+2015-07-04 19:33:40.166 haoshiyou-ionic[97804:1111956] [CDVTimer][file] 1.952052ms
+2015-07-04 19:33:40.166 haoshiyou-ionic[97804:1111956] [CDVTimer][TotalPluginStartup] 15.960991ms
+2015-07-04 19:33:40.240 haoshiyou-ionic[97804:1111956] Resetting plugins due to page load.
+2015-07-04 19:33:40.469 haoshiyou-ionic[97804:1111956] Finished load of: file:///Users/zzn/Library/Developer/CoreSimulator/Devices/1E07705D-779A-4C1B-A33B-C17805CC17A5/data/Containers/Bundle/Application/D4F2D445-9F2C-4E57-95B1-2EE5005AAD9C/haoshiyou-ionic.app/www/index.html#/tab/dash
+2015-07-04 19:33:40.736 haoshiyou-ionic[97804:1111956] ionic Ready xxx

@@ -1,7 +1,7 @@
 var ctrls = angular.module('haoshiyou.PostCtrls', ['ngResource', 'lbServices']);
 
 function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
-                          $ionicLoading, $ionicModal,  $ionicPopup,
+                          $ionicLoading, $ionicModal,  $ionicPopup, $http,
                           HsyPost, ConstantService, SessionService, uuid4) {
     $scope.postInput = {};
     $scope.dirty = {};
@@ -160,13 +160,12 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
             }
         });
     }
-
 }
 ctrls.controller('EditOrCreateCtrl', EditOrCreateCtrl);
 
 
-function PhotoCtrl($scope, $cordovaCamera, $rootScope) {
-    $scope.images = [];
+function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $http, $q, $cordovaFileTransfer) {
+    $scope.canEdit = true;
 
     $scope.ready = false;
 
@@ -175,25 +174,55 @@ function PhotoCtrl($scope, $cordovaCamera, $rootScope) {
         if($rootScope.appReady.status) $scope.ready = true;
     });
 
+    var options = {
+        maximumImagesCount: 10,
+        width: 1600,
+        height: 1600,
+        quality: 80
+    };
+
+    $scope.postInput.images =  $scope.postInput.images || [];
+
+    console.log("111");
     $scope.getPhotos = function() {
-        var options = {
-            quality: 100,
-            destinationType: Camera.DestinationType.FILE_URI,
-            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-            targetWidth: 100,
-            targetHeight: 100
-        };
 
-        $cordovaCamera.getPicture(options).then(function(imageUri) {
-            console.log('img', imageUri);
-            $scope.images.push(imageUri);
-            console.log($scope.images);
-            //$scope.images.push("data:image/jpeg;base64," + imageData);
-
-        }, function(err) {
-            // error
-            console.error(err);
-        });
+        console.log("222 ");
+        $cordovaImagePicker.getPictures(options)
+            .then(function (results) {
+                console.log("333 ");
+                var promises = [];
+                for (var i = 0; i < results.length; i++) {
+                    console.log("444 " + i);
+                    try {
+                        promises.push(
+                            $cordovaFileTransfer.upload("https://api.cloudinary.com/v1_1/" +
+                                $.cloudinary.config().cloud_name + "/image/upload", results[i], {
+                                params: {upload_preset: $.cloudinary.config().upload_preset}
+                            }));
+                    } catch (err) {
+                        console.log(JSON.stringify(err));
+                    }
+                }
+                return $q.all(promises);
+            }).then(function (postResults) {
+                console.log("Start upload XXX");
+                for (var i in postResults) {
+                    var postResult = postResults[i];
+                    var data = JSON.parse(postResult.response);
+                    console.log(data);
+                    $scope.postInput.images.push(data.public_id);
+                }
+                console.log($scope.imagePublicIds);
+                console.log("End upload XXX");
+            }).catch(function(error) {
+                console.log(error);
+            });
+    }
+    $scope.delete = function(imageId) {
+        var i = $scope.postInput.images.indexOf(imageId);
+        if (i > -1) {
+            $scope.postInput.images.splice(i, 1);
+        }
     }
 }
 ctrls.controller('PhotoCtrl', PhotoCtrl);
