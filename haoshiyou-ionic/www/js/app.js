@@ -149,17 +149,50 @@ angular.module('haoshiyou', [
     }
   });
 
-
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
 
-}).config(function(LoopBackResourceProvider, $compileProvider, backendHostAndPort){
+}).config(function(LoopBackResourceProvider, $compileProvider, BACKEND){
 
     // Change the URL where to access the LoopBack REST API server
-    LoopBackResourceProvider.setUrlBase('http://' + backendHostAndPort + '/api');
+    LoopBackResourceProvider.setUrlBase('http://' + BACKEND + '/api');
     // LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
 
     // TODO(zzn): is the imgSrcSanitizationWhitelist really needed
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|content|file|assets-library):/);
-}).constant("backendHostAndPort", "0.0.0.0:3000");
+
+
+}).constant("BACKEND", "0.0.0.0:5000")
+.run(function(Logger){
+  var CONST_PARSE_ID = "RPjt04MBMl3rzzEKBGKUpP7KHFXAsomtDbr9cS0y";
+  var CONST_PARSE_KEY = "DSqWg9xElC6mI1PwtPWzzeIPQYUXPGTOC66nT82h";
+  Parse.initialize(CONST_PARSE_ID, CONST_PARSE_KEY);
+  Logger.trackerFunctions["ga"] = function(action, dimensions) {
+    ga('send', 'event', 'button', 'click', action, dimensions);
+  };
+  Logger.trackerFunctions["ga"] = function(action, dimensions) {
+    ga('send', 'event', 'button', 'click', action, dimensions);
+  };
+
+  Logger.trackerFunctions["parse"] = function(action, dimensions) {
+    var ParseTracking = Parse.Object.extend("ParseTracking");
+    var parseTracking = new ParseTracking();
+    for(var key in dimensions) {
+      parseTracking.set(key, dimensions[key]);
+    }
+    parseTracking.set("action", action);
+    parseTracking.save();
+  };
+  Logger.loggerFunctions["parse"] = function(msg, level, data) {
+    var ParseLogging = Parse.Object.extend("ParseLogging");
+    var parseLogging = new ParseLogging();
+    parseLogging.set("msg", msg);
+    parseLogging.set("level", level);
+    for(var key in data) {
+      parseLogging.set(key, data[key]);
+    }
+    parseLogging.save();
+  };
+
+});

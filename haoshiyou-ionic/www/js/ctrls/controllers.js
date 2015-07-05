@@ -27,7 +27,8 @@ function DashCtrl($scope, HaoshiyouService) {
 ctrls.controller('DashCtrl', DashCtrl);
 
 function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
-                      $q, $state, SessionService, $ionicModal, ConstantService, $filter) {
+                      $q, $state, SessionService, $ionicModal,
+                      ConstantService, $filter, Logger) {
   $scope.NEED_TYPE_COLOR = ConstantService.NEED_TYPE_COLOR;
   var filter = {
       limit: 10,
@@ -55,6 +56,7 @@ function PostListCtrl($log, $scope, HsyPost, $ionicLoading, $ionicPopup,
       $scope.canEdit = false;
   } else if ($state.is("tab.my")) {
       // TODO(zzn): Change session filter once we have id set up
+      Logger.log(SessionService.getSessionId());
       filter.where.createdBySessionId = SessionService.getSessionId();
       $scope.title = "我的帖子";
       $scope.canEdit = true;

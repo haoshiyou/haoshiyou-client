@@ -17,6 +17,7 @@
     "ngCordova": "~0.1.17-alpha",
     "underscore": "~1.8.3",
     "cloudinary_ng": "~0.1.2",
-    "cloudinary_js": "~1.0.24"
+    "cloudinary_js": "~1.0.24",
+    "jquery-cookie": "~1.4.1"
   }
 }

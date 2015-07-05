@@ -1,6 +1,8 @@
 'use strict';
 
-var services = angular.module('haoshiyou.services', ['ngResource', 'lbServices']);
+var services = angular.module('haoshiyou.services', [
+  'ngResource', 'lbServices',
+]);
 
 function ConstantSerivce() {
   return {
@@ -46,12 +48,10 @@ function ConstantSerivce() {
 }
 services.factory('ConstantService', ConstantSerivce);
 
-function WeChatService($http, $log, $q, $location, backendHostAndPort) {
+function WeChatService($http, $log, $q, $location, BACKEND) {
   var ready = false;
   function init() {
-    var signatureServer= "http://" + backendHostAndPort + "/wechatsig";
-
-    // Step 1: get access token
+    var signatureServer= "http://" + BACKEND + "/wechatsig";
     return $http({
       url: signatureServer,
       method: 'GET',
@@ -93,7 +93,7 @@ function WeChatService($http, $log, $q, $location, backendHostAndPort) {
         }
       });
       return deferred.promise;
-    }).catch(function(err){
+    }).catch(function(err) {
       $log.error(err);
     });
   }
@@ -103,7 +103,6 @@ function WeChatService($http, $log, $q, $location, backendHostAndPort) {
   };
 }
 services.factory('WeChatService', WeChatService);
-
 
 services.factory('HaoshiyouService', function ($log, $cacheFactory, $http, $q) {
   var CONST_SPREADSHEET_URL = "https://spreadsheets.google.com/feeds/list/1vzugrYLpgXmFODqysSx331Lhq8LpDQGJ4sQtwSMrtV4/1/public/values?alt=json&callback=JSON_CALLBACK";
@@ -208,17 +207,126 @@ services.factory('PagedResult', function (HaoshiyouService) {
   }
 });
 
-
-services.factory('SessionService', function(){
-  var sessionId;
-  function getSessionId() {
-    if (sessionId) {
-      return sessionId;
-    } else {
-      sessionId = "debug-session-id";
-      return sessionId;
-    }
+function Logger($location, SessionService) {
+  "use strict";
+  var LOG_LEVELS = {
+    VERBOSE: "VERBOSE",
+    DEBUG: "DEBUG",
+    INFO: "INFO",
+    WARNING: "WARNING",
+    ERROR: "ERROR"
   };
+
+  var geoInfo = {
+    ip: "",
+    city: "",
+    country: ""
+  };
+
+  function log(msg, level, data) {
+    // levels VERBOSE ,DEBUG, INFO, WARNING, ERROR,
+    if (typeof level == "undefined") {
+      level = "INFO"
+    }
+    console.log(level + " | " + new Date() + " | " + msg + " | " + JSON.stringify(data || {}));
+
+    for (var key in loggerFunctions) {
+      var logger = loggerFunctions[key];
+      logger(msg, level, $.extend(data,{
+        client_id: null, session_id: SessionService.getSessionId(),
+        is_debug: isDebug()}));
+    }
+  }
+
+  function isDebug() {
+    if ($location.search()["debug"] == 1) {
+      return true;
+    }
+    var myId = "";
+    if (myId === "12d506b1-5d1c-6d4b-10dc-0789815264d8" ||
+        myId === "zzn-mac" ||
+        myId === "zzn-mac-local" ||
+        myId === "eb56ba79-92e5-9fd4-2918-930a1bad4943" ||
+        myId === "b9640001-2f59-f47f-d36a-b8178e5dfb5a") {
+      return true
+    } else {
+      return false;
+    }
+  }
+  function isAlertOn() {
+    if ($.url().param("alert") == 1) {
+      return true;
+    } else return false;
+  }
+  if (isDebug()) {
+    console.log("zHelper turns on debug mode.");
+  }
+  var loggerFunctions = {};
+  var trackerFunctions = {};
+
+  function track(action, dimensions) {
+    var debug = isDebug(myId);
+    var timestamp = new Date();
+    var commonDim = {};
+
+    commonDim.client_id = myId;
+    commonDim.is_debug = debug;
+    commonDim.url_location = window.location.toString();
+    commonDim.user_agent = navigator.userAgent;
+    commonDim.timestamp = timestamp;
+    var extendedDim = $.extend(commonDim, dimensions || {}, geoInfo);
+    for (var key in trackerFunctions) {
+      var func = trackerFunctions[key];
+      func(action, extendedDim);
+    }
+
+  }
+
+  function assert(value, msg) {
+    if (value) {
+      // PASS
+    } else  {
+      zHelper.log("Assert failed!", LOG_LEVELS.ERROR, msg);
+      if (isDebug()) {
+        console.assert(value, msg);
+      }
+    }
+
+  }
+
+  function logAlert(msg) {
+    if (isDebug() && isAlertOn())
+      alert(msg);
+    zHelper.log(msg);
+  }
+
+  return {
+    // A dict{} which key is name of logger, value is logging function to call, same format of log
+    loggerFunctions: loggerFunctions,
+
+    // A dict{} which key is name of logger, value is tracking function to call, same format of log
+    trackerFunctions: trackerFunctions,
+
+    // A dict{}
+    geoInfo: geoInfo,
+
+    log: log,
+    track: track,
+    isDebug: isDebug,
+    assert: assert,
+    logAlert: logAlert,
+    LOG_LEVELS: LOG_LEVELS
+  };
+}
+services.factory("Logger", Logger);
+
+services.factory('SessionService', function(uuid4){
+  var sessionId =  window.$.cookie("sessionId") || uuid4.generate();
+  window.$.cookie("sessionId", sessionId);
+
+  function getSessionId() {
+      return sessionId;
+  }
   return {
     getSessionId: getSessionId
   };

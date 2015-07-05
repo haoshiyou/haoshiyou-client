@@ -1,0 +1,13 @@
+{
+  "name": "jweixin-bower",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "jweixin-1.0.0.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

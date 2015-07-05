@@ -164,7 +164,7 @@ function EditOrCreateCtrl($log, $scope, $q, $state, $stateParams,
 ctrls.controller('EditOrCreateCtrl', EditOrCreateCtrl);
 
 
-function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $http, $q, $cordovaFileTransfer) {
+function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $q, $cordovaFileTransfer) {
     $scope.canEdit = true;
 
     $scope.ready = false;
@@ -180,10 +180,6 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $http, $q, $cordovaF
         height: 1600,
         quality: 80
     };
-
-
-    console.log($scope.postInput.images);
-    console.log("111");
     $scope.getPhotos = function() {
 
         console.log("222 ");
