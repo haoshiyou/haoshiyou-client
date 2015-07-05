@@ -100,7 +100,7 @@ function WeChatService($http, $q, $location, BACKEND, Logger, SessionService, $f
     var imgUrl = "http://dev.haoshiyou.org/img/logo-v1-blue-1024sq2.jpg";
     hsyPost.images = hsyPost.images || [];
     if (hsyPost.images.length > 0) {
-      imgUrl = "http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{imageId}}.JPG";
+      imgUrl = "http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/" + hsyPost.images[0] + ".JPG";
     }
     var wxData = {
       title: $filter('date')(hsyPost.startDate, "yyyy-MM-dd") + "起" + hsyPost.needType,
