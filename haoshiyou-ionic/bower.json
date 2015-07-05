@@ -15,6 +15,8 @@
     "ionic-datepicker": "~0.4.0",
     "ngAutocomplete": "~1.0.0",
     "ngCordova": "~0.1.17-alpha",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "cloudinary_ng": "~0.1.2",
+    "cloudinary_js": "~1.0.24"
   }
 }

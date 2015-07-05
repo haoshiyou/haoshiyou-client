@@ -92,5 +92,13 @@ https://developer.apple.com/account/ios/device/deviceCreate.action?formID=470092
 * Knowledge
 ** ui-gmap-google-map
 http://angular-ui.github.io/angular-google-maps/#!/
+** Choosing an image processing service
+Blitline http://blitline.com/
+Chute http://www.getchute.com/
+Cloudinary http://cloudinary.com/
+imgix http://www.imgix.com/
+transloadit http://transloadit.com
+Aviary free 
+
 * Wish list
 

@@ -2,6 +2,7 @@ angular.module('haoshiyou', [
   'ionic',
   'ngCordova',
   'lbServices',
+  'cloudinary',
   'haoshiyou.controllers',
   'haoshiyou.PostCtrls',
   'haoshiyou.services',
@@ -16,7 +17,7 @@ angular.module('haoshiyou', [
   $rootScope.appReady = {status:false};
   $ionicPlatform.ready(function() {
 
-    console.log('ionic Ready');
+    console.log('ionic Ready xxx');
     $rootScope.appReady.status = true;
 
     $rootScope.$apply();
@@ -156,8 +157,8 @@ angular.module('haoshiyou', [
 }).config(function(LoopBackResourceProvider, $compileProvider){
 
     // Change the URL where to access the LoopBack REST API server
-    // LoopBackResourceProvider.setUrlBase('http://0.0.0.0:3000/api');
-    LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
+    LoopBackResourceProvider.setUrlBase('http://0.0.0.0:3000/api');
+    // LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
 
     // TODO(zzn): is the imgSrcSanitizationWhitelist really needed
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|content|file|assets-library):/);

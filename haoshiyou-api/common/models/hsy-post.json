@@ -68,6 +68,10 @@
     "radiusInMiles": {
       "type": "number",
       "comments": "radius in miles"
+    },
+    "images": {
+      "type": "array",
+      "comments": "array of images' public_id on cloudinary"
     }
   },
   "validations": [],

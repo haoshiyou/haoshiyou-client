@@ -32,6 +32,8 @@ function ConstantSerivce() {
       { key: 'geopointFromLocation', hide: true,
       },
       { key: 'radiusInMiles', hide: true,
+      },
+      { key: 'images', hide: true,
       }
     ],
     BEFORE_MIGRATION_SESSION_ID: "before-migration-session-id",
