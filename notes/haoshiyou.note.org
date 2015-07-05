@@ -65,6 +65,8 @@ The day after tomorrow
 *** Go to production
 **** Analytics
 ***** logging
+TODO
+http://solutionoptimist.com/2013/10/07/enhance-angularjs-logging-using-decorators/
 ***** analytics
 **** Testing
 ***** Unit Testing 8h

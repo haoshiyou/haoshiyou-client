@@ -46,6 +46,65 @@ function ConstantSerivce() {
 }
 services.factory('ConstantService', ConstantSerivce);
 
+function WeChatService($http, $log, $q, $location, backendHostAndPort) {
+  var ready = false;
+  function init() {
+    var signatureServer= "http://" + backendHostAndPort + "/wechatsig";
+
+    // Step 1: get access token
+    return $http({
+      url: signatureServer,
+      method: 'GET',
+      params: {
+        url: $location.absUrl().split('#')[0]
+      }
+    }).then(function (result) {
+      var options = result.data.data;
+      options.debug = true;
+      options.jsApiList = [
+        'checkJsApi',
+        "onMenuShareTimeline",
+        "onMenuShareAppMessage"
+      ];
+      $log.info(options);
+      var deferred = $q.defer();
+      wx.config(options);
+      wx.error(function (res) {
+        deferred.reject(res.errMsg);
+      });
+
+      wx.ready(function (res) {
+        deferred.resolve(res);
+      });
+      return deferred.promise;
+    }).then(function (res) {
+      $log.info("before check js api");
+      var deferred = $q.defer();
+      wx.checkJsApi({
+        jsApiList: [
+          "onMenuShareTimeline",
+          "onMenuShareAppMessage"
+        ],
+        success: function (res) {
+          $log.info("Check JsAPI success!");
+          $log.info(res);
+          ready = true;
+          deferred.resolve(res);
+        }
+      });
+      return deferred.promise;
+    }).catch(function(err){
+      $log.error(err);
+    });
+  }
+  return {
+    init: init,
+    ready: ready
+  };
+}
+services.factory('WeChatService', WeChatService);
+
+
 services.factory('HaoshiyouService', function ($log, $cacheFactory, $http, $q) {
   var CONST_SPREADSHEET_URL = "https://spreadsheets.google.com/feeds/list/1vzugrYLpgXmFODqysSx331Lhq8LpDQGJ4sQtwSMrtV4/1/public/values?alt=json&callback=JSON_CALLBACK";
   var CONST_FIELD_KEYS = {

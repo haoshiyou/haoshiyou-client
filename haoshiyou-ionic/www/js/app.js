@@ -12,7 +12,7 @@ angular.module('haoshiyou', [
   'ngAutocomplete',
   "uuid4"])
 
-.run(function($ionicPlatform,  $rootScope, $log) {
+.run(function($ionicPlatform,  $rootScope, $log, WeChatService) {
 
   $rootScope.appReady = {status:false};
   $ionicPlatform.ready(function() {
@@ -30,8 +30,6 @@ angular.module('haoshiyou', [
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
     }
-
-
   });
 
   $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
@@ -55,6 +53,8 @@ angular.module('haoshiyou', [
     console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
     $log.debug(unfoundState, fromState, fromParams);
   });
+
+  WeChatService.init();
 })
 
 .config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {
@@ -73,7 +73,7 @@ angular.module('haoshiyou', [
   .state('login', {
       url: '/login',
       templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
+      controller: 'LoginCtrl',
   })
 
   .state('tab', {
@@ -110,7 +110,7 @@ angular.module('haoshiyou', [
         templateUrl: 'templates/edit.html',
         controller: 'EditOrCreateCtrl'
       }
-    }
+    },
   })
 
   .state('tab.view', {
@@ -120,12 +120,12 @@ angular.module('haoshiyou', [
         templateUrl: 'templates/view.html',
         controller: 'ViewCtrl'
       }
-    }
+    },
   })
   .state('view', {
     url: '/view/:postId',
     templateUrl: 'templates/view.html',
-    controller: 'ViewCtrl'
+    controller: 'ViewCtrl',
   })
   .state('tab.info', {
     url: '/info',
@@ -154,13 +154,12 @@ angular.module('haoshiyou', [
   $urlRouterProvider.otherwise('/tab/dash');
 
 
-}).config(function(LoopBackResourceProvider, $compileProvider){
+}).config(function(LoopBackResourceProvider, $compileProvider, backendHostAndPort){
 
     // Change the URL where to access the LoopBack REST API server
-    // LoopBackResourceProvider.setUrlBase('http://0.0.0.0:3000/api');
-    LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
+    LoopBackResourceProvider.setUrlBase('http://' + backendHostAndPort + '/api');
+    // LoopBackResourceProvider.setUrlBase('http://haoshiyou-dev.herokuapp.com/api');
 
     // TODO(zzn): is the imgSrcSanitizationWhitelist really needed
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|content|file|assets-library):/);
-
-});
+}).constant("backendHostAndPort", "0.0.0.0:3000");
