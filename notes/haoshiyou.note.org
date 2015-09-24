@@ -25,6 +25,9 @@ The day after tomorrow
 ** <2015-07-01 Wed>
 - add load from load data
 
+** <2015-09-22 Tue>
+Talked with ranger@ (Renjie Weng) about how to start the server
+
 * Development Plan
 ** Feature 3.0
 *** DONE Editing
