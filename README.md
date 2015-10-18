@@ -5,8 +5,8 @@ A project to help my San Francsco friends match landlords, tenants and roommates
 ## Getting Start
 ### Install and set up
 ```bash
-npm install                        # Install all npm package defined in package.json
-sudo npm -g install cordova ionic  # Install ionic and cordova
+npm install                                              # Install all npm package defined in package.json
+sudo npm -g install cordova ionic ios-deploy             # Install ionic and cordova
 cd haoshiyou-ionic && ionic state restore                # Install ionic plugins
 ```
 
@@ -51,6 +51,15 @@ git-root/haoshiyou-ionic/www/js/app.js
 
 ## Troubleshooting
 #### ios9 new security check cause failure in running in ios 
+It says "App Transport Security has blocked a cleartext HTTP (http://) resource load since it is
+insecure. Temporary exceptions can be configured via your app's Info.plist file."
+
+For now, use an iOS version earlier than 9.0 or apply the following fix
+https://gist.github.com/mlynch/284699d676fe9ed0abfa
+
+Or demonstrated in video here
+https://blog.nraboy.com/2015/10/fix-ios-9-app-transport-security-issues-in-apache-cordova/
+
 run 030_modify_plist.sh
 
 
