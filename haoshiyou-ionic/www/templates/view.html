@@ -6,8 +6,7 @@
     </ion-nav-buttons>
     <ion-content>
         <div class="list">
-
-            <div ng-repeat="field in FIELDS" ng-if="!field.hide">
+            <div ng-repeat="field in FIELDS" ng-if="!field.hide && postInput[field.key]">
                 <div class="item item-divider" >
                     {{ field.label}}
                 </div>
