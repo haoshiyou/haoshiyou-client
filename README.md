@@ -60,9 +60,6 @@ https://gist.github.com/mlynch/284699d676fe9ed0abfa
 Or demonstrated in video here
 https://blog.nraboy.com/2015/10/fix-ios-9-app-transport-security-issues-in-apache-cordova/
 
-run 030_modify_plist.sh
-
-
 ## Developer
 
 Zainan Victor Zhou <zzn@zzn.im>
