@@ -34,12 +34,17 @@
                     </p>
                 </div>
             </div>
-            <div class="item item-image" ng-repeat="imageId in postInput.images">
-                <img src="http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{imageId}}.JPG"
-                        style="max-width: 540px;"
-                        />
+            <div>
+                <div class="item item-divider" ng-if="postInput.images.length > 0"  >图片</div>
+                <div class="row responsive-sm" ng-repeat="image in postInput.images" ng-if="$index % 2 == 0">
+                    <div class="col col-50">
+                        <img ng-src="http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{postInput.images[$index]}}.JPG" width="100%" />
+                    </div>
+                    <div class="col col-50" ng-if="$index + 1 < postInput.images.length" >
+                        <img ng-src="http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{postInput.images[$index + 1]}}.JPG" width="100%" />
+                    </div>
+                </div>
             </div>
-
         </div>
     </ion-content>
 
