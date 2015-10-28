@@ -66,7 +66,7 @@ angular.module('haoshiyou', [
     url: '/dash',
     views: {
       'tab-dash': {
-        templateUrl: 'templates/tab-my.html',
+        templateUrl: 'templates/tab-dash.html',
         controller: 'PostListCtrl'
       }
     }

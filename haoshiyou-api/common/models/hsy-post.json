@@ -56,6 +56,10 @@
     "wechat": {
       "type": "string"
     },
+    "email": {
+      "type": "string"
+    },
+
     "guid": {
       "type": "string",
       "required": true,

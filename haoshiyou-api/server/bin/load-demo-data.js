@@ -12,8 +12,9 @@ var ALL_POSTS = [
       "drh3taiwmjytqchiyaug",
       "rd5piqclbsf55q2qsmxl",
       "uxkxnm1g8lqkhx3hootg",
-      "ctwzuiqnti3gyorla1ja"
+      "ctwzuiqnti3gyorla1ja",
     ],
+    email: "zzn@zzn.im"
   },
   {
     needType: "求租",
