@@ -17,17 +17,20 @@ function ConstantSerivce() {
       },
       { key: 'price', label:'预期价格', icon: 'ion-cash',
         type: 'number' },
+      { key: 'wechat', label:'微信', icon: 'ion-chatbubbles',
+        type: 'short-text'
+      },
       { key: 'house', label:'房屋', icon: 'ion-ios-home-outline',
         type: 'checkbox', options: [
         { key: 'privateBath', label: '独立卫生间' },
-        { key: 'designatedParking' , label :'专用停车位' }
-      ]
+        { key: 'designatedParking' , label :'专用停车位' }]
       },
       { key: 'roommate', label: '室友', icon: 'ion-person',
         type: 'checkbox', options: [
         { key: 'lessCooking', label: '少炊' },
         { key: 'noPets', label: '不带宠物' }
       ]},
+
       { key: 'introduction', label:'情况简介', icon: 'ion-document', required: true,
         type: 'text'
       },
@@ -36,7 +39,7 @@ function ConstantSerivce() {
       { key: 'radiusInMiles', hide: true,
       },
       { key: 'images', hide: true,
-      }
+      },
     ],
     BEFORE_MIGRATION_SESSION_ID: "before-migration-session-id",
     NEED_TYPE_COLOR: {
