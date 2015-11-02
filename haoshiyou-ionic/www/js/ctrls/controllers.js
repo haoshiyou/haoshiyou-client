@@ -42,12 +42,13 @@ function PostListCtrl($scope, HsyPost, $ionicLoading, $ionicPopup,
       "求租": true,
       "找室友": true
   };
-    $scope.getPostTitle = function(post) {
-        var location = post.location + '附近';
-        var startDate = "，起始时间：" + $filter('date')(post.startDate, "yyyy-MM-dd");
-        var price = post.price ? "，价格：" + post.price : "" ;
-        return location + startDate + price
-    };
+  $scope.locationFilter = { text: '' };
+  $scope.getPostTitle = function(post) {
+      var location = post.location + '附近';
+      var startDate = "，起始时间：" + $filter('date')(post.startDate, "yyyy-MM-dd");
+      var price = post.price ? "，价格：" + post.price : "" ;
+      return location + startDate + price
+  };
   var skip = 0;
   $scope.$state = $state;
   $scope.posts = [];
@@ -129,6 +130,7 @@ function PostListCtrl($scope, HsyPost, $ionicLoading, $ionicPopup,
           }
       }
       filter.where.needType = {inq: needTypeList};
+      filter.where.location = {like: '%' + $scope.locationFilter.text + '%'};
       $scope.filterModal.hide();
       $scope.reload();
   };

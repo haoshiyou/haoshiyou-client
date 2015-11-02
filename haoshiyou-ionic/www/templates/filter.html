@@ -6,10 +6,22 @@
     </div>
     <ion-content class="has-header" >
         <ion-list>
+            <ion-label class="item item-label">
+                需求类型
+            </ion-label>
             <ion-checkbox class="item item-checkbox" ng-repeat="option in ['招租', '求租', '找室友']"
                         name="needTypeFilter" ng-model="needTypeFilter[option]">
                 {{ option }}
             </ion-checkbox>
+        </ion-list>
+        <ion-list>
+            <ion-label class="item item-label">
+                地址
+            </ion-label>
+            <label class="item item-input">
+                <input type="text" placeholder="输入地址关键词"
+                    ng-model="locationFilter.text" />
+            </label>
         </ion-list>
     </ion-content>
     <div class="bar bar-footer bar-positive" ng-click="filterModelDone()">
