@@ -1,4 +1,4 @@
-var ctrls = angular.module('haoshiyou.PostCtrls', ['ngResource', 'lbServices']);
+var ctrls = angular.module('haoshiyou.PostCtrls', ['ngResource', 'lbServices', 'ionic']);
 
 function EditOrCreateCtrl(Logger, $scope, $q, $state, $stateParams,
                           $ionicLoading, $ionicModal,  $ionicPopup,
@@ -155,10 +155,11 @@ function EditOrCreateCtrl(Logger, $scope, $q, $state, $stateParams,
 ctrls.controller('EditOrCreateCtrl', EditOrCreateCtrl);
 
 
-function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $q, $cordovaFileTransfer) {
+function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $q, $cordovaFileTransfer, $window) {
     $scope.canEdit = true;
-
     $scope.ready = false;
+
+    var UPLOAD_URL = "https://api.cloudinary.com/v1_1/" + $.cloudinary.config().cloud_name + "/image/upload";
 
     $rootScope.$watch('appReady.status', function() {
         console.log('watch fired '+$rootScope.appReady.status);
@@ -171,19 +172,17 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $q, $cordovaFileTran
         height: 1600,
         quality: 80
     };
+
+    $scope.cordovaImagePickerDefined = ($window.imagePicker !== undefined);
     $scope.getPhotos = function() {
 
-        console.log("222 ");
         $cordovaImagePicker.getPictures(options)
             .then(function (results) {
-                console.log("333 ");
                 var promises = [];
                 for (var i = 0; i < results.length; i++) {
-                    console.log("444 " + i);
                     try {
                         promises.push(
-                            $cordovaFileTransfer.upload("https://api.cloudinary.com/v1_1/" +
-                                $.cloudinary.config().cloud_name + "/image/upload", results[i], {
+                            $cordovaFileTransfer.upload(UPLOAD_URL, results[i], {
                                 params: {upload_preset: $.cloudinary.config().upload_preset}
                             }));
                     } catch (err) {
@@ -192,21 +191,14 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $q, $cordovaFileTran
                 }
                 return $q.all(promises);
             }).then(function (postResults) {
-                console.log("Start upload XXX");
                 for (var i in postResults) {
                     var postResult = postResults[i];
                     var data = JSON.parse(postResult.response);
-
-                    console.log("images:" + JSON.stringify($scope.postInput.images));
                     $scope.postInput.images = $scope.postInput.images === null ? [] : $scope.postInput.images;
-                    console.log("images:" + JSON.stringify($scope.postInput.images));
-                    console.log("data:" + JSON.stringify(data));
-                    console.log($scope.postInput.images);
                     $scope.postInput.images.push(data.public_id);
                 }
-                console.log($scope.imagePublicIds);
-                console.log("End upload XXX");
             }).catch(function(error) {
+                // TODO(zzn): change to error
                 console.log(error);
             });
     };
@@ -216,6 +208,31 @@ function PhotoCtrl($scope, $cordovaImagePicker, $rootScope, $q, $cordovaFileTran
             $scope.postInput.images.splice(i, 1);
         }
     }
+    $scope.dropzoneConfig = {
+        parallelUploads: 3,
+        maxFileSize: 30,
+        url: UPLOAD_URL + "?upload_preset=" + $.cloudinary.config().upload_preset,
+        addedfile: function(e,very,thing) {
+            console.log("XXX addedfile");
+            console.log(e);
+            console.log(very);
+            console.log(thing);
+        },
+        complete: function(e,very,thing) {
+            console.log("XXX complete");
+            console.log(e);
+            console.log(very);
+            console.log(thing);
+        },
+        success: function(e,very,thing) {
+            console.log("XXX success");
+            console.log(e);
+            console.log(very);
+            console.log(thing);
+        },
+
+    };
+
 }
 ctrls.controller('PhotoCtrl', PhotoCtrl);
 
@@ -224,6 +241,10 @@ function ViewCtrl($scope, $state, ConstantService, HsyPost, $stateParams,
                   Logger) {
 
   Logger.log("entering ViewCtrl!");
+  $scope.dropzoneConfig = {
+        parallelUploads: 3,
+        maxFileSize: 30
+    };
   $scope.$state = $state;
   $scope.FIELDS = ConstantService.FIELDS;
     $scope.postInput = {};

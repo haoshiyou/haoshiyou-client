@@ -10,14 +10,16 @@ angular.module('haoshiyou', [
   'uiGmapgoogle-maps',
   'ionic-datepicker',
   'ngAutocomplete',
-  "uuid4"])
+  "uuid4",
+  "ngDropzone",
+])
 
 .run(function($ionicPlatform,  $rootScope, Logger, WeChatService) {
 
   $rootScope.appReady = {status:false};
   $ionicPlatform.ready(function() {
 
-    console.log('ionic Ready xxx');
+    console.log('ionic Platform Ready');
     $rootScope.appReady.status = true;
 
     $rootScope.$apply();

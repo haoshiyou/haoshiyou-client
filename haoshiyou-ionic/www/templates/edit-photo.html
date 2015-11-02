@@ -4,42 +4,54 @@
             <ion-item class="item item-icon-left item-icon-right"
                  ng-disabled="!ready"
                  ng-click="getPhotos()"
-                 >
+                 ng-if="cordovaImagePickerDefined">
                 <i class="icon ion-image"></i>
                 <span> 选择图片 </span>
             </ion-item>
             <ion-item class="item item-thumbnail item-icon-right"
                  ng-repeat="imageId in postInput['images']">
-                <img src="http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{imageId}}.JPG"
-                        style="width:150px;height: 150px"/>
+                <img src="http://res.cloudinary.com/xinbenlv/image/upload/w_300,h_300,c_fill/{{imageId}}.JPG" style="width:150px;height: 150px"/>
                 <ion-option-button class="button-assertive" ng-click="delete(imageId)">
-                    <i class="icon ion-close-circled"></i></ion-option-button>
+                    <i class="icon ion-close-circled"></i>
+                </ion-option-button>
+            </ion-item>
+            <ion-item class="item item-icon-left item-icon-right">
+                <form class="dropzone" method="post"
+                      enctype="multipart/form-data"
+                      ng-dropzone dropzone="dropzone"
+                      dropzone-config="dropzoneConfig"
+                      ng-if="!cordovaImagePickerDefined">
+                    <div class="dz-message">
+
+                        <i class="icon ion-image"></i>
+                        <span> 点击或者拖拽图片到此 </span>
+                    </div>
+                </form>
             </ion-item>
         </ion-list>
-        <!--<div class="file" ng-repeat="file in files">-->
-            <!--<h3>{{file.name}}</h3>-->
-            <!--<div class="status">{{file.status}}</div>-->
-            <!--<div class="progress-bar">-->
-                <!--<div class="progress" style="width: {{file.progress}}%" ng-init="progress=0"></div>-->
-            <!--</div>-->
-            <!--<div class="form_line">-->
-                <!--<div class="form_controls">-->
-                    <!--<div class="preview"></div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="info">-->
-                <!--<table>-->
-                    <!--<tr ng-repeat="(key, value) in file.result">-->
-                        <!--<td> {{key}} </td> <td> {{ value }} </td>-->
-                    <!--</tr>-->
-                <!--</table>-->
-            <!--</div>-->
-        <!--</div>-->
-
     </ion-content>
-
     <button class="bar bar-footer" ng-class="{ 'bar-positive': !pending, 'bar-stable': pending }" ng-click="done()"
             ng-disabled="pending" >
         <h1 class="title" >OK</h1>
     </button>
 </div>
+
+<!--<div class="file" ng-repeat="file in files">-->
+<!--<h3>{{file.name}}</h3>-->
+<!--<div class="status">{{file.status}}</div>-->
+<!--<div class="progress-bar">-->
+<!--<div class="progress" style="width: {{file.progress}}%" ng-init="progress=0"></div>-->
+<!--</div>-->
+<!--<div class="form_line">-->
+<!--<div class="form_controls">-->
+<!--<div class="preview"></div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="info">-->
+<!--<table>-->
+<!--<tr ng-repeat="(key, value) in file.result">-->
+<!--<td> {{key}} </td> <td> {{ value }} </td>-->
+<!--</tr>-->
+<!--</table>-->
+<!--</div>-->
+<!--</div>-->
