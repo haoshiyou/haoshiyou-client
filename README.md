@@ -44,10 +44,12 @@ git-root/haoshiyou-ionic/www/js/app.js
 }).constant("BACKEND", "dev.haoshiyou.org") // Change here, change to "localhost:5000"
 ```
 ## Explanation of Directory as of 2015-07-18
-.
-├── haoshiyou-api       The API part of the code
-├── haoshiyou-ionic     The hybrid app of HTML5 
-├── haoshiyou-v1        The deprecated version one currently serving at http://rent.zzn.im
+
+|    Folder        | Note                                                               | 
+|------------------|:------------------------------------------------------------------:| 
+| haoshiyou-api    | The API part of the code                                           | 
+| haoshiyou-ionic  | The hybrid app of HTML5                                            | 
+| haoshiyou-v1     | The deprecated version one currently serving at http://rent.zzn.im |
 
 ## Troubleshooting
 #### ios9 new security check cause failure in running in ios 
