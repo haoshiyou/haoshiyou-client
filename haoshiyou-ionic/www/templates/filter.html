@@ -9,10 +9,10 @@
             <ion-label class="item item-label">
                 需求类型
             </ion-label>
-            <ion-checkbox class="item item-checkbox" ng-repeat="option in ['招租', '求租', '找室友']"
+            <ion-radio class="item item-checkbox" ng-repeat="option in ['招租', '求租', '找室友']"
                         name="needTypeFilter" ng-model="needTypeFilter[option]">
                 {{ option }}
-            </ion-checkbox>
+            </ion-radio>
         </ion-list>
         <ion-list>
             <ion-label class="item item-label">
