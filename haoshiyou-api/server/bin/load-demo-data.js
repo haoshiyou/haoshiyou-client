@@ -37,6 +37,16 @@ var ALL_POSTS = [
     guid: "7cc18a5e-62e1-4eb8-9680-2285678748e3",
     createdBySessionId: "503470da-9d99-4c08-8c9b-6e5e9c254bde"
   },
+  {
+    needType: "求租",
+    startDate: "2016-04-23",
+    location: "1545 Charleston Rd, Mountain View, CA 94043",
+    price: 1500,
+    introduction: "Looking for a place near Google QH, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus interdum pellentesque felis, vel ultricies ligula rhoncus ut. Donec interdum urna lobortis, volutpat dui at, mattis ante. Maecenas risus augue, dictum a risus nec, porttitor bibendum velit. Vivamus massa mi, faucibus gravida mi nec, faucibus tristique massa. Proin efficitur eu sapien vitae ullamcorper. Aliquam ligula elit, tempus efficitur lacus rutrum, faucibus sagittis mi. Duis sed ligula viverra, porta augue sed, lobortis augue. Curabitur eu felis quis nisl fermentum dignissim. Nulla scelerisque, ipsum eget ullamcorper laoreet, quam lacus sagittis mi, non laoreet felis nibh nec lectus. Nam nisi felis, vulputate sit amet tristique vel, viverra sed sapien. Etiam imperdiet purus sed dapibus facilisis. In hac habitasse platea dictumst. Nulla non quam bibendum, iaculis ante non, porttitor arcu.",
+    wechat: "xinbenlv",
+    guid: "379df353-18c0-4d66-90d2-ce974f661a7a",
+    createdBySessionId: "6e7c42ed-c185-433b-844b-3701f2c0d318"
+  },
 ];
 
 var path = require('path');
