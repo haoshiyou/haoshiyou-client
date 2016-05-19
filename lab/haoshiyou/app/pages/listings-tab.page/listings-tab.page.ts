@@ -1,7 +1,8 @@
-import {Page, Platform} from 'ionic-angular';
+import {Page, Platform, NavController} from 'ionic-angular';
 import { ListingService } from '../../listing.service';
 import { Listing } from '../../listing';
 import { OnInit } from 'angular2/core';
+import { CreationPage } from '../creation.page';
 
 /**
  *  Google Maps API
@@ -12,7 +13,7 @@ declare let google: any;
  * A page contains a map view and a list showing the listings.
  */
 @Page({
-  templateUrl: 'build/pages/page2/listings-tab.page.html',
+  templateUrl: 'build/pages/listings-tab.page/listings-tab.page.html',
   providers: [ListingService]
 })
 export class ListingsTabPage implements OnInit {
@@ -20,8 +21,8 @@ export class ListingsTabPage implements OnInit {
   private markers: any[] = []; // atually google.maps.Marker[];
   private listings: Listing[];
   constructor(private platform: Platform,
-    private listingService: ListingService
-  ) {
+    private listingService: ListingService,
+    private nav: NavController) {
 
   }
 
@@ -56,5 +57,12 @@ export class ListingsTabPage implements OnInit {
         this.markers.push(marker);
       }
     });
+  }
+
+  gotoCreationPage() {
+    console.log("XXX gotoCreationPage");
+    //push another page onto the history stack
+    //causing the nav controller to animate the new page in
+    this.nav.push(CreationPage);
   }
 }
