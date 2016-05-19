@@ -16,6 +16,11 @@
   <!-- this Ionic's root component and where the app will load -->
   <ion-app></ion-app>
 
+  <!-- Google Maps Javascript SDK -->
+  <!-- Aaha(xinbenlv): this Google API Key has to be ether "iOS Key" or "Android Key" instead of "Browser Key",
+       otherwise, a device loading Google Maps will fail with RefererNotAllowedMapError -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3OcB66E0lRgmfRCNly31rYbUgZgUrEzc"></script>
+
   <!-- cordova.js required for cordova apps -->
   <script src="cordova.js"></script>
   <!-- Polyfill needed for platforms without Promise and Collection support -->

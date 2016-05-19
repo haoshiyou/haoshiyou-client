@@ -3,8 +3,18 @@
   <ion-title>
     Tab 2
   </ion-title>
+  <ion-buttons end>
+    <button><ion-icon name="add"></ion-icon></button>
+  </ion-buttons>
 </ion-navbar>
 
-<ion-content class="page2">
+<ion-content class="page2" style="height:50%" >
   <div style="width:100%;height:100%" id="map_canvas"></div>
+</ion-content>
+<ion-content class="page2" style="height:50%">
+  <ion-list>
+    <ion-item *ngFor="#listing of listings">
+      {{listing.content}}
+    </ion-item>
+  </ion-list>
 </ion-content>
