@@ -12,10 +12,10 @@ declare let google: any;
  * A page contains a map view and a list showing the listings.
  */
 @Page({
-  templateUrl: 'build/pages/page2/page2.html',
+  templateUrl: 'build/pages/page2/listings-tab.page.html',
   providers: [ListingService]
 })
-export class Page2 implements OnInit {
+export class ListingsTabPage implements OnInit {
   private map: any; // actually google.maps.Map;
   private markers: any[] = []; // atually google.maps.Marker[];
   private listings: Listing[];
