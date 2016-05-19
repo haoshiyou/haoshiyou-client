@@ -13,7 +13,7 @@ declare let google: any;
  * A page contains a map view and a list showing the listings.
  */
 @Page({
-  templateUrl: 'build/pages/listings-tab.page/listings-tab.page.html',
+  templateUrl: 'build/pages/listings-tab/listings-tab.html',
   providers: [ListingService]
 })
 export class ListingsTabPage implements OnInit {
