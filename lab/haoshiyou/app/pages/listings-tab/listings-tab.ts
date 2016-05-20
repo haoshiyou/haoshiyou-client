@@ -2,7 +2,7 @@ import {Page, Platform, NavController} from "ionic-angular";
 import {ListingService, MockListingService} from "../../listing.service";
 import {Listing} from "../../listing";
 import {OnInit, OnDestroy, provide} from "angular2/core";
-import {CreationPage} from "../creation.page";
+import {CreationPage} from "./creation.page.ts";
 import {ListingItem} from "./listing-item";
 import {ListingDetailPage} from "./listing-detail";
 
