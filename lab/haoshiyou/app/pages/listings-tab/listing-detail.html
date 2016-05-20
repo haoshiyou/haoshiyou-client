@@ -3,14 +3,26 @@
 </ion-navbar>
 
 <ion-content>
-    <ion-item>
-        {{listing.type | EnumMsgPipe}}
-    </ion-item>
-    <ion-item>
-        {{listing.title}}
-    </ion-item>
-    <ion-item>
-        {{listing.content}}
-    </ion-item>
-    <!-- TODO(zzn): add location -->
+    <ion-card>
+        <img src="http://placehold.it/350x150?text=Google+Map">
+        <ion-item>
+            <h2>{{listing.title}}</h2>
+            <p>{{listing.updated|date}}</p>
+          </ion-item>
+        <ion-card-content>
+            <p class="">{{listing.content}}</p>
+        </ion-card-content>
+        <img src="http://placehold.it/350x150?text=Room+Pictures">
+        <img src="http://placehold.it/350x150?text=Room+Pictures">
+        <img src="http://placehold.it/350x150?text=Room+Pictures">
+        <ion-item>
+            <span item-left>{{listing.type|EnumMsgPipe}}</span>
+            <button clear item-right>
+                <ion-icon name="thumbs-up"></ion-icon>
+            </button>
+            <button primary clear item-right>
+                <ion-icon name="chatbubbles"></ion-icon>
+            </button>
+        </ion-item>
+    </ion-card>
 </ion-content>
