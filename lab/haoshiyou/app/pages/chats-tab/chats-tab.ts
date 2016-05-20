@@ -11,6 +11,3 @@ export class ChatsTabPage {
 
   }
 }
-
-class Chat {
-}
