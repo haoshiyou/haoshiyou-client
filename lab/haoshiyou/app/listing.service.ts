@@ -3,14 +3,25 @@ import {Injectable} from "angular2/core";
 
 @Injectable()
 export class ListingService {
+  /**
+   * Get a list of listing, by default it should sort by date desc.
+   */
   getListings():Promise<Listing[]> {
     throw "Not implemented";
   }
 
-  getListing(id:ListingId):Promise<Listing> {
+  /**
+   * Get a listing by its id
+   * @param id
+   */
+  getListingById(id:ListingId):Promise<Listing> {
     throw "Not implemented";
   }
 
+  /**
+   * Add a listing to the all listings.
+   * @param listing: the value of listing for creation.
+   */
   createListing(listing:Listing):Promise<ListingId> {
     throw "Not implemented";
   }
@@ -30,7 +41,7 @@ export class MockListingService {
             .reverse());
   }
 
-  getListing(id:ListingId):Promise<Listing> {
+  getListingById(id:ListingId):Promise<Listing> {
     return Promise.resolve(this.listings)
         .then(listings => listings.filter(listing => listing.id === id)[0]);
   }

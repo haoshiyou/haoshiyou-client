@@ -1,9 +1,10 @@
 import {Page, Platform, NavController} from "ionic-angular";
 import {ListingService, MockListingService} from "../../listing.service";
 import {Listing} from "../../listing";
-import {OnInit, provide} from "angular2/core";
+import {OnInit, OnDestroy, provide} from "angular2/core";
 import {CreationPage} from "../creation.page";
 import {ListingItem} from "./listing-item";
+import {ListingDetailPage} from "./listing-detail";
 
 /**
  *  Google Maps API
@@ -18,9 +19,14 @@ declare let google:any;
   providers: [provide(ListingService, {useClass: MockListingService})],
   directives: [ListingItem]
 })
-export class ListingsTabPage implements OnInit {
-  private map:any; // actually google.maps.Map;
-  private markers:any[] = []; // atually google.maps.Marker[];
+export class ListingsTabPage implements OnInit, OnDestroy {
+  ngOnDestroy():any {
+    for(let marker of this.markers) {
+        marker.setMap(null);
+    }
+  }
+  private map:any; // Actually google.maps.Map;
+  private markers:any[]; // Actually google.maps.Marker[];
   private listings:Listing[];
 
   constructor(private platform:Platform,
@@ -57,8 +63,10 @@ export class ListingsTabPage implements OnInit {
       for (let listing of this.listings) {
         let marker = new google.maps.Marker({
           position: {lat: listing.lat, lng: listing.lng},
+          animation: google.maps.Animation.DROP,
           map: this.map
         });
+        marker.addListener('click', () => this.gotoDetail(listing));
         this.markers.push(marker);
       }
     });
@@ -68,5 +76,9 @@ export class ListingsTabPage implements OnInit {
     //push another page onto the history stack
     //causing the nav controller to animate the new page in
     this.nav.push(CreationPage);
+  }
+
+  gotoDetail(listing: Listing) {
+    this.nav.push(ListingDetailPage, {listing: listing});
   }
 }

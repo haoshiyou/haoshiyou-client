@@ -1,4 +1,5 @@
 <ion-item *ngIf="listing" (click)="gotoDetail()">
     <h2>{{ listing.title }}</h2>
     <p>{{ listing.content }}</p>
+    <p>Updated: {{ listing.updated | date }}</p>
 </ion-item>
