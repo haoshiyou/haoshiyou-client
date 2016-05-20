@@ -13,4 +13,5 @@ export class Listing {
   title: string;
   type: ListingType;
   ownerId: number;
+  updated: Date;
 }
