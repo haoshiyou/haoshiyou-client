@@ -13,5 +13,4 @@ export class ChatsTabPage {
 }
 
 class Chat {
-  participants:number[];
 }
