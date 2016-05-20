@@ -1,35 +1,36 @@
-import {Page, Platform, NavController} from 'ionic-angular';
-import { ListingService } from '../../listing.service';
-import { Listing } from '../../listing';
-import { OnInit } from 'angular2/core';
-import { CreationPage } from '../creation.page';
-import { ListingItem } from './listing-item';
+import {Page, Platform, NavController} from "ionic-angular";
+import {ListingService, MockListingService} from "../../listing.service";
+import {Listing} from "../../listing";
+import {OnInit, provide} from "angular2/core";
+import {CreationPage} from "../creation.page";
+import {ListingItem} from "./listing-item";
 
 /**
  *  Google Maps API
  */
-declare let google: any;
+declare let google:any;
 
 /**
  * A page contains a map view and a list showing the listings.
  */
 @Page({
   templateUrl: 'build/pages/listings-tab/listings-tab.html',
-  providers: [ListingService],
+  providers: [provide(ListingService, {useClass: MockListingService})],
   directives: [ListingItem]
 })
 export class ListingsTabPage implements OnInit {
-  private map: any; // actually google.maps.Map;
-  private markers: any[] = []; // atually google.maps.Marker[];
-  private listings: Listing[];
-  constructor(private platform: Platform,
-    private listingService: ListingService,
-    private nav: NavController) {
+  private map:any; // actually google.maps.Map;
+  private markers:any[] = []; // atually google.maps.Marker[];
+  private listings:Listing[];
+
+  constructor(private platform:Platform,
+              private listingService:ListingService,
+              private nav:NavController) {
 
   }
 
   ngOnInit() {
-    let initMap: Promise<any> = this.platform.ready().then(() => {
+    let initMap:Promise<any> = this.platform.ready().then(() => {
       var minZoomLevel = 9;
 
       // Load Google Maps
@@ -46,9 +47,11 @@ export class ListingsTabPage implements OnInit {
       });
     });
 
-    let initListings: Promise<any> = this.listingService.getListings(
+    let initListings:Promise<any> = this.listingService.getListings(
         /* TODO(zzn): currently get all, need to narrow down. */)
-        .then((listings) => {this.listings = listings;});
+        .then((listings) => {
+          this.listings = listings;
+        });
     Promise.all([initMap, initListings]).then(() => {
       this.markers = []; // TODO(zzn): shall we reset all markers?
       for (let listing of this.listings) {
