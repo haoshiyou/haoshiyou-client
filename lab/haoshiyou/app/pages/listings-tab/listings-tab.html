@@ -1,4 +1,3 @@
-
 <ion-navbar *navbar>
   <ion-title>
     Listings
@@ -13,8 +12,6 @@
 </ion-content>
 <ion-content class="listing-tab" style="height:50%">
   <ion-list>
-    <ion-item *ngFor="#listing of listings">
-      {{listing.content}}
-    </ion-item>
+      <listing-item *ngFor="#listing of listings" [listing]=listing ></listing-item>
   </ion-list>
 </ion-content>

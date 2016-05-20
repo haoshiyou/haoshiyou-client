@@ -3,6 +3,7 @@ import { ListingService } from '../../listing.service';
 import { Listing } from '../../listing';
 import { OnInit } from 'angular2/core';
 import { CreationPage } from '../creation.page';
+import { ListingItem } from './listing-item';
 
 /**
  *  Google Maps API
@@ -14,7 +15,8 @@ declare let google: any;
  */
 @Page({
   templateUrl: 'build/pages/listings-tab/listings-tab.html',
-  providers: [ListingService]
+  providers: [ListingService],
+  directives: [ListingItem]
 })
 export class ListingsTabPage implements OnInit {
   private map: any; // actually google.maps.Map;
@@ -60,7 +62,6 @@ export class ListingsTabPage implements OnInit {
   }
 
   gotoCreationPage() {
-    console.log("XXX gotoCreationPage");
     //push another page onto the history stack
     //causing the nav controller to animate the new page in
     this.nav.push(CreationPage);
