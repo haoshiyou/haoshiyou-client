@@ -21,6 +21,7 @@ export class MyApp {
 
 // TODO(xinbenlv): primary feature in orders
 // - Create, Save, Update, View, Sort a listing
+// - Translator
 // - LogIn, LogOut, Password Reset
 // - Map Marker Listing Navigation
 // - Chat
