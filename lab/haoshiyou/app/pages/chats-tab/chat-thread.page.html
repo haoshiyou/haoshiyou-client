@@ -1,0 +1,20 @@
+<ion-navbar *navbar>
+    <ion-title>{{chatThread.title}}</ion-title>
+</ion-navbar>
+
+<ion-content>
+    <ion-list>
+        <ion-grid>
+            <ion-row *ngFor="#chatItem of chatItems">
+                <ion-col *ngIf="chatItem.senderId === myUserId" width-10></ion-col>
+                <ion-col width-90>
+                    <chat-item [chatItem]="chatItem"
+                               [class.my]="chatItem.senderId === myUserId">
+                    </chat-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-list>
+</ion-content>
+
+<chat-box [chatThread]="chatThread" position="bottom"> </chat-box>

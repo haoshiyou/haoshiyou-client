@@ -54,12 +54,12 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     });
 
     let initListings:Promise<any> = this.listingService.getListings(
-        /* TODO(zzn): currently get all, need to narrow down. */)
+        /* TODO(xinbenlv): currently get all, need to narrow down. */)
         .then((listings) => {
           this.listings = listings;
         });
     Promise.all([initMap, initListings]).then(() => {
-      this.markers = []; // TODO(zzn): shall we reset all markers?
+      this.markers = [];
       for (let listing of this.listings) {
         let marker = new google.maps.Marker({
           position: {lat: listing.lat, lng: listing.lng},

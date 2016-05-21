@@ -2,6 +2,14 @@
     <ion-title>Chats</ion-title>
 </ion-navbar>
 
-<ion-content padding class="chats-tab">
-    <chat-item></chat-item>
+<ion-content class="chats-tab">
+    <ion-list>
+        <ion-item *ngFor="#chatThread of chatThreads" (click)="gotoThread(chatThread)">
+            <ion-avatar item-left>
+                <img src="http://placehold.it/100x100?text=Avatar" alt="">
+            </ion-avatar>
+            <h2>{{chatThread.title}}</h2>
+            <p> {{chatThread.latestMsg}}</p>
+        </ion-item>
+    </ion-list>
 </ion-content>

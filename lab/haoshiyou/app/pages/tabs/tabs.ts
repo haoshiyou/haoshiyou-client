@@ -5,7 +5,8 @@ import {Page3} from "../settings-tab/settings-tab";
 
 
 @Page({
-  templateUrl: 'build/pages/tabs/tabs.html'
+  templateUrl: 'build/pages/tabs/tabs.html',
+
 })
 export class TabsPage {
   // this tells the tabs component which Pages

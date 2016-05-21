@@ -32,7 +32,8 @@
       "platform": "ios",
       "version": "",
       "locator": "ios"
-    }
+    },
+    "android"
   ],
   "name": "haoshiyou",
   "description": "haoshiyou: An Ionic project"
