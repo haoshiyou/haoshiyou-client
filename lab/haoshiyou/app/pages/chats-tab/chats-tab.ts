@@ -1,5 +1,5 @@
 import {Page, NavController} from "ionic-angular";
-import {provide} from "angular2/core";
+import {provide} from "@angular/core";
 import {ListingService, MockListingService} from "../../listing.service";
 import {ChatThread} from "../../chat";
 import {ChatThreadPage} from "./chat-thread.page";

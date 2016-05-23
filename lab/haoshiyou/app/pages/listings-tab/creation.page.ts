@@ -1,6 +1,6 @@
 import {Page} from "ionic-angular";
 import {ListingService, MockListingService} from "../../listing.service.ts";
-import {provide} from "angular2/core";
+import {provide} from "@angular/core";
 
 /**
  *  Google Maps API

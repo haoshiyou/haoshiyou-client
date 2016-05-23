@@ -1,8 +1,8 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input} from "@angular/core";
 import {NavController} from "ionic-angular";
 import {Listing} from "../../listing";
 import {ListingDetailPage} from "./listing-detail";
-import {DatePipe} from "angular2/common";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'listing-item',
