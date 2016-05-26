@@ -16,3 +16,6 @@ the angular2 rc. Once ionic@beta is moving to angular2 rc, the following will be
 
 xinbenlv@
 
+
+ * TODO(xinbenlv): handle tsd and typings install at the time of 
+ restart.

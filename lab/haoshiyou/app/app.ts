@@ -5,6 +5,9 @@ import {provide} from '@angular/core';
 import {Http} from '@angular/http'
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {AuthService} from './auth.service';
+import {MessagesService} from "./services/MessagesService";
+import {ThreadsService} from "./services/ThreadsService";
+import {UserService} from "./services/UserService";
 
 
 @App({
@@ -19,7 +22,10 @@ import {AuthService} from './auth.service';
       },
       deps: [Http]
     }),
-    AuthService
+    AuthService,
+    MessagesService,
+    ThreadsService,
+    UserService
   ]
 })
 export class MyApp {
