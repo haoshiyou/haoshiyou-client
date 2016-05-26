@@ -1,15 +1,11 @@
 <ion-navbar *navbar>
-    <ion-title>Chats</ion-title>
+    <nav-bar></nav-bar>
 </ion-navbar>
-
-<ion-content class="chats-tab">
+<ion-content>
     <ion-list>
-        <ion-item *ngFor="let chatThread of chatThreads" (click)="gotoThread(chatThread)">
-            <ion-avatar item-left>
-                <img src="http://placehold.it/100x100?text=Avatar" alt="">
-            </ion-avatar>
-            <h2>{{chatThread.title}}</h2>
-            <p> {{chatThread.latestMsg}}</p>
-        </ion-item>
+        <chat-thread
+                *ngFor="let thread of threads | async"
+                [thread]="thread">
+        </chat-thread>
     </ion-list>
 </ion-content>

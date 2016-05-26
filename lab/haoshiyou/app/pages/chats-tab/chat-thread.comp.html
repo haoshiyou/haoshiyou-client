@@ -1,0 +1,9 @@
+<ion-item (click)="gotoThread()">
+    <ion-avatar item-left>
+        <img src="{{thread.avatarSrc}}">
+    </ion-avatar>
+    <h2 class="media-heading contact-name">{{thread.name}}
+        <span *ngIf="selected">&bull;</span>
+    </h2>
+    <small class="message-preview">{{thread.lastMessage.text}}</small>
+</ion-item>

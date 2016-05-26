@@ -1,33 +1,31 @@
-import {Page, NavController} from "ionic-angular";
-import {provide} from "@angular/core";
+import {Page} from "ionic-angular";
+import {provide, ChangeDetectionStrategy, OnInit} from "@angular/core";
 import {ListingService, MockListingService} from "../../listing.service";
-import {ChatExampleData} from '../../ChatExampleData';
-import {MessagesService, ThreadsService, UserService} from '../../services/services';
-import {ChatNavBar} from "./ChatNavBar";
-import {ChatThreads} from "./ChatThreads";
-import {ChatWindow} from "./ChatWindow";
+import {ChatExampleData} from "../../ChatExampleData";
+import {MessagesService, ThreadsService, UserService} from "../../services/services";
+import {ChatWindowPage} from "./chat-window.page";
 import {FromNowPipe} from "../../util/FromNowPipe";
+import {Observable} from "rxjs";
+import {ChatThreadComp} from "./chat-thread.comp.ts";
 
 @Page({
   selector: 'chat-app',
-  template: `
-  <div>
-    <nav-bar></nav-bar>
-    <div class="container">
-      <chat-threads></chat-threads>
-      <chat-window></chat-window>
-    </div>
-  </div>
-  `,
+  templateUrl: 'build/pages/chats-tab/chats-tab.html',
   providers: [provide(ListingService, {useClass: MockListingService})],
-  directives: [ChatNavBar, ChatThreads, ChatWindow],
-  pipes:[FromNowPipe]
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  directives: [ChatWindowPage, ChatThreadComp],
+  pipes: [FromNowPipe]
 })
-export class ChatsTabPage {
-  constructor(private nav:NavController,
-              public messagesService: MessagesService,
-              public threadsService: ThreadsService,
-              public userService: UserService) {
-    ChatExampleData.init(messagesService, threadsService, userService);
+export class ChatsTabPage implements OnInit {
+  threads:Observable<any>;
+
+  constructor(private messagesService:MessagesService,
+              private threadsService:ThreadsService,
+              private userService:UserService) {
+    this.threads = threadsService.orderedThreads;
+  }
+
+  ngOnInit() {
+    ChatExampleData.init(this.messagesService, this.threadsService, this.userService);
   }
 }
