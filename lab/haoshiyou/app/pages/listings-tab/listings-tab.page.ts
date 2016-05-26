@@ -1,10 +1,10 @@
 import {Page, Platform, NavController} from "ionic-angular";
-import {ListingService, MockListingService} from "../../listing.service";
-import {Listing} from "../../listing";
+import {ListingService, MockListingService} from "../../services/listing.service.ts";
+import {Listing} from "../../models/listing";
 import {OnInit, OnDestroy, provide} from "@angular/core";
-import {CreationPage} from "./creation.page.ts";
-import {ListingItem} from "./listing-item";
-import {ListingDetailPage} from "./listing-detail";
+import {CreationPage} from "./listing-creation.page.ts";
+import {ListingItem} from "./listing-item.comp";
+import {ListingDetailPage} from "./listing-detail.page";
 
 /**
  *  Google Maps API
@@ -15,16 +15,17 @@ declare let google:any;
  * A page contains a map view and a list showing the listings.
  */
 @Page({
-  templateUrl: 'build/pages/listings-tab/listings-tab.html',
+  templateUrl: 'build/pages/listings-tab/listings-tab.page.html',
   providers: [provide(ListingService, {useClass: MockListingService})],
   directives: [ListingItem]
 })
 export class ListingsTabPage implements OnInit, OnDestroy {
   ngOnDestroy():any {
-    for(let marker of this.markers) {
-        marker.setMap(null);
+    for (let marker of this.markers) {
+      marker.setMap(null);
     }
   }
+
   private map:any; // Actually google.maps.Map;
   private markers:any[]; // Actually google.maps.Marker[];
   private listings:Listing[];
@@ -78,7 +79,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     this.nav.push(CreationPage);
   }
 
-  gotoDetail(listing: Listing) {
+  gotoDetail(listing:Listing) {
     this.nav.push(ListingDetailPage, {listing: listing});
   }
 }

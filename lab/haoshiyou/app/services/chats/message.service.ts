@@ -1,35 +1,36 @@
-import {Injectable, bind} from '@angular/core';
-import {Subject, Observable} from 'rxjs';
-import {User, Thread, Message} from '../models';
+import {Injectable} from "@angular/core";
+import {Subject, Observable} from "rxjs";
+import {User, Thread, Message} from "../../models/models";
 
-let initialMessages: Message[] = [];
+let initialMessages:Message[] = [];
 
 interface IMessagesOperation extends Function {
-  (messages: Message[]): Message[];
+  (messages:Message[]):Message[];
 }
 
 @Injectable()
-export class MessagesService {
-  // a stream that publishes new messages only once
-  newMessages: Subject<Message> = new Subject<Message>();
+export class MessageService {
+  markThreadAsRead:Subject<any> = new Subject<any>();
 
   // `messages` is a stream that emits an array of the most up to date messages
-  messages: Observable<Message[]>;
+  messages:Observable<Message[]>;
+
+  // a stream that publishes new messages only once
+  private newMessages:Subject<Message> = new Subject<Message>();
 
   // `updates` receives _operations_ to be applied to our `messages`
   // it's a way we can perform changes on *all* messages (that are currently
   // stored in `messages`)
-  updates: Subject<any> = new Subject<any>();
+  private updates:Subject<any> = new Subject<any>();
 
   // action streams
-  create: Subject<Message> = new Subject<Message>();
-  markThreadAsRead: Subject<any> = new Subject<any>();
+  private create:Subject<Message> = new Subject<Message>();
 
   constructor() {
     this.messages = this.updates
     // watch the updates and accumulate operations on the messages
-        .scan((messages: Message[],
-               operation: IMessagesOperation) => {
+        .scan((messages:Message[],
+               operation:IMessagesOperation) => {
               return operation(messages);
             },
             initialMessages)
@@ -54,8 +55,8 @@ export class MessagesService {
     // entirely. The pros are that it is potentially clearer. The cons are that
     // the stream is no longer composable.
     this.create
-        .map( function(message: Message): IMessagesOperation {
-          return (messages: Message[]) => {
+        .map(function (message:Message):IMessagesOperation {
+          return (messages:Message[]) => {
             return messages.concat(message);
           };
         })
@@ -67,9 +68,9 @@ export class MessagesService {
     // similarly, `markThreadAsRead` takes a Thread and then puts an operation
     // on the `updates` stream to mark the Messages as read
     this.markThreadAsRead
-        .map( (thread: Thread) => {
-          return (messages: Message[]) => {
-            return messages.map( (message: Message) => {
+        .map((thread:Thread) => {
+          return (messages:Message[]) => {
+            return messages.map((message:Message) => {
               // note that we're manipulating `message` directly here. Mutability
               // can be confusing and there are lots of reasons why you might want
               // to, say, copy the Message object or some other 'immutable' here
@@ -85,13 +86,13 @@ export class MessagesService {
   }
 
   // an imperative function call to this action stream
-  addMessage(message: Message): void {
+  addMessage(message:Message):void {
     this.newMessages.next(message);
   }
 
-  messagesForThreadUser(thread: Thread, user: User): Observable<Message> {
+  messagesForThreadUser(thread:Thread, user:User):Observable<Message> {
     return this.newMessages
-        .filter((message: Message) => {
+        .filter((message:Message) => {
           // belongs to this thread
           return (message.thread.id === thread.id) &&
               // and isn't authored by this user
@@ -99,7 +100,3 @@ export class MessagesService {
         });
   }
 }
-
-export var messagesServiceInjectables: Array<any> = [
-  bind(MessagesService).toClass(MessagesService)
-];

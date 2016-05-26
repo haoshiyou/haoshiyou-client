@@ -5,7 +5,7 @@
     </ion-avatar>
     <h2>{{message.text}}</h2>
     <p>
-        <time>{{message.sender}} • {{message.sentAt | fromNow}}</time>
+        <time>{{message.sender}} • {{message.sentAt | timeFromNow}}</time>
     </p>
     <ion-avatar *ngIf="!incoming" item-right>
         <img src="{{message.author.avatarSrc}}">

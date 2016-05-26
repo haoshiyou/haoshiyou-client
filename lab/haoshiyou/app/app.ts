@@ -4,10 +4,10 @@ import {TabsPage} from './pages/tabs/tabs';
 import {provide} from '@angular/core';
 import {Http} from '@angular/http'
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
-import {AuthService} from './auth.service';
-import {MessagesService} from "./services/MessagesService";
-import {ThreadsService} from "./services/ThreadsService";
-import {UserService} from "./services/UserService";
+import {AuthService} from './services/auth.service.ts';
+import {MessageService} from "./services/chats/message.service.ts";
+import {ThreadService} from "./services/chats/thread.service.ts";
+import {UserService} from "./services/chats/user.service";
 
 
 @App({
@@ -23,8 +23,8 @@ import {UserService} from "./services/UserService";
       deps: [Http]
     }),
     AuthService,
-    MessagesService,
-    ThreadsService,
+    MessageService,
+    ThreadService,
     UserService
   ]
 })

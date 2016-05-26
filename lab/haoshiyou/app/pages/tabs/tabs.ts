@@ -1,11 +1,10 @@
 import {Page} from "ionic-angular";
-import {ChatsTabPage} from "../chats-tab/chats-tab";
-import {ListingsTabPage} from "../listings-tab/listings-tab.ts";
-import {SettingsTabPage} from "../settings-tab/settings-tab";
-
-import {MessagesService, ThreadsService} from '../../services/services';
-import {Message, Thread} from '../../models';
-import * as _ from 'underscore';
+import {ChatsTabPage} from "../chats-tab/chats-tab.page";
+import {ListingsTabPage} from "../listings-tab/listings-tab.page.ts";
+import {SettingsTabPage} from "../settings-tab/settings-tab.page";
+import {MessageService, ThreadService} from "../../services/services";
+import {Message, Thread} from "../../models/models";
+import * as _ from "underscore";
 
 @Page({
   templateUrl: 'build/pages/tabs/tabs.html',
@@ -18,25 +17,25 @@ export class TabsPage {
   tab2Root:any = ListingsTabPage;
   tab3Root:any = SettingsTabPage;
 
-  unreadMessagesCount: number;
+  unreadMessagesCount:number;
 
-  constructor(public messagesService: MessagesService,
-              public threadsService: ThreadsService) {
+  constructor(public messagesService:MessageService,
+              public threadsService:ThreadService) {
   }
 
-  ngOnInit(): void {
+  ngOnInit():void {
     this.messagesService.messages
         .combineLatest(
             this.threadsService.currentThread,
-            (messages: Message[], currentThread: Thread) =>
-                [currentThread, messages] )
+            (messages:Message[], currentThread:Thread) =>
+                [currentThread, messages])
 
         .subscribe(([currentThread, messages]: [Thread, Message[]]) => {
           this.unreadMessagesCount =
               _.reduce(
                   messages,
-                  (sum: number, m: Message) => {
-                    let messageIsInCurrentThread: boolean = m.thread &&
+                  (sum:number, m:Message) => {
+                    let messageIsInCurrentThread:boolean = m.thread &&
                         currentThread &&
                         (currentThread.id === m.thread.id);
                     if (m && !m.isRead && !messageIsInCurrentThread) {

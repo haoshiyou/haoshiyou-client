@@ -1,23 +1,22 @@
 // app/services/auth/auth.ts
 
-import {Storage, LocalStorage} from 'ionic-angular';
-import {AuthHttp, JwtHelper, tokenNotExpired} from 'angular2-jwt';
-import {Injectable, NgZone} from '@angular/core';
-import {Observable} from 'rxjs/Rx';
+import {Storage, LocalStorage} from "ionic-angular";
+import {AuthHttp, JwtHelper, tokenNotExpired} from "angular2-jwt";
+import {Injectable, NgZone} from "@angular/core";
 
 // Avoid name not found warnings
-declare var Auth0Lock: any;
+declare var Auth0Lock:any;
 
 @Injectable()
 export class AuthService {
-  jwtHelper: JwtHelper = new JwtHelper();
+  jwtHelper:JwtHelper = new JwtHelper();
   lock = new Auth0Lock('StjMTE6NRzI9qmUPT2ij4LvEzmlja8OY', 'xinbenlv.auth0.com');
-  local: Storage = new Storage(LocalStorage);
-  refreshSubscription: any;
-  user: Object;
-  zoneImpl: NgZone;
+  local:Storage = new Storage(LocalStorage);
+  refreshSubscription:any;
+  user:Object;
+  zoneImpl:NgZone;
 
-  constructor(private authHttp: AuthHttp, zone: NgZone) {
+  constructor(private authHttp:AuthHttp, zone:NgZone) {
     this.zoneImpl = zone;
     // If there is a profile saved in local storage
     this.local.get('profile').then(profile => {

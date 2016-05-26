@@ -1,9 +1,9 @@
 import {Page, NavParams} from "ionic-angular";
-import {Listing} from "../../listing";
-import {EnumMsgPipe} from "../../enum-msg.pipe";
+import {Listing} from "../../models/listing";
+import {EnumMsgPipe} from "../../pipes/enum-msg.pipe.ts";
 
 @Page({
-  templateUrl: 'build/pages/listings-tab/listing-detail.html',
+  templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe]
 })
 export class ListingDetailPage {
@@ -14,6 +14,6 @@ export class ListingDetailPage {
    * @param params
    */
   constructor(params:NavParams) {
-      this.listing = params.data.listing;
+    this.listing = params.data.listing;
   }
 }

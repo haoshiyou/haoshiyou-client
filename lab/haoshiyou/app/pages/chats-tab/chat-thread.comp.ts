@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from "@angular/core";
-import {ThreadsService} from "../../services/services";
-import {Thread} from "../../models";
+import {ThreadService} from "../../services/services";
+import {Thread} from "../../models/models";
 import {NavController} from "ionic-angular/index";
 import {ChatWindowPage} from "./chat-window.page";
 
@@ -12,7 +12,7 @@ export class ChatThreadComp implements OnInit {
   @Input() thread:Thread;
   selected:boolean = false;
 
-  constructor(public threadsService:ThreadsService,
+  constructor(public threadsService:ThreadService,
               private nav:NavController) {
   }
 

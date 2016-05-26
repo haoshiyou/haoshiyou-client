@@ -1,8 +1,8 @@
 /* tslint:disable:max-line-length */
-import {User, Thread, Message} from './models';
-import {MessagesService} from './services/MessagesService';
-import {ThreadsService} from './services/ThreadsService';
-import {UserService} from './services/UserService';
+import {User, Thread, Message} from './models/models';
+import {MessageService} from './services/chats/message.service.ts';
+import {ThreadService} from './services/chats/thread.service.ts';
+import {UserService} from './services/chats/user.service';
 import * as moment from 'moment';
 
 // the person using the app us Juliet
@@ -51,8 +51,8 @@ let initialMessages: Array<Message> = [
 ];
 
 export class ChatExampleData {
-  static init(messagesService: MessagesService,
-              threadsService: ThreadsService,
+  static init(messagesService: MessageService,
+              threadsService: ThreadService,
               userService: UserService): void {
 
     // TODO make `messages` hot
@@ -69,7 +69,7 @@ export class ChatExampleData {
     this.setupBots(messagesService);
   }
 
-  static setupBots(messagesService: MessagesService): void {
+  static setupBots(messagesService: MessageService): void {
 
     // echo bot
     messagesService.messagesForThreadUser(tEcho, echo)

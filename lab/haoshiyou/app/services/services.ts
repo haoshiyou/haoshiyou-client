@@ -1,13 +1,3 @@
-import {messagesServiceInjectables} from './MessagesService';
-import {threadsServiceInjectables} from './ThreadsService';
-import {userServiceInjectables} from './UserService';
-
-export * from './MessagesService';
-export * from './ThreadsService';
-export * from './UserService';
-
-export var servicesInjectables: Array<any> = [
-  messagesServiceInjectables,
-  threadsServiceInjectables,
-  userServiceInjectables
-];
+export * from './chats/message.service.ts';
+export * from './chats/thread.service.ts';
+export * from './chats/user.service';

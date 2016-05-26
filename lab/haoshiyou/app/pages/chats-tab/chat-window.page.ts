@@ -1,8 +1,8 @@
 import {OnInit, ElementRef, ChangeDetectionStrategy} from "@angular/core";
 import {FORM_DIRECTIVES} from "@angular/common";
-import {MessagesService, ThreadsService, UserService} from "../../services/services";
+import {MessageService, ThreadService, UserService} from "../../services/services";
 import {Observable} from "rxjs";
-import {User, Thread, Message} from "../../models";
+import {User, Thread, Message} from "../../models/models";
 import {Page} from "ionic-angular/index";
 import {ChatMessageComp} from "./chat-message.comp";
 
@@ -20,8 +20,8 @@ export class ChatWindowPage implements OnInit {
   draftMessage:Message;
   currentUser:User;
 
-  constructor(public messagesService:MessagesService,
-              public threadsService:ThreadsService,
+  constructor(public messagesService:MessageService,
+              public threadsService:ThreadService,
               public userService:UserService,
               public el:ElementRef) {
   }

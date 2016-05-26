@@ -1,4 +1,4 @@
-import {Listing, ListingType, ListingId} from "./listing";
+import {Listing, ListingType, ListingId} from "../models/listing";
 import {Injectable} from "@angular/core";
 
 @Injectable()
