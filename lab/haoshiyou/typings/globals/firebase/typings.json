@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/73fa26213aa5d2e1de5d7c2cc74118108cb2e5fa/firebase/firebase.d.ts",
+    "raw": "registry:dt/firebase#2.4.1+20160412125105",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/73fa26213aa5d2e1de5d7c2cc74118108cb2e5fa/firebase/firebase.d.ts"
+  }
+}

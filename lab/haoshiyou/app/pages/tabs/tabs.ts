@@ -24,7 +24,7 @@ export class TabsPage {
   }
 
   ngOnInit():void {
-    this.messagesService.messages
+    this.messagesService.fbMessages
         .combineLatest(
             this.threadsService.currentThread,
             (messages:Message[], currentThread:Thread) =>

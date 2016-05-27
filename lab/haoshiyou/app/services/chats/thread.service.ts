@@ -1,4 +1,4 @@
-import {Injectable, bind} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {Subject, BehaviorSubject, Observable} from "rxjs";
 import {Thread, Message} from "../../models/models";
 import {MessageService} from "./message.service.ts";
@@ -25,7 +25,7 @@ export class ThreadService {
 
   constructor(private messagesService:MessageService) {
 
-    this.threads = messagesService.messages
+    this.threads = messagesService.fbMessages
         .map((messages:Message[]) => {
           let threads:{[key:string]:Thread} = {};
           // Store the message's thread in our accumulator `threads`
@@ -35,22 +35,23 @@ export class ThreadService {
 
             // Cache the most recent message for each thread
             let messagesThread:Thread = threads[message.thread.id];
-            if (!messagesThread.lastMessage ||
-                messagesThread.lastMessage.sentAt < message.sentAt) {
-              messagesThread.lastMessage = message;
+
+            if (!messagesThread.lastMessageText ||
+                messagesThread.lastMessageSentAt < message.sentAt) {
+              messagesThread.lastMessageText = message.text;
             }
           });
           return threads;
-        });
+        }).publishReplay(1).refCount();
 
     this.orderedThreads = this.threads
         .map((threadGroups:{ [key:string]:Thread }) => {
           let threads:Thread[] = _.values(threadGroups);
-          return _.sortBy(threads, (t:Thread) => t.lastMessage.sentAt).reverse();
+          return _.sortBy(threads, (t:Thread) => t.lastMessageSentAt).reverse();
         });
 
     this.currentThreadMessages = this.currentThread
-        .combineLatest(messagesService.messages,
+        .combineLatest(messagesService.fbMessages,
             (currentThread:Thread, messages:Message[]) => {
               if (currentThread && messages.length > 0) {
                 return _.chain(messages)

@@ -11,7 +11,8 @@ export class User {
 
 export class Thread {
   id:string;
-  lastMessage:Message;
+  lastMessageText:string;
+  lastMessageSentAt:Date;
   name:string;
   avatarSrc:string;
 

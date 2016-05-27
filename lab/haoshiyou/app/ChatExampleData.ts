@@ -1,23 +1,23 @@
 /* tslint:disable:max-line-length */
-import {User, Thread, Message} from './models/models';
-import {MessageService} from './services/chats/message.service.ts';
-import {ThreadService} from './services/chats/thread.service.ts';
-import {UserService} from './services/chats/user.service';
-import * as moment from 'moment';
+import {User, Thread, Message} from "./models/models";
+import {MessageService} from "./services/chats/message.service.ts";
+import {ThreadService} from "./services/chats/thread.service.ts";
+import {UserService} from "./services/chats/user.service";
+import * as moment from "moment";
 
 // the person using the app us Juliet
-let me: User      = new User('Juliet', 'http://placehold.it/100x100?text=Juliet');
-let ladycap: User = new User('Lady Capulet', 'http://placehold.it/100x100?text=Capulet');
-let echo: User    = new User('Echo Bot', 'http://placehold.it/100x100?text=Echo+Bot');
-let rev: User     = new User('Reverse Bot', 'http://placehold.it/100x100?text=Reverse+Bot');
-let wait: User    = new User('Waiting Bot', 'http://placehold.it/100x100?text=Waiting+Bot');
+let me:User = new User('Juliet', 'http://placehold.it/100x100?text=Juliet');
+let ladycap:User = new User('Lady Capulet', 'http://placehold.it/100x100?text=Capulet');
+let echo:User = new User('Echo Bot', 'http://placehold.it/100x100?text=Echo+Bot');
+let rev:User = new User('Reverse Bot', 'http://placehold.it/100x100?text=Reverse+Bot');
+let wait:User = new User('Waiting Bot', 'http://placehold.it/100x100?text=Waiting+Bot');
 
-let tLadycap: Thread = new Thread('tLadycap', ladycap.name, ladycap.avatarSrc);
-let tEcho: Thread    = new Thread('tEcho', echo.name, echo.avatarSrc);
-let tRev: Thread     = new Thread('tRev', rev.name, rev.avatarSrc);
-let tWait: Thread    = new Thread('tWait', wait.name, wait.avatarSrc);
+let tLadycap:Thread = new Thread('tLadycap', ladycap.name, ladycap.avatarSrc);
+let tEcho:Thread = new Thread('tEcho', echo.name, echo.avatarSrc);
+let tRev:Thread = new Thread('tRev', rev.name, rev.avatarSrc);
+let tWait:Thread = new Thread('tWait', wait.name, wait.avatarSrc);
 
-let initialMessages: Array<Message> = [
+let initialMessages:Array<Message> = [
   new Message({
     author: me,
     sentAt: moment().subtract(45, 'minutes').toDate(),
@@ -51,81 +51,19 @@ let initialMessages: Array<Message> = [
 ];
 
 export class ChatExampleData {
-  static init(messagesService: MessageService,
-              threadsService: ThreadService,
-              userService: UserService): void {
-
+  static init(messagesService:MessageService,
+              threadsService:ThreadService,
+              userService:UserService):void {
     // TODO make `messages` hot
-    messagesService.messages.subscribe(() => ({}));
+    messagesService.fbMessages.subscribe(() => ({}));
 
     // set "Juliet" as the current user
     userService.setCurrentUser(me);
 
     // create the initial messages
-    initialMessages.map( (message: Message) => messagesService.addMessage(message) );
+    initialMessages.map((message:Message) => messagesService.addMessage(message));
 
     threadsService.setCurrentThread(tEcho);
-
-    this.setupBots(messagesService);
   }
 
-  static setupBots(messagesService: MessageService): void {
-
-    // echo bot
-    messagesService.messagesForThreadUser(tEcho, echo)
-        .forEach( (message: Message): void => {
-              messagesService.addMessage(
-                  new Message({
-                    author: echo,
-                    text: message.text,
-                    thread: tEcho
-                  })
-              );
-            },
-            null);
-
-
-    // reverse bot
-    messagesService.messagesForThreadUser(tRev, rev)
-        .forEach( (message: Message): void => {
-              messagesService.addMessage(
-                  new Message({
-                    author: rev,
-                    text: message.text.split('').reverse().join(''),
-                    thread: tRev
-                  })
-              );
-            },
-            null);
-
-    // waiting bot
-    messagesService.messagesForThreadUser(tWait, wait)
-        .forEach( (message: Message): void => {
-
-              let waitTime: number = parseInt(message.text, 10);
-              let reply: string;
-
-              if (isNaN(waitTime)) {
-                waitTime = 0;
-                reply = `I didn\'t understand ${message}. Try sending me a number`;
-              } else {
-                reply = `I waited ${waitTime} seconds to send you this.`;
-              }
-
-              setTimeout(
-                  () => {
-                    messagesService.addMessage(
-                        new Message({
-                          author: wait,
-                          text: reply,
-                          thread: tWait
-                        })
-                    );
-                  },
-                  waitTime * 1000);
-            },
-            null);
-
-
-  }
 }

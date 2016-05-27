@@ -1,2 +1,4 @@
+/// <reference path="globals/firebase/index.d.ts" />
 /// <reference path="globals/underscore/index.d.ts" />
 /// <reference path="modules/moment/index.d.ts" />
+/// <reference path="modules/requirejs/index.d.ts" />

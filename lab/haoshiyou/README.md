@@ -14,6 +14,16 @@ the angular2 rc. Once ionic@beta is moving to angular2 rc, the following will be
 
 (AngularFire2)[https://github.com/angular/angularfire2/tree/16c573b0144b3c38165407744b21e504421086d2]
 
+### Install typings definition from DefinitelyTyped
+
+For example
+
+```
+typings install dt~firebase --save --global
+```
+
+Install 
+
 xinbenlv@
 
 
