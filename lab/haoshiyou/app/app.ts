@@ -5,9 +5,9 @@ import {provide} from "@angular/core";
 import {Http} from "@angular/http";
 import {AuthHttp, AuthConfig} from "angular2-jwt";
 import {AuthService} from "./services/auth.service.ts";
-import {MessageService} from "./services/chats/message.service.ts";
-import {ThreadService} from "./services/chats/thread.service.ts";
-import {UserService} from "./services/chats/user.service";
+import {IMessageService, FirebaseMessageService} from "./services/chats/message.service.ts";
+import {IThreadService, FirebaseThreadService} from "./services/chats/thread.service.ts";
+import {IUserService, FirebaseUserService} from "./services/chats/user.service";
 import {FIREBASE_PROVIDERS, defaultFirebase, AngularFire} from "angularfire2";
 
 @App({
@@ -23,9 +23,9 @@ import {FIREBASE_PROVIDERS, defaultFirebase, AngularFire} from "angularfire2";
       deps: [Http]
     }),
     AuthService,
-    MessageService,
-    ThreadService,
-    UserService,
+    provide(IUserService, {useClass: FirebaseUserService}),
+    provide(IThreadService, {useClass: FirebaseThreadService}),
+    provide(IMessageService, {useClass: FirebaseMessageService}),
     FIREBASE_PROVIDERS,
     defaultFirebase('haoshiyou-dev.firebaseio.com'),
   ]
@@ -34,7 +34,12 @@ export class MyApp {
 
   rootPage:any = TabsPage;
 
-  constructor(private platform:Platform, private af:AngularFire) {
+  constructor(private platform:Platform,
+              private af:AngularFire,
+              private userSerivce:IUserService,
+              private threadService:IThreadService,
+              private messageService:IMessageService,
+              private authService:AuthService) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

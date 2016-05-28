@@ -12,7 +12,7 @@
     <ion-row>
         <ion-textarea block placeholder="Write your message here..."
                       (keydown.enter)="onEnter($event)"
-                      [(ngModel)]="draftMessage.text"></ion-textarea>
+                      [(ngModel)]="draftMessageText"></ion-textarea>
         <button clear outline royal (click)="onEnter($event)">
             Send
             <ion-icon name="send"></ion-icon>

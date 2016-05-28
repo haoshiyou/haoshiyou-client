@@ -1,13 +1,13 @@
 <ion-item
         [ngClass]="{'base-sent': !incoming, 'base-receive': incoming}">
-    <ion-avatar *ngIf="incoming" item-left>
-        <img src="{{message.author.avatarSrc}}">
+    <ion-avatar *ngIf="incoming()" item-left>
+        <img src="{{(author | async)?.avatarSrc}}">
     </ion-avatar>
     <h2>{{message.text}}</h2>
     <p>
-        <time>{{message.sender}} • {{message.sentAt | timeFromNow}}</time>
+        <time>{{(author | async)?.name}} • {{message.sentAt | timeFromNow}}</time>
     </p>
-    <ion-avatar *ngIf="!incoming" item-right>
-        <img src="{{message.author.avatarSrc}}">
+    <ion-avatar *ngIf="!incoming()" item-right>
+        <img src="{{(author | async)?.avatarSrc}}">
     </ion-avatar>
 </ion-item>

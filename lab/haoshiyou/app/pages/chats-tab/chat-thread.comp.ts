@@ -1,5 +1,4 @@
-import {Component, OnInit, Input} from "@angular/core";
-import {ThreadService} from "../../services/services";
+import {Component, Input} from "@angular/core";
 import {Thread} from "../../models/models";
 import {NavController} from "ionic-angular/index";
 import {ChatWindowPage} from "./chat-window.page";
@@ -8,26 +7,13 @@ import {ChatWindowPage} from "./chat-window.page";
   selector: 'chat-thread',
   templateUrl: 'build/pages/chats-tab/chat-thread.comp.html'
 })
-export class ChatThreadComp implements OnInit {
+export class ChatThreadComp {
   @Input() thread:Thread;
-  selected:boolean = false;
 
-  constructor(public threadsService:ThreadService,
-              private nav:NavController) {
-  }
-
-  ngOnInit():void {
-    this.threadsService.currentThread
-        .subscribe((currentThread:Thread) => {
-          this.selected = currentThread &&
-              this.thread &&
-              (currentThread.id === this.thread.id);
-        });
+  constructor(private nav:NavController) {
   }
 
   gotoThread():void {
-    this.threadsService.setCurrentThread(this.thread);
-
-    this.nav.push(ChatWindowPage);
+    this.nav.push(ChatWindowPage, {thread: this.thread});
   }
 }

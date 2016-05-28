@@ -16,4 +16,4 @@ export function uuid() {
   }
 
   return result;
-};
+}

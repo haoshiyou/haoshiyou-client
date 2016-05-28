@@ -2,10 +2,11 @@
     <nav-bar></nav-bar>
 </ion-navbar>
 <ion-content>
-    <ion-list>
+    <ion-list *ngIf="me">
         <chat-thread
-                *ngFor="let thread of threads | async"
+                *ngFor="let thread of observableThreads | async"
                 [thread]="thread">
         </chat-thread>
     </ion-list>
+    <h2 *ngIf="!me"> Please login :)</h2>
 </ion-content>

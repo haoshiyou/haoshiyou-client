@@ -1,10 +1,11 @@
 import {OnInit, ElementRef, ChangeDetectionStrategy} from "@angular/core";
 import {FORM_DIRECTIVES} from "@angular/common";
-import {MessageService, ThreadService, UserService} from "../../services/services";
+import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {Observable} from "rxjs";
 import {User, Thread, Message} from "../../models/models";
-import {Page} from "ionic-angular/index";
+import {Page, NavParams} from "ionic-angular/index";
 import {ChatMessageComp} from "./chat-message.comp";
+import {uuid} from "../../util/uuid";
 
 
 @Page({
@@ -15,58 +16,33 @@ import {ChatMessageComp} from "./chat-message.comp";
   templateUrl: 'build/pages/chats-tab/chat-window.page.html'
 })
 export class ChatWindowPage implements OnInit {
-  messages:Observable<any>;
   currentThread:Thread;
-  draftMessage:Message;
-  currentUser:User;
+  messages:Observable<Message[]>;
+  draftMessageText:string;
 
-  constructor(public messagesService:MessageService,
-              public threadsService:ThreadService,
-              public userService:UserService,
-              public el:ElementRef) {
+  me:User;
+
+  constructor(private messagesService:IMessageService,
+              private threadsService:IThreadService,
+              private userService:IUserService,
+              private el:ElementRef, private params:NavParams) {
+    this.currentThread = params.data.thread;
+    this.me = userService.getMe();
+    this.messages = messagesService.observableMessagesByThreadId(this.currentThread.id);
   }
 
   ngOnInit():void {
-    this.messages = this.threadsService.currentThreadMessages;
 
-    this.draftMessage = new Message();
-
-    this.threadsService.currentThread.subscribe(
-        (thread:Thread) => {
-          this.currentThread = thread;
-        });
-
-    this.userService.currentUser
-        .subscribe(
-            (user:User) => {
-              this.currentUser = user;
-            });
-
-    this.messages
-        .subscribe(
-            (messages:Array<Message>) => {
-              setTimeout(() => {
-                this.scrollToBottom();
-              });
-            });
   }
 
   onEnter(event:any):void {
     this.sendMessage();
-    event.preventDefault();
   }
 
   sendMessage():void {
-    let m:Message = this.draftMessage;
-    m.author = this.currentUser;
-    m.thread = this.currentThread;
-    m.isRead = true;
-    this.messagesService.addMessage(m);
-    this.draftMessage = new Message();
-  }
-
-  scrollToBottom():void {
-    //TODO(xinbenlv): implement scroll
+    let m:Message = new Message(uuid(), this.draftMessageText, new Date(), this.me.id, this.currentThread.id);
+    this.messagesService.createMessage(m);
+    this.draftMessageText = "";
   }
 
 }

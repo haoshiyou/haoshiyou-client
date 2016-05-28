@@ -1,31 +1,30 @@
-import {Component, OnInit} from "@angular/core";
-import {UserService} from "../../services/services";
+import {Component, OnInit, Input} from "@angular/core";
+import {IUserService} from "../../services/services";
 import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe";
 import {User, Message} from "../../models/models";
+import {Observable} from "rxjs/Observable";
 
 @Component({
-  inputs: ['message'],
   selector: 'chat-message',
   pipes: [TimeFromNowPipe],
   templateUrl: 'build/pages/chats-tab/chat-message.comp.html'
 })
 export class ChatMessageComp implements OnInit {
-  message:Message;
-  currentUser:User;
-  incoming:boolean;
-
-  constructor(public userService:UserService) {
+  ngOnInit():any {
+    this.author = this.userService.observableUserById(this.message.authorId);
   }
 
-  ngOnInit():void {
-    this.userService.currentUser
-        .subscribe(
-            (user:User) => {
-              this.currentUser = user;
-              if (this.message.author && user) {
-                this.incoming = this.message.author.id !== user.id;
-              }
-            });
+  @Input() message:Message;
+  author:Observable<User>;
+  me:User;
+
+  incoming():boolean {
+    return this.message.authorId != this.me.id;
+  }
+
+  constructor(private userService:IUserService) {
+    this.me = userService.getMe();
+    console.assert(this.me != null);
   }
 
 }

@@ -2,9 +2,7 @@ import {Page} from "ionic-angular";
 import {ChatsTabPage} from "../chats-tab/chats-tab.page";
 import {ListingsTabPage} from "../listings-tab/listings-tab.page.ts";
 import {SettingsTabPage} from "../settings-tab/settings-tab.page";
-import {MessageService, ThreadService} from "../../services/services";
-import {Message, Thread} from "../../models/models";
-import * as _ from "underscore";
+import {IMessageService, IThreadService} from "../../services/services";
 
 @Page({
   templateUrl: 'build/pages/tabs/tabs.html',
@@ -19,31 +17,11 @@ export class TabsPage {
 
   unreadMessagesCount:number;
 
-  constructor(public messagesService:MessageService,
-              public threadsService:ThreadService) {
+  constructor(public messagesService:IMessageService,
+              public threadsService:IThreadService) {
   }
 
   ngOnInit():void {
-    this.messagesService.fbMessages
-        .combineLatest(
-            this.threadsService.currentThread,
-            (messages:Message[], currentThread:Thread) =>
-                [currentThread, messages])
-
-        .subscribe(([currentThread, messages]: [Thread, Message[]]) => {
-          this.unreadMessagesCount =
-              _.reduce(
-                  messages,
-                  (sum:number, m:Message) => {
-                    let messageIsInCurrentThread:boolean = m.thread &&
-                        currentThread &&
-                        (currentThread.id === m.thread.id);
-                    if (m && !m.isRead && !messageIsInCurrentThread) {
-                      sum = sum + 1;
-                    }
-                    return sum;
-                  },
-                  0);
-        });
+    // TODO(zzn): add unread message counts
   }
 }
