@@ -9,6 +9,7 @@ import {IMessageService, FirebaseMessageService} from "./services/chats/message.
 import {IThreadService, FirebaseThreadService} from "./services/chats/thread.service.ts";
 import {IUserService, FirebaseUserService} from "./services/chats/user.service";
 import {FIREBASE_PROVIDERS, defaultFirebase, AngularFire} from "angularfire2";
+import {User} from "./models/models";
 
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
@@ -44,6 +45,11 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
+    });
+    authService.userObservable().subscribe((user:User) => {
+      // TODO(xinbenlv): on condition create user.
+      userSerivce.createUser(user);
+      userSerivce.setMe(user);
     });
   }
 }

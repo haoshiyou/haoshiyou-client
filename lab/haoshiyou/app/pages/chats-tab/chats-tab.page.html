@@ -1,5 +1,7 @@
 <ion-navbar *navbar>
-    <nav-bar></nav-bar>
+    <ion-title>
+        Chats
+    </ion-title>
 </ion-navbar>
 <ion-content>
     <ion-list *ngIf="me">
@@ -7,6 +9,7 @@
                 *ngFor="let thread of observableThreads | async"
                 [thread]="thread">
         </chat-thread>
+        <ion-item *ngIf="!(observableThreads|async)?.length"> You don't have any chat thread yet. </ion-item>
     </ion-list>
     <h2 *ngIf="!me"> Please login :)</h2>
 </ion-content>

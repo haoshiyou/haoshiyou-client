@@ -1,13 +1,14 @@
-import {OnInit, ElementRef, ChangeDetectionStrategy} from "@angular/core";
+import {OnInit, OnDestroy, ElementRef, ChangeDetectionStrategy, ViewChild} from "@angular/core";
 import {FORM_DIRECTIVES} from "@angular/common";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {Observable} from "rxjs";
 import {User, Thread, Message} from "../../models/models";
-import {Page, NavParams} from "ionic-angular/index";
+import {Page, NavParams, Content} from "ionic-angular/index";
 import {ChatMessageComp} from "./chat-message.comp";
 import {uuid} from "../../util/uuid";
-
-
+import {Subject} from "rxjs/Subject";
+import {Subscription} from "rxjs/Subscription";
+import {Observer} from "rxjs/Observer";
 @Page({
   selector: 'chat-window',
   directives: [ChatMessageComp,
@@ -15,9 +16,11 @@ import {uuid} from "../../util/uuid";
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'build/pages/chats-tab/chat-window.page.html'
 })
-export class ChatWindowPage implements OnInit {
+export class ChatWindowPage implements OnInit, OnDestroy {
+  @ViewChild(Content) content: Content;
   currentThread:Thread;
-  messages:Observable<Message[]>;
+  messages:Subject<Message[]> = new Subject<Message[]>();
+  subscription:Subscription;
   draftMessageText:string;
 
   me:User;
@@ -27,12 +30,18 @@ export class ChatWindowPage implements OnInit {
               private userService:IUserService,
               private el:ElementRef, private params:NavParams) {
     this.currentThread = params.data.thread;
-    this.me = userService.getMe();
-    this.messages = messagesService.observableMessagesByThreadId(this.currentThread.id);
   }
 
   ngOnInit():void {
-
+    this.me = this.userService.getMe();
+    this.userService.observableMe().subscribe();
+    let o = this.messagesService.observableMessagesByThreadId(
+        this.currentThread.id);
+    this.subscription = o.subscribe(this.messages);
+    o.subscribe(()=>{this.scrollToBottom();});
+  }
+  ngOnDestroy():void {
+    if(this.subscription) this.subscription.unsubscribe();
   }
 
   onEnter(event:any):void {
@@ -43,6 +52,11 @@ export class ChatWindowPage implements OnInit {
     let m:Message = new Message(uuid(), this.draftMessageText, new Date(), this.me.id, this.currentThread.id);
     this.messagesService.createMessage(m);
     this.draftMessageText = "";
+    this.scrollToBottom();
   }
 
+  private scrollToBottom():void {
+    let dimensions = this.content.getContentDimensions();
+    this.content.scrollTo(0, dimensions.scrollBottom, 0);
+  }
 }
