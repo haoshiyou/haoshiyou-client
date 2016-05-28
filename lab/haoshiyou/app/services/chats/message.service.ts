@@ -17,7 +17,6 @@ export class IMessageService {
 @Injectable()
 export class FirebaseMessageService implements IMessageService {
   constructor(private af:AngularFire) {
-
   }
 
   observableMessagesByThreadId(threadId:string):Observable<Message[]> {

@@ -1,0 +1,38 @@
+{
+  "messages" : {
+    "44edc49a-dcb1-4df3-9361-47e9cf9700c5" : {
+      "authorId" : "eGluYmVubHZAZ21haWwuY29t",
+      "id" : "44edc49a-dcb1-4df3-9361-47e9cf9700c5",
+      "sentAt" : "2016-05-28T22:32:42.822Z",
+      "text" : "Hi, how are you guys?",
+      "threadId" : "tmp-thread-xinbenlv-zzn"
+    },
+    "4de5e1d1-2e11-4570-a85b-c0143605d67f" : {
+      "authorId" : "enpuK2xpbmtlZGluQHp6bi5pbQ==",
+      "id" : "4de5e1d1-2e11-4570-a85b-c0143605d67f",
+      "sentAt" : "2016-05-28T22:33:31.279Z",
+      "text" : "Pretty good, what's up?",
+      "threadId" : "tmp-thread-xinbenlv-zzn"
+    }
+  },
+  "threads" : {
+    "tmp-thread-xinbenlv-zzn" : {
+      "id" : "tmp-thread-xinbenlv-zzn",
+      "lastMessageSentAt" : "2016-05-28T21:18:11.561Z",
+      "lastMessageText" : "",
+      "userIds" : [ "eGluYmVubHZAZ21haWwuY29t", "enpuK2xpbmtlZGluQHp6bi5pbQ==" ]
+    }
+  },
+  "users" : {
+    "eGluYmVubHZAZ21haWwuY29t" : {
+      "avatarSrc" : "https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12063291_10153160416122596_5410931305650844395_n.jpg?oh=35e9d7a0c8051228b07f6df7fc13b75a&oe=57DCB394",
+      "id" : "eGluYmVubHZAZ21haWwuY29t",
+      "name" : "Zainan Victor Zhou"
+    },
+    "enpuK2xpbmtlZGluQHp6bi5pbQ==" : {
+      "avatarSrc" : "https://media.licdn.com/mpr/mprx/0_G13Ym4_-pYiqlnBIuv_TmU1yY0FZAnBIhBz3mU3DTM1ea-8wmzAthRviK-bbtlnFiri8Tpx6V4ca",
+      "id" : "enpuK2xpbmtlZGluQHp6bi5pbQ==",
+      "name" : "Zainan Victor Zhou"
+    }
+  }
+}
