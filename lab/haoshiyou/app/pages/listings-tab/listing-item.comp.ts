@@ -2,12 +2,12 @@ import {Component, Input} from "@angular/core";
 import {NavController} from "ionic-angular";
 import {Listing} from "../../models/listing";
 import {ListingDetailPage} from "./listing-detail.page";
-import {DatePipe} from "@angular/common";
+import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe";
 
 @Component({
   selector: 'listing-item',
   templateUrl: 'build/pages/listings-tab/listing-item.comp.html',
-  pipes: [DatePipe]
+  pipes: [TimeFromNowPipe]
 })
 export class ListingItem {
   @Input() listing:Listing;

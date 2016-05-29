@@ -3,7 +3,7 @@
     <ion-avatar *ngIf="incoming()" item-left>
         <img src="{{(author | async)?.avatarSrc}}">
     </ion-avatar>
-    <h2>{{message.text}}</h2>
+    <p2>{{message.text}}</p2>
     <p>
         <time>{{(author | async)?.name}} • {{message.sentAt | timeFromNow}}</time>
     </p>

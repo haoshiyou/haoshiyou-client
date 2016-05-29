@@ -1,14 +1,12 @@
 import {OnInit, OnDestroy, ElementRef, ChangeDetectionStrategy, ViewChild} from "@angular/core";
 import {FORM_DIRECTIVES} from "@angular/common";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
-import {Observable} from "rxjs";
 import {User, Thread, Message} from "../../models/models";
 import {Page, NavParams, Content} from "ionic-angular/index";
 import {ChatMessageComp} from "./chat-message.comp";
 import {uuid} from "../../util/uuid";
 import {Subject} from "rxjs/Subject";
 import {Subscription} from "rxjs/Subscription";
-import {Observer} from "rxjs/Observer";
 @Page({
   selector: 'chat-window',
   directives: [ChatMessageComp,
@@ -17,7 +15,7 @@ import {Observer} from "rxjs/Observer";
   templateUrl: 'build/pages/chats-tab/chat-window.page.html'
 })
 export class ChatWindowPage implements OnInit, OnDestroy {
-  @ViewChild(Content) content: Content;
+  @ViewChild(Content) content:Content;
   currentThread:Thread;
   messages:Subject<Message[]> = new Subject<Message[]>();
   subscription:Subscription;
@@ -38,10 +36,13 @@ export class ChatWindowPage implements OnInit, OnDestroy {
     let o = this.messagesService.observableMessagesByThreadId(
         this.currentThread.id);
     this.subscription = o.subscribe(this.messages);
-    o.subscribe(()=>{this.scrollToBottom();});
+    o.subscribe(()=> {
+      this.scrollToBottom();
+    });
   }
+
   ngOnDestroy():void {
-    if(this.subscription) this.subscription.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 
   onEnter(event:any):void {

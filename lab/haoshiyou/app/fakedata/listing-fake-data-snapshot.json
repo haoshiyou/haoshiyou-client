@@ -1,0 +1,82 @@
+{
+  "0055704b-2819-4b37-9e7f-223d9669350b": {
+    "content": "Random Place 3 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.",
+    "id": "0055704b-2819-4b37-9e7f-223d9669350b",
+    "lat": 37.46764,
+    "lng": -122.15458,
+    "ownerId": 7,
+    "title": "Random Place 1",
+    "type": 0,
+    "updated": "2016-05-09T07:00:00.000Z"
+  },
+  "108a4e0c-adaf-43e4-98e2-101566103dd3": {
+    "content": "Random Place 2 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.",
+    "id": "108a4e0c-adaf-43e4-98e2-101566103dd3",
+    "lat": 37.41557,
+    "lng": -122.0872,
+    "ownerId": 4,
+    "title": "Random Place 1",
+    "type": 0,
+    "updated": "2016-05-03T07:00:00.000Z"
+  },
+  "2250a1ad-5c35-40d4-ad8d-71bf7730a92f": {
+    "content": "Avelon MTV Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.",
+    "id": "2250a1ad-5c35-40d4-ad8d-71bf7730a92f",
+    "lat": 37.41564,
+    "lng": -122.06626,
+    "ownerId": 2,
+    "title": "Avelon MTV",
+    "type": 1,
+    "updated": "2016-05-29T07:00:00.000Z"
+  },
+  "608357e4-1b60-4eb8-9db4-0ad4fd731f99": {
+    "content": "Random Place 4 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.",
+    "id": "608357e4-1b60-4eb8-9db4-0ad4fd731f99",
+    "lat": 37.45013,
+    "lng": -122.129,
+    "ownerId": 8,
+    "title": "Random Place 1",
+    "type": 1,
+    "updated": "2016-05-20T07:00:00.000Z"
+  },
+  "6a42ecb7-2335-4009-a35d-80f34e3910a5": {
+    "content": "Random Place 1 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.",
+    "id": "6a42ecb7-2335-4009-a35d-80f34e3910a5",
+    "lat": 37.39389,
+    "lng": -122.07031,
+    "ownerId": 3,
+    "title": "Random Place 1",
+    "type": 1,
+    "updated": "2016-05-05T07:00:00.000Z"
+  },
+  "b1ca8329-7d6d-485b-9a3a-a3e1baf4e695": {
+    "content": "Random Place 3 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.",
+    "id": "b1ca8329-7d6d-485b-9a3a-a3e1baf4e695",
+    "lat": 37.46764,
+    "lng": -122.15458,
+    "ownerId": 5,
+    "title": "Random Place 1",
+    "type": 0,
+    "updated": "2016-05-02T07:00:00.000Z"
+  },
+  "d16666b4-0f9d-4180-a762-2bc4befb8c95": {
+    "content": "Google Main Campus Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.",
+    "id": "d16666b4-0f9d-4180-a762-2bc4befb8c95",
+    "lat": 37.41666,
+    "lng": -122.09106,
+    "ownerId": 1,
+    "title": "Google Main Campus",
+    "type": 0,
+    "updated": "2016-05-21T07:00:00.000Z"
+  },
+  "ed06e5f2-09bf-4d1f-a9b0-1e27ce659142": {
+    "content": "Random Place 4 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.",
+    "id": "ed06e5f2-09bf-4d1f-a9b0-1e27ce659142",
+    "lat": 37.45013,
+    "lng": -122.129,
+    "ownerId": 6,
+    "title": "Random Place 1",
+    "type": 1,
+    "updated": "2016-05-13T07:00:00.000Z"
+  }
+}

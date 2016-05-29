@@ -5,7 +5,6 @@ import {ChatWindowPage} from "./chat-window.page";
 import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe.ts";
 import {ChatThreadComp} from "./chat-thread.comp.ts";
 import {Thread, User} from "../../models/models";
-import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {Subscription} from "rxjs/Subscription";
 
@@ -23,6 +22,7 @@ export class ChatsTabPage implements OnInit, OnDestroy {
   private me:User;
   private subjectThreads:Subject<Thread[]> = new Subject<Thread[]>();
   private subscription:Subscription;
+
   constructor(private messagesService:IMessageService,
               private threadsService:IThreadService,
               private userService:IUserService) {
@@ -31,19 +31,22 @@ export class ChatsTabPage implements OnInit, OnDestroy {
     this.retrieveMe();
 
   }
+
   ngOnInit() {
+
+    // ChatFakeDataLoader.init(this.messagesService, this.threadsService, this.userService);
     this.userService.observableMe().subscribe((me:User) => {
       this.retrieveMe();
     });
   }
+
   ngOnDestroy() {
-    // ChatFakeDataLoader.init(this.messagesService, this.threadsService, this.userService);
-    if(this.subscription) this.subscription.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 
   private retrieveMe():void {
     this.me = this.userService.getMe();
-    if(this.subscription) this.subscription.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
     this.subscription = this.threadsService.obserbableThreadsByUserId(this.me.id).subscribe(this.subjectThreads);
   }
 }

@@ -1,4 +1,3 @@
-
 import {User, Thread, Message} from "../models/models";
 import * as moment from "moment";
 // the person using the app us Juliet

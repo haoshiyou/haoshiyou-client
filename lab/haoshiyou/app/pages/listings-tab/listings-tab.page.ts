@@ -1,7 +1,7 @@
 import {Page, Platform, NavController} from "ionic-angular";
-import {ListingService, MockListingService} from "../../services/listing.service.ts";
+import {IListingService} from "../../services/listings/listing.service.ts";
 import {Listing} from "../../models/listing";
-import {OnInit, OnDestroy, provide} from "@angular/core";
+import {OnInit, OnDestroy} from "@angular/core";
 import {CreationPage} from "./listing-creation.page.ts";
 import {ListingItem} from "./listing-item.comp";
 import {ListingDetailPage} from "./listing-detail.page";
@@ -16,7 +16,6 @@ declare let google:any;
  */
 @Page({
   templateUrl: 'build/pages/listings-tab/listings-tab.page.html',
-  providers: [provide(ListingService, {useClass: MockListingService})],
   directives: [ListingItem]
 })
 export class ListingsTabPage implements OnInit, OnDestroy {
@@ -31,12 +30,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private listings:Listing[];
 
   constructor(private platform:Platform,
-              private listingService:ListingService,
+              private listingService:IListingService,
               private nav:NavController) {
 
   }
 
   ngOnInit() {
+    // ChatFakeDataLoader.init(this.messagesService, this.threadsService, this.userService);
     let initMap:Promise<any> = this.platform.ready().then(() => {
       var minZoomLevel = 9;
 
@@ -54,7 +54,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       });
     });
 
-    let initListings:Promise<any> = this.listingService.getListings(
+    let initListings:Promise<void> = this.listingService.getListings(
         /* TODO(xinbenlv): currently get all, need to narrow down. */)
         .then((listings) => {
           this.listings = listings;

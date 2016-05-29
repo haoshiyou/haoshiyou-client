@@ -10,6 +10,8 @@ import {IThreadService, FirebaseThreadService} from "./services/chats/thread.ser
 import {IUserService, FirebaseUserService} from "./services/chats/user.service";
 import {FIREBASE_PROVIDERS, defaultFirebase, AngularFire} from "angularfire2";
 import {User} from "./models/models";
+import {IListingService} from "./services/listings/listing.service";
+import {FirebaseListingService} from "./services/listings/fb-listing.service";
 
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
@@ -27,6 +29,7 @@ import {User} from "./models/models";
     provide(IUserService, {useClass: FirebaseUserService}),
     provide(IThreadService, {useClass: FirebaseThreadService}),
     provide(IMessageService, {useClass: FirebaseMessageService}),
+    provide(IListingService, {useClass: FirebaseListingService}),
     FIREBASE_PROVIDERS,
     defaultFirebase('haoshiyou-dev.firebaseio.com'),
   ]

@@ -9,7 +9,7 @@
                 *ngFor="let thread of subjectThreads | async"
                 [thread]="thread">
         </chat-thread>
-        <ion-item *ngIf="!(subjectThreads|async)?.length"> You don't have any chat thread yet. </ion-item>
+        <ion-item *ngIf="!(subjectThreads|async)?.length"> You don't have any chat thread yet.</ion-item>
     </ion-list>
     <h2 *ngIf="!me"> Please login :)</h2>
 </ion-content>
