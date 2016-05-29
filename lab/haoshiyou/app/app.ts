@@ -58,9 +58,12 @@ export class MyApp {
 }
 
 // TODO(xinbenlv): primary feature in orders
-// - Create, Save, Update, View, Sort a listing
-// - Translator
-// - LogIn, LogOut, Password Reset
-// - Map Marker Listing Navigation
-// - Chat
+// - DONE Create, Save, Update, View, Sort a listing
+// - DONE LogIn, LogOut, Password Reset
+// - DONE Map Marker Listing Navigation
+// - DONE Chat
+// - City and Zip Pipe
+// - Create chat from listing.
+// - Push cycle
+// - Image picker
 // - Share to WeChat

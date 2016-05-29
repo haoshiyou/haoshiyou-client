@@ -25,7 +25,3 @@ typings install dt~firebase --save --global
 Install 
 
 xinbenlv@
-
-
- * TODO(xinbenlv): handle tsd and typings install at the time of 
- restart.

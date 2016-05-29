@@ -5,11 +5,7 @@ import {OnInit, OnDestroy} from "@angular/core";
 import {CreationPage} from "./listing-creation.page.ts";
 import {ListingItem} from "./listing-item.comp";
 import {ListingDetailPage} from "./listing-detail.page";
-
-/**
- *  Google Maps API
- */
-declare let google:any;
+import LatLng = google.maps.LatLng;
 
 /**
  * A page contains a map view and a list showing the listings.
@@ -62,11 +58,11 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     Promise.all([initMap, initListings]).then(() => {
       this.markers = [];
       for (let listing of this.listings) {
-        let marker = new google.maps.Marker({
-          position: {lat: listing.lat, lng: listing.lng},
-          animation: google.maps.Animation.DROP,
-          map: this.map
-        });
+        let opt:google.maps.MarkerOptions = <google.maps.MarkerOptions>{};
+        opt.position = new google.maps.LatLng(listing.lat, listing.lng);
+        opt.animation = google.maps.Animation.DROP;
+        opt.map = this.map;
+        let marker = new google.maps.Marker(opt);
         marker.addListener('click', () => this.gotoDetail(listing));
         this.markers.push(marker);
       }

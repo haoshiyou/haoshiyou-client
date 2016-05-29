@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from "@angular/core";
 import {ListingType} from "../models/listing";
 
-@Pipe({name: 'EnumMsgPipe'})
+@Pipe({name: 'enumMsgPipe'})
 export class EnumMsgPipe implements PipeTransform {
   transform(value:ListingType):string {
     switch (value) {
