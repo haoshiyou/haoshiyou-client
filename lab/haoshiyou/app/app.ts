@@ -13,6 +13,9 @@ import {User} from "./models/models";
 import {IListingService} from "./services/listings/listing.service";
 import {FirebaseListingService} from "./services/listings/fb-listing.service";
 import {MapService} from "./services/map.service";
+import {FAKE_LISTINGS} from "./fakedata/listing-fake-data";
+import {Listing} from "./models/listing";
+import {ChatFakeDataLoader} from "./fakedata/chat-fake-data-loader";
 
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
@@ -42,7 +45,7 @@ export class MyApp {
 
   constructor(private platform:Platform,
               private af:AngularFire,
-              private userSerivce:IUserService,
+              private userService:IUserService,
               private threadService:IThreadService,
               private messageService:IMessageService,
               private authService:AuthService) {
@@ -53,8 +56,16 @@ export class MyApp {
     });
     authService.userObservable().subscribe((user:User) => {
       // TODO(xinbenlv): on condition create user.
-      userSerivce.createUser(user);
-      userSerivce.setMe(user);
+      userService.createUser(user);
+      userService.setMe(user);
+    });
+    // this.loadFakeData();
+  }
+
+  loadFakeData() {
+    ChatFakeDataLoader.init(this.messageService, this.threadService, this.userService);
+    FAKE_LISTINGS.map((listing:Listing) => {
+      this.af.database.object("/listings/" + listing.id).set(listing);
     });
   }
 }
@@ -65,7 +76,11 @@ export class MyApp {
 // - DONE Map Marker Listing Navigation
 // - DONE Chat
 // - DONE City and Zip Pipe
-// - Create chat from listing.
-// - Push cycle
+// - DONE Create chat from listing.
+// - Push notification
 // - Image picker
+// - Handle most frequent bad cases
+// -  - No login
+// -  - No internet connection
+// -  - Authentication
 // - Share to WeChat

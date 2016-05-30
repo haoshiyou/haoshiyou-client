@@ -34,7 +34,6 @@ export class ChatsTabPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // ChatFakeDataLoader.init(this.messagesService, this.threadsService, this.userService);
     this.userService.observableMe().subscribe((me:User) => {
       this.retrieveMe();
     });

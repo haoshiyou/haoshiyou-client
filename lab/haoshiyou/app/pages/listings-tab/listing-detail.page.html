@@ -4,6 +4,12 @@
 
 <ion-content>
     <ion-card>
+        <ion-item *ngIf="owner" >
+            <ion-avatar item-left>
+                <img src="{{owner.avatarSrc}}" alt=""/>
+            </ion-avatar>
+            {{ owner.name }}
+        </ion-item>
         <img src="http://placehold.it/350x150?text=Google+Map">
         <ion-item>
             <h2>{{listing.title}}</h2>
@@ -17,7 +23,7 @@
         <img src="http://placehold.it/350x150?text=Room+Pictures">
         <ion-item>
             <span item-left>{{listing.type|enumMsgPipe}}</span>
-            <button primary clear item-right>
+            <button primary clear item-right (click)="startChat()">
                 <ion-icon name="chatbubbles"></ion-icon>
             </button>
         </ion-item>

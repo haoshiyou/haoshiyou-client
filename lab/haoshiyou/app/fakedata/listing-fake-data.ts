@@ -5,9 +5,9 @@ export const FAKE_LISTINGS:Listing[] = [
     lat: 37.41666,
     lng: -122.09106,
     content: 'Google Main Campus Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.',
-    ownerId: 1,
+    ownerId: 'eGluYmVubHZAZ21haWwuY29t',
     type: ListingType.ROOMMATE_WANTED,
-    title: 'Google Main Campus',
+    title: 'A place near Google Main Campus',
     updated: new Date(2016, 4, 21)
   },
   {
@@ -15,7 +15,7 @@ export const FAKE_LISTINGS:Listing[] = [
     lat: 37.41564,
     lng: -122.06626,
     content: 'Avelon MTV Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.',
-    ownerId: 2,
+    ownerId: 'enpuK2xpbmtlZGluQHp6bi5pbQ==',
     type: ListingType.ROOM_WANTED,
     title: 'Avelon MTV',
     updated: new Date(2016, 4, 29)
@@ -25,7 +25,7 @@ export const FAKE_LISTINGS:Listing[] = [
     lat: 37.39389,
     lng: -122.07031,
     content: 'Random Place 1 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.',
-    ownerId: 3,
+    ownerId: '3',
     type: ListingType.ROOM_WANTED,
     title: 'Random Place 1',
     updated: new Date(2016, 4, 5)
@@ -35,7 +35,7 @@ export const FAKE_LISTINGS:Listing[] = [
     lat: 37.41557,
     lng: -122.08720,
     content: 'Random Place 2 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.',
-    ownerId: 4,
+    ownerId: '4',
     type: ListingType.ROOMMATE_WANTED,
     title: 'Random Place 1',
     updated: new Date(2016, 4, 3)
@@ -45,7 +45,7 @@ export const FAKE_LISTINGS:Listing[] = [
     lat: 37.46764,
     lng: -122.15458,
     content: 'Random Place 3 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.',
-    ownerId: 5,
+    ownerId: '5',
     type: ListingType.ROOMMATE_WANTED,
     title: 'Random Place 1',
     updated: new Date(2016, 4, 2)
@@ -55,7 +55,7 @@ export const FAKE_LISTINGS:Listing[] = [
     lat: 37.45013,
     lng: -122.12900,
     content: 'Random Place 4 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.',
-    ownerId: 6,
+    ownerId: '6',
     type: ListingType.ROOM_WANTED,
     title: 'Random Place 1',
     updated: new Date(2016, 4, 13)
@@ -65,7 +65,7 @@ export const FAKE_LISTINGS:Listing[] = [
     lat: 37.46764,
     lng: -122.15458,
     content: 'Random Place 3 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.',
-    ownerId: 7,
+    ownerId: '7',
     type: ListingType.ROOMMATE_WANTED,
     title: 'Random Place 1',
     updated: new Date(2016, 4, 9)
@@ -75,7 +75,7 @@ export const FAKE_LISTINGS:Listing[] = [
     lat: 37.45013,
     lng: -122.12900,
     content: 'Random Place 4 Lorem ipsum dolor sit amet, pri ei viris legimus persecuti, dicat legimus intellegebat est no, vix ne putent legimus ocurreret. Facilis detraxit argumentum nec te. Vim an clita imperdiet, dicunt expetenda duo ex. Periculis hendrerit te mel, ex vim malis expetenda, te vis dicam vidisse intellegam.',
-    ownerId: 8,
+    ownerId: '8',
     type: ListingType.ROOM_WANTED,
     title: 'Random Place 1',
     updated: new Date(2016, 4, 20)

@@ -34,6 +34,7 @@ export class FirebaseThreadService implements IThreadService {
 
   createThread(thread:Thread):Promise<void> {
     if (thread.id) {
+      // TODO(xinbenlv): fix bug: when a thread already exist, do not override it
       return this.af.database.object("/threads/" + thread.id).update(thread);
     } else {
       return this.af.database.list("/threads").push(thread);

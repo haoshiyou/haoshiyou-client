@@ -33,12 +33,4 @@ export class FirebaseListingService implements IListingService {
     if (listing.id) return this.af.database.object("/listings/" + listing.id).update(listing);
     else return this.af.database.list("/listings").push(listing);
   }
-
-  loadFakeData() {
-    FAKE_LISTINGS.map((l:Listing) => {
-      this.af.database.object("/listings/" + l.id);
-    });
-  }
-
-
 }

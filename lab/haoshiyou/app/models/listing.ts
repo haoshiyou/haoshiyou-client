@@ -17,6 +17,6 @@ export class Listing {
   content:string;
   title:string;
   type:ListingType;
-  ownerId:number;
+  ownerId:string;
   updated:Date;
 }
