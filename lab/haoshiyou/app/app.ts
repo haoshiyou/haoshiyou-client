@@ -12,6 +12,7 @@ import {FIREBASE_PROVIDERS, defaultFirebase, AngularFire} from "angularfire2";
 import {User} from "./models/models";
 import {IListingService} from "./services/listings/listing.service";
 import {FirebaseListingService} from "./services/listings/fb-listing.service";
+import {MapService} from "./services/map.service";
 
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
@@ -30,6 +31,7 @@ import {FirebaseListingService} from "./services/listings/fb-listing.service";
     provide(IThreadService, {useClass: FirebaseThreadService}),
     provide(IMessageService, {useClass: FirebaseMessageService}),
     provide(IListingService, {useClass: FirebaseListingService}),
+    MapService,
     FIREBASE_PROVIDERS,
     defaultFirebase('haoshiyou-dev.firebaseio.com'),
   ]
@@ -62,7 +64,7 @@ export class MyApp {
 // - DONE LogIn, LogOut, Password Reset
 // - DONE Map Marker Listing Navigation
 // - DONE Chat
-// - City and Zip Pipe
+// - DONE City and Zip Pipe
 // - Create chat from listing.
 // - Push cycle
 // - Image picker

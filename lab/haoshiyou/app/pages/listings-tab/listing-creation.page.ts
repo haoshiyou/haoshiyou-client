@@ -4,6 +4,8 @@ import {EnumMsgPipe} from "../../pipes/enum-msg.pipe";
 import {ListingType, Listing} from "../../models/listing";
 import {uuid} from "../../util/uuid";
 import {IListingService} from "../../services/listings/listing.service";
+import {CityNZipPipe} from "../../pipes/city-n-zip.pipe";
+import {MapService, ILocality} from "../../services/map.service";
 
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
 
@@ -12,19 +14,19 @@ const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
  */
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-creation.page.html',
-  pipes: [EnumMsgPipe],
+  pipes: [EnumMsgPipe, CityNZipPipe],
 })
 export class CreationPage implements OnInit {
   private typeOptions:ListingType[] = ListingType.values();
   private map:google.maps.Map;
   private marker:google.maps.Marker;
-
-  private center:google.maps.LatLng;
   private listing:Listing;
+  private localityText:string;
 
   constructor(private platform:Platform, private params:NavParams,
               private listingService:IListingService,
-              private nav:NavController) {
+              private nav:NavController,
+              private mapService:MapService) {
     if (params.data.listing) {
       this.listing = params.data.listing;
     } else {
@@ -64,6 +66,10 @@ export class CreationPage implements OnInit {
     google.maps.event.addListener(this.marker, 'dragend', (event) => {
       this.listing.lat = this.marker.getPosition().lat();
       this.listing.lng = this.marker.getPosition().lng();
+      this.mapService.getLocality(new google.maps.LatLng(this.listing.lat, this.listing.lng))
+          .then((locality:ILocality)=> {
+            this.localityText = locality.city + "," + locality.zip;
+          });
     });
 
   }
