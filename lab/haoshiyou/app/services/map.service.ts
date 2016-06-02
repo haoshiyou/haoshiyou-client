@@ -1,12 +1,15 @@
 import {Injectable} from "@angular/core";
+import {LogService} from "./log.service";
+import Logger = log4javascript.Logger;
 
 @Injectable()
 export class MapService {
   // TODO(xinbenlv): consider add caching.
   private geocoder:google.maps.Geocoder;
-
+  private logger:Logger = LogService.getDefaultLogger();
   constructor() {
     this.geocoder = new google.maps.Geocoder();
+    this.logger.debug("Initialized MapService.");
   }
 
   public getLocality(latlng:google.maps.LatLng):Promise<ILocality> {

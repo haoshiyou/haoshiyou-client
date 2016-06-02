@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/3644ba6e4f6f4421001fc73d795d684384abb2c7/log4javascript/log4javascript.d.ts",
+    "raw": "registry:dt/log4javascript#0.0.0+20160514173738",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/3644ba6e4f6f4421001fc73d795d684384abb2c7/log4javascript/log4javascript.d.ts"
+  }
+}
