@@ -1,9 +1,10 @@
-import {Injectable} from "@angular/core";
+import {Injectable, Inject} from "@angular/core";
 import {User} from "../../models/models";
 import {Observable} from "rxjs";
 import {AngularFire} from "angularfire2/angularfire2";
 import {Subject} from "rxjs/Subject";
-import {LogService} from "../log.service";
+import {Logger} from "log4javascript";
+import {loggerToken} from "../log.service";
 
 @Injectable()
 export class IUserService { // use as interface, angular2 does not support injecting interface yet.
@@ -32,10 +33,9 @@ export class IUserService { // use as interface, angular2 does not support injec
 export class FirebaseUserService implements IUserService { // use "class" IUserService as "interface"
   private me:User;
   private subjectMe:Subject<User> = new Subject<User>();
-  private log:log4javascript.Logger;
-  constructor(private af:AngularFire) {
-    this.log = LogService.getDefaultLogger();
-    this.log.debug("Initialized FirebaseUserService.");
+
+  constructor(private af:AngularFire, @Inject(loggerToken) private logger:Logger) {
+    this.logger.debug("Initialized FirebaseUserService.");
   }
 
   getMe():User {

@@ -16,6 +16,7 @@ import {MapService} from "./services/map.service";
 import {FAKE_LISTINGS} from "./fakedata/listing-fake-data";
 import {Listing} from "./models/listing";
 import {ChatFakeDataLoader} from "./fakedata/chat-fake-data-loader";
+import {LogService, loggerToken} from "./services/log.service";
 
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
@@ -34,6 +35,12 @@ import {ChatFakeDataLoader} from "./fakedata/chat-fake-data-loader";
     provide(IThreadService, {useClass: FirebaseThreadService}),
     provide(IMessageService, {useClass: FirebaseMessageService}),
     provide(IListingService, {useClass: FirebaseListingService}),
+    LogService,
+    provide(loggerToken, {
+      useFactory: (logService:LogService) => {
+        return logService.getLogger();
+      }, deps: [LogService]
+    }),
     MapService,
     FIREBASE_PROVIDERS,
     defaultFirebase('haoshiyou-dev.firebaseio.com'),
@@ -77,8 +84,8 @@ export class MyApp {
 // - DONE Chat
 // - DONE City and Zip Pipe
 // - DONE Create chat from listing.
-// - Push notification
-// - Image picker
+// - PARTIAL Push notification
+// - DONE Image picker
 // - Handle most frequent bad cases
 // -  - No login
 // -  - No internet connection
