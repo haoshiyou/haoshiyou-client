@@ -6,6 +6,8 @@ import {Device} from "ionic-native";
 import {AngularFire} from "angularfire2/angularfire2";
 export let loggerToken:OpaqueToken = new OpaqueToken("value");
 
+declare let window:any;
+
 @Injectable()
 export class LogService {
   private logger:Logger;
@@ -21,7 +23,19 @@ export class LogService {
       this.logger.addAppender(browserAppender);
       this.logger.debug("Initialized Logger.");
     });
+    window.onerror = (msg, url, line, col, error) => {
+      // Note that col & error are new to the HTML 5 spec and may not be
+      // supported in every browser.  It worked for me in Chrome.
+      var extra = !col ? '' : '\ncolumn: ' + col;
+      extra += !error ? '' : '\nerror: ' + error;
 
+      this.logger.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
+
+      var suppressErrorAlert = true;
+      // If you return true, then error alerts (like in older versions of
+      // Internet Explorer) will be suppressed.
+      return suppressErrorAlert;
+    };
   }
 
   getLogger():Logger {
@@ -48,7 +62,7 @@ export class FbAppender extends log4javascript.Appender {
     entry.messages = loggingEvent.messages;
     if (loggingEvent.exception) entry.exception = loggingEvent.exception;
     this.af.database.list("/tmp/logs/device-" + this.device.uuid).push(entry);
-    this.af.database.object("/tmp/devices/device-" + this.device.uuid).update(this.device);
+    this.af.database.object("/tmp/devices/device-" + this.device.uuid).set(this.device);
   };
 }
 
