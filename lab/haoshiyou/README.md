@@ -24,4 +24,11 @@ typings install dt~firebase --save --global
 
 Install 
 
+
+### Run 
+
+```
+ionic run -lcs --debug ios --address=localhost
+```
+
 xinbenlv@

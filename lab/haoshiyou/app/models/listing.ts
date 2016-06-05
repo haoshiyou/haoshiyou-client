@@ -10,7 +10,7 @@ export namespace ListingType {
   }
 }
 
-export class Listing {
+export interface Listing {
   id:ListingId;
   lat:number; // latitude
   lng:number; // longitude
@@ -19,4 +19,5 @@ export class Listing {
   type:ListingType;
   ownerId:string;
   updated:Date;
+  imageIds:string[]; // ids
 }

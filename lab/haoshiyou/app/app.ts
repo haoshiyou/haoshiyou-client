@@ -17,6 +17,7 @@ import {FAKE_LISTINGS} from "./fakedata/listing-fake-data";
 import {Listing} from "./models/listing";
 import {ChatFakeDataLoader} from "./fakedata/chat-fake-data-loader";
 import {LogService, loggerToken} from "./services/log.service";
+import {IImageService, CloudinaryImageService} from "./services/image.service";
 
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
@@ -35,6 +36,7 @@ import {LogService, loggerToken} from "./services/log.service";
     provide(IThreadService, {useClass: FirebaseThreadService}),
     provide(IMessageService, {useClass: FirebaseMessageService}),
     provide(IListingService, {useClass: FirebaseListingService}),
+    provide(IImageService, {useClass: CloudinaryImageService}),
     LogService,
     provide(loggerToken, {
       useFactory: (logService:LogService) => {

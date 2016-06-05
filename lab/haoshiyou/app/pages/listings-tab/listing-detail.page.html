@@ -4,13 +4,18 @@
 
 <ion-content>
     <ion-card>
+        <ion-item>
+            <span item-left>{{listing.type|enumMsgPipe}}</span>
+            <button primary clear item-right (click)="startChat()">
+                <ion-icon name="chatbubbles"></ion-icon>
+            </button>
+        </ion-item>
         <ion-item *ngIf="owner" >
             <ion-avatar item-left>
                 <img src="{{owner.avatarSrc}}" alt=""/>
             </ion-avatar>
             {{ owner.name }}
         </ion-item>
-        <img src="http://placehold.it/350x150?text=Google+Map">
         <ion-item>
             <h2>{{listing.title}}</h2>
             <p>{{listing.updated|timeFromNow}}</p>
@@ -18,9 +23,10 @@
         <ion-card-content>
             <p class="">{{listing.content}}</p>
         </ion-card-content>
-        <img src="http://placehold.it/350x150?text=Room+Pictures">
-        <img src="http://placehold.it/350x150?text=Room+Pictures">
-        <img src="http://placehold.it/350x150?text=Room+Pictures">
+        <img src="http://placehold.it/350x150?text=Google+Map">
+
+        <image-grid [imageUrls]="listing.imageIds | imageIdToUrlPipe"></image-grid>
+
         <ion-item>
             <span item-left>{{listing.type|enumMsgPipe}}</span>
             <button primary clear item-right (click)="startChat()">

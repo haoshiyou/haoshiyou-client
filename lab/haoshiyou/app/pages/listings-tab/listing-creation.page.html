@@ -15,7 +15,7 @@
     <div style="width:100%;height:250px" id="map_drag_canvas"></div>
     <ion-item>
         <ion-label>Type</ion-label>
-        <ion-select [(ngModel)]="type">
+        <ion-select [(ngModel)]="listing.type">
             <ion-option *ngFor="let v of typeOptions "> {{ v | enumMsgPipe }}</ion-option>
         </ion-select>
     </ion-item>
@@ -36,38 +36,13 @@
         <ion-label fixed>Pictures</ion-label>
         <ion-input fixed disabled></ion-input>
     </ion-item>
-    <ion-item>
-        <ion-grid>
-            <ion-row>
-                <ion-col width-33>
-                    <img src="http://placehold.it/100x100?text=Room+Pick">
-                </ion-col>
-                <ion-col width-33>
-                    <img src="http://placehold.it/100x100?text=Room+Pick">
-                </ion-col>
-                <ion-col width-33>
-                    <img src="http://placehold.it/100x100?text=Room+Pick">
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col width-33>
-                    <img src="http://placehold.it/100x100?text=Room+Pick">
-                </ion-col>
-                <ion-col width-33>
-                    <img src="http://placehold.it/100x100?text=Room+Pick">
-                </ion-col>
-                <ion-col width-33>
-                    <img src="http://placehold.it/100x100?text=Room+Pick">
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col width-33>
-                    <img src="http://placehold.it/100x100?text=Room+Pick">
-                </ion-col>
-                <ion-col width-33>
-                    <img src="http://placehold.it/100x100?text=?">
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+
+    <ion-item *ngIf="listing">
+        <image-grid
+                (add)="pickPictures()"
+                [imageUrls]="listing.imageIds | imageIdToUrlPipe"
+                [isEdit]="true"
+        ></image-grid>
     </ion-item>
+
 </ion-content>

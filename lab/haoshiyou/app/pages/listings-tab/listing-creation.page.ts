@@ -1,12 +1,19 @@
 import {Page, Platform, NavParams, NavController} from "ionic-angular";
-import {OnInit} from "@angular/core";
+import {OnInit, Inject} from "@angular/core";
 import {EnumMsgPipe} from "../../pipes/enum-msg.pipe";
 import {ListingType, Listing} from "../../models/listing";
 import {uuid} from "../../util/uuid";
 import {IListingService} from "../../services/listings/listing.service";
 import {CityNZipPipe} from "../../pipes/city-n-zip.pipe";
 import {MapService, ILocality} from "../../services/map.service";
+import {ImagePicker} from "ionic-native";
+import {Logger} from "log4javascript";
+import {loggerToken} from "../../services/log.service";
+import {IImageService} from "../../services/image.service";
+import {ImageGridComponent} from "./image-grid.comp";
+import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe.ts";
 
+// TODO(xinbenlv):
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
 
 /**
@@ -14,9 +21,11 @@ const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
  */
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-creation.page.html',
-  pipes: [EnumMsgPipe, CityNZipPipe],
+  pipes: [EnumMsgPipe, CityNZipPipe, ImageIdToUrlPipe],
+  directives: [ImageGridComponent]
 })
 export class CreationPage implements OnInit {
+  //noinspection JSUnusedLocalSymbols
   private typeOptions:ListingType[] = ListingType.values();
   private map:google.maps.Map;
   private marker:google.maps.Marker;
@@ -26,17 +35,19 @@ export class CreationPage implements OnInit {
   constructor(private platform:Platform, private params:NavParams,
               private listingService:IListingService,
               private nav:NavController,
-              private mapService:MapService) {
+              private mapService:MapService,
+              private imageService:IImageService,
+              @Inject(loggerToken) private logger:Logger) {
     if (params.data.listing) {
       this.listing = params.data.listing;
     } else {
-      this.listing = new Listing();
+      this.listing = <Listing>{};
       this.listing.id = uuid();
       this.listing.lat = DEFAULT_CENTER.lat();
       this.listing.lng = DEFAULT_CENTER.lng();
     }
-
-
+    if (!this.listing.imageIds) this.listing.imageIds = [];
+    this.logger.debug("Initialized CreationPage with listing %s", this.listing);
   }
 
   ngOnInit():any {
@@ -77,7 +88,33 @@ export class CreationPage implements OnInit {
   private save() {
     this.listingService.createListing(this.listing).then(()=> {
       // succeed.
+      this.logger.info(`Saved listing: ${JSON.stringify(this.listing)}`);
       this.nav.pop();
     });
+  }
+
+  private pickPictures() {
+    var options = {
+      maximumImagesCount: 10,
+      width: 1600,
+      height: 1600,
+      quality: 80
+    };
+    ImagePicker.getPictures(options)
+        .then((urls:string[]) => {
+          return this.imageService.uploadImagesAndGetIds(urls)
+        })
+        .then((storedImageIds:string[]) => {
+          if (!this.listing.imageIds) this.listing.imageIds = [];
+          this.listing.imageIds = this.listing.imageIds.concat(storedImageIds);
+          this.logger.info(`Listing added imageIds: ${JSON.stringify(storedImageIds)}`);
+          this.logger.debug(`Listing result imageIds: ${JSON.stringify(this.listing.imageIds)}`);
+        })
+        .catch((err) => {
+          this.logger.error(`Creation page attempt to add images result in error! ${JSON.stringify(err)}`);
+          // TODO(xinbenlv, #error-handling): handle error, using.
+          alert("Filed to upload images!");
+          this.nav.pop();
+        });
   }
 }

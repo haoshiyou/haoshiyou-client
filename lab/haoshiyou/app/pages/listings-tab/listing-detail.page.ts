@@ -6,10 +6,13 @@ import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
 import {IUserService} from "../../services/chats/user.service";
 import {ChatWindowPage} from "../chats-tab/chat-window.page";
+import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
+import {ImageGridComponent} from "./image-grid.comp";
 
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
-  pipes: [EnumMsgPipe, TimeFromNowPipe]
+  pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
+  directives: [ImageGridComponent]
 })
 export class ListingDetailPage {
   private listing:Listing;

@@ -11,6 +11,7 @@
   <allow-intent href="sms:*"/>
   <allow-intent href="mailto:*"/>
   <allow-intent href="geo:*"/>
+  <allow-navigation href="*"/>
   <platform name="android">
     <allow-intent href="market:*"/>
   </platform>
@@ -32,4 +33,5 @@
   <plugin name="cordova-plugin-splashscreen" spec="~3.2.2"/>
   <plugin name="cordova-plugin-statusbar" spec="~2.1.3"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.0"/>
+  <plugin name="cordova-plugin-file-transfer" spec="~1.5.1"/>
 </widget>
