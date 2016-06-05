@@ -41,7 +41,8 @@
     "ionic-plugin-keyboard",
     "cordova-plugin-image-picker",
     "cordova-plugin-file-transfer",
-    "cordova-plugin-file"
+    "cordova-plugin-file",
+    "cordova-plugin-network-information"
   ],
   "cordovaPlatforms": [
     "ios",

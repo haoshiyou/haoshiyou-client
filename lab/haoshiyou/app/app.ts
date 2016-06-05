@@ -87,10 +87,10 @@ export class MyApp {
 // - DONE City and Zip Pipe
 // - DONE Create chat from listing.
 // - DONE Image picker
-// - Google Map on Detail Page
-// - PARTIAL Push notification
+// - DONE Google Map on Detail Page
 // - Handle most frequent bad cases
 // -  - No login
-// -  - No internet connection
+// -  - DONE No internet connection
+// - PARTIAL Push notification
 // - Authentication
 // - Share to WeChat
