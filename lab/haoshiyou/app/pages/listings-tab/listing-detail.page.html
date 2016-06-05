@@ -23,8 +23,7 @@
         <ion-card-content>
             <p class="">{{listing.content}}</p>
         </ion-card-content>
-        <img src="http://placehold.it/350x150?text=Google+Map">
-
+        <map-view [listings]="[listing]"></map-view>
         <image-grid [imageUrls]="listing.imageIds | imageIdToUrlPipe"></image-grid>
 
         <ion-item>

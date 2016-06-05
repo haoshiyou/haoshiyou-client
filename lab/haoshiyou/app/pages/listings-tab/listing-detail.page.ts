@@ -8,11 +8,12 @@ import {IUserService} from "../../services/chats/user.service";
 import {ChatWindowPage} from "../chats-tab/chat-window.page";
 import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 import {ImageGridComponent} from "./image-grid.comp";
+import {MapViewComponent} from "./map-view.comp";
 
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
-  directives: [ImageGridComponent]
+  directives: [ImageGridComponent, MapViewComponent]
 })
 export class ListingDetailPage {
   private listing:Listing;
