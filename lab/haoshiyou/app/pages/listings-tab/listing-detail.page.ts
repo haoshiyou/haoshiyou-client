@@ -9,7 +9,9 @@ import {ChatWindowPage} from "../chats-tab/chat-window.page";
 import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 import {ImageGridComponent} from "./image-grid.comp";
 import {MapViewComponent} from "./map-view.comp";
-
+import {loggerToken} from "../../services/log.service";
+import {Inject} from "@angular/core";
+import {Logger} from "log4javascript";
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
@@ -22,9 +24,11 @@ export class ListingDetailPage {
   constructor(private threadService:IThreadService,
               private userService:IUserService,
               private nav:NavController,
+              @Inject(loggerToken)
+              private logger:Logger,
               params:NavParams) {
     this.listing = params.data.listing;
-
+    this.logger.info(`Entering detail page for ${JSON.stringify(this.listing)}`);
     this.userService.observableUserById(this.listing.ownerId).subscribe((owner:User)=> {
       this.owner = owner;
     });

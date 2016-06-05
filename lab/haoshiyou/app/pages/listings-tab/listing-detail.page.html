@@ -24,8 +24,10 @@
             <p class="">{{listing.content}}</p>
         </ion-card-content>
         <map-view [listings]="[listing]"></map-view>
-        <image-grid [imageUrls]="listing.imageIds | imageIdToUrlPipe"></image-grid>
-
+        <image-grid *ngIf="listing.imageIds" [imageUrls]="listing.imageIds | imageIdToUrlPipe"></image-grid>
+        <ion-item *ngIf="!listing.imageIds">
+            No Pictures
+        </ion-item>
         <ion-item>
             <span item-left>{{listing.type|enumMsgPipe}}</span>
             <button primary clear item-right (click)="startChat()">
