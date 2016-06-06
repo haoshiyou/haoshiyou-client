@@ -67,6 +67,7 @@ export class AuthService {
     this.local.remove('id_token');
     this.local.remove('refresh_token');
     this.zoneImpl.run(() => this.user = null);
+    this.userSubject.next(null); // logout
   }
 
   /**

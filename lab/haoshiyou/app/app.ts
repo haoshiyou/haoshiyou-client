@@ -65,8 +65,21 @@ export class MyApp {
     });
     authService.userObservable().subscribe((user:User) => {
       // TODO(xinbenlv): on condition create user.
-      userService.createUser(user);
-      userService.setMe(user);
+      if (!user) {
+        userService.setMeId(null);
+      } // logout
+      else { // login
+        userService.observableUserById(user.id).take(1).toPromise().then((user:User)=> {
+          if (!user) {
+            userService.createUser(user).then(()=> {
+              userService.setMeId(user.id);
+            });
+          } else {
+            userService.setMeId(user.id);
+          }
+        });
+      }
+
     });
     // this.loadFakeData();
   }

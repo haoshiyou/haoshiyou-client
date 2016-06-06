@@ -2,8 +2,8 @@
 <ion-content>
     <ion-list>
         <chat-message
-                *ngFor="let message of messages | async"
-                [message]="message">
+                *ngFor="let messageInfo of messageInfos"
+                [message]="messageInfo.message" [author]="messageInfo.author" [incoming]="messageInfo.incoming">
         </chat-message>
     </ion-list>
 </ion-content>

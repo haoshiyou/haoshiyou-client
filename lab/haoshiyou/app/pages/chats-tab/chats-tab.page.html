@@ -4,12 +4,18 @@
     </ion-title>
 </ion-navbar>
 <ion-content>
-    <ion-list *ngIf="me">
+    <ion-list *ngIf="meId">
         <chat-thread
-                *ngFor="let thread of subjectThreads | async"
+                *ngFor="let thread of threads"
                 [thread]="thread">
         </chat-thread>
-        <ion-item *ngIf="!(subjectThreads|async)?.length"> You don't have any chat thread yet.</ion-item>
+        <ion-item *ngIf="!threads || !threads.length"> You don't have any chat thread yet.</ion-item>
     </ion-list>
-    <h2 *ngIf="!me"> Please login :)</h2>
+
+    <ion-list *ngIf="!meId">
+        <ion-item>
+            <ion-label>You need to login to chat, please login</ion-label>
+            <button item-right (click)="auth.login()">Login</button>
+        </ion-item>
+    </ion-list>
 </ion-content>

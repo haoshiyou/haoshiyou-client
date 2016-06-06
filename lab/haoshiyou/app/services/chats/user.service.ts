@@ -2,57 +2,57 @@ import {Injectable, Inject} from "@angular/core";
 import {User} from "../../models/models";
 import {Observable} from "rxjs";
 import {AngularFire} from "angularfire2/angularfire2";
-import {Subject} from "rxjs/Subject";
 import {Logger} from "log4javascript";
 import {loggerToken} from "../log.service";
+import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class IUserService { // use as interface, angular2 does not support injecting interface yet.
-  getMe():User {
+  promiseMe():Promise<User> {
+    throw "Not implemented";
+  }
+
+  setMeId(idstring):void {
     throw "Not implemented";
   }
 
   observableUserById(id:string):Observable<User> {
-    throw "Not implemented";
-  }
-
-  setMe(user:User):void {
-    throw "Not implemented";
-  }
-
-  observableMe():Observable<User> {
     throw "Not implemented";
   }
 
   createUser(user:User):Promise<void> {
     throw "Not implemented";
   }
+
+  observableMeId():Observable<string> {
+    throw "Not implemented";
+  }
 }
 
 @Injectable()
 export class FirebaseUserService implements IUserService { // use "class" IUserService as "interface"
-  private me:User;
-  private subjectMe:Subject<User> = new Subject<User>();
-
+  private meId:string = null; // explicitly default to null
+  private meIdSubject:Subject<string> = new Subject<string>();
   constructor(private af:AngularFire, @Inject(loggerToken) private logger:Logger) {
     this.logger.debug("Initialized FirebaseUserService.");
   }
 
-  getMe():User {
-    return this.me;
+  setMeId(id:string):void {
+    this.meId = id;
+    this.meIdSubject.next(id);
+  }
+
+  promiseMe():Promise<User> {
+    if (this.meId) {
+      this.logger.info(`Promise me returns a meId = ${this.meId}`);
+      return this.observableUserById(this.meId).take(1).toPromise();
+    } else {
+      return Promise.resolve(<User>null);
+    }
   }
 
   observableUserById(id:string):Observable<User> {
     return this.af.database.object("/users/" + id);
-  }
-
-  setMe(me:User):void {
-    this.me = me;
-    this.subjectMe.next(me);
-  }
-
-  observableMe():Observable<User> {
-    return this.subjectMe;
   }
 
   createUser(user:User):Promise<void> {
@@ -60,7 +60,11 @@ export class FirebaseUserService implements IUserService { // use "class" IUserS
     if (user && user.id) {
       return this.af.database.object("/users/" + user.id).update(user);
     } else {
-      console.log("WARNING: user or user.id not exist! user=" + user);
+      this.logger.error("user or user.id does not exit");
     }
+  }
+
+  observableMeId():Observable<string> {
+    return this.meIdSubject;
   }
 }

@@ -38,13 +38,15 @@ export class ListingDetailPage {
   startChat() {
     // TODO(xinbenlv): handle when not yet logged in.
     let thread:Thread = <Thread>{};
-    let me:User = this.userService.getMe();
-    let newThreadId:string = me.id + '|' + this.listing.id;
-    thread.id = newThreadId;
-    thread.userIds = [me.id, this.listing.ownerId];
-    this.threadService.createThread(thread).then(() => {
+    this.userService.promiseMe().then((me:User)=> {
+      let newThreadId:string = me.id + '|' + this.listing.id;
+      thread.id = newThreadId;
+      thread.userIds = [me.id, this.listing.ownerId];
+      return this.threadService.createThread(thread);
+    }).then(() => {
       this.nav.push(ChatWindowPage, {thread: thread});
     });
+
   }
 
 }

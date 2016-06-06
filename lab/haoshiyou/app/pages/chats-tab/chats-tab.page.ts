@@ -1,12 +1,14 @@
 import {Page} from "ionic-angular";
-import {OnInit, OnDestroy} from "@angular/core";
+import {OnInit, OnDestroy, Inject} from "@angular/core";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {ChatWindowPage} from "./chat-window.page";
 import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe.ts";
 import {ChatThreadComp} from "./chat-thread.comp.ts";
 import {Thread, User} from "../../models/models";
-import {Subject} from "rxjs/Subject";
 import {Subscription} from "rxjs/Subscription";
+import {loggerToken} from "../../services/log.service";
+import {Logger} from "log4javascript";
+import {AuthService} from "../../services/auth.service";
 
 /**
  * TODO(xinbenlv): optimize the messages update process and ChangeDetection for optimal user experience.
@@ -19,33 +21,44 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class ChatsTabPage implements OnInit, OnDestroy {
 
-  private me:User;
-  private subjectThreads:Subject<Thread[]> = new Subject<Thread[]>();
+  private meId:string;
+  private threads:Thread[];
   private subscription:Subscription;
 
   constructor(private messagesService:IMessageService,
               private threadsService:IThreadService,
-              private userService:IUserService) {
-    // we need this and below both, depending on whether UserService has doen initialize.
-    // TODO(xinbenlv): there should be a way to optimize it
-    this.retrieveMe();
-
+              private userService:IUserService,
+              @Inject(loggerToken) private logger:Logger,
+              private auth:AuthService) {
+    this.userService.observableMeId().subscribe((meId:string) => {
+      this.logger.info(`Receiving me in the chat tab. me=${JSON.stringify(meId)}`);
+      this.retrieveMe(meId);
+    });
   }
 
   ngOnInit() {
 
-    this.userService.observableMe().subscribe((me:User) => {
-      this.retrieveMe();
+    this.userService.promiseMe().then((me:User)=> {
+      this.logger.info(`Agressively getting me me in the chat tab. me=${JSON.stringify(me)}`);
+      this.retrieveMe(me ? me.id : null);
     });
   }
 
+
   ngOnDestroy() {
+    this.logger.debug(`ChatsTabPage ngOnDestroy`);
     if (this.subscription) this.subscription.unsubscribe();
   }
 
-  private retrieveMe():void {
-    this.me = this.userService.getMe();
+  private retrieveMe(meId:string):void {
+    this.meId = meId;
+    if (!meId) {
+      return;
+    }
+    this.logger.info(`Setting me in retrieve me. me=${JSON.stringify(this.meId)}`);
     if (this.subscription) this.subscription.unsubscribe();
-    this.subscription = this.threadsService.obserbableThreadsByUserId(this.me.id).subscribe(this.subjectThreads);
+    this.threadsService.obserbableThreadsByUserId(meId).subscribe((threads:Thread[])=> {
+      this.threads = threads;
+    });
   }
 }
