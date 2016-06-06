@@ -50,7 +50,7 @@ TODO(xinbenlv): primary feature in orders
    -  - DONE Strip to production credentials
    -  - DONE Turn Off FB and LinkedIn Auth0 signin.
    -  - DONE Disable Web Upload Image, Stop nav-back after upload image failure.
-   -  - Add icon, splash screen, webpage icon
+   -  - DONE Add icon, splash screen, webpage icon
    -  - Sanitize
    -  - Publish on Android and iOS for beta testing.
  - Rlease 2: MVP for Growth
