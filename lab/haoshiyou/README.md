@@ -32,3 +32,32 @@ ionic run -lcs --debug ios --address=localhost
 ```
 
 xinbenlv@
+
+## Road Map
+TODO(xinbenlv): primary feature in orders
+ - DONE Create, Save, Update, View, Sort a listing
+ - DONE LogIn, LogOut, Password Reset
+ - DONE Map Marker Listing Navigation
+ - DONE Chat
+ - DONE City and Zip Pipe
+ - DONE Create chat from listing.
+ - DONE Image picker
+ - DONE Google Map on Detail Page
+ - DONE Handle most frequent bad cases
+   -  - DONE No login
+   -  - DONE No internet connection
+ - Rlease 1: MVP for Early Adopter
+   -  - DONE Strip to production credentials
+   -  - DONE Turn Off FB and LinkedIn Auth0 signin.
+   -  - DONE Disable Web Upload Image, Stop nav-back after upload image failure.
+   -  - Add icon, splash screen, webpage icon
+   -  - Sanitize
+   -  - Publish on Android and iOS for beta testing.
+ - Rlease 2: MVP for Growth
+   -  - Push notification
+   -  - New message counting
+   -  - Browser upload pictures
+   -  - Facebook and LinkedIn Sign-In Callback Fixing
+   -  - Share to WeChat
+ - Release 3: Performance and UX tweak 
+ - Authentication

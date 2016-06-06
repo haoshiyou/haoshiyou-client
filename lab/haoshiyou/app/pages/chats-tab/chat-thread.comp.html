@@ -1,10 +1,6 @@
 <ion-item (click)="gotoThread()">
-    <ion-avatar item-left>
-        <!-- <img src="{{thread.avatarSrc}}">-->
-        <img src="http://placehold.it/100x100?text=Thread Avatar">
-    </ion-avatar>
     <h2 class="media-heading contact-name">
-        Thread with someone
+        {{ participants }}
     </h2>
     <small class="message-preview">{{thread.lastMessageText}}</small>
 </ion-item>

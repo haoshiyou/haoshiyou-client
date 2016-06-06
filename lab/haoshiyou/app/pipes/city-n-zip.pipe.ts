@@ -10,7 +10,7 @@ export class CityNZipPipe implements PipeTransform {
 
   transform(latlng:google.maps.LatLng):Promise<string> {
     return this.mapService.getLocality(latlng).then((locality:ILocality) => {
-      return locality.city + "," + locality.zip;
+      return locality.city + ", " + locality.zip;
     }).catch((e:any) => {
       console.log(e);
       return Promise.resolve("Unknown City");

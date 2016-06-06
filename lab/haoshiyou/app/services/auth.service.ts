@@ -7,6 +7,7 @@ import {IThreadService} from "./chats/thread.service";
 import {User} from "../models/models";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
+import {ICredentialService} from "./credential.service";
 
 // Avoid name not found warnings
 declare var Auth0Lock:any;
@@ -16,14 +17,18 @@ export class AuthService {
 
   public user:Object;
   private jwtHelper:JwtHelper = new JwtHelper();
-  private lock = new Auth0Lock('StjMTE6NRzI9qmUPT2ij4LvEzmlja8OY', 'xinbenlv.auth0.com');
+  private lock;
   private local:Storage = new Storage(LocalStorage);
   private refreshSubscription:any;
   private zoneImpl:NgZone;
   private userSubject:Subject<User>;
 
   constructor(private authHttp:AuthHttp, zone:NgZone,
-              private threadService:IThreadService) {
+              private threadService:IThreadService, private credentialService:ICredentialService) {
+    this.lock = new Auth0Lock(
+        this.credentialService.get("AUTH0_CLIENT_ID"),
+        this.credentialService.get("AUTH0_ACCOUNT_DOMAIN")
+    );
     this.zoneImpl = zone;
     this.userSubject = new Subject<User>();
     // If there is a profile saved in local storage

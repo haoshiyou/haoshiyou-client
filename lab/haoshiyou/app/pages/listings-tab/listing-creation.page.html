@@ -16,7 +16,7 @@
     <ion-item>
         <ion-label>Type</ion-label>
         <ion-select [(ngModel)]="listing.type">
-            <ion-option *ngFor="let v of typeOptions "> {{ v | enumMsgPipe }}</ion-option>
+            <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
         </ion-select>
     </ion-item>
     <ion-item>
@@ -37,12 +37,15 @@
         <ion-input fixed disabled></ion-input>
     </ion-item>
 
-    <ion-item *ngIf="listing">
+    <ion-item *ngIf="platform.is('ios') || platform.is('android')">
         <image-grid
                 (add)="pickPictures()"
                 [imageUrls]="listing.imageIds | imageIdToUrlPipe"
                 [isEdit]="true"
         ></image-grid>
+    </ion-item>
+    <ion-item *ngIf="!(platform.is('ios') || platform.is('android'))">
+        Sorry, Web cannot upload image (yet), to upload image, use your phone.
     </ion-item>
 
 </ion-content>

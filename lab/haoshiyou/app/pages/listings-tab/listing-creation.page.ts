@@ -121,8 +121,7 @@ export class CreationPage implements OnInit {
         .catch((err) => {
           this.logger.error(`Creation page attempt to add images result in error! ${JSON.stringify(err)}`);
           // TODO(xinbenlv, #error-handling): handle error, using.
-          alert("Filed to upload images!");
-          this.nav.pop();
+          alert("Failed to upload images!");
         });
   }
 }

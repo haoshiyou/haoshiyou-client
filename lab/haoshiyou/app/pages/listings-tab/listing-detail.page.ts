@@ -42,6 +42,7 @@ export class ListingDetailPage {
       let newThreadId:string = me.id + '|' + this.listing.id;
       thread.id = newThreadId;
       thread.userIds = [me.id, this.listing.ownerId];
+      this.logger.debug(`Creating chat thread ${JSON.stringify(thread)}`);
       return this.threadService.createThread(thread);
     }).then(() => {
       this.nav.push(ChatWindowPage, {thread: thread});

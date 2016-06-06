@@ -8,7 +8,7 @@ import {AuthService} from "./services/auth.service.ts";
 import {IMessageService, FirebaseMessageService} from "./services/chats/message.service.ts";
 import {IThreadService, FirebaseThreadService} from "./services/chats/thread.service.ts";
 import {IUserService, FirebaseUserService} from "./services/chats/user.service";
-import {FIREBASE_PROVIDERS, defaultFirebase, AngularFire} from "angularfire2";
+import {FIREBASE_PROVIDERS, AngularFire, FirebaseUrl} from "angularfire2";
 import {User} from "./models/models";
 import {IListingService} from "./services/listings/listing.service";
 import {FirebaseListingService} from "./services/listings/fb-listing.service";
@@ -18,6 +18,9 @@ import {Listing} from "./models/listing";
 import {ChatFakeDataLoader} from "./fakedata/chat-fake-data-loader";
 import {LogService, loggerToken} from "./services/log.service";
 import {IImageService, CloudinaryImageService} from "./services/image.service";
+import {ICredentialService, StaticCredentialService} from "./services/credential.service";
+
+declare let ga:any;
 
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
@@ -25,6 +28,12 @@ import {IImageService, CloudinaryImageService} from "./services/image.service";
     tabSubPages: true
   }, // http://ionicframework.com/docs/v2/api/config/Config/
   providers: [
+    provide(ICredentialService, {useClass: StaticCredentialService}),
+    provide(FirebaseUrl, {
+      useFactory: (credService:ICredentialService) => {
+        return credService.get('FIREBASE_BASE_URL');
+      }, deps: [ICredentialService]
+    }),
     provide(AuthHttp, {
       useFactory: (http) => {
         return new AuthHttp(new AuthConfig(), http);
@@ -38,26 +47,30 @@ import {IImageService, CloudinaryImageService} from "./services/image.service";
     provide(IListingService, {useClass: FirebaseListingService}),
     provide(IImageService, {useClass: CloudinaryImageService}),
     LogService,
+
     provide(loggerToken, {
       useFactory: (logService:LogService) => {
         return logService.getLogger();
       }, deps: [LogService]
     }),
     MapService,
-    FIREBASE_PROVIDERS,
-    defaultFirebase('haoshiyou-dev.firebaseio.com'),
+    FIREBASE_PROVIDERS
   ]
 })
 export class MyApp {
 
   rootPage:any = TabsPage;
-
+  F
   constructor(private platform:Platform,
               private af:AngularFire,
               private userService:IUserService,
               private threadService:IThreadService,
               private messageService:IMessageService,
-              private authService:AuthService) {
+              private authService:AuthService,
+              private credService:ICredentialService) {
+    ga('create', this.credService.get('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
+    ga('send', 'pageview');
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -91,19 +104,3 @@ export class MyApp {
     });
   }
 }
-
-// TODO(xinbenlv): primary feature in orders
-// - DONE Create, Save, Update, View, Sort a listing
-// - DONE LogIn, LogOut, Password Reset
-// - DONE Map Marker Listing Navigation
-// - DONE Chat
-// - DONE City and Zip Pipe
-// - DONE Create chat from listing.
-// - DONE Image picker
-// - DONE Google Map on Detail Page
-// - Handle most frequent bad cases
-// -  - No login
-// -  - DONE No internet connection
-// - PARTIAL Push notification
-// - Authentication
-// - Share to WeChat

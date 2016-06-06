@@ -2,6 +2,7 @@ import {Injectable, Inject} from "@angular/core";
 import {loggerToken} from "./log.service";
 import {Logger} from "log4javascript";
 import {Transfer} from "ionic-native";
+import {ICredentialService} from "./credential.service";
 @Injectable()
 export class IImageService {
 
@@ -27,12 +28,12 @@ export class IImageService {
 export class CloudinaryImageService implements IImageService {
   private config:CloudinaryConfig;
 
-  constructor(@Inject(loggerToken) private logger:Logger) {
+  constructor(@Inject(loggerToken) private logger:Logger, private credService:ICredentialService) {
     // TODO(xinbenlv): update the credentials of CloudinaryImageService.
     this.config = <CloudinaryConfig>{
-      cloud_name: "xinbenlv",
-      api_key: "999284541119412",
-      upload_preset: "haoshiyou-dev"
+      cloud_name: this.credService.get('CLOUDINARY_CLOUD_NAME'),
+      api_key: this.credService.get('CLOUDINARY_API_KEY'),
+      upload_preset: this.credService.get('CLOUDINARY_UPLOAD_PRESET')
     };
   }
 

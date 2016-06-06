@@ -2,7 +2,6 @@ import {Listing, ListingId} from "../../models/listing";
 import {IListingService} from "./listing.service";
 import {Injectable} from "@angular/core";
 import {AngularFire} from "angularfire2/angularfire2";
-import {FAKE_LISTINGS} from "../../fakedata/listing-fake-data";
 
 @Injectable()
 export class FirebaseListingService implements IListingService {
