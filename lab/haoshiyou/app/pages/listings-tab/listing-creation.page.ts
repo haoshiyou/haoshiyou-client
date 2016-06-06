@@ -12,6 +12,8 @@ import {loggerToken} from "../../services/log.service";
 import {IImageService} from "../../services/image.service";
 import {ImageGridComponent} from "./image-grid.comp";
 import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe.ts";
+import {IUserService} from "../../services/chats/user.service";
+import {User} from "../../models/models";
 
 // TODO(xinbenlv):
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
@@ -37,7 +39,8 @@ export class CreationPage implements OnInit {
               private nav:NavController,
               private mapService:MapService,
               private imageService:IImageService,
-              @Inject(loggerToken) private logger:Logger) {
+              @Inject(loggerToken) private logger:Logger,
+              private userService:IUserService) {
     if (params.data.listing) {
       this.listing = params.data.listing;
     } else {
@@ -86,7 +89,12 @@ export class CreationPage implements OnInit {
   }
 
   private save() {
-    this.listingService.createListing(this.listing).then(()=> {
+    this.listing.updated = new Date();
+    this.userService.promiseMe().then((me:User)=> {
+      this.listing.ownerId = me.id;
+    }).then(()=> {
+      this.listingService.createListing(this.listing)
+    }).then(()=> {
       // succeed.
       this.logger.info(`Saved listing: ${JSON.stringify(this.listing)}`);
       this.nav.pop();
