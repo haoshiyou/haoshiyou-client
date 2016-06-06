@@ -31,6 +31,30 @@ Install
 ionic run -lcs --debug ios --address=localhost
 ```
 
+
+### Release
+
+Follow [Ionic Publishing Guide](http://ionicframework.com/docs/guide/publishing.html)
+for publishing.
+
+1. Copy haoshiyou-android.keystore from xinbenlv@'s secret fault
+
+2. Run the following command. You will be prompt for keystore secret, ask xinbenlv@
+
+```
+ionic build --release android && jarsigner -verbose \
+-sigalg SHA1withRSA -digestalg SHA1 \
+-keystore haoshiyou-android.keystore \
+platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name
+```
+
+3. run
+
+```
+alias zipalign=~/Library/Android/sdk/build-tools/23.0.3/zipalign
+
+```
+
 xinbenlv@
 
 ## Road Map
@@ -51,7 +75,7 @@ TODO(xinbenlv): primary feature in orders
    -  - DONE Turn Off FB and LinkedIn Auth0 signin.
    -  - DONE Disable Web Upload Image, Stop nav-back after upload image failure.
    -  - DONE Add icon, splash screen, webpage icon
-   -  - Sanitize
+   -  - DONE Sanitize
    -  - Publish on Android and iOS for beta testing.
  - Rlease 2: MVP for Growth
    -  - Push notification
