@@ -46,18 +46,19 @@ export class ChatWindowPage implements OnInit, OnDestroy {
         }
       }
       let promises:Promise<User>[] = [];
-      for (let m:Message of diffMessages) {
+      for (let m of diffMessages) {
         if (!this.cacheAuthors[m.authorId]) {
           promises.push(this.userService.observableUserById(m.authorId).take(1).toPromise());
         }
       }
-      Promise.all(promises).then((users:User[]) => {
+      Promise.all(promises).then((users:any[]) => {
+        users = <Array<User>>users;
         users.map((user:User)=> {
           this.cacheAuthors[user.id] = user;
         });
       }).then(()=> {
         let diffMessageInfos:MessageInfo[] = [];
-        for (let m:Message of diffMessages) {
+        for (let m of diffMessages) {
           diffMessageInfos.push(<MessageInfo>{
             message: m,
             author: this.cacheAuthors[m.authorId],
