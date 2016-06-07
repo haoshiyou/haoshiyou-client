@@ -79,6 +79,7 @@ TODO(xinbenlv): primary feature in orders
    -  - Publish on Android and iOS for beta testing.
  - Rlease 2: MVP for Growth
    -  - Edit
+   -  - Show  image full screen view.
    -  - Push notification
    -  - New message counting
    -  - Browser upload pictures
