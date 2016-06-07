@@ -78,10 +78,14 @@ TODO(xinbenlv): primary feature in orders
    -  - DONE Sanitize
    -  - Publish on Android and iOS for beta testing.
  - Rlease 2: MVP for Growth
+   -  - Edit
    -  - Push notification
    -  - New message counting
    -  - Browser upload pictures
    -  - Facebook and LinkedIn Sign-In Callback Fixing
    -  - Share to WeChat
- - Release 3: Performance and UX tweak 
+ - Release 3: Performance and UX tweak
+   -  - Update Splash Screen and Logo
+   -  - Add performance profiling related logging
+   
  - Authentication

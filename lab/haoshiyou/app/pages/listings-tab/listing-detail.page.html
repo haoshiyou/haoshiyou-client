@@ -21,7 +21,7 @@
             <p>{{listing.updated|timeFromNow}}</p>
         </ion-item>
         <ion-card-content>
-            <p class="">{{listing.content}}</p>
+            <p style="white-space: pre-line">{{listing.content}}</p>
         </ion-card-content>
         <map-view [listings]="[listing]"></map-view>
         <image-grid *ngIf="listing.imageIds" [imageUrls]="listing.imageIds | imageIdToUrlPipe"></image-grid>
