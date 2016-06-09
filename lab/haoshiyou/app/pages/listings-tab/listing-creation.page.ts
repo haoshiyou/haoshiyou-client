@@ -14,6 +14,7 @@ import {ImageGridComponent} from "./image-grid.comp";
 import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe.ts";
 import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
+import { NgForm }    from '@angular/common';
 
 // TODO(xinbenlv):
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
