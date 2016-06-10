@@ -42,7 +42,8 @@
     "cordova-plugin-image-picker",
     "cordova-plugin-file-transfer",
     "cordova-plugin-file",
-    "cordova-plugin-network-information"
+    "cordova-plugin-network-information",
+    "cordova-plugin-inappbrowser"
   ],
   "cordovaPlatforms": [
     "ios",

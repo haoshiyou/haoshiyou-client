@@ -133,8 +133,8 @@ Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, i
    -  - DONE Sanitize
    -  - DONE Publish on Android and iOS for beta testing.
    -  - Bugs
-   -  -  - Flash quit when adding picture
-   -  -  - Flash quit when registering
+   -  -  - DONE Flash quit when adding picture
+   -  -  - DONE Flash quit when registering
    -  -  - Chat Thread shows up for unrelated person
  - Web Release => wrj@
    -  - Large Screen: listing list on left and map on right
@@ -142,13 +142,11 @@ Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, i
  - Release 2: MVP for Growth
    -  - Make the detail page editable
    -  - Show image full screen view.
-
    -  - Push notification
-   -  - New message counting
-   -  - Browser upload pictures
-   -  - Facebook and LinkedIn Sign-In Callback Fixing
+   -  - DONE Facebook and LinkedIn Sign-In Callback Fixing
    -  - Share to WeChat
  - Release 3: Performance and UX tweak
+   -  - New message counting
    -  - Update Splash Screen and Logo
    -  - Add performance profiling related logging
    
