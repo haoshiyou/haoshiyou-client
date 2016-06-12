@@ -141,7 +141,7 @@ Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, i
    -  - Large Screen: listing list on left and map on right
    -  - Web image picker in creation page
  - Release 2: MVP for Growth
-   -  - Make the detail page editable
+   -  - DONE Make the detail page editable
    -  - Show image full screen view.
    -  - Push notification
    -  - DONE Facebook and LinkedIn Sign-In Callback Fixing

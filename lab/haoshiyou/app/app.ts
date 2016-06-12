@@ -76,15 +76,15 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
     });
-    authService.userObservable().subscribe((user:User) => {
+    authService.userObservable().subscribe((authUser:User) => {
       // TODO(xinbenlv): on condition create user.
-      if (!user) {
+      if (!authUser) {
         userService.setMeId(null);
       } // logout
       else { // login
-        userService.observableUserById(user.id).take(1).toPromise().then((user:User)=> {
+        userService.observableUserById(authUser.id).take(1).toPromise().then((user:User)=> {
           if (!user) {
-            userService.createUser(user).then(()=> {
+            userService.createUser(authUser).then(()=> {
               userService.setMeId(user.id);
             });
           } else {
