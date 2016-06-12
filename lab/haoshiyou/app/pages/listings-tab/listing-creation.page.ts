@@ -43,14 +43,16 @@ export class CreationPage implements OnInit {
               private userService:IUserService) {
     if (params.data.listing) {
       this.listing = params.data.listing;
+      this.logger.debug(`Edit listing ${JSON.stringify(this.listing)}`);
     } else {
+      this.logger.debug(`Create a listing`);
       this.listing = <Listing>{};
       this.listing.id = uuid();
       this.listing.lat = DEFAULT_CENTER.lat();
       this.listing.lng = DEFAULT_CENTER.lng();
     }
     if (!this.listing.imageIds) this.listing.imageIds = [];
-    this.logger.debug("Initialized CreationPage with listing %s", this.listing);
+    this.logger.debug("Initialized CreationPage with listing %s", JSON.stringify(this.listing));
   }
 
   ngOnInit():any {
@@ -94,10 +96,10 @@ export class CreationPage implements OnInit {
       this.userService.promiseMe().then((me:User)=> {
         this.listing.ownerId = me.id;
       }).then(()=> {
-        this.listingService.createListing(this.listing)
+        this.listingService.createListing(this.listing);
       }).then(()=> {
         // succeed.
-        this.logger.info(`Saved listing: ${JSON.stringify(this.listing)}`);
+        this.logger.debug(`Saved listing: ${JSON.stringify(this.listing)}`);
         this.nav.pop();
       });
     } else {

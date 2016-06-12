@@ -12,6 +12,7 @@ import {MapViewComponent} from "./map-view.comp";
 import {loggerToken} from "../../services/log.service";
 import {Inject} from "@angular/core";
 import {Logger} from "log4javascript";
+import {CreationPage} from "./listing-creation.page";
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
@@ -19,8 +20,8 @@ import {Logger} from "log4javascript";
 })
 export class ListingDetailPage {
   private listing:Listing;
-  private owner:User = <User>{ id: "1212", name: "good guy", avatarSrc: "http://placehold.it/50x50"};
-
+  private owner:User;
+  private meId:string;
   constructor(private threadService:IThreadService,
               private userService:IUserService,
               private nav:NavController,
@@ -30,9 +31,22 @@ export class ListingDetailPage {
     this.listing = params.data.listing;
     this.logger.info(`Entering detail page for ${JSON.stringify(this.listing)}`);
     this.userService.observableUserById(this.listing.ownerId).subscribe((owner:User)=> {
+      this.logger.debug(`owner=${JSON.stringify(owner)}`);
       this.owner = owner;
     });
+    this.userService.promiseMe().then((me:User)=>{
+      if (me) {
+        this.meId = me.id;
+      }
+    });
+    this.userService.observableMeId().subscribe((meId:string)=>{
+      this.logger.debug(`meId=${meId}`);
+      this.meId = meId;
+    });
+  }
 
+  edit() {
+    this.nav.push(CreationPage, {listing: this.listing});
   }
 
   startChat() {

@@ -1,11 +1,13 @@
 import {Listing, ListingId} from "../../models/listing";
 import {IListingService} from "./listing.service";
-import {Injectable} from "@angular/core";
+import {Injectable, Inject} from "@angular/core";
 import {AngularFire} from "angularfire2/angularfire2";
+import {loggerToken} from "../log.service";
+import {Logger} from "log4javascript/log4javascript";
 
 @Injectable()
 export class FirebaseListingService implements IListingService {
-  constructor(private af:AngularFire) {
+  constructor(private af:AngularFire, @Inject(loggerToken) private logger:Logger) {
   }
 
   /**
@@ -29,7 +31,12 @@ export class FirebaseListingService implements IListingService {
    * @param listing: the value of listing for creation.
    */
   createListing(listing:Listing):Promise<void> {
-    if (listing.id) return this.af.database.object("/listings/" + listing.id).update(listing);
+    this.logger.debug(`Create or saving ${JSON.stringify(listing)}`);
+    if (listing.id) {
+      this.logger.assert(listing.id == listing["$key"]);
+      delete  listing["$key"]; // strip $key before update
+      return this.af.database.object("/listings/" + listing.id).update(listing);
+    }
     else return this.af.database.list("/listings").push(listing);
   }
 }
