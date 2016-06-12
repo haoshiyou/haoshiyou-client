@@ -135,7 +135,6 @@ Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, i
    -  - Bugs
    -  -  - DONE Flash quit when adding picture
    -  -  - DONE Flash quit when registering
-   -  -  - Chat Thread shows up for unrelated person
    -  -  - DONE Edit validation
  - Web Release => wrj@
    -  - Large Screen: listing list on left and map on right
