@@ -14,7 +14,6 @@ import {ImageGridComponent} from "./image-grid.comp";
 import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe.ts";
 import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
-import { NgForm }    from '@angular/common';
 
 // TODO(xinbenlv):
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
@@ -34,7 +33,7 @@ export class CreationPage implements OnInit {
   private marker:google.maps.Marker;
   private listing:Listing;
   private localityText:string;
-
+  private dirty:{[field:string]: boolean} = {};
   constructor(private platform:Platform, private params:NavParams,
               private listingService:IListingService,
               private nav:NavController,
@@ -90,16 +89,22 @@ export class CreationPage implements OnInit {
   }
 
   private save() {
-    this.listing.updated = new Date();
-    this.userService.promiseMe().then((me:User)=> {
-      this.listing.ownerId = me.id;
-    }).then(()=> {
-      this.listingService.createListing(this.listing)
-    }).then(()=> {
-      // succeed.
-      this.logger.info(`Saved listing: ${JSON.stringify(this.listing)}`);
-      this.nav.pop();
-    });
+    if (this.validate()) {
+      this.listing.updated = new Date();
+      this.userService.promiseMe().then((me:User)=> {
+        this.listing.ownerId = me.id;
+      }).then(()=> {
+        this.listingService.createListing(this.listing)
+      }).then(()=> {
+        // succeed.
+        this.logger.info(`Saved listing: ${JSON.stringify(this.listing)}`);
+        this.nav.pop();
+      });
+    } else {
+      this.dirty['title'] = true;
+      this.dirty['content'] = true;
+      this.dirty['type'] = true;
+    }
   }
 
   private pickPictures() {
@@ -124,5 +129,9 @@ export class CreationPage implements OnInit {
           // TODO(xinbenlv, #error-handling): handle error, using.
           alert("Failed to upload images!");
         });
+  }
+
+  validate():boolean {
+    return (this.listing.title && this.listing.content && (this.listing.type!=null));
   }
 }

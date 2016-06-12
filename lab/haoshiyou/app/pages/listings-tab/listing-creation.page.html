@@ -3,11 +3,11 @@
         Create
     </ion-title>
     <ion-buttons end>
+        <button (click)="save()">Save</button>
     </ion-buttons>
 </ion-navbar>
 
 <ion-content class="creation">
-    <form *ngIf="active" (ngSubmit)="save()" #listingEditForm="ngForm">
     <ion-item>
         <ion-label>Location</ion-label>
         <ion-label>{{localityText}}</ion-label>
@@ -15,40 +15,31 @@
     <div style="width:100%;height:250px" id="map_drag_canvas"></div>
     <ion-item>
         <ion-label>Type</ion-label>
-        <ion-select required
-                    [(ngModel)]="listing.type"
-                    ngControl="type"
-                    #type="ngForm">
+        <ion-select required [(ngModel)]="listing.type" (change)="dirty['type']=true">
             <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
         </ion-select>
-        <div [hidden]="type.valid || type.pristine" class="alert alert-danger">
-            Listing Type is required
-        </div>
+        <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
+            required
+        </p>
     </ion-item>
     <ion-item>
         <ion-label fixed>Title</ion-label>
-        <ion-input required
-                   [(ngModel)]="listing.title"
-                   ngControl="title"
-                   #title="ngForm"
-                   type="text"></ion-input>
-        <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
-            Title is required
-        </div>
+        <ion-input required [(ngModel)]="listing.title" (change)="dirty['content']=true"></ion-input>
+        <p style="color: red;" item-right *ngIf="dirty['title'] && !listing.title">
+        required
+        </p>
     </ion-item>
+
     <ion-item>
         <ion-label>Details</ion-label>
-        <ion-textarea required
-                      [(ngModel)]="listing.content"
-                      ngControl="content"
-                      #content="ngForm"></ion-textarea>
-        <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
-            Content is required
-        </div>
+        <ion-textarea required [(ngModel)]="listing.content" (change)="dirty['content']=true"></ion-textarea>
+        <p style="color: red;" item-right *ngIf="dirty['content'] && !listing.content">
+            required
+        </p>
     </ion-item>
     <ion-item>
-        <ion-label fixed>Contact</ion-label>
-        <ion-input></ion-input>
+        <ion-label fixed>Contact Info</ion-label>
+        <ion-input [(ngModel)]="listing.contact"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -64,10 +55,6 @@
         ></image-grid>
     </ion-item>
     <ion-item *ngIf="!(platform.is('ios') || platform.is('android'))">
-        Sorry, Web cannot upload image (yet), to upload image, use your phone.
+        Sorry, Web cannot upload image (yet), to upload image, use your Android or iPhone to create a listing.
     </ion-item>
-    <ion-item>
-        <button type="submit" class="btn btn-default" [disabled]="!listingEditForm.form.valid">Submit</button>
-    </ion-item>
-    </form>
 </ion-content>
