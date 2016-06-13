@@ -1,6 +1,8 @@
 <ion-row *ngFor="let row of cacheGrid; let rowIndex = index">
     <ion-col width-33 *ngFor="let col of row; let colIndex = index">
-        <img *ngIf="col" src="{{col}}" alt="Image row:{{rowIndex}}, col:{{colIndex}}">
+        <img *ngIf="col" src="{{col}}" alt="Image row:{{rowIndex}}, col:{{colIndex}}"
+             id="image-{{rowIndex}}-{{colIndex}}"
+             (click)="showImage(col, rowIndex, colIndex)">
         <img *ngIf="!col && isEdit" src="http://placehold.it/300x300?text=new" (click)="clickAdd()">
     </ion-col>
 </ion-row>

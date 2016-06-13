@@ -1,5 +1,6 @@
 import {Component, OnChanges, Input, Output, EventEmitter, SimpleChange} from "@angular/core";
 
+declare let window;
 @Component({
   selector: 'image-grid',
   templateUrl: 'build/pages/listings-tab/image-grid.comp.html'
@@ -38,5 +39,11 @@ export class ImageGridComponent implements OnChanges {
         this.cacheGrid.push(row);
       }
     }
+  }
+  showImage(url, row, col) {
+    let id:string = `image-${row}-${col}`;
+    console.log("XXX id=" + id + ", url=" + url);
+    let viewer = new window.Viewer(document.getElementById(id), {url:url});
+    viewer.show();
   }
 }
