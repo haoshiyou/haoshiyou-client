@@ -5,7 +5,7 @@ import * as moment from "moment";
   name: 'timeFromNow'
 })
 export class TimeFromNowPipe implements PipeTransform {
-  transform(value:any):string {
-    return moment(value).fromNow();
+  transform(value:number/*time in UTC ms */):string {
+    return moment(new Date(value)).fromNow();
   }
 }

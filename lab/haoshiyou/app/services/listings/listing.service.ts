@@ -1,6 +1,6 @@
 import {Listing, ListingId} from "../../models/listing";
 import {Injectable} from "@angular/core";
-import {FAKE_LISTINGS} from "../../fakedata/listing-fake-data";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class IListingService {
@@ -19,6 +19,10 @@ export class IListingService {
     throw "Not implemented";
   }
 
+  observableListings():Observable<Listing[]> {
+    throw "Not implemented";
+  }
+
   /**
    * Add a listing to the all listings.
    * @param listing: the value of listing for creation.
@@ -28,17 +32,20 @@ export class IListingService {
   }
 }
 
-export class MockListingService {
+export class MockListingService implements IListingService{
+  observableListings():Observable<Listing[]> {
+    throw "Not implemented";
+  }
   private listings:Listing[];
 
   constructor() {
-    this.listings = FAKE_LISTINGS; // initialize with default fake data
+    this.listings = []; 
   }
 
   getListings():Promise<Listing[]> {
     return Promise.resolve(this.listings)
         .then(listings => listings.sort(
-            (l1:Listing, l2:Listing) => l1.updated.getTime() - l2.updated.getTime())
+            (l1:Listing, l2:Listing) => new Date(l1.lastUpdated).getTime() - new Date(l2.lastUpdated).getTime())
             .reverse());
   }
 

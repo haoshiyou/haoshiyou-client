@@ -1,11 +1,14 @@
 import {Page, Platform, NavController} from "ionic-angular";
 import {IListingService} from "../../services/listings/listing.service.ts";
 import {Listing} from "../../models/listing";
-import {OnInit, OnDestroy} from "@angular/core";
+import {OnInit, OnDestroy, Inject} from "@angular/core";
 import {CreationPage} from "./listing-creation.page.ts";
 import {ListingItem} from "./listing-item.comp";
 import {ListingDetailPage} from "./listing-detail.page";
 import LatLng = google.maps.LatLng;
+import {Observable} from "rxjs/Observable";
+import {loggerToken} from "../../services/log.service";
+import {Logger} from "log4javascript/log4javascript";
 
 /**
  * A page contains a map view and a list showing the listings.
@@ -24,10 +27,12 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private map:any; // Actually google.maps.Map;
   private markers:any[]; // Actually google.maps.Marker[];
   private listings:Listing[];
-
+  private listingObservable: Observable<Listing[]>;
+  private mapReady:boolean = false;
   constructor(private platform:Platform,
               private listingService:IListingService,
-              private nav:NavController) {
+              private nav:NavController,
+              @Inject(loggerToken) private logger:Logger) {
 
   }
 
@@ -48,14 +53,22 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         center: new google.maps.LatLng(37.41666, -122.09106), // Google
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
+    }).then(()=>{
+      this.mapReady = true;
+      this.updateMarkers();
     });
 
-    let initListings:Promise<void> = this.listingService.getListings(
-        /* TODO(xinbenlv): currently get all, need to narrow down. */)
-        .then((listings) => {
-          this.listings = listings;
-        });
-    Promise.all([initMap, initListings]).then(() => {
+
+    this.listingObservable = this.listingService.observableListings();
+    this.listingObservable.subscribe((listings:Listing[]) => {
+      /* TODO(xinbenlv): currently get all, need to narrow down. */
+      this.listings = listings.reverse();
+      this.updateMarkers();
+    });
+  }
+
+  private updateMarkers() {
+    if(this.mapReady && this.listings) {
       this.markers = [];
       for (let listing of this.listings) {
         let opt:google.maps.MarkerOptions = <google.maps.MarkerOptions>{};
@@ -66,7 +79,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         marker.addListener('click', () => this.gotoDetail(listing));
         this.markers.push(marker);
       }
-    });
+    }
   }
 
   gotoCreationPage() {

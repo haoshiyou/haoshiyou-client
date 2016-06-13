@@ -13,7 +13,6 @@ import {User} from "./models/models";
 import {IListingService} from "./services/listings/listing.service";
 import {FirebaseListingService} from "./services/listings/fb-listing.service";
 import {MapService} from "./services/map.service";
-import {FAKE_LISTINGS} from "./fakedata/listing-fake-data";
 import {Listing} from "./models/listing";
 import {ChatFakeDataLoader} from "./fakedata/chat-fake-data-loader";
 import {LogService, loggerToken} from "./services/log.service";
@@ -99,8 +98,5 @@ export class MyApp {
 
   loadFakeData() {
     ChatFakeDataLoader.init(this.messageService, this.threadService, this.userService);
-    FAKE_LISTINGS.map((listing:Listing) => {
-      this.af.database.object("/listings/" + listing.id).set(listing);
-    });
   }
 }

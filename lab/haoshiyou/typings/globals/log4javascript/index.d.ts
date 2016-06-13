@@ -929,7 +929,7 @@ declare namespace log4javascript {
     /**
      * Some layouts (JsonLayout, HttpPostDataLayout, PatternLayout and XmlLayout) allow you to set custom fields (e.g. a session
      * id to send to the server) to the formatted output. Use this method to set a custom field. If there is already a custom
-     * field with the specified name, its value will be updated with value.
+     * field with the specified name, its value will be lastUpdated with value.
      * @param name Name of the custom property you wish to be included in the formmtted output.
      * @param value Value of the custom property you wish to be included in the formatted output.
      */

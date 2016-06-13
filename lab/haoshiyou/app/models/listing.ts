@@ -18,6 +18,6 @@ export interface Listing {
   title:string;
   type:ListingType;
   ownerId:string;
-  updated:Date;
+  lastUpdated:number; // in UTC Milliseconds
   imageIds:string[]; // ids
 }

@@ -92,7 +92,8 @@ export class CreationPage implements OnInit {
 
   private save() {
     if (this.validate()) {
-      this.listing.updated = new Date();
+      this.listing.lastUpdated = Date.now();
+      this.logger.debug(`Creating listing on ${this.listing.lastUpdated}`);
       this.userService.promiseMe().then((me:User)=> {
         this.listing.ownerId = me.id;
       }).then(()=> {
