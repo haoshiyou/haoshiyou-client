@@ -1,7 +1,7 @@
 import {App, Platform} from "ionic-angular";
 import {StatusBar} from "ionic-native";
 import {TabsPage} from "./pages/tabs/tabs";
-import {provide} from "@angular/core";
+import {provide, Inject} from "@angular/core";
 import {Http} from "@angular/http";
 import {AuthHttp, AuthConfig} from "angular2-jwt";
 import {AuthService} from "./services/auth.service.ts";
@@ -13,11 +13,11 @@ import {User} from "./models/models";
 import {IListingService} from "./services/listings/listing.service";
 import {FirebaseListingService} from "./services/listings/fb-listing.service";
 import {MapService} from "./services/map.service";
-import {Listing} from "./models/listing";
 import {ChatFakeDataLoader} from "./fakedata/chat-fake-data-loader";
 import {LogService, loggerToken} from "./services/log.service";
 import {IImageService, CloudinaryImageService} from "./services/image.service";
 import {ICredentialService, StaticCredentialService} from "./services/credential.service";
+import {Logger} from "log4javascript/log4javascript";
 
 declare let ga:any;
 
@@ -59,21 +59,44 @@ declare let ga:any;
 export class MyApp {
 
   rootPage:any = TabsPage;
-  F
+  private registrationId:string;
   constructor(private platform:Platform,
               private af:AngularFire,
               private userService:IUserService,
               private threadService:IThreadService,
               private messageService:IMessageService,
               private authService:AuthService,
-              private credService:ICredentialService) {
+              private credService:ICredentialService,
+              @Inject(loggerToken) private logger:Logger) {
     ga('create', this.credService.get('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
     ga('send', 'pageview');
 
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
+      if (platform.is('android') || platform.is('ios')) {
+        this.logger.info("Setting up push notification");
+        var push = PushNotification.init({
+              "android": {"senderID": this.credService.get("FCM_SENDER_ID")},
+              "ios": {
+                "senderID": this.credService.get("FCM_SENDER_ID"), "gcmSandbox": true,
+                "alert": "true", "badge": "true", "sound": "true"
+              }, "windows": {}
+            }
+        );
+        push.on('registration', (data) => {
+          this.logger.info(`Push notification registration completed: registrationId=${data.registrationId}`);
+          this.registrationId = data.registrationId;
+        });
+        push.on('notification', (data) => {
+          // TODO(xinbenlv): add navigate to specific thread;
+          this.logger.info(`Received data from push notification: ${JSON.stringify(data)}`);
+        });
+        push.on('error', (e) => {
+          this.logger.error('Push notification error!',e);
+        });
+        // Okay, so the platform is ready and our plugins are available.
+        // Here you can do any higher level native things you might need.
+        StatusBar.styleDefault();
+      }
     });
     authService.userObservable().subscribe((authUser:User) => {
       // TODO(xinbenlv): on condition create user.

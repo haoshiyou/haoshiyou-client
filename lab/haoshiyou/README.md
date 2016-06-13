@@ -45,15 +45,19 @@ ionic emulate ios
 ionic emulate android
 ```
 
-## Note
+### Install Push Notification
 
-Most of the packages here are included at the time of 2016-05-22. at the time the ionicv2 is still in it's beta
-Angular2 is just moving to to rc1, splitting how packages are included, and ionic@beta has not yet moved to
-the angular2 rc. Once ionic@beta is moving to angular2 rc, the following will be refactored accordingly.
+1. Add GoogleService-Info.plist to `platforms/ios/haoshiyou`
+2. In Xcode in target `CordovaLib` and in `Build Phases` 
+in the part of `Copy Bundle Resources`, add GoogleService-Info.plist,
 
-* AngularFire2 at alpha14
+For example
 
-(AngularFire2)[https://github.com/angular/angularfire2/tree/16c573b0144b3c38165407744b21e504421086d2]
+Inline-style: 
+![Screenshot for Adding GoogleService-Info.plist](docs/screenshot/xcode-add-fcm-google-service-info-plist.png)
+
+
+See [ionicv2-push-example](https://github.com/xinbenlv-just-learning/ionicv2-push-example) for more
 
 ### Install typings definition from DefinitelyTyped
 

@@ -7,6 +7,7 @@
     "firebase": "registry:dt/firebase#2.4.1+20160412125105",
     "google.maps": "registry:dt/google.maps#3.20.0+20160414124451",
     "log4javascript": "registry:dt/log4javascript#0.0.0+20160514173738",
+    "phonegap-plugin-push": "registry:dt/phonegap-plugin-push#0.0.0+20160501153936",
     "underscore": "registry:dt/underscore#1.7.0+20160505190121"
   },
   "dependencies": {

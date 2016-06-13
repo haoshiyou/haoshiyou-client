@@ -43,7 +43,13 @@
     "cordova-plugin-file-transfer",
     "cordova-plugin-file",
     "cordova-plugin-network-information",
-    "cordova-plugin-inappbrowser"
+    "cordova-plugin-inappbrowser",
+    {
+      "variables": {
+        "SENDER_ID": "59094925347"
+      },
+      "locator": "phonegap-plugin-push"
+    }
   ],
   "cordovaPlatforms": [
     "ios",
