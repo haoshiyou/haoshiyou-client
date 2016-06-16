@@ -10,6 +10,10 @@ export class ICredentialService {
   setEnv(type:string) {
     throw "Not Implemented";
   }
+
+  getEnv():string {
+    throw "Not Implemented";
+  }
 }
 
 @Injectable()
@@ -44,5 +48,9 @@ export class StaticCredentialService {
 
   setEnv(type:string) {
     this.env = type;
+  }
+
+  getEnv():string {
+    return this.env;
   }
 }

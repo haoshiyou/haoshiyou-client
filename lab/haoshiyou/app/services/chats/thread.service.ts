@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {Thread} from "../../models/models";
 import {Observable} from "rxjs";
 import {AngularFire} from "angularfire2/angularfire2";
+import {LogService} from "../log.service";
 
 @Injectable()
 export class IThreadService {
@@ -18,7 +19,7 @@ export class IThreadService {
 @Injectable()
 export class FirebaseThreadService implements IThreadService {
 
-  constructor(private af:AngularFire) {
+  constructor(private af:AngularFire, private logService: LogService) {
 
   }
 
@@ -33,6 +34,7 @@ export class FirebaseThreadService implements IThreadService {
   }
 
   createThread(thread:Thread):Promise<void> {
+    this.logService.logEvent("thread", "created");
     if (thread.id) {
       // TODO(xinbenlv): fix bug: when a thread already exist, do not override it
       return this.af.database.object("/threads/" + thread.id).update(thread);

@@ -146,11 +146,15 @@ Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, i
  - Release 2: MVP for Growth
    -  - DONE Make the detail page editable
    -  - DONE Show image full screen view.
-   -  - Push notification
+   -  - DONE Push notification
    -  -  - DONE FCM registration
-   -  -  - When user log in, subscribe to topic: [threads] and [listing]
+   -  -  - DONE Push for chat
    -  - DONE Facebook and LinkedIn Sign-In Callback Fixing
-   -  - Firebase event tracking, mixpanel maybe?
+   -  - DONE Firebase event tracking
+   -  - Bug
+   -  -  - Already logged in, reload the page, and then try to load a 
+listing, starting a chat will cause nullpointer exception.
+   
  - Release 3: Better UX
    -  - Share to WeChat
    -  - New message counting
@@ -160,5 +164,5 @@ Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, i
    -  - Testing structure
    -  - Security rules
    -  - Add performance profiling related logging
-   
- - Authentication
+ - Backlog
+   - Authentication

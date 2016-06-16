@@ -8,6 +8,7 @@ import {User} from "../models/models";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 import {ICredentialService} from "./credential.service";
+import {LogService} from "./log.service";
 
 // Avoid name not found warnings
 declare var Auth0Lock:any;
@@ -24,7 +25,9 @@ export class AuthService {
   private userSubject:Subject<User>;
 
   constructor(private authHttp:AuthHttp, zone:NgZone,
-              private threadService:IThreadService, private credentialService:ICredentialService) {
+              private threadService:IThreadService,
+              private credentialService:ICredentialService,
+              private logService:LogService) {
     this.lock = new Auth0Lock(
         this.credentialService.get("AUTH0_CLIENT_ID"),
         this.credentialService.get("AUTH0_ACCOUNT_DOMAIN")
@@ -63,6 +66,7 @@ export class AuthService {
         this.local.set('refresh_token', refreshToken);
         this.zoneImpl.run(() => this.user = profile);
         this.userSubject.next(AuthService.createHsyUser(this.user));
+        this.logService.logEvent("authService", "login");
       }
     });
   }
@@ -73,6 +77,7 @@ export class AuthService {
     this.local.remove('refresh_token');
     this.zoneImpl.run(() => this.user = null);
     this.userSubject.next(null); // logout
+    this.logService.logEvent("authService", "logout");
   }
 
   /**

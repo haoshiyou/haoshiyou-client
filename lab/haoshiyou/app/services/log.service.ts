@@ -5,15 +5,17 @@ import {Platform, Storage, LocalStorage} from "ionic-angular";
 import {Device} from "ionic-native";
 import {AngularFire} from "angularfire2/angularfire2";
 import {uuid} from "../util/uuid";
+import {ICredentialService} from "./credential.service";
 export let loggerToken:OpaqueToken = new OpaqueToken("value");
 
 declare let window:any;
+declare let ga:any;
 
 @Injectable()
 export class LogService {
   private logger:Logger;
 
-  constructor(platform:Platform, af:AngularFire) {
+  constructor(platform:Platform, af:AngularFire, private cred:ICredentialService) {
     this.logger = log4javascript.getLogger();
     let layout = new log4javascript.PatternLayout("%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5p %m");
     platform.ready().then(()=> {
@@ -48,6 +50,10 @@ export class LogService {
 
   getLogger():Logger {
     return this.logger;
+  }
+
+  logEvent(eventCategory, eventAction) {
+    ga('send', 'event', eventCategory, eventAction, this.cred.getEnv());
   }
 }
 
@@ -133,8 +139,6 @@ export class FbAppender extends log4javascript.Appender {
     return "";
 }
 }
-
-declare let ga:any;
 
 export class GaAppender extends log4javascript.Appender {
   private device:Device;

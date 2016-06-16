@@ -70,12 +70,12 @@ export class MyApp {
               private credService:ICredentialService,
               @Inject(loggerToken) private logger:Logger,
               private notificationService:NotificationService,
-              private http:Http) {
+              private http:Http,
+              private logService:LogService) {
     this.platform.ready().then(()=> {
-
-
       ga('create', this.credService.get('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
       ga('send', 'pageview');
+      this.logService.logEvent('app', 'start');
 
       authService.userObservable().subscribe((authUser:User) => {
         // TODO(xinbenlv): on condition create user.

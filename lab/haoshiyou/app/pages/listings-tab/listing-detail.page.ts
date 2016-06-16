@@ -9,7 +9,7 @@ import {ChatWindowPage} from "../chats-tab/chat-window.page";
 import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 import {ImageGridComponent} from "./image-grid.comp";
 import {MapViewComponent} from "./map-view.comp";
-import {loggerToken} from "../../services/log.service";
+import {loggerToken, LogService} from "../../services/log.service";
 import {Inject} from "@angular/core";
 import {Logger} from "log4javascript";
 import {CreationPage} from "./listing-creation.page";
@@ -27,7 +27,8 @@ export class ListingDetailPage {
               private nav:NavController,
               @Inject(loggerToken)
               private logger:Logger,
-              params:NavParams) {
+              params:NavParams,
+              private logService:LogService) {
     this.listing = params.data.listing;
     this.logger.info(`Entering detail page for ${JSON.stringify(this.listing)}`);
     this.userService.observableUserById(this.listing.ownerId).subscribe((owner:User)=> {
@@ -50,6 +51,7 @@ export class ListingDetailPage {
   }
 
   startChat() {
+    this.logService.logEvent("listing-detail", "start-chat");
     // TODO(xinbenlv): handle when not yet logged in.
     let thread:Thread = <Thread>{};
     this.userService.promiseMe().then((me:User)=> {
