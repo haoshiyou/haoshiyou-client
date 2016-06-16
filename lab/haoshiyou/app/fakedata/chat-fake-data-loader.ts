@@ -8,7 +8,7 @@ import {FAKE_USERS, FAKE_THREADS, FAKE_MESSAGES} from "./chat-fake-data";
 
 export class ChatFakeDataLoader {
   static init(messagesService:IMessageService, threadService:IThreadService, userService:IUserService):void {
-    FAKE_USERS.map((user:User) => userService.createUser(user));
+    FAKE_USERS.map((user:User) => userService.createOrUpdateUser(user));
     FAKE_THREADS.map((thread:Thread) => threadService.createThread(thread));
     // create the initial messages
     FAKE_MESSAGES.map((message:Message) => messagesService.createMessage(message));

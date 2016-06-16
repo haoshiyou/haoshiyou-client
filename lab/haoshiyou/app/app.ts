@@ -1,5 +1,4 @@
 import {App, Platform} from "ionic-angular";
-import {StatusBar} from "ionic-native";
 import {TabsPage} from "./pages/tabs/tabs";
 import {provide, Inject} from "@angular/core";
 import {Http} from "@angular/http";
@@ -18,6 +17,7 @@ import {LogService, loggerToken} from "./services/log.service";
 import {IImageService, CloudinaryImageService} from "./services/image.service";
 import {ICredentialService, StaticCredentialService} from "./services/credential.service";
 import {Logger} from "log4javascript/log4javascript";
+import {NotificationService} from "./services/notfication.service";
 
 declare let ga:any;
 
@@ -45,6 +45,7 @@ declare let ga:any;
     provide(IMessageService, {useClass: FirebaseMessageService}),
     provide(IListingService, {useClass: FirebaseListingService}),
     provide(IImageService, {useClass: CloudinaryImageService}),
+    NotificationService,
     LogService,
 
     provide(loggerToken, {
@@ -59,7 +60,6 @@ declare let ga:any;
 export class MyApp {
 
   rootPage:any = TabsPage;
-  private registrationId:string;
   constructor(private platform:Platform,
               private af:AngularFire,
               private userService:IUserService,
@@ -67,56 +67,50 @@ export class MyApp {
               private messageService:IMessageService,
               private authService:AuthService,
               private credService:ICredentialService,
-              @Inject(loggerToken) private logger:Logger) {
-    ga('create', this.credService.get('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
-    ga('send', 'pageview');
+              @Inject(loggerToken) private logger:Logger,
+              private notificationService:NotificationService) {
+    this.platform.ready().then(()=> {
+      ga('create', this.credService.get('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
+      ga('send', 'pageview');
 
-    platform.ready().then(() => {
-      if (platform.is('android') || platform.is('ios')) {
-        this.logger.info("Setting up push notification");
-        var push = PushNotification.init({
-              "android": {"senderID": this.credService.get("FCM_SENDER_ID")},
-              "ios": {
-                "senderID": this.credService.get("FCM_SENDER_ID"), "gcmSandbox": true,
-                "alert": "true", "badge": "true", "sound": "true"
-              }, "windows": {}
-            }
-        );
-        push.on('registration', (data) => {
-          this.logger.info(`Push notification registration completed: registrationId=${data.registrationId}`);
-          this.registrationId = data.registrationId;
-        });
-        push.on('notification', (data) => {
-          // TODO(xinbenlv): add navigate to specific thread;
-          this.logger.info(`Received data from push notification: ${JSON.stringify(data)}`);
-        });
-        push.on('error', (e) => {
-          this.logger.error('Push notification error!',e);
-        });
-        // Okay, so the platform is ready and our plugins are available.
-        // Here you can do any higher level native things you might need.
-        StatusBar.styleDefault();
-      }
-    });
-    authService.userObservable().subscribe((authUser:User) => {
-      // TODO(xinbenlv): on condition create user.
-      if (!authUser) {
-        userService.setMeId(null);
-      } // logout
-      else { // login
-        userService.observableUserById(authUser.id).take(1).toPromise().then((user:User)=> {
-          if (!user) {
-            userService.createUser(authUser).then(()=> {
+      authService.userObservable().subscribe((authUser:User) => {
+        // TODO(xinbenlv): on condition create user.
+        if (!authUser) {
+          userService.setMeId(null);
+        } // logout
+        else { // login
+          userService.observableUserById(authUser.id).take(1).toPromise().then((user:User)=> {
+            if (!user) {
+              userService.createOrUpdateUser(authUser).then(()=> {
+                userService.setMeId(authUser.id);
+              });
+            } else {
               userService.setMeId(user.id);
-            });
-          } else {
-            userService.setMeId(user.id);
-          }
-        });
-      }
+            }
+          });
+        }
+
+      });
+
+      authService.userObservable().subscribe((user:User)=> {
+        this.logger.debug(`Push notification gets user= ${JSON.stringify(user)}`);
+        if (user == null) {
+          this.notificationService.unregister();
+        } else {
+          this.notificationService.register(user.id).then((regId:string) => {
+            if (regId) {
+              return this.userService.addRegistrationId(regId);
+            } else {
+              this.logger.debug("no regid, return directly");
+              return Promise.resolve(); // TODO(xinbenlv): need to do anything special?
+            }
+          });
+
+        }
+      });
 
     });
-    // this.loadFakeData();
+
   }
 
   loadFakeData() {

@@ -42,7 +42,6 @@ export class ImageGridComponent implements OnChanges {
   }
   showImage(url, row, col) {
     let id:string = `image-${row}-${col}`;
-    console.log("XXX id=" + id + ", url=" + url);
     let viewer = new window.Viewer(document.getElementById(id), {url:url});
     viewer.show();
   }

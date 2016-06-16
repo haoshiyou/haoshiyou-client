@@ -1,8 +1,6 @@
 import {User, Thread, Message} from "../models/models";
 import * as moment from "moment";
 // the person using the app us Juliet
-export let USER_JULIET:User = new User('tmp-juliet', 'Juliet', 'http://placehold.it/100x100?text=Juliet');
-let USER_LADY_CAP:User = new User('tmp-capulet', 'Lady Capulet', 'http://placehold.it/100x100?text=Capulet');
 let THREAD_LADYCAP_JULIET:Thread = new Thread('tmp-thread-USER_JULIET-capulet', ['tmp-juliet', 'tmp-capulet'], new Date(), "");
 let THREAD_XINBENLV_ZZN:Thread = new Thread('tmp-thread-xinbenlv-zzn',
     [
@@ -23,6 +21,6 @@ export let FAKE_MESSAGES:Message[] = [
   ),
 ];
 
-export let FAKE_USERS:User[] = [USER_JULIET, USER_LADY_CAP];
+export let FAKE_USERS:User[] = [];
 
 export let FAKE_THREADS:Thread[] = [THREAD_LADYCAP_JULIET, THREAD_XINBENLV_ZZN];

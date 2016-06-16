@@ -1,8 +1,8 @@
-export class User {
-  constructor(public id:string,
-              public name:string,
-              public avatarSrc:string) {
-  }
+export interface User {
+  id:string;
+  name:string;
+  avatarSrc:string;
+  regIds:string[];
 }
 
 export class Thread {

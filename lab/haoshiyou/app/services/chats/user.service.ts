@@ -20,11 +20,16 @@ export class IUserService { // use as interface, angular2 does not support injec
     throw "Not implemented";
   }
 
-  createUser(user:User):Promise<void> {
+  createOrUpdateUser(user:User):Promise<void> {
     throw "Not implemented";
   }
 
   observableMeId():Observable<string> {
+    throw "Not implemented";
+  }
+
+
+  addRegistrationId(regId:string):Promise<void> {
     throw "Not implemented";
   }
 }
@@ -55,16 +60,37 @@ export class FirebaseUserService implements IUserService { // use "class" IUserS
     return this.af.database.object("/users/" + id);
   }
 
-  createUser(user:User):Promise<void> {
+  createOrUpdateUser(user:User):Promise<void> {
     // TODO(xinbenlv): handle when user.id does not exist;
     if (user && user.id) {
       return this.af.database.object("/users/" + user.id).update(user);
     } else {
-      this.logger.error("user or user.id does not exit");
+      this.logger.warn("user or user.id does not exit");
+      return;
     }
   }
 
   observableMeId():Observable<string> {
     return this.meIdSubject;
+  }
+
+  addRegistrationId(regId:string):Promise<void> {
+    return this.promiseMe().then((me:User)=> {
+      if (me) {
+        if (!me.regIds) me.regIds = [];
+        me.regIds.push(regId);
+        this.logger.info(`Adding a new registrationId for meId=${me.id}, regId=${regId}.`);
+        return me;
+      } else {
+        this.logger.warn("Attempt to add registrationId, but not logged in yet");
+        return null;
+      }
+    }).then((me:User) => {
+      if (me) {
+        this.logger.info(`Trying to update user with new registrationId`);
+        return this.createOrUpdateUser(me);
+      } else
+        return null;
+    });
   }
 }

@@ -145,13 +145,20 @@ Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, i
    -  - Web image picker in creation page
  - Release 2: MVP for Growth
    -  - DONE Make the detail page editable
-   -  - Show image full screen view.
+   -  - DONE Show image full screen view.
    -  - Push notification
+   -  -  - DONE FCM registration
+   -  -  - When user log in, subscribe to topic: [threads] and [listing]
    -  - DONE Facebook and LinkedIn Sign-In Callback Fixing
+   -  - Firebase event tracking, mixpanel maybe?
+ - Release 3: Better UX
    -  - Share to WeChat
- - Release 3: Performance and UX tweak
    -  - New message counting
+   -  - Upload image in full resolution, display default low resolution
    -  - Update Splash Screen and Logo
+ - Release 4: Performance and Reliability
+   -  - Testing structure
+   -  - Security rules
    -  - Add performance profiling related logging
    
  - Authentication

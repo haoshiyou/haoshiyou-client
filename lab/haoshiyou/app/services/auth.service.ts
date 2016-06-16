@@ -84,7 +84,10 @@ export class AuthService {
   }
 
   private static createHsyUser(user:Object):User {
-    return new User(
-        btoa(user['email'])/* using BASE64 email as unique userId*/, user['name'], user['picture']);
+    return <User> {
+      id: btoa(user['email'])/* using BASE64 email as unique userId*/,
+      name: user['name'],
+      avatarSrc: user['picture']
+    };
   }
 }
