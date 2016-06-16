@@ -1,7 +1,7 @@
 import {App, Platform} from "ionic-angular";
 import {TabsPage} from "./pages/tabs/tabs";
 import {provide, Inject} from "@angular/core";
-import {Http} from "@angular/http";
+import {Http, HTTP_PROVIDERS, Headers, RequestOptions} from "@angular/http";
 import {AuthHttp, AuthConfig} from "angular2-jwt";
 import {AuthService} from "./services/auth.service.ts";
 import {IMessageService, FirebaseMessageService} from "./services/chats/message.service.ts";
@@ -54,7 +54,8 @@ declare let ga:any;
       }, deps: [LogService]
     }),
     MapService,
-    FIREBASE_PROVIDERS
+    FIREBASE_PROVIDERS,
+    HTTP_PROVIDERS
   ]
 })
 export class MyApp {
@@ -68,8 +69,11 @@ export class MyApp {
               private authService:AuthService,
               private credService:ICredentialService,
               @Inject(loggerToken) private logger:Logger,
-              private notificationService:NotificationService) {
+              private notificationService:NotificationService,
+              private http:Http) {
     this.platform.ready().then(()=> {
+
+
       ga('create', this.credService.get('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
       ga('send', 'pageview');
 

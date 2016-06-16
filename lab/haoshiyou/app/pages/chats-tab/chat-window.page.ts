@@ -8,6 +8,7 @@ import {uuid} from "../../util/uuid";
 import {Subscription} from "rxjs/Subscription";
 import {Logger} from "log4javascript/log4javascript";
 import {loggerToken} from "../../services/log.service";
+import {NotificationService} from "../../services/notfication.service";
 @Page({
   selector: 'chat-window',
   directives: [ChatMessageComp, FORM_DIRECTIVES],
@@ -28,7 +29,8 @@ export class ChatWindowPage implements OnInit, OnDestroy {
               private userService:IUserService,
               private el:ElementRef, private params:NavParams,
               @Inject(loggerToken) private logger:Logger,
-              private cd:ChangeDetectorRef) {
+              private cd:ChangeDetectorRef,
+              private ns:NotificationService) {
     this.currentThread = params.data.thread;
   }
 
@@ -82,7 +84,28 @@ export class ChatWindowPage implements OnInit, OnDestroy {
 
   sendMessage():void {
     let m:Message = new Message(uuid(), this.draftMessageText, new Date(), this.me.id, this.currentThread.id);
-    this.messagesService.createMessage(m);
+    let notificationRegIds:string[] = [];
+    this.messagesService.createMessage(m).then(()=>{
+      let promises:Promise<void>[] = [];
+      for(let userId of this.currentThread.userIds) {
+        promises.push(this.userService.observableUserById(userId).take(1).toPromise()
+            .then((user:User)=>{
+              if(user.id != this.me.id && user.regIds) {
+                notificationRegIds = notificationRegIds.concat(user.regIds);
+              };
+            }).catch((e)=>{
+              this.logger.error(e);
+            }));
+      }
+      Promise.all(promises).then(()=>{
+        this.logger.debug(`Try to send push notification.` +
+                          `regIds:${notificationRegIds}, author:${this.me.name}, text:${m.text}`);
+        this.ns.sendPushMessage(notificationRegIds, m.text, this.me.name).then(()=>{
+          this.logger.debug(`Done sending push notification.` +
+              `regIds:${notificationRegIds}, author:${this.me.name}, text:${m.text}`);
+        });
+      });
+    });
     this.draftMessageText = "";
     this.scrollToBottom();
   }

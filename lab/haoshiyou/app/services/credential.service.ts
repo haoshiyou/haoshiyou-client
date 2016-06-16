@@ -18,6 +18,7 @@ export class StaticCredentialService {
 
   private devCredentials:{[credId:string]:string} = {
     FCM_SENDER_ID: '59094925347',
+    FCM_KEY: 'AIzaSyA8IczGUriov_yYY4bnrqKUkL7F4v6i9sc',
     AUTH0_CLIENT_ID: 'StjMTE6NRzI9qmUPT2ij4LvEzmlja8OY',
     AUTH0_ACCOUNT_DOMAIN: 'xinbenlv.auth0.com',
     CLOUDINARY_CLOUD_NAME: 'xinbenlv',

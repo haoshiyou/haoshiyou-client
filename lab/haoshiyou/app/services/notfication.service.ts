@@ -5,17 +5,18 @@ import {Injectable, Inject} from "@angular/core";
 import {loggerToken} from "./log.service";
 import {Logger} from "log4javascript/log4javascript";
 import {ICredentialService} from "./credential.service";
+import {Http, Headers, RequestOptions} from "@angular/http";
 
 @Injectable()
 export class NotificationService {
-
   private registrationId:string;
-  private push:any/* PushNotification */;
+  private push:any/* PushNotification, no typed definition yet. */;
 
   constructor(private platform:Platform,
               @Inject(loggerToken) private logger:Logger,
-              private credService:ICredentialService) {
-    this.logger.info("Constructor of NotificationService");
+              private credService:ICredentialService,
+              private http:Http) {
+    this.logger.info("NotificationService init");
   }
 
   register(meId:string):Promise<string> {
@@ -31,7 +32,7 @@ export class NotificationService {
             "senderID": this.credService.get("FCM_SENDER_ID")
           };
           if (meId) {
-            coreOpt["topics"] = [`user:${meId}`]; // TODO(xinbenlv): add group support
+            //coreOpt["topics"] = [`user:${meId}`]; // TODO(xinbenlv): add group support
           }
           let opt;
           if (this.platform.is('android')) {
@@ -40,6 +41,7 @@ export class NotificationService {
               "android": coreOpt
             };
           } else if (this.platform.is('ios')) {
+            coreOpt["gcmSandbox"] = true; // without sandbox it will not be able to received out.
             coreOpt["alert"] = true;
             coreOpt["badge"] = true;
             coreOpt["sound"] = true;
@@ -83,5 +85,26 @@ export class NotificationService {
         this.logger.info("Done unregistering push notificaiton");
       });
     }
+  }
+
+  sendPushMessage(regIds:string[], msg:string, userName:string):Promise<any> {
+    let url = 'https://fcm.googleapis.com/fcm/send';
+    let body = JSON.stringify({
+      "registration_ids":regIds,
+      "notification":{
+        "title":`${userName}: ${msg}`,
+        "body":`${userName}: ${msg}`
+      }
+    });
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'Authorization':`key=${this.credService.get('FCM_KEY')}`
+    });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(url, body, options).take(1).toPromise().then((ret)=>{
+      this.logger.info(ret);
+    }).catch((e)=>{
+      this.logger.warn(e);
+    });
   }
 }
