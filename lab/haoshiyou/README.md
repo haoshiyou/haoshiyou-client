@@ -116,6 +116,11 @@ icon    | 512x512 24bit PNG
 icon        |  1024x1024 JPG or PNG 72DPI+ RGB 
 Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, iPad, iPad Pro
 
+## Known Issues
+Due to https://github.com/driftyco/ionic-cli/issues/420
+Splash screen cannot be updated.
+
+
 ## Road Map
 (A task without assignee is xinbenlv@)
  - DONE Create, Save, Update, View, Sort a listing
