@@ -2,13 +2,14 @@
 
 import {Storage, LocalStorage} from "ionic-angular";
 import {AuthHttp, JwtHelper, tokenNotExpired} from "angular2-jwt";
-import {Injectable, NgZone} from "@angular/core";
+import {Injectable, NgZone, Inject} from "@angular/core";
 import {IThreadService} from "./chats/thread.service";
 import {User} from "../models/models";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 import {ICredentialService} from "./credential.service";
-import {LogService} from "./log.service";
+import {LogService, loggerToken} from "./log.service";
+import {Logger} from "log4javascript/log4javascript";
 
 // Avoid name not found warnings
 declare var Auth0Lock:any;
@@ -27,7 +28,8 @@ export class AuthService {
   constructor(private authHttp:AuthHttp, zone:NgZone,
               private threadService:IThreadService,
               private credentialService:ICredentialService,
-              private logService:LogService) {
+              private logService:LogService,
+              @Inject(loggerToken) private logger:Logger) {
     this.lock = new Auth0Lock(
         this.credentialService.get("AUTH0_CLIENT_ID"),
         this.credentialService.get("AUTH0_ACCOUNT_DOMAIN")
@@ -46,6 +48,10 @@ export class AuthService {
   public authenticated() {
     // Check if there's an unexpired JWT
     return tokenNotExpired();
+  }
+
+  public getUser() {
+    return this.user;
   }
 
   public login() {
@@ -88,7 +94,7 @@ export class AuthService {
     return this.userSubject;
   }
 
-  private static createHsyUser(user:Object):User {
+  public static createHsyUser(user:Object):User {
     return <User> {
       id: btoa(user['email'])/* using BASE64 email as unique userId*/,
       name: user['name'],

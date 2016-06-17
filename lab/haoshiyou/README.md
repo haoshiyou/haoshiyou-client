@@ -151,9 +151,9 @@ Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, i
    -  -  - DONE Push for chat
    -  - DONE Facebook and LinkedIn Sign-In Callback Fixing
    -  - DONE Firebase event tracking
-   -  - Bug
-   -  -  - Already logged in, reload the page, and then try to load a 
-listing, starting a chat will cause nullpointer exception.
+   -  - Bugs
+   -  -  - DONE Already logged in, reload the page, and then try to 
+   load a listing, starting a chat will cause nullpointer exception.
    
  - Release 3: Better UX
    -  - Share to WeChat

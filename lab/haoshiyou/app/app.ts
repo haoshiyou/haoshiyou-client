@@ -77,6 +77,10 @@ export class MyApp {
       ga('send', 'pageview');
       this.logService.logEvent('app', 'start');
 
+      if (authService.getUser()) {
+        userService.setMeId(AuthService.createHsyUser(authService.getUser()).id);
+      }
+      // Setup UserService
       authService.userObservable().subscribe((authUser:User) => {
         // TODO(xinbenlv): on condition create user.
         if (!authUser) {
@@ -93,9 +97,9 @@ export class MyApp {
             }
           });
         }
-
       });
 
+      // Setup notification
       authService.userObservable().subscribe((user:User)=> {
         this.logger.debug(`Push notification gets user= ${JSON.stringify(user)}`);
         if (user == null) {
