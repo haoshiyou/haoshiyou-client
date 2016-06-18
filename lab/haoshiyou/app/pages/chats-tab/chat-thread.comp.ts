@@ -15,9 +15,9 @@ export class ChatThreadComp implements OnChanges {
         return this.userService.observableUserById(id).take(1).toPromise();
       })).then((users:any[]) => {
         users = <Array<User>>users;
-        this.participants = "Chats between " + users.map((user:User)=> {
+        this.participants = users.map((user:User)=> {
               return user.name;
-            }).join(", ");
+            }).join("、");
       });
     }
   }

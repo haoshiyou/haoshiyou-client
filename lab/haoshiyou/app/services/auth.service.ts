@@ -14,6 +14,75 @@ import {Logger} from "log4javascript/log4javascript";
 // Avoid name not found warnings
 declare var Auth0Lock:any;
 
+// TODO(xinbenlv): update Auth0 once my pull request is pulled. https://github.com/auth0/lock/pull/447
+let zhDict = {
+  "//": "This is an automatic translation. Help us to improve it.",
+  "loadingTitle": "请稍候。。。",
+  "close": "关闭",
+  "noConnectionError": "网络连接已中断。",
+  "signin": {
+    "title": "登录",
+    "action": "登录",
+    "all": "不是您的账户?",
+    "strategyEmailEmpty": "电子邮件是空的。",
+    "strategyEmailInvalid": "电子邮件是无效的。",
+    "strategyDomainInvalid": "指定域 {domain} 无效。",
+    "signinText": "登录",
+    "signupText": "注册",
+    "forgotText": "忘记密码？",
+    "emailPlaceholder": "电子邮件",
+    "usernamePlaceholder": "用户名",
+    "passwordPlaceholder": "密码",
+    "separatorText": "或",
+    "serverErrorText": "处理所示的标志时出错。",
+    "returnUserLabel": "上次登录账户为：",
+    "wrongEmailPasswordErrorText": "电子邮件或密码不匹配。",
+    "popupCredentials": "请在弹出窗口内登录",
+    "or": "...或使用登录",
+    "loadingMessage": "连接 {connection}..."
+  },
+  "signup": {
+    "description": "",
+    "title": "注册",
+    "action": "注册",
+    "signinText": "登录",
+    "signupText": "注册",
+    "emailPlaceholder": "电子邮件",
+    "passwordPlaceholder": "密码",
+    "cancelAction": "取消",
+    "headerText": "请输入您的电子邮件和密码",
+    "footerText": "",
+    "signupOnSSODomainErrorText": "指定此域 {domain} 已配置为单一登录，且您不能创建一个帐户。请尝试登录其他方法。",
+    "serverErrorText": "处理标志向上时出错。"
+  },
+  "newReset": {
+    "title": "重置密码",
+    "action": "发送",
+    "emailPlaceholder": "电子邮件",
+    "cancelAction": "取消",
+    "footerText": "",
+    "successText": "我们刚刚已经向您发送一封电子邮件，请查看以重置您的密码。",
+    "headerText": "请输入您的电子邮件地址。我们会向您发送电子邮件重设密码。",
+    "serverErrorText": "处理重置密码时出错。",
+    "userDoesNotExistErrorText": "用户不存在。",
+    "tooManyRequestsErrorText": "您已达密码重置尝试的极限。请稍候再试。"
+  },
+  "reset": {
+    "title": "更改密码",
+    "action": "发送",
+    "emailPlaceholder": "电子邮件",
+    "passwordPlaceholder": "新密码",
+    "repeatPasswordPlaceholder": "再次输入新密码",
+    "cancelAction": "取消",
+    "successText": "我们刚刚已经向您发送一封电子邮件，重置您的密码。",
+    "enterSamePasswordText": "请输入相同的密码。",
+    "headerText": "请输入您的电子邮件和新的密码。我们将向您发送邮件以确认密码更改。",
+    "serverErrorText": "处理重置密码时出错。",
+    "userDoesNotExistErrorText": "用户不存在。",
+    "tooManyRequestsErrorText": "您已达密码重置尝试的极限。重试前请稍候。",
+    "invalidPassword": "密码太弱。"
+  }
+};
 @Injectable()
 export class AuthService {
 
@@ -59,8 +128,10 @@ export class AuthService {
     this.lock.show({
       authParams: {
         scope: 'openid offline_access',
-        device: 'Mobile device'
-      }
+        device: 'Mobile device',
+      },
+      dict: zhDict,
+      icon: 'res/icon.png'
     }, (err, profile, token, accessToken, state, refreshToken) => {
       if (err) {
         alert(err); // TODO(xinbenlv): handle error

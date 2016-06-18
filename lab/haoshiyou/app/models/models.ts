@@ -16,7 +16,7 @@ export class Thread {
 export class Message {
   constructor(public id:string,
               public text:string,
-              public sentAt:Date,
+              public sentAt:number,
               public authorId:string,
               public threadId:string) {
   }

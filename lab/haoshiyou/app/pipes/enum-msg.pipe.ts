@@ -6,9 +6,9 @@ export class EnumMsgPipe implements PipeTransform {
   transform(value:ListingType):string {
     switch (value) {
       case ListingType.ROOM_WANTED:
-        return "Room Wanted";
+        return "求租";
       case ListingType.ROOMMATE_WANTED:
-        return "Roommate Wanted";
+        return "招租";
       default:
         throw 'Unsupported ListingType.';
     }

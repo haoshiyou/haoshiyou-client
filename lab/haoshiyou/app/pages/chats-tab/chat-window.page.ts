@@ -17,6 +17,7 @@ import {NotificationService} from "../../services/notfication.service";
 export class ChatWindowPage implements OnInit, OnDestroy {
   @ViewChild(Content) content:Content;
   currentThread:Thread;
+  title:string;
   messageInfos:MessageInfo[] = [];
   subscription:Subscription;
   draftMessageText:string;
@@ -83,7 +84,7 @@ export class ChatWindowPage implements OnInit, OnDestroy {
   }
 
   sendMessage():void {
-    let m:Message = new Message(uuid(), this.draftMessageText, new Date(), this.me.id, this.currentThread.id);
+    let m:Message = new Message(uuid(), this.draftMessageText, Date.now(), this.me.id, this.currentThread.id);
     let notificationRegIds:string[] = [];
     this.messagesService.createMessage(m).then(()=>{
       let promises:Promise<void>[] = [];

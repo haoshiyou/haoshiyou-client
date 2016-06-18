@@ -9,13 +9,13 @@
                 *ngFor="let thread of threads"
                 [thread]="thread">
         </chat-thread>
-        <ion-item *ngIf="!threads || !threads.length"> You don't have any chat thread yet.</ion-item>
+        <ion-item *ngIf="!threads || !threads.length"> 没有任何消息 </ion-item>
     </ion-list>
 
     <ion-list *ngIf="!meId">
         <ion-item>
-            <ion-label>You need to login to chat, please login</ion-label>
-            <button item-right (click)="auth.login()">Login</button>
+            <ion-label>请登录</ion-label>
+            <button item-right (click)="auth.login()">登录</button>
         </ion-item>
     </ion-list>
 </ion-content>

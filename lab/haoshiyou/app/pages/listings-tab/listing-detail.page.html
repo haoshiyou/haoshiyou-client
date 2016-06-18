@@ -1,16 +1,18 @@
 <ion-navbar *navbar>
-    <ion-title>Detail</ion-title>
+    <ion-title>帖子</ion-title>
     <ion-buttons end *ngIf="owner && meId && owner.id == meId" click="edit()">
-        <button (click)="edit()">Edit</button>
+        <button (click)="edit()">编辑</button>
     </ion-buttons>
 </ion-navbar>
 
 <ion-content>
     <ion-card>
         <ion-item>
-            <span item-left>{{listing.type|enumMsgPipe}}</span>
+            <ion-badge class="{{ listing.type == 0 ? 'badge-secondary' : 'badge-primary'}}" item-left>
+                {{listing.type|enumMsgPipe}}
+            </ion-badge>
             <button primary clear item-right (click)="startChat()">
-                <ion-icon name="chatbubbles"></ion-icon>
+                私信<ion-icon name="chatbubbles"></ion-icon>
             </button>
         </ion-item>
         <ion-item *ngIf="owner" >
@@ -21,7 +23,7 @@
         </ion-item>
         <ion-item>
             <h2>{{listing.title}}</h2>
-            <p>{{listing.updated|timeFromNow}}</p>
+            <p>{{listing.lastUpdated|timeFromNow}}</p>
         </ion-item>
         <ion-card-content>
             <p style="white-space: pre-line">{{listing.content}}</p>
@@ -29,12 +31,14 @@
         <map-view [listings]="[listing]"></map-view>
         <image-grid *ngIf="listing.imageIds" [imageUrls]="listing.imageIds | imageIdToUrlPipe"></image-grid>
         <ion-item *ngIf="!listing.imageIds">
-            No Pictures
+            无照片
         </ion-item>
         <ion-item>
-            <span item-left>{{listing.type|enumMsgPipe}}</span>
+            <ion-badge class="{{ listing.type == 0 ? 'badge-secondary' : 'badge-primary'}}" item-left>
+                {{listing.type|enumMsgPipe}}
+            </ion-badge>
             <button primary clear item-right (click)="startChat()">
-                <ion-icon name="chatbubbles"></ion-icon>
+                私信<ion-icon name="chatbubbles"></ion-icon>
             </button>
         </ion-item>
     </ion-card>

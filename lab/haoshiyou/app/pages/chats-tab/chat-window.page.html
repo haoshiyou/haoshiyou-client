@@ -1,4 +1,8 @@
-<ion-navbar *navbar></ion-navbar>
+<ion-navbar *navbar>
+    <ion-title>
+        群聊({{currentThread.userIds.length}})
+    </ion-title>
+</ion-navbar>
 <ion-content>
     <ion-list>
         <chat-message

@@ -1,20 +1,20 @@
 <ion-navbar *navbar>
     <ion-title>
-        Create
+        创建
     </ion-title>
     <ion-buttons end>
-        <button (click)="save()">Save</button>
+        <button (click)="save()">保存</button>
     </ion-buttons>
 </ion-navbar>
 
 <ion-content class="creation">
     <ion-item>
-        <ion-label>Location</ion-label>
+        <ion-label>位置</ion-label>
         <ion-label>{{localityText}}</ion-label>
     </ion-item>
     <div style="width:100%;height:250px" id="map_drag_canvas"></div>
     <ion-item>
-        <ion-label>Type</ion-label>
+        <ion-label>类型</ion-label>
         <ion-select required [(ngModel)]="listing.type" (change)="dirty['type']=true">
             <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
         </ion-select>
@@ -23,7 +23,7 @@
         </p>
     </ion-item>
     <ion-item>
-        <ion-label fixed>Title</ion-label>
+        <ion-label fixed>标题</ion-label>
         <ion-input required [(ngModel)]="listing.title" (change)="dirty['content']=true"></ion-input>
         <p style="color: red;" item-right *ngIf="dirty['title'] && !listing.title">
         required
@@ -31,19 +31,19 @@
     </ion-item>
 
     <ion-item>
-        <ion-label>Details</ion-label>
+        <ion-label>详情</ion-label>
         <ion-textarea required [(ngModel)]="listing.content" (change)="dirty['content']=true"></ion-textarea>
         <p style="color: red;" item-right *ngIf="dirty['content'] && !listing.content">
             required
         </p>
     </ion-item>
     <ion-item>
-        <ion-label fixed>Contact Info</ion-label>
+        <ion-label fixed>联系方式</ion-label>
         <ion-input [(ngModel)]="listing.contact"></ion-input>
     </ion-item>
 
     <ion-item>
-        <ion-label fixed>Pictures</ion-label>
+        <ion-label fixed>图片</ion-label>
         <ion-input fixed disabled></ion-input>
     </ion-item>
 
@@ -55,6 +55,6 @@
         ></image-grid>
     </ion-item>
     <ion-item *ngIf="!(platform.is('ios') || platform.is('android'))">
-        Sorry, Web cannot upload image (yet), to upload image, use your Android or iPhone to create a listing.
+        抱歉,网页版暂时不支持添加图片,请使用安卓或者iPhone添加图片。
     </ion-item>
 </ion-content>

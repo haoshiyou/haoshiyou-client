@@ -9,13 +9,13 @@ let THREAD_XINBENLV_ZZN:Thread = new Thread('tmp-thread-xinbenlv-zzn',
     ], new Date(), "");
 export let FAKE_MESSAGES:Message[] = [
   new Message('tmp-message1', 'Hi How are you?',
-      moment().subtract(45, 'minutes').toDate(),
+      moment().subtract(45, 'minutes').toDate().getUTCMilliseconds(),
       'tmp-juliet',
       'tmp-thread-USER_JULIET-capulet'
   ),
 
   new Message('tmp-message2', 'Fine thank you!.',
-      moment().subtract(46, 'minutes').toDate(),
+      moment().subtract(46, 'minutes').toDate().getUTCMilliseconds(),
       'tmp-capulet',
       'tmp-thread-USER_JULIET-capulet'
   ),

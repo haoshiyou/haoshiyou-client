@@ -61,5 +61,10 @@
     "android"
   ],
   "name": "haoshiyou",
-  "description": "haoshiyou: An Ionic project"
+  "description": "A project that helps SF Bay Area Chinese friends to find roommate.",
+  "license": "SEE LICENSE IN LICENCE",
+  "repository" :
+  { "type" : "git"
+  , "url" : "https://github.com/xinbenlv/rent.zzn.im.git"
+  }
 }
