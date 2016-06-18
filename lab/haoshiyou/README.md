@@ -90,14 +90,14 @@ for publishing.
 ionic build --release android && jarsigner -verbose \
 -sigalg SHA1withRSA -digestalg SHA1 \
 -keystore haoshiyou-android.keystore \
-platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name
+platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name # do not change "alias_name"
 ```
 
 3. run
 
 ```
 alias zipalign=~/Library/Android/sdk/build-tools/23.0.3/zipalign
-
+zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk releases/haoshiyou-android-release-0.0.2.apk
 ```
 
 ### Resource resolutions for releases
@@ -159,12 +159,17 @@ Splash screen cannot be updated.
    -  - Bugs
    -  -  - DONE Already logged in, reload the page, and then try to 
    load a listing, starting a chat will cause nullpointer exception.
-   
  - Release 3: Better UX
    -  - Share to WeChat
    -  - New message counting
    -  - Upload image in full resolution, display default low resolution
    -  - Update Splash Screen and Logo
+   -  - Polishing user flow
+   -  -  - Remove card boundary in the detail page
+   -  -  - Disallow anonymous user to create a listing (for now)
+   -  - Bug
+   -  -  - Invalid date when posting a new listing
+   
  - Release 4: Performance and Reliability
    -  - Testing structure
    -  - Security rules
