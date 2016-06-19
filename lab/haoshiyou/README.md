@@ -145,9 +145,7 @@ Splash screen cannot be updated.
    -  -  - DONE Flash quit when adding picture
    -  -  - DONE Flash quit when registering
    -  -  - DONE Edit validation
- - Web Release => wrj@
-   -  - Large Screen: listing list on left and map on right
-   -  - Web image picker in creation page
+
  - Release 2: MVP for Growth
    -  - DONE Make the detail page editable
    -  - DONE Show image full screen view.
@@ -159,20 +157,27 @@ Splash screen cannot be updated.
    -  - Bugs
    -  -  - DONE Already logged in, reload the page, and then try to 
    load a listing, starting a chat will cause nullpointer exception.
- - Release 3: Better UX
-   -  - Share to WeChat
+
+ - Web Release
+   -  - Large Screen: listing list on left and map on right (wrj@)
+   -  - Web image picker in creation page (wrj@)
+   -  - Deep Linking (xinbenlv@)
+   -  - Share to WeChat (xinbenlv@)
+
+ - Release 3: Prod
+   -  - DONE Use a production database
+   -  - Firebase Realtime DB Security Rules
+   -  - Image and Listing Deletion.
    -  - New message counting
    -  - Upload image in full resolution, display default low resolution
-   -  - Update Splash Screen and Logo
+   -  - DONE Update Splash Screen and Logo
    -  - Polishing user flow
-   -  -  - Remove card boundary in the detail page
-   -  -  - Disallow anonymous user to create a listing (for now)
+   -  -  - Prompt anonymous user to login when create a listing or chat.
    -  - Bug
-   -  -  - Invalid date when posting a new listing
+   -  -  - DONE Invalid date when posting a new listing
    
  - Release 4: Performance and Reliability
    -  - Testing structure
-   -  - Security rules
    -  - Add performance profiling related logging
  - Backlog
    - Authentication

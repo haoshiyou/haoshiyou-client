@@ -34,7 +34,7 @@ let zhDict = {
     "usernamePlaceholder": "用户名",
     "passwordPlaceholder": "密码",
     "separatorText": "或",
-    "serverErrorText": "处理所示的标志时出错。",
+    "serverErrorText": "处理服务器请求时出错。",
     "returnUserLabel": "上次登录账户为：",
     "wrongEmailPasswordErrorText": "电子邮件或密码不匹配。",
     "popupCredentials": "请在弹出窗口内登录",
@@ -53,7 +53,7 @@ let zhDict = {
     "headerText": "请输入您的电子邮件和密码",
     "footerText": "",
     "signupOnSSODomainErrorText": "指定此域 {domain} 已配置为单一登录，且您不能创建一个帐户。请尝试登录其他方法。",
-    "serverErrorText": "处理标志向上时出错。"
+    "serverErrorText": "处理服务器请求时出错。"
   },
   "newReset": {
     "title": "重置密码",
