@@ -29,7 +29,7 @@ git checkout -b lab2 origin/lab2 # checkout branch "lab2"
 
 ```bash
 cd lab/haoshiyou/
-npm install
+npm install --dev
 ionic state restore
 ```
 
@@ -75,6 +75,13 @@ Install
 ```
 ionic run -lcs --debug ios --address=localhost
 ```
+### Debug
+
+Install Google
+1. Follow the instruction to download ARM translator
+https://inthecheesefactory.com/blog/how-to-install-google-services-on-genymotion/en
+
+2. Download GAPPS from http://opengapps.org/
 
 
 ### Release
@@ -166,7 +173,6 @@ Splash screen cannot be updated.
 
  - Release 3: Prod
    -  - DONE Use a production database
-   -  - Firebase Realtime DB Security Rules
    -  - Image and Listing Deletion.
    -  - New message counting
    -  - Upload image in full resolution, display default low resolution
@@ -180,4 +186,4 @@ Splash screen cannot be updated.
    -  - Testing structure
    -  - Add performance profiling related logging
  - Backlog
-   - Authentication
+   -  - Firebase Realtime DB Security Rules - need to wait for Angular
