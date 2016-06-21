@@ -27,7 +27,8 @@ export class StaticCredentialService {
     CLOUDINARY_API_KEY: '999284541119412',
     CLOUDINARY_UPLOAD_PRESET: 'haoshiyou-prod',
     FIREBASE_BASE_URL: 'haoshiyou-prod.firebaseio.com',
-    GOOGLE_ANALYTICS_PROPERTY_ID: 'UA-55311687-4'
+    GOOGLE_ANALYTICS_PROPERTY_ID: 'UA-55311687-4',
+    LOG_SENSE_TOKEN: 'd032d125-1a39-4129-bfb0-4e3e4afc17e9',
   };
 
   private devCredentials:{[credId:string]:string} = {
@@ -39,7 +40,8 @@ export class StaticCredentialService {
     CLOUDINARY_API_KEY: '999284541119412',
     CLOUDINARY_UPLOAD_PRESET: 'haoshiyou-dev',
     FIREBASE_BASE_URL: 'haoshiyou-dev.firebaseio.com',
-    GOOGLE_ANALYTICS_PROPERTY_ID: 'UA-55311687-3'
+    GOOGLE_ANALYTICS_PROPERTY_ID: 'UA-55311687-3',
+    LOG_SENSE_TOKEN: '85b11658-5721-4734-a396-cb552d8e5e96',
   };
   private env:string;
   private credentials;

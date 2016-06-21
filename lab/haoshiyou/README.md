@@ -168,8 +168,6 @@ Splash screen cannot be updated.
  - Web Release
    -  - Large Screen: listing list on left and map on right (wrj@)
    -  - Web image picker in creation page (wrj@)
-   -  - Deep Linking (xinbenlv@)
-   -  - Share to WeChat (xinbenlv@)
 
  - Release 3: Prod
    -  - DONE Use a production database
@@ -185,5 +183,9 @@ Splash screen cannot be updated.
  - Release 4: Performance and Reliability
    -  - Testing structure
    -  - Add performance profiling related logging
- - Backlog
-   -  - Firebase Realtime DB Security Rules - need to wait for Angular
+ - BLOCKED
+   -  - Firebase Realtime DB Security Rules: blocked on 
+   [auth0-angular2](github.com/auth0/auth0-angular2)
+   -  - DeepLinking blocked on @angular/router to 
+   [finalize](http://angularjs.blogspot.com/2016/06/improvements-coming-for-routing-in.html),
+   -  - Shared to WeChat blocked on DeepLinking

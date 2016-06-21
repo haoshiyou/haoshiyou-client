@@ -6,6 +6,9 @@ import {Device} from "ionic-native";
 import {AngularFire} from "angularfire2/angularfire2";
 import {uuid} from "../util/uuid";
 import {ICredentialService} from "./credential.service";
+import 'rxjs/Rx';
+import {Http, Headers, RequestOptions} from "@angular/http";
+
 export let loggerToken:OpaqueToken = new OpaqueToken("value");
 
 declare let window:any;
@@ -15,20 +18,27 @@ declare let ga:any;
 export class LogService {
   private logger:Logger;
 
-  constructor(platform:Platform, af:AngularFire, private cred:ICredentialService) {
+  constructor(platform:Platform,
+              private cred:ICredentialService,
+              private af:AngularFire,
+              private credService:ICredentialService,
+              private http:Http) {
     this.logger = log4javascript.getLogger();
     let layout = new log4javascript.PatternLayout("%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5p %m");
     platform.ready().then(()=> {
-      let fbAppender = new FbAppender(af);
+      let fbAppender:FbAppender = new FbAppender(af);
+      let logSenseAppender = new LogSenseAppender(http, credService);
       let browserAppender = new log4javascript.BrowserConsoleAppender();
       let gaAppender = new GaAppender();
 
       browserAppender.setLayout(layout);
+      logSenseAppender.setLayout(layout);
       fbAppender.setLayout(layout);
       gaAppender.setLayout(layout);
 
       this.logger.addAppender(gaAppender);
       this.logger.addAppender(fbAppender);
+      this.logger.addAppender(logSenseAppender);
       this.logger.addAppender(browserAppender);
 
       this.logger.debug("Initialized Logger.");
@@ -58,13 +68,13 @@ export class LogService {
 }
 
 
-export class FbAppender extends log4javascript.Appender {
-  private deviceId:string;
-  private device = {};
+export class BaseRemoteAppender extends log4javascript.Appender {
+  protected deviceId:string;
+  protected device = {};
+  protected ready:boolean = false;
+  protected entries = [];
   private local:Storage = new Storage(LocalStorage);
-  private ready:boolean = false;
-  private entries = [];
-  constructor(private af:AngularFire) {
+  constructor() {
     super();
     this.local.get('deviceId').then(deviceId => {
       if (deviceId) {
@@ -91,30 +101,22 @@ export class FbAppender extends log4javascript.Appender {
     entry.timeStampInMilliseconds = loggingEvent.timeStampInMilliseconds;
     entry.level = loggingEvent.level;
     entry.messages = loggingEvent.messages;
+    if(this.deviceId)entry.deviceId = this.deviceId;
+    if(this.device) {
+      entry.device = this.device;
+      delete entry.device['registerTime'];
+    }
     if (loggingEvent.exception) entry.exception = loggingEvent.exception;
     this.entries.push(entry);
     this.upload();
   };
 
   upload() {
-    if (this.ready) {
-      let tmpEntries = this.entries;
-      this.entries = []; //clear
-      for (let entry of tmpEntries) {
-        this.af.database.list("/tmp/logs/device-" + this.deviceId).push(entry);
-      }
+    throw "Not Implemented";
+  }
 
-      this.af.database.object("/tmp/devices/device-" + this.deviceId).take(1).toPromise().then((device:any)=> {
-        if (device != null) {
-          device.registerTime.push(new Date().toISOString());
-          this.af.database.object(`/tmp/devices/device-${this.deviceId}`).update(device);
-        } else {
-          this.af.database.object(`/tmp/devices/device-${this.deviceId}`).set(this.device);
-        }
-      });
-
-
-    }
+  register() {
+    throw "Not Implemented";
   }
 
   setCookie(cname, cvalue) {
@@ -138,6 +140,59 @@ export class FbAppender extends log4javascript.Appender {
     }
     return "";
 }
+}
+
+@Injectable()
+export class FbAppender extends BaseRemoteAppender {
+  constructor(private af:AngularFire) {
+    super()
+  }
+
+  upload() {
+    if (this.ready) {
+      let tmpEntries = this.entries;
+      this.entries = []; //clear
+      for (let entry of tmpEntries) {
+        this.af.database.list("/tmp/logs/device-" + this.deviceId).push(entry);
+      }
+      this.af.database.object("/tmp/devices/device-" + this.deviceId).take(1).toPromise().then((device:any)=> {
+        if (device != null) {
+          device.registerTime.push(new Date().toISOString());
+          this.af.database.object(`/tmp/devices/device-${this.deviceId}`).update(device);
+        } else {
+          this.af.database.object(`/tmp/devices/device-${this.deviceId}`).set(this.device);
+        }
+      });
+    }
+  }
+
+  
+}
+
+@Injectable()
+export class LogSenseAppender extends BaseRemoteAppender {
+  constructor(private http:Http, private credService:ICredentialService) {
+    super();
+  }
+  upload() {
+    if (this.ready) {
+      let tmpEntries = this.entries;
+      this.entries = []; //clear
+      let url = `http://logsene-receiver.sematext.com/${this.credService.get('LOG_SENSE_TOKEN')}/log/`;
+      let headers = new Headers({
+        'Content-Type': 'application/json',
+      });
+      let options = new RequestOptions({ headers: headers });
+      for (let entry of tmpEntries) {
+        let body = JSON.stringify(entry);
+        this.http.post(url, body, options).take(1).toPromise().catch((e)=>{
+          console.log(e);
+        });
+      }
+    }
+
+    return
+  }
 }
 
 export class GaAppender extends log4javascript.Appender {
@@ -169,4 +224,6 @@ interface LogEntry {
   level:Level;
   messages:any[];
   exception?:Error;
+  deviceId:string;
+  device:{};
 }
