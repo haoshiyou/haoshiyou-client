@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="org.haoshiyou.app" version="3.3.0" xmlns="http://www.w3.org/ns/widgets">
-  <name>好室友(haoshiyou)</name>
+  <name>haoshiyou</name>
   <description>帮助旧金山湾区小伙伴们找室友。</description>
   <author email="zzn@zzn.im" href="http://zzn.im/">Zainan Victor Zhou</author>
   <content src="index.html"/>

@@ -7,14 +7,6 @@
 
 <ion-content>
     <ion-card>
-        <ion-item>
-            <ion-badge class="{{ listing.type == 0 ? 'badge-secondary' : 'badge-primary'}}" item-left>
-                {{listing.type|enumMsgPipe}}
-            </ion-badge>
-            <button primary clear item-right (click)="startChat()">
-                私信<ion-icon name="chatbubbles"></ion-icon>
-            </button>
-        </ion-item>
         <ion-item *ngIf="owner" >
             <ion-avatar item-left>
                 <img src="{{owner.avatarSrc}}" alt=""/>

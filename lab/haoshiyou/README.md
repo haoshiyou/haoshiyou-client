@@ -171,14 +171,15 @@ Splash screen cannot be updated.
 
  - Release 3: Prod
    -  - DONE Use a production database
+   -  - DONE Update Splash Screen and Logo
+   -  - Bug
+   -  -  - DONE Invalid date when posting a new listing
+
    -  - Image and Listing Deletion.
    -  - New message counting
    -  - Upload image in full resolution, display default low resolution
-   -  - DONE Update Splash Screen and Logo
    -  - Polishing user flow
    -  -  - Prompt anonymous user to login when create a listing or chat.
-   -  - Bug
-   -  -  - DONE Invalid date when posting a new listing
    
  - Release 4: Performance and Reliability
    -  - Testing structure
