@@ -1,4 +1,4 @@
-import {Page, Platform, NavController} from "ionic-angular";
+import {Page, Platform, NavController, Alert} from "ionic-angular";
 import {IListingService} from "../../services/listings/listing.service.ts";
 import {Listing} from "../../models/listing";
 import {OnInit, OnDestroy, Inject} from "@angular/core";
@@ -9,6 +9,7 @@ import LatLng = google.maps.LatLng;
 import {Observable} from "rxjs/Observable";
 import {loggerToken} from "../../services/log.service";
 import {Logger} from "log4javascript/log4javascript";
+import {AuthService} from "../../services/auth.service";
 
 /**
  * A page contains a map view and a list showing the listings.
@@ -32,6 +33,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   constructor(private platform:Platform,
               private listingService:IListingService,
               private nav:NavController,
+              private auth:AuthService,
               @Inject(loggerToken) private logger:Logger) {
 
   }
@@ -83,9 +85,17 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   gotoCreationPage() {
-    //push another page onto the history stack
-    //causing the nav controller to animate the new page in
-    this.nav.push(CreationPage);
+    if (this.auth.authenticated()) {
+      //push another page onto the history stack
+      //causing the nav controller to animate the new page in
+      this.nav.push(CreationPage);
+    } else {
+      let alert = Alert.create({
+        title: '请登录后发帖',
+        buttons: ['好的']
+      });
+      this.nav.present(alert);
+    }
   }
 
   gotoDetail(listing:Listing) {

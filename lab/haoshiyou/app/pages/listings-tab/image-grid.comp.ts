@@ -48,9 +48,22 @@ export class ImageGridComponent implements OnChanges {
       }
     }
   }
+
   showImage(url, row, col) {
     let id:string = `image-${row}-${col}`;
-    let viewer = new window.Viewer(document.getElementById(id), {url:url});
+    let el = document.getElementsByTagName('body');
+    // TODO(xinbenlv): modify the viewerjs to customize the following
+    // 1. click on background area to close
+    let viewer = new window.Viewer(el[0],
+        {
+          url:url,
+          inline:false,
+          toolbar: false,
+          title: false,
+          movable: true,
+          keyboard: false,
+          navbar: false
+        });
     viewer.show();
   }
 }

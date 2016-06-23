@@ -113,13 +113,7 @@ export class CreationPage implements OnInit {
   }
 
   private pickPictures() {
-    var options = {
-      maximumImagesCount: 10,
-      width: 1600,
-      height: 1600,
-      quality: 80
-    };
-    ImagePicker.getPictures(options)
+    ImagePicker.getPictures({})
         .then((urls:string[]) => {
           return this.imageService.uploadImagesAndGetIds(urls)
         })
@@ -145,7 +139,6 @@ export class CreationPage implements OnInit {
 
     let prompt = Alert.create({
       title: '确认删除?',
-      subTitle: '删除后不可恢复哦!',
       buttons: [
         {
           text: '取消',

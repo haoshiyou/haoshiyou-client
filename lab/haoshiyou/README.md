@@ -141,7 +141,7 @@ Splash screen cannot be updated.
  - DONE Handle most frequent bad cases
    -  - DONE No login
    -  - DONE No internet connection
- - Rlease 1: MVP for Early Adopter
+ - Release 1: MVP for Early Adopter
    -  - DONE Strip to production credentials
    -  - DONE Turn Off FB and LinkedIn Auth0 signin.
    -  - DONE Disable Web Upload Image, Stop nav-back after upload image failure.
@@ -174,13 +174,15 @@ Splash screen cannot be updated.
    -  - DONE Update Splash Screen and Logo
    -  - Bug
    -  -  - DONE Invalid date when posting a new listing
-
-   -  - Image and Listing Deletion.
-   -  - New message counting
-   -  - Upload image in full resolution, display default low resolution
-   -  - Polishing user flow
-   -  -  - Prompt anonymous user to login when create a listing or chat.
-   
+   -  - Image Related Features
+   -  -  - DONE Image and Listing Deletion.
+   -  -  - DONE Image viewer now closable
+   -  -  - Upload image in full resolution, display default low resolution
+   -  - DONE disallow anonymous user to login when create a listing or chat.
+   -  - Improve chatting
+   -  -  - New message counting badge
+   -  -  - Listing
+      
  - Release 4: Performance and Reliability
    -  - Testing structure
    -  - Add performance profiling related logging

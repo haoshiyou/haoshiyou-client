@@ -64,7 +64,17 @@ export class CloudinaryImageService implements IImageService {
    * override
    */
   getUrlFromId(id:string, width:number = 300, height:number = 300):string {
-    return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/w_300,h_300,c_fill/${id}.jpg`;
+    let param;
+    if (width == 0 && height == 0) {
+      param = 'w_0.5';
+    } else if (width == 0) {
+      param = `h_${height}`;
+    } else if (height == 0 ){
+      param = `w_${width}`;
+    } else {
+      param = `w_${width},h_${height},c_fill`;
+    }
+    return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/${param}/${id}.jpg`;
   }
 }
 
