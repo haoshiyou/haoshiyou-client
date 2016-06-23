@@ -174,14 +174,19 @@ Splash screen cannot be updated.
    -  - DONE Update Splash Screen and Logo
    -  - Bug
    -  -  - DONE Invalid date when posting a new listing
-   -  - Image Related Features
+   -  - DONE Image Related Features
    -  -  - DONE Image and Listing Deletion.
    -  -  - DONE Image viewer now closable
    -  -  - DONE Upload image in full resolution, display default low resolution
    -  - DONE disallow anonymous user to login when create a listing or chat.
-   -  - Improve chatting
+   -  - Improve push notification
    -  -  - New message counting badge
-   -  -  - Listing
+   -  -  - New Listing push
+   -  - Cosmetic
+   -  -  - Add avatar to listing left
+   -  -  - Display image in detail page in flow instead of image-grid?
+   -  -  - Display my listing and my chat message in a light blue to 
+   Distinguish it from others
       
  - Release 4: Performance and Reliability
    -  - Testing structure
