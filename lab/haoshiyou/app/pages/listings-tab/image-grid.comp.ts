@@ -15,9 +15,17 @@ export class ImageGridComponent implements OnChanges {
   @Output()
   add = new EventEmitter();
 
+  @Output()
+  delete = new EventEmitter();
+
   //noinspection JSUnusedGlobalSymbols: used in HTML
   clickAdd() {
     this.add.emit(null);
+  }
+
+  //noinspection JSUnusedGlobalSymbols: used in HTML
+  clickDelete() {
+    this.delete.emit(null);
   }
 
   ngOnChanges(changes:{[propertyName:string]:SimpleChange}) {
@@ -28,7 +36,7 @@ export class ImageGridComponent implements OnChanges {
 
   load() {
     this.cacheGrid = [];
-    this.cacheUrls = this.imageUrls.concat([""]);
+    this.cacheUrls = this.imageUrls.concat(["add", "delete"]);
     let row:string[];
     for (let i = 0; i < this.cacheUrls.length; i++) {
       if (i % 3 == 0) {

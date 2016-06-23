@@ -6,7 +6,7 @@ import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
 import {IUserService} from "../../services/chats/user.service";
 import {ChatWindowPage} from "../chats-tab/chat-window.page";
-import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
+import {ImageIdsToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 import {ImageGridComponent} from "./image-grid.comp";
 import {MapViewComponent} from "./map-view.comp";
 import {loggerToken, LogService} from "../../services/log.service";
@@ -15,7 +15,7 @@ import {Logger} from "log4javascript";
 import {CreationPage} from "./listing-creation.page";
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
-  pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
+  pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdsToUrlPipe],
   directives: [ImageGridComponent, MapViewComponent]
 })
 export class ListingDetailPage {

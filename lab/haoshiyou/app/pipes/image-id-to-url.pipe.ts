@@ -2,9 +2,9 @@ import {Pipe, PipeTransform} from "@angular/core";
 import {IImageService} from "../services/image.service";
 
 @Pipe({
-  name: 'imageIdToUrlPipe',
+  name: 'imageIdsToUrlPipe',
 })
-export class ImageIdToUrlPipe implements PipeTransform {
+export class ImageIdsToUrlPipe implements PipeTransform {
   constructor(private imageService:IImageService) {
   }
 
@@ -13,4 +13,18 @@ export class ImageIdToUrlPipe implements PipeTransform {
       return this.imageService.getUrlFromId(id);
     });
   }
+
+}
+
+@Pipe({
+  name: 'imageIdToUrlPipe',
+})
+export class ImageIdToUrlPipe implements PipeTransform {
+  constructor(private imageService:IImageService) {
+  }
+
+  transform(id:string):string {
+    return this.imageService.getUrlFromId(id);
+  }
+
 }

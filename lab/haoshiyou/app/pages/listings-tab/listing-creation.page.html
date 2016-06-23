@@ -47,14 +47,16 @@
         <ion-input fixed disabled></ion-input>
     </ion-item>
 
-    <ion-item *ngIf="platform.is('ios') || platform.is('android')">
+    <ion-item>
         <image-grid
                 (add)="pickPictures()"
-                [imageUrls]="listing.imageIds | imageIdToUrlPipe"
+                (delete)="deletePictures()"
+                [imageUrls]="listing.imageIds | imageIdsToUrlPipe"
                 [isEdit]="true"
         ></image-grid>
     </ion-item>
     <ion-item *ngIf="!(platform.is('ios') || platform.is('android'))">
         抱歉,网页版暂时不支持添加图片,请使用安卓或者iPhone添加图片。
     </ion-item>
+    <button block danger (click)="deleteListing()">删除</button>
 </ion-content>

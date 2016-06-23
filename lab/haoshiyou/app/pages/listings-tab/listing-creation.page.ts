@@ -1,4 +1,4 @@
-import {Page, Platform, NavParams, NavController} from "ionic-angular";
+import {Page, Platform, NavParams, NavController, Modal, Alert} from "ionic-angular";
 import {OnInit, Inject} from "@angular/core";
 import {EnumMsgPipe} from "../../pipes/enum-msg.pipe";
 import {ListingType, Listing} from "../../models/listing";
@@ -11,9 +11,10 @@ import {Logger} from "log4javascript";
 import {loggerToken} from "../../services/log.service";
 import {IImageService} from "../../services/image.service";
 import {ImageGridComponent} from "./image-grid.comp";
-import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe.ts";
+import {ImageIdsToUrlPipe} from "../../pipes/image-id-to-url.pipe.ts";
 import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
+import {RemoveModal} from "./remove.modal";
 
 // TODO(xinbenlv):
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
@@ -23,7 +24,7 @@ const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
  */
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-creation.page.html',
-  pipes: [EnumMsgPipe, CityNZipPipe, ImageIdToUrlPipe],
+  pipes: [EnumMsgPipe, CityNZipPipe, ImageIdsToUrlPipe],
   directives: [ImageGridComponent]
 })
 export class CreationPage implements OnInit {
@@ -34,6 +35,7 @@ export class CreationPage implements OnInit {
   private listing:Listing;
   private localityText:string;
   private dirty:{[field:string]: boolean} = {};
+  private removeModal:Modal;
   constructor(private platform:Platform, private params:NavParams,
               private listingService:IListingService,
               private nav:NavController,
@@ -84,7 +86,7 @@ export class CreationPage implements OnInit {
       this.listing.lng = this.marker.getPosition().lng();
       this.mapService.getLocality(new google.maps.LatLng(this.listing.lat, this.listing.lng))
           .then((locality:ILocality)=> {
-            this.localityText = locality.city + "," + locality.zip;
+            this.localityText = locality.city + ", " + locality.zip;
           });
     });
 
@@ -132,6 +134,43 @@ export class CreationPage implements OnInit {
           // TODO(xinbenlv, #error-handling): handle error, using.
           alert("Failed to upload images!");
         });
+  }
+
+  private deletePictures() {
+    this.removeModal = Modal.create(RemoveModal, {listing: this.listing});
+    this.nav.present(this.removeModal, {animate: true});
+  }
+
+  private deleteListing() {
+
+    let prompt = Alert.create({
+      title: '确认删除?',
+      subTitle: '删除后不可恢复哦!',
+      buttons: [
+        {
+          text: '取消',
+          handler: data => {
+            // Do nothing
+            console.log(data); //XXX
+            this.nav.pop(); // alert
+          }
+        },
+        {
+          text: '删除',
+          handler: data => {
+            console.log(data); //XXX
+            this.listingService.removeListing(this.listing.id).then(()=>{
+              this.nav.pop().then(()=>{
+                this.nav.pop();
+              }); // alert
+            });
+          }
+        }
+      ]
+    });
+
+    this.nav.present(prompt);
+
   }
 
   validate():boolean {

@@ -45,8 +45,15 @@ export class FirebaseListingService implements IListingService {
     if (listing["$key"]) {
       this.logger.assert(listing.id == listing["$key"]);
       delete  listing["$key"]; // strip $key before update
-      return this.af.database.object("/listings/" + listing.id).update(listing);
     }
-    else return this.af.database.list("/listings").push(listing);
+    return this.af.database.object("/listings/" + listing.id).update(listing);
+  }
+
+  /**
+   * Delete listing by id
+   * @param listingId
+   */
+  removeListing(listingId:string):Promise<void> {
+    return this.af.database.object("/listings/" + listingId).remove();
   }
 }

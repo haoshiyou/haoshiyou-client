@@ -30,9 +30,20 @@ export class IListingService {
   createListing(listing:Listing):Promise<void> {
     throw "Not implemented";
   }
+
+  /**
+   * Delete listing by id
+   * @param id
+   */
+  removeListing(id:string):Promise<void> {
+    throw "Not implemented";
+  }
 }
 
 export class MockListingService implements IListingService{
+  removeListing(id:string):Promise<void> {
+    throw "Not implemented";
+  }
   observableListings():Observable<Listing[]> {
     throw "Not implemented";
   }
