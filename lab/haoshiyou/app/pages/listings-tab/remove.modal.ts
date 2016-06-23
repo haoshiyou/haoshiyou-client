@@ -26,10 +26,6 @@ export class RemoveModal {
       }
     }
     this.listing.imageIds = imagesAfterSave;
-    console.log("XXX checkboxes = ");
-    console.log(this.checkboxes);
-    console.log("XXX imagesId after save = ");
-    console.log(this.listing.imageIds);
     this.nav.pop();
   }
 

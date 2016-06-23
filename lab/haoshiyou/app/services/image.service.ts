@@ -66,7 +66,7 @@ export class CloudinaryImageService implements IImageService {
   getUrlFromId(id:string, width:number = 300, height:number = 300):string {
     let param;
     if (width == 0 && height == 0) {
-      param = 'w_0.5';
+      param = 'w_1242'; // 1242 is the width of iphone 6plus.
     } else if (width == 0) {
       param = `h_${height}`;
     } else if (height == 0 ){

@@ -23,8 +23,12 @@ export class ImageIdToUrlPipe implements PipeTransform {
   constructor(private imageService:IImageService) {
   }
 
-  transform(id:string):string {
-    return this.imageService.getUrlFromId(id);
+  transform(id:string, mode:string = "default"):string {
+    if (mode == "default") {
+      return this.imageService.getUrlFromId(id);
+    } else if (mode == "full") {
+      return this.imageService.getUrlFromId(id, 0, 0);
+    }
   }
 
 }

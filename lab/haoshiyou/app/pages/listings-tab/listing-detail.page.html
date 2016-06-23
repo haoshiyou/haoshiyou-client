@@ -5,7 +5,7 @@
     </ion-buttons>
 </ion-navbar>
 
-<ion-content>
+<ion-content id="page-container">
     <ion-card>
         <ion-item *ngIf="owner" >
             <ion-avatar item-left>
@@ -21,7 +21,7 @@
             <p style="white-space: pre-line">{{listing.content}}</p>
         </ion-card-content>
         <map-view [listings]="[listing]"></map-view>
-        <image-grid *ngIf="listing.imageIds" [imageUrls]="listing.imageIds | imageIdsToUrlPipe"></image-grid>
+        <image-grid *ngIf="listing.imageIds" [imageIds]="listing.imageIds"></image-grid>
         <ion-item *ngIf="!listing.imageIds">
             无照片
         </ion-item>

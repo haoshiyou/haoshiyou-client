@@ -7,7 +7,7 @@
     </ion-buttons>
 </ion-navbar>
 
-<ion-content class="creation">
+<ion-content class="creation" id="page-container">
     <ion-item>
         <ion-label>位置</ion-label>
         <ion-label>{{localityText}}</ion-label>
@@ -51,7 +51,7 @@
         <image-grid
                 (add)="pickPictures()"
                 (delete)="deletePictures()"
-                [imageUrls]="listing.imageIds | imageIdsToUrlPipe"
+                [imageIds]="listing.imageIds"
                 [isEdit]="true"
         ></image-grid>
     </ion-item>

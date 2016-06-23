@@ -143,15 +143,12 @@ export class CreationPage implements OnInit {
         {
           text: '取消',
           handler: data => {
-            // Do nothing
-            console.log(data); //XXX
             this.nav.pop(); // alert
           }
         },
         {
           text: '删除',
           handler: data => {
-            console.log(data); //XXX
             this.listingService.removeListing(this.listing.id).then(()=>{
               this.nav.pop().then(()=>{
                 this.nav.pop();

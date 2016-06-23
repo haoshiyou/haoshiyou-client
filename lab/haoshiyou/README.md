@@ -177,7 +177,7 @@ Splash screen cannot be updated.
    -  - Image Related Features
    -  -  - DONE Image and Listing Deletion.
    -  -  - DONE Image viewer now closable
-   -  -  - Upload image in full resolution, display default low resolution
+   -  -  - DONE Upload image in full resolution, display default low resolution
    -  - DONE disallow anonymous user to login when create a listing or chat.
    -  - Improve chatting
    -  -  - New message counting badge
