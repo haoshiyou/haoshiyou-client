@@ -212,19 +212,22 @@ https://github.com/phonegap/phonegap-plugin-push/blob/c63a41a0a58ec37b4ce2354680
    -  -  - DONE Upload image in full resolution, display default low resolution
    -  - DONE disallow anonymous user to login when create a listing or chat.
    -  - Improve push notification
-   -  -  - New message counting badge
+   -  -  - DONE New message counting badge
    -  -  - DONE(pending verification) New Listing push
    -  - Cosmetic
-   -  -  - Add avatar to listing left
    -  -  - DONE Display image in detail page in flow instead of image-grid?
    -  -  - DONE Fix Android Notification Icon problem
-   -  -  - Display my listing and my chat message in a light blue to 
+   -  -  - Show last message
    Distinguish it from others
 
  - Release 4: Performance and Reliability
    -  - Testing structure
    -  - Add performance profiling related logging
    -  - About, Version, Env and Control
+   -  - Cosmetic
+   -  -  - Display my listing and my chat message in a light blue to 
+   -  -  - Add avatar to listing left
+
  - BLOCKED
    -  - Firebase Realtime DB Security Rules: blocked on 
    [auth0-angular2](github.com/auth0/auth0-angular2)
