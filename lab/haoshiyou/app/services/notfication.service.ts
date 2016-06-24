@@ -9,6 +9,7 @@ import {Http, Headers, RequestOptions} from "@angular/http";
 
 @Injectable()
 export class NotificationService {
+  public static TOPIC_LISTING:string = "listing";
   private registrationId:string;
   private push:any/* PushNotification, no typed definition yet. */;
 
@@ -29,14 +30,15 @@ export class NotificationService {
         return new Promise<string>((resolve, reject)=> {
           this.logger.info("Registering push notification");
           let coreOpt = {
-            "senderID": this.credService.get("FCM_SENDER_ID")
+            "senderID": this.credService.get("FCM_SENDER_ID"),
+            "topics": [NotificationService.TOPIC_LISTING]
           };
           if (meId) {
             //coreOpt["topics"] = [`user:${meId}`]; // TODO(xinbenlv): add group support
           }
           let opt;
           if (this.platform.is('android')) {
-            coreOpt["icon"] = "drawable-xhdpi-icon";
+            coreOpt["icon"] = "icon";
             opt = {
               "android": coreOpt
             };
@@ -92,7 +94,7 @@ export class NotificationService {
     let body = JSON.stringify({
       "registration_ids":regIds,
       "notification":{
-        "title":`${userName}: ${msg}`,
+        "title": `好室友(haoshiyou)`,
         "body":`${userName}: ${msg}`
       }
     });
@@ -104,6 +106,27 @@ export class NotificationService {
     return this.http.post(url, body, options).take(1).toPromise().then((ret)=>{
       this.logger.info(ret);
     }).catch((e)=>{
+      this.logger.warn(e);
+    });
+  }
+
+  sendTopicMessage(topic:string, msg:string):Promise<any> {
+    let url = 'https://fcm.googleapis.com/fcm/send';
+    let body = JSON.stringify({
+      "to": `/topics/${topic}`,
+      "notification": {
+        "title": `好室友(haoshiyou)`,
+        "body": msg
+      }
+    });
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': `key=${this.credService.get('FCM_KEY')}`
+    });
+    let options = new RequestOptions({headers: headers});
+    return this.http.post(url, body, options).take(1).toPromise().then((ret)=> {
+      this.logger.info(ret);
+    }).catch((e)=> {
       this.logger.warn(e);
     });
   }

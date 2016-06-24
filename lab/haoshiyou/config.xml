@@ -65,6 +65,10 @@
     <splash src="resources/ios/splash/Default@2x~iphone.png" width="640" height="960"/>
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
+
+  <!-- To resolve android "the connection to the server was unsuccessful" -->
+  <preference name="loadUrlTimeoutValue" value="700000"/>
+
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

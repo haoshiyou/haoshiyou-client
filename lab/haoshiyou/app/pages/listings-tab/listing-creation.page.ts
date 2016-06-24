@@ -15,6 +15,7 @@ import {ImageIdsToUrlPipe} from "../../pipes/image-id-to-url.pipe.ts";
 import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
 import {RemoveModal} from "./remove.modal";
+import {NotificationService} from "../../services/notfication.service";
 
 // TODO(xinbenlv):
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
@@ -42,7 +43,8 @@ export class CreationPage implements OnInit {
               private mapService:MapService,
               private imageService:IImageService,
               @Inject(loggerToken) private logger:Logger,
-              private userService:IUserService) {
+              private userService:IUserService,
+              private notificationService:NotificationService) {
     if (params.data.listing) {
       this.listing = params.data.listing;
       this.logger.debug(`Edit listing ${JSON.stringify(this.listing)}`);
@@ -99,11 +101,14 @@ export class CreationPage implements OnInit {
       this.userService.promiseMe().then((me:User)=> {
         this.listing.ownerId = me.id;
       }).then(()=> {
-        this.listingService.createListing(this.listing);
+        return this.listingService.createListing(this.listing);
       }).then(()=> {
         // succeed.
-        this.logger.debug(`Saved listing: ${JSON.stringify(this.listing)}`);
-        this.nav.pop();
+        this.logger.debug(`Saved listing: ${JSON.stringify(this.listing)}, now sending notification!`);
+        return this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
+      }).then(()=> {
+        this.logger.debug(`Notification done!`);
+        return this.nav.pop();
       });
     } else {
       this.dirty['title'] = true;
