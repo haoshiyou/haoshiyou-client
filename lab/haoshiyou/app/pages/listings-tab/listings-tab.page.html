@@ -14,6 +14,7 @@
 </ion-content>
 <ion-content class="listing-tab" style="height:50%">
     <ion-list>
-        <listing-item *ngFor="let listing of listings" [listing]=listing></listing-item>
+        <listing-item *ngFor="let listing of listings; let i = index"
+                      [listing]=listing></listing-item>
     </ion-list>
 </ion-content>

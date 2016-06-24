@@ -1,7 +1,7 @@
 import {App, Platform} from "ionic-angular";
 import {TabsPage} from "./pages/tabs/tabs";
 import {provide, Inject} from "@angular/core";
-import {Http, HTTP_PROVIDERS, Headers, RequestOptions} from "@angular/http";
+import {Http, HTTP_PROVIDERS} from "@angular/http";
 import {AuthHttp, AuthConfig} from "angular2-jwt";
 import {AuthService} from "./services/auth.service.ts";
 import {IMessageService, FirebaseMessageService} from "./services/chats/message.service.ts";
@@ -12,7 +12,6 @@ import {User} from "./models/models";
 import {IListingService} from "./services/listings/listing.service";
 import {FirebaseListingService} from "./services/listings/fb-listing.service";
 import {MapService} from "./services/map.service";
-import {ChatFakeDataLoader} from "./fakedata/chat-fake-data-loader";
 import {LogService, loggerToken} from "./services/log.service";
 import {IImageService, CloudinaryImageService} from "./services/image.service";
 import {ICredentialService, StaticCredentialService} from "./services/credential.service";
@@ -119,9 +118,5 @@ export class MyApp {
 
     });
 
-  }
-
-  loadFakeData() {
-    ChatFakeDataLoader.init(this.messageService, this.threadService, this.userService);
   }
 }

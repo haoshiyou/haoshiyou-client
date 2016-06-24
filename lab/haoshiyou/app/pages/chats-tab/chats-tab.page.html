@@ -6,8 +6,9 @@
 <ion-content>
     <ion-list *ngIf="meId">
         <chat-thread
-                *ngFor="let thread of threads"
-                [thread]="thread">
+                *ngFor="let thread of threads; let i = index"
+                [thread]="thread"
+                [badgeCounter]="badgeCounters[i]">
         </chat-thread>
         <ion-item *ngIf="!threads || !threads.length"> 没有任何消息 </ion-item>
     </ion-list>

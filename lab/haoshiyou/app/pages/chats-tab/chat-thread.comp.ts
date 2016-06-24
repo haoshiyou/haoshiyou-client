@@ -23,6 +23,7 @@ export class ChatThreadComp implements OnChanges {
   }
 
   @Input() thread:Thread;
+  @Input() badgeCounter:number;
   participants:string;
 
   constructor(private nav:NavController, private userService:IUserService) {

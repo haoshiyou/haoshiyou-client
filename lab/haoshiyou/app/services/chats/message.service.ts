@@ -13,6 +13,10 @@ export class IMessageService {
   createMessage(message:Message):Promise<void> {
     throw "Not implemented";
   }
+
+  observableBadgeCounter(threadId:string, lastCheckTime:number):Observable<number> {
+    throw "Not implemented";
+  }
 }
 
 @Injectable()
@@ -21,6 +25,7 @@ export class FirebaseMessageService implements IMessageService {
       private logService:LogService) {
   }
 
+  // TODO(xinbenlv): optimize for performance
   observableMessagesByThreadId(threadId:string):Observable<Message[]> {
     return this.af.database.list("/messages", {
       query: {
@@ -34,6 +39,23 @@ export class FirebaseMessageService implements IMessageService {
         });
   }
 
+  // TODO(xinbenlv): optimize for performance
+  observableBadgeCounter(threadId:string, lastCheckTime:number):Observable<number> {
+    console.log(`XXXX 1`);
+    return this.af.database.list("/messages", {
+      query: {
+        orderByChild: 'sentAt',
+        // TODO(xinbenlv): startAt with a key in AngularFire2
+        // is not yet available.
+      }
+    }).map((messages:Message[])=> {
+      return messages.filter((m:Message) => {
+        return m.sentAt >= lastCheckTime &&
+            (!threadId || threadId == m.threadId); // if ThreadId is not sepecified, count all;
+      }).length;
+    });
+  }
+
   createMessage(message:Message):Promise<void> {
     this.logService.logEvent("message", "sent");
     if (message.id) {
@@ -44,4 +66,3 @@ export class FirebaseMessageService implements IMessageService {
   }
 
 }
-

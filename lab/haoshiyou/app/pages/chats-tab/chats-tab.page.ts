@@ -1,5 +1,5 @@
 import {Page} from "ionic-angular";
-import {OnInit, OnDestroy, Inject} from "@angular/core";
+import {OnInit, OnDestroy, Inject, Output, EventEmitter} from "@angular/core";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {ChatWindowPage} from "./chat-window.page";
 import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe.ts";
@@ -20,11 +20,12 @@ import {AuthService} from "../../services/auth.service";
   pipes: [TimeFromNowPipe]
 })
 export class ChatsTabPage implements OnInit, OnDestroy {
-
   private meId:string;
   private threads:Thread[];
   private subscription:Subscription;
-
+  private badgeCounters:number[];
+  @Output()
+  allCounters = new EventEmitter<number[]>();
   constructor(private messagesService:IMessageService,
               private threadsService:IThreadService,
               private userService:IUserService,
@@ -37,9 +38,8 @@ export class ChatsTabPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.userService.promiseMe().then((me:User)=> {
-      this.logger.info(`Agressively getting me me in the chat tab. me=${JSON.stringify(me)}`);
+      this.logger.info(`Aggressively getting me me in the chat tab. me=${JSON.stringify(me)}`);
       this.retrieveMe(me ? me.id : null);
     });
   }
@@ -59,6 +59,17 @@ export class ChatsTabPage implements OnInit, OnDestroy {
     if (this.subscription) this.subscription.unsubscribe();
     this.threadsService.obserbableThreadsByUserId(meId).subscribe((threads:Thread[])=> {
       this.threads = threads;
+      this.badgeCounters = new Array<number>();
+
+      // Set up badge counter update;
+      this.threads.map((thread:Thread, index:number)=> {
+        return this.messagesService.observableBadgeCounter(thread.id,
+            thread.lastCheckTime ? thread.lastCheckTime[meId] : 0).subscribe((counter:number)=> {
+          this.badgeCounters[index] = counter;
+          this.allCounters.emit(this.badgeCounters);
+          console.log(`xxx emit! ${this.badgeCounters}`);
+        });
+      });
     });
   }
 }

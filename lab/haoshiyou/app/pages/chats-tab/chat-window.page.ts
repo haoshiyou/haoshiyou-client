@@ -38,6 +38,9 @@ export class ChatWindowPage implements OnInit, OnDestroy {
   ngOnInit():void {
     this.userService.promiseMe().then((me:User)=> {
       this.me = me;
+      if (!this.currentThread.lastCheckTime) this.currentThread.lastCheckTime = {};
+      this.currentThread.lastCheckTime[me.id] = Date.now();
+      return this.threadsService.createThread(this.currentThread);
     });
     this.subscription = this.messagesService.observableMessagesByThreadId(
         this.currentThread.id).subscribe((messages:Message[]) => {
@@ -84,9 +87,18 @@ export class ChatWindowPage implements OnInit, OnDestroy {
   }
 
   sendMessage():void {
-    let m:Message = new Message(uuid(), this.draftMessageText, Date.now(), this.me.id, this.currentThread.id);
+    let m:Message = <Message>{
+      id: uuid(),
+      text: this.draftMessageText,
+      sentAt: Date.now(),
+      authorId: this.me.id,
+      threadId: this.currentThread.id
+    };
     let notificationRegIds:string[] = [];
     this.messagesService.createMessage(m).then(()=>{
+      this.currentThread.lastMessageText = m.text;
+      return this.threadsService.createThread(this.currentThread);
+    }).then(()=> {
       let promises:Promise<void>[] = [];
       for(let userId of this.currentThread.userIds) {
         promises.push(this.userService.observableUserById(userId).take(1).toPromise()

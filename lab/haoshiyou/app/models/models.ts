@@ -5,19 +5,20 @@ export interface User {
   regIds:string[];
 }
 
-export class Thread {
-  constructor(public id:string,
-              public userIds:string[],
-              public lastMessageSentAt:Date, //If not exist, use now
-              public lastMessageText:string) {
-  }
+export interface Thread {
+  id:string;
+  userIds:string[];
+  lastMessageSentAt:Date; //If not exist, use now
+  lastMessageText:string;
+  lastCheckTime:{
+    [userId:string]:number // in UTC Milliseconds
+  };
 }
 
-export class Message {
-  constructor(public id:string,
-              public text:string,
-              public sentAt:number,
-              public authorId:string,
-              public threadId:string) {
-  }
+export interface Message {
+  id:string;
+  text:string;
+  sentAt:number;
+  authorId:string;
+  threadId:string;
 }

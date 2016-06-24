@@ -220,10 +220,11 @@ https://github.com/phonegap/phonegap-plugin-push/blob/c63a41a0a58ec37b4ce2354680
    -  -  - DONE Fix Android Notification Icon problem
    -  -  - Display my listing and my chat message in a light blue to 
    Distinguish it from others
-      
+
  - Release 4: Performance and Reliability
    -  - Testing structure
    -  - Add performance profiling related logging
+   -  - About, Version, Env and Control
  - BLOCKED
    -  - Firebase Realtime DB Security Rules: blocked on 
    [auth0-angular2](github.com/auth0/auth0-angular2)
