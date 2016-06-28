@@ -159,78 +159,101 @@ TODO(xinbenlv): FCM topic message still pending verify
 
 ### Android push icon issue
 https://github.com/phonegap/phonegap-plugin-push/blob/c63a41a0a58ec37b4ce23546802177c0e5f554f4/docs/PAYLOAD.md
+## Release Notes
+
+###  3.3.1 2016-06-24
+Update Splash Screen and Logo
+Fixed invalid date when posting a new listing
+Image related
+- Image and Listing Deletion.
+- Image viewer now closable
+- Upload image in full resolution, display default low resolution
+- disallow anonymous user to login when create a listing or chat.
+Improve push notification
+- New message counting badge
+- New Listing push
+Cosmetic
+- Display image in detail page in flow instead of image-grid?
+- Fix Android Notification Icon problem
+- Show last message
+
 
 ## Road Map
+
+
 (A task without assignee is xinbenlv@)
- - DONE Create, Save, Update, View, Sort a listing
- - DONE LogIn, LogOut, Password Reset
- - DONE Map Marker Listing Navigation
- - DONE Chat
- - DONE City and Zip Pipe
- - DONE Create chat from listing.
- - DONE Image picker
- - DONE Google Map on Detail Page
- - DONE Handle most frequent bad cases
-   -  - DONE No login
-   -  - DONE No internet connection
- - Release 1: MVP for Early Adopter
-   -  - DONE Strip to production credentials
-   -  - DONE Turn Off FB and LinkedIn Auth0 signin.
-   -  - DONE Disable Web Upload Image, Stop nav-back after upload image failure.
-   -  - DONE Add icon, splash screen, webpage icon
-   -  - DONE Sanitize
-   -  - DONE Publish on Android and iOS for beta testing.
-   -  - Bugs
-   -  -  - DONE Flash quit when adding picture
-   -  -  - DONE Flash quit when registering
-   -  -  - DONE Edit validation
 
- - Release 2: MVP for Growth
-   -  - DONE Make the detail page editable
-   -  - DONE Show image full screen view.
-   -  - DONE Push notification
-   -  -  - DONE FCM registration
-   -  -  - DONE Push for chat
-   -  - DONE Facebook and LinkedIn Sign-In Callback Fixing
-   -  - DONE Firebase event tracking
-   -  - Bugs
-   -  -  - DONE Already logged in, reload the page, and then try to 
-   load a listing, starting a chat will cause nullpointer exception.
 
- - Web Release
-   -  - Large Screen: listing list on left and map on right (wrj@)
-   -  - Web image picker in creation page (wrj@)
+- Release 1: MVP for Early Adopter
+  - DONE Create, Save, Update, View, Sort a listing
+  - DONE LogIn, LogOut, Password Reset
+  - DONE Map Marker Listing Navigation
+  - DONE Chat
+  - DONE City and Zip Pipe
+  - DONE Create chat from listing.
+  - DONE Image picker
+  - DONE Google Map on Detail Page
+  - DONE Handle most frequent bad cases
+    - DONE No login
+    - DONE No internet connection
+  - DONE Strip to production credentials
+  - DONE Turn Off FB and LinkedIn Auth0 signin.
+  - DONE Disable Web Upload Image, Stop nav-back after upload image failure.
+    - DONE Add icon, splash screen, webpage icon
+    - DONE Sanitize
+    - DONE Publish on Android and iOS for beta testing.
+  - Bugs
+    - DONE Flash quit when adding picture
+    - DONE Flash quit when registering
+    - DONE Edit validation
+- Release 2: MVP for Growth
+  - DONE Make the detail page editable
+  - DONE Show image full screen view.
+  - DONE Push notification
+     - DONE FCM registration
+     - DONE Push for chat
+  - DONE Facebook and LinkedIn Sign-In Callback Fixing
+  - DONE Firebase event tracking
+  - Bugs
+     - DONE Already logged in, reload the page, and then try to 
+     load a listing, starting a chat will cause nullpointer exception.
 
- - Release 3: Prod
-   -  - DONE Use a production database
-   -  - DONE Update Splash Screen and Logo
-   -  - Bug
-   -  -  - DONE Invalid date when posting a new listing
-   -  - DONE Image Related Features
-   -  -  - DONE Image and Listing Deletion.
-   -  -  - DONE Image viewer now closable
-   -  -  - DONE Upload image in full resolution, display default low resolution
-   -  - DONE disallow anonymous user to login when create a listing or chat.
-   -  - Improve push notification
-   -  -  - DONE New message counting badge
-   -  -  - DONE(pending verification) New Listing push
-   -  - Cosmetic
-   -  -  - DONE Display image in detail page in flow instead of image-grid?
-   -  -  - DONE Fix Android Notification Icon problem
-   -  -  - Show last message
-   Distinguish it from others
+- Web Release
+  - Large Screen: listing list on left and map on right (wrj@)
+  - Web image picker in creation page (wrj@)
 
- - Release 4: Performance and Reliability
-   -  - Testing structure
-   -  - Add performance profiling related logging
-   -  - About, Version, Env and Control
-   -  - Cosmetic
-   -  -  - Display my listing and my chat message in a light blue to 
-   -  -  - Add avatar to listing left
+- Release 3: Prod
+  - DONE Use a production database
+  - DONE Update Splash Screen and Logo
+  - Bug
+    - DONE Invalid date when posting a new listing
+  - DONE Image Related Features
+    - DONE Image and Listing Deletion.
+    - DONE Image viewer now closable
+    - DONE Upload image in full resolution, display default low resolution
+  - DONE disallow anonymous user to login when create a listing or chat.
+    - Improve push notification
+    - DONE New message counting badge
+    - DONE(pending verification) New Listing push
+  - Cosmetic
+    - DONE Display image in detail page in flow instead of image-grid?
+    - DONE Fix Android Notification Icon problem
+    - DONE Show last message
+- Release 4: Performance and Reliability
+  - Bug
+    - When sending a message, both sender and receiver got a 
+    push notification.
+    - Android version adding new image will flash quit.
+  - Testing structure
+  - Add performance profiling related logging
+  - About, Version, Env and Control
+  - Cosmetic
+    - Display my listing and my chat message in a light blue to 
+    - Add avatar to listing left
 
- - BLOCKED
-   -  - Firebase Realtime DB Security Rules: blocked on 
+- BLOCKED
+  - Firebase Realtime DB Security Rules: blocked on 
    [auth0-angular2](github.com/auth0/auth0-angular2)
-   -  - DeepLinking blocked on @angular/router to 
+  - DeepLinking blocked on @angular/router to 
    [finalize](http://angularjs.blogspot.com/2016/06/improvements-coming-for-routing-in.html),
-   -  - Shared to WeChat blocked on DeepLinking
+  - Shared to WeChat blocked on DeepLinking
