@@ -219,7 +219,6 @@ Cosmetic
      load a listing, starting a chat will cause nullpointer exception.
 
 - Web Release
-  - Large Screen: listing list on left and map on right (wrj@)
   - Web image picker in creation page (wrj@)
 
 - Release 3: Prod
@@ -252,6 +251,11 @@ Cosmetic
     - Add avatar to listing left
 
 - BLOCKED
+  - Listing list on the left depends on Split View for Ionic V2. A few
+  ionic forum threads have mentioned this
+    - [Ionic 2 Split View](https://forum.ionicframework.com/t/ionic-2-split-view/49282)
+    - [Ion-menu always open for tablet?](https://forum.ionicframework.com/t/ion-menu-always-open-for-tablet/48327)
+    - [Ionic 2 Roadmap](https://docs.google.com/document/d/1Qlc5X2eJyOB0izkFlH7KJ5BmMi0MeXUZRHJHt3hS6Wo/edit#heading=h.puikk611x4pd)
   - Firebase Realtime DB Security Rules: blocked on 
    [auth0-angular2](github.com/auth0/auth0-angular2)
   - DeepLinking blocked on @angular/router to 
