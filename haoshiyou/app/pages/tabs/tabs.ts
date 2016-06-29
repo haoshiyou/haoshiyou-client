@@ -8,6 +8,7 @@ import {Logger} from "log4javascript";
 import {DisconnectModal} from "./disconnect.modal";
 import {Subscription} from "rxjs";
 import {loggerToken} from "../../services/log.service";
+import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab.page";
 
 @Page({
   templateUrl: 'build/pages/tabs/tabs.html',
@@ -22,7 +23,7 @@ export class TabsPage implements OnInit, OnDestroy {
   tab1Root:any = ChatsTabPage;
   tab2Root:any = ListingsTabPage;
   tab3Root:any = SettingsTabPage;
-
+  tab4Root:any = QrCodeTabPage;
   unreadMessagesCount:number;
 
   constructor(private nav:NavController,

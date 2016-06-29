@@ -23,7 +23,7 @@ declare let ga:any;
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
   config: {
-    tabSubPages: true
+    tabSubPages: true,
   }, // http://ionicframework.com/docs/v2/api/config/Config/
   providers: [
     provide(ICredentialService, {useClass: StaticCredentialService}),

@@ -1,0 +1,11 @@
+<ion-row *ngFor="let row of cacheGrid; let rowIndex = index">
+    <ion-col width-33 *ngFor="let imageId of row; let colIndex = index">
+        <img *ngIf="imageId!='add' && imageId!='delete'"
+             src="{{imageId | imageIdToUrlPipe}}"
+             alt="Image row:{{rowIndex}}, col:{{colIndex}}"
+             id="image-{{rowIndex}}-{{colIndex}}"
+             (click)="showImage(imageId)">
+        <img *ngIf="imageId=='add' && isEdit" src="http://placehold.it/300x300?text=添加" (click)="clickAdd()">
+        <img *ngIf="imageId=='delete' && isEdit" src="http://placehold.it/300x300?text=删除" (click)="clickDelete()">
+    </ion-col>
+</ion-row>

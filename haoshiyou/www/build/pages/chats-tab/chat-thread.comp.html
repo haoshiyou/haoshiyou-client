@@ -1,0 +1,8 @@
+<ion-item (click)="gotoThread()">
+    <ion-avatar item-left>
+        <img src="http://placehold.it/300x300?text=添加">
+    </ion-avatar>
+    <h2 class="message-preview">{{thread.lastMessageText}}</h2>
+    <p class="media-heading contact-name">{{ participants }}</p>
+    <ion-badge *ngIf="badgeCounter" item-right>{{badgeCounter}}</ion-badge>
+</ion-item>
