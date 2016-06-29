@@ -47,7 +47,7 @@
         <ion-input fixed disabled></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="platform.is('ios') || platform.is('android')">
         <image-grid
                 (add)="pickPictures()"
                 (delete)="deletePictures()"
@@ -56,7 +56,11 @@
         ></image-grid>
     </ion-item>
     <ion-item *ngIf="!(platform.is('ios') || platform.is('android'))">
-        抱歉,网页版暂时不支持添加图片,请使用安卓或者iPhone添加图片。
+      <div class="preview" width="300px" height="300px"></div>
+      <label class="custom-file-upload">
+        <img src="http://placehold.it/300x300?text=添加" />
+        <input name="file" type="file" multiple="" class="cloudinary-fileupload" data-cloudinary-field="image_id" />
+      </label>
     </ion-item>
     <button block danger (click)="deleteListing()">删除</button>
 </ion-content>

@@ -16,6 +16,7 @@ import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
 import {RemoveModal} from "./remove.modal";
 import {NotificationService} from "../../services/notfication.service";
+declare var $:JQueryStatic; // might not necessary
 
 // TODO(xinbenlv):
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
@@ -62,7 +63,38 @@ export class CreationPage implements OnInit {
   ngOnInit():any {
     this.platform.ready().then(() => {
       var minZoomLevel = 9;
-
+      /* bind upoload image on WebUI -- START */
+      var cloudinaryCorsHtml = document.location.origin + "/cloudinary_cors.html"
+      var uploadImageFormData = {"timestamp":$.now(),
+        "callback":cloudinaryCorsHtml,
+        "api_key":"999284541119412",
+        "upload_preset":"haoshiyou-dev"};
+      var escapedFormData = JSON.stringify(uploadImageFormData);
+      $('.cloudinary-fileupload').attr("data-form-data", escapedFormData);
+      var self = this;
+      $('.cloudinary-fileupload').bind('cloudinarydone', function(e, data) {
+        $('.preview').append(
+          $.cloudinary.image(data.result.public_id,
+            { format: data.result.format, version: data.result.version,
+              crop: 'fill', width: 300, height: 300 })
+        );
+        $('.image_public_id').val(data.result.public_id);
+        if (!self.listing.imageIds) self.listing.imageIds = [];
+        self.listing.imageIds = self.listing.imageIds.concat(data.result.public_id);
+        self.logger.info(`Listing added imageIds: ${JSON.stringify(data.result.public_id)}`);
+        self.logger.debug(`Listing result imageIds: ${JSON.stringify(self.listing.imageIds)}`);
+        return true;
+      });
+      $('.cloudinary-fileupload').cloudinary_fileupload();
+      // in edit mode, load existing images
+      for (var i = 0; i < this.listing.imageIds.length; i++) {
+        $('.preview').append(
+          $.cloudinary.image(this.listing.imageIds[i],
+            { crop: 'fill', width: 300, height: 300 })
+        );
+      }
+     /* TODO DELETE images */
+     /* bind upoload image on WebUI -- END */
       // Load Google Maps
       /* TODO(xinbenlv): follow example here
        * https://codingwithspike.wordpress.com/2014/08/13/loading-google-maps-in-cordova-the-right-way/
