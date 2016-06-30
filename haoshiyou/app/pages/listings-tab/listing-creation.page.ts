@@ -63,6 +63,7 @@ export class CreationPage implements OnInit {
   ngOnInit():any {
     this.platform.ready().then(() => {
       var minZoomLevel = 9;
+      var self = this;
       /* bind upoload image on WebUI -- START */
       var cloudinaryCorsHtml = document.location.origin + "/cloudinary_cors.html"
       var uploadImageFormData = {"timestamp":$.now(),
@@ -71,13 +72,13 @@ export class CreationPage implements OnInit {
         "upload_preset":"haoshiyou-dev"};
       var escapedFormData = JSON.stringify(uploadImageFormData);
       $('.cloudinary-fileupload').attr("data-form-data", escapedFormData);
-      var self = this;
       $('.cloudinary-fileupload').bind('cloudinarydone', function(e, data) {
-        $('.preview').append(
-          $.cloudinary.image(data.result.public_id,
-            { format: data.result.format, version: data.result.version,
-              crop: 'fill', width: 300, height: 300 })
-        );
+        var imageDiv = buildImageDiv(data.result.public_id);
+        var newImage = $.cloudinary.image(data.result.public_id,
+          { format: data.result.format, version: data.result.version,
+            crop: 'fill', width: 300, height: 300 });
+        imageDiv.append(newImage);
+        imageDiv.insertBefore('.custom-file-upload');
         $('.image_public_id').val(data.result.public_id);
         if (!self.listing.imageIds) self.listing.imageIds = [];
         self.listing.imageIds = self.listing.imageIds.concat(data.result.public_id);
@@ -88,12 +89,40 @@ export class CreationPage implements OnInit {
       $('.cloudinary-fileupload').cloudinary_fileupload();
       // in edit mode, load existing images
       for (var i = 0; i < this.listing.imageIds.length; i++) {
-        $('.preview').append(
-          $.cloudinary.image(this.listing.imageIds[i],
-            { crop: 'fill', width: 300, height: 300 })
-        );
+        var imageDiv = buildImageDiv(this.listing.imageIds[i]);
+        var existingImage = $.cloudinary.image(this.listing.imageIds[i],
+          { crop: 'fill', width: 300, height: 300 });
+        imageDiv.append(existingImage);
+        imageDiv.insertBefore('.custom-file-upload');
       }
-     /* TODO DELETE images */
+      function buildImageDiv(public_id) {
+        var imageDiv = $('<div />', {'class': 'show-image'});
+        var deleteImage = $('<input />', {
+          'class': 'delete-image',
+          'type': 'button',
+          'value': ' 删除 ',
+          'click': function(e) {
+            self.listing.imageIds = $.grep(self.listing.imageIds,
+                function(value) {
+                  return value != public_id;
+                });
+            imageDiv.remove();
+            self.logger.info(`Listing deleted imageIds: ${JSON.stringify(public_id)}`);
+            self.logger.debug(`Listing result imageIds: ${JSON.stringify(self.listing.imageIds)}`);
+          }
+        })
+        imageDiv.append(deleteImage);
+        return imageDiv;
+      }
+      function deleteImage(public_id) {
+        alert(public_id);
+        this.listing.imageIds = $.grep(this.listing.imageIds,
+            function(value) {
+              return value != public_id;
+            });
+        this.logger.info(`Listing added imageIds: ${JSON.stringify(public_id)}`);
+        this.logger.debug(`Listing result imageIds: ${JSON.stringify(this.listing.imageIds)}`);
+      }
      /* bind upoload image on WebUI -- END */
       // Load Google Maps
       /* TODO(xinbenlv): follow example here

@@ -56,11 +56,12 @@
         ></image-grid>
     </ion-item>
     <ion-item *ngIf="!(platform.is('ios') || platform.is('android'))">
-      <div class="preview" width="300px" height="300px"></div>
-      <label class="custom-file-upload">
-        <img src="http://placehold.it/300x300?text=添加" />
-        <input name="file" type="file" multiple="" class="cloudinary-fileupload" data-cloudinary-field="image_id" />
-      </label>
+      <div class="preview" width="300px" height="300px">
+        <label class="custom-file-upload">
+          <img src="http://placehold.it/300x300?text=添加" />
+          <input name="file" type="file" multiple="" class="cloudinary-fileupload" data-cloudinary-field="image_id" />
+        </label>
+      </div>
     </ion-item>
     <button block danger (click)="deleteListing()">删除</button>
 </ion-content>
