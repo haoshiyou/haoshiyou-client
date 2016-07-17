@@ -117,3 +117,11 @@ TODO(xinbenlv): FCM topic message still pending verify
 
 ### Android push icon issue
 https://github.com/phonegap/phonegap-plugin-push/blob/c63a41a0a58ec37b4ce23546802177c0e5f554f4/docs/PAYLOAD.md
+
+
+## New Developer Learning Material
+1. javascript
+2. [Anglar2TS](https://angular.io/docs/ts/latest/quickstart.html) 
+3. [ionic v2](http://ionicframework.com/docs/v2/getting-started/)
+4. [TypeScript](https://www.typescriptlang.org/)
+5. (Optional)[Corodva](https://cordova.apache.org/)
