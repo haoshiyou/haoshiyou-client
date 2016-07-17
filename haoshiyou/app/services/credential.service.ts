@@ -1,6 +1,13 @@
 // app/services/auth/auth.ts
 
 import {Injectable} from "@angular/core";
+
+// TODO(xinbenlv): Ideally we want to use enum as the credId for retrieving the credentials,
+// but using enum or string alias is not yet supported in TS per
+// https://github.com/Microsoft/TypeScript/issues/1206 (Duplicates #2491, #5683, 8921)
+// We will revisit later once that becomes available.
+//
+
 @Injectable()
 export class ICredentialService {
   get(credId:string):string {

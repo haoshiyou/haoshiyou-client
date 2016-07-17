@@ -1,4 +1,4 @@
-import {Page, Platform, NavParams, NavController, Modal, Alert} from "ionic-angular";
+import {Page, Platform, NavParams, NavController, Alert} from "ionic-angular";
 import {OnInit, Inject} from "@angular/core";
 import {EnumMsgPipe} from "../../pipes/enum-msg.pipe";
 import {ListingType, Listing} from "../../models/listing";
@@ -6,17 +6,12 @@ import {uuid} from "../../util/uuid";
 import {IListingService} from "../../services/listings/listing.service";
 import {CityNZipPipe} from "../../pipes/city-n-zip.pipe";
 import {MapService, ILocality} from "../../services/map.service";
-import {ImagePicker} from "ionic-native";
 import {Logger} from "log4javascript";
 import {loggerToken} from "../../services/log.service";
-import {IImageService} from "../../services/image.service";
 import {ImageGridComponent} from "./image-grid.comp";
-import {ImageIdsToUrlPipe} from "../../pipes/image-id-to-url.pipe.ts";
 import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
-import {RemoveModal} from "./remove.modal";
 import {NotificationService} from "../../services/notfication.service";
-declare var $:JQueryStatic; // might not necessary
 
 // TODO(xinbenlv):
 const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
@@ -26,23 +21,22 @@ const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
  */
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-creation.page.html',
-  pipes: [EnumMsgPipe, CityNZipPipe, ImageIdsToUrlPipe],
+  pipes: [EnumMsgPipe, CityNZipPipe],
   directives: [ImageGridComponent]
 })
 export class CreationPage implements OnInit {
-  //noinspection JSUnusedLocalSymbols
+  //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
   private typeOptions:ListingType[] = ListingType.values();
   private map:google.maps.Map;
   private marker:google.maps.Marker;
   private listing:Listing;
   private localityText:string;
+  //noinspection JSMismatchedCollectionQueryUpdate used in HTML
   private dirty:{[field:string]: boolean} = {};
-  private removeModal:Modal;
   constructor(private platform:Platform, private params:NavParams,
               private listingService:IListingService,
               private nav:NavController,
               private mapService:MapService,
-              private imageService:IImageService,
               @Inject(loggerToken) private logger:Logger,
               private userService:IUserService,
               private notificationService:NotificationService) {
@@ -63,67 +57,7 @@ export class CreationPage implements OnInit {
   ngOnInit():any {
     this.platform.ready().then(() => {
       var minZoomLevel = 9;
-      var self = this;
-      /* bind upoload image on WebUI -- START */
-      var cloudinaryCorsHtml = document.location.origin + "/cloudinary_cors.html"
-      var uploadImageFormData = {"timestamp":$.now(),
-        "callback":cloudinaryCorsHtml,
-        "api_key":"999284541119412",
-        "upload_preset":"haoshiyou-dev"};
-      var escapedFormData = JSON.stringify(uploadImageFormData);
-      $('.cloudinary-fileupload').attr("data-form-data", escapedFormData);
-      $('.cloudinary-fileupload').bind('cloudinarydone', function(e, data) {
-        var imageDiv = buildImageDiv(data.result.public_id);
-        var newImage = $.cloudinary.image(data.result.public_id,
-          { format: data.result.format, version: data.result.version,
-            crop: 'fill', width: 300, height: 300 });
-        imageDiv.append(newImage);
-        imageDiv.insertBefore('.custom-file-upload');
-        $('.image_public_id').val(data.result.public_id);
-        if (!self.listing.imageIds) self.listing.imageIds = [];
-        self.listing.imageIds = self.listing.imageIds.concat(data.result.public_id);
-        self.logger.info(`Listing added imageIds: ${JSON.stringify(data.result.public_id)}`);
-        self.logger.debug(`Listing result imageIds: ${JSON.stringify(self.listing.imageIds)}`);
-        return true;
-      });
-      $('.cloudinary-fileupload').cloudinary_fileupload();
-      // in edit mode, load existing images
-      for (var i = 0; i < this.listing.imageIds.length; i++) {
-        var imageDiv = buildImageDiv(this.listing.imageIds[i]);
-        var existingImage = $.cloudinary.image(this.listing.imageIds[i],
-          { crop: 'fill', width: 300, height: 300 });
-        imageDiv.append(existingImage);
-        imageDiv.insertBefore('.custom-file-upload');
-      }
-      function buildImageDiv(public_id) {
-        var imageDiv = $('<div />', {'class': 'show-image'});
-        var deleteImage = $('<input />', {
-          'class': 'delete-image',
-          'type': 'button',
-          'value': ' 删除 ',
-          'click': function(e) {
-            self.listing.imageIds = $.grep(self.listing.imageIds,
-                function(value) {
-                  return value != public_id;
-                });
-            imageDiv.remove();
-            self.logger.info(`Listing deleted imageIds: ${JSON.stringify(public_id)}`);
-            self.logger.debug(`Listing result imageIds: ${JSON.stringify(self.listing.imageIds)}`);
-          }
-        })
-        imageDiv.append(deleteImage);
-        return imageDiv;
-      }
-      function deleteImage(public_id) {
-        alert(public_id);
-        this.listing.imageIds = $.grep(this.listing.imageIds,
-            function(value) {
-              return value != public_id;
-            });
-        this.logger.info(`Listing added imageIds: ${JSON.stringify(public_id)}`);
-        this.logger.debug(`Listing result imageIds: ${JSON.stringify(this.listing.imageIds)}`);
-      }
-     /* bind upoload image on WebUI -- END */
+  
       // Load Google Maps
       /* TODO(xinbenlv): follow example here
        * https://codingwithspike.wordpress.com/2014/08/13/loading-google-maps-in-cordova-the-right-way/
@@ -144,7 +78,7 @@ export class CreationPage implements OnInit {
       animation: google.maps.Animation.DROP,
       draggable: true,
     });
-    google.maps.event.addListener(this.marker, 'dragend', (event) => {
+    google.maps.event.addListener(this.marker, 'dragend', () => {
       this.listing.lat = this.marker.getPosition().lat();
       this.listing.lng = this.marker.getPosition().lng();
       this.mapService.getLocality(new google.maps.LatLng(this.listing.lat, this.listing.lng))
@@ -152,9 +86,10 @@ export class CreationPage implements OnInit {
             this.localityText = locality.city + ", " + locality.zip;
           });
     });
-
   }
 
+
+  //noinspection JSUnusedLocalSymbols: used in HTML
   private save() {
     if (this.validate()) {
       this.listing.lastUpdated = Date.now();
@@ -178,43 +113,27 @@ export class CreationPage implements OnInit {
     }
   }
 
-  private pickPictures() {
-    ImagePicker.getPictures({})
-        .then((urls:string[]) => {
-          return this.imageService.uploadImagesAndGetIds(urls)
-        })
-        .then((storedImageIds:string[]) => {
-          if (!this.listing.imageIds) this.listing.imageIds = [];
-          this.listing.imageIds = this.listing.imageIds.concat(storedImageIds);
-          this.logger.info(`Listing added imageIds: ${JSON.stringify(storedImageIds)}`);
-          this.logger.debug(`Listing result imageIds: ${JSON.stringify(this.listing.imageIds)}`);
-        })
-        .catch((err) => {
-          this.logger.error(`Creation page attempt to add images result in error! ${JSON.stringify(err)}`);
-          // TODO(xinbenlv, #error-handling): handle error, using.
-          alert("Failed to upload images!");
-        });
+  validate():boolean {
+    return (this.listing.title && this.listing.content && (this.listing.type!=null));
   }
 
-  private deletePictures() {
-    this.removeModal = Modal.create(RemoveModal, {listing: this.listing});
-    this.nav.present(this.removeModal, {animate: true});
+  updateImageIds(imageIds:string[]) {
+    this.listing.imageIds = imageIds;
   }
-
-  private deleteListing() {
-
+  //noinspection JSUnusedLocalSymbols, used in HTML,
+  private deleteListing(): void {
     let prompt = Alert.create({
       title: '确认删除?',
       buttons: [
         {
           text: '取消',
-          handler: data => {
+          handler: () => {
             this.nav.pop(); // alert
           }
         },
         {
           text: '删除',
-          handler: data => {
+          handler: () => {
             this.listingService.removeListing(this.listing.id).then(()=>{
               this.nav.pop().then(()=>{
                 this.nav.pop();
@@ -224,12 +143,6 @@ export class CreationPage implements OnInit {
         }
       ]
     });
-
     this.nav.present(prompt);
-
-  }
-
-  validate():boolean {
-    return (this.listing.title && this.listing.content && (this.listing.type!=null));
   }
 }

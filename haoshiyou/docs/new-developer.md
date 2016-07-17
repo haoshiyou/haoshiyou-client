@@ -51,7 +51,7 @@ in the part of `Copy Bundle Resources`, add GoogleService-Info.plist,
 For example
 
 Inline-style: 
-![Screenshot for Adding GoogleService-Info.plist](docs/screenshot/xcode-add-fcm-google-service-info-plist.png)
+![Screenshot for Adding GoogleService-Info.plist](screenshot/xcode-ad0d-fcm-google-service-info-plist.png)
 
 
 See [ionicv2-push-example](https://github.com/xinbenlv-just-learning/ionicv2-push-example) for more
