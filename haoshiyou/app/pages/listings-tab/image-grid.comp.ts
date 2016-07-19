@@ -85,8 +85,7 @@ export class ImageGridComponent implements OnInit {
         .bind('cloudinarydone',
             (e, data) => {
               if (!this.imageIds) this.imageIds = [];
-              this.imageIds = this.imageIds.concat(data.result.public_id);
-              this.updateImagesIds.emit(this.imageIds);  // notify parent
+              this.updateImageids(this.imageIds.concat(data.result.public_id));
               this.logger.info(`Listing added imageIds: ${JSON.stringify(data.result.public_id)}`);
               this.logger.debug(`Listing result imageIds: ${JSON.stringify(this.imageIds)}`);
               return true;
@@ -97,7 +96,16 @@ export class ImageGridComponent implements OnInit {
   //noinspection JSUnusedLocalSymbols, used in HTML
   private clickDelete() {
     this.removeModal = Modal.create(RemoveModal, {imageIds: this.imageIds});
+    this.removeModal.onDismiss((data)=>{
+      this.updateImageids(data.imageIds);
+    });
+
     this.nav.present(this.removeModal, {animate: true});
+  }
+
+  private updateImageids(imageIds:string[]) {
+    this.imageIds = imageIds;
+    this.updateImagesIds.emit(this.imageIds);  // notify parent
   }
 
 }

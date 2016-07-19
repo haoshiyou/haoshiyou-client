@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {NavController, NavParams} from "ionic-angular/index";
+import {NavController, NavParams, ViewController} from "ionic-angular/index";
 import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 
 @Component({
@@ -12,9 +12,15 @@ export class RemoveModal {
   private checkboxes:boolean[];
   constructor(
       private nav:NavController,
-      params:NavParams) {
+      params:NavParams,
+      private viewCtrl:ViewController) {
     this.imageIds = params.data.imageIds;
     this.checkboxes = new Array(this.imageIds.length);
+  }
+
+  dismiss() {
+    let data = { imageIds: this.imageIds };
+    this.viewCtrl.dismiss(data);
   }
 
   save() {
@@ -25,11 +31,11 @@ export class RemoveModal {
       }
     }
     this.imageIds = imagesAfterSave;
-    this.nav.pop();
+    this.dismiss();
   }
 
   cancel() {
-    this.nav.pop();
+    this.dismiss();
   }
 }
 
