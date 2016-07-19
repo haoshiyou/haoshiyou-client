@@ -26,7 +26,7 @@ export class ImageGridComponent implements OnInit {
   private imageIds: string[];
 
   @Output()
-  private updateImagesIds = new EventEmitter<string[]>();
+  private updateImageIds = new EventEmitter<string[]>();
 
   private removeModal:Modal;
 
@@ -43,7 +43,6 @@ export class ImageGridComponent implements OnInit {
       private nav:NavController,
       private platform:Platform,
       @Inject(loggerToken) private logger:Logger) {
-
   }
 
   //noinspection JSUnusedLocalSymbols, used in HTML
@@ -85,7 +84,7 @@ export class ImageGridComponent implements OnInit {
         .bind('cloudinarydone',
             (e, data) => {
               if (!this.imageIds) this.imageIds = [];
-              this.updateImageids(this.imageIds.concat(data.result.public_id));
+              this.onUpdateImageIds( this.imageIds.concat(data.result.public_id));
               this.logger.info(`Listing added imageIds: ${JSON.stringify(data.result.public_id)}`);
               this.logger.debug(`Listing result imageIds: ${JSON.stringify(this.imageIds)}`);
               return true;
@@ -97,15 +96,15 @@ export class ImageGridComponent implements OnInit {
   private clickDelete() {
     this.removeModal = Modal.create(RemoveModal, {imageIds: this.imageIds});
     this.removeModal.onDismiss((data)=>{
-      this.updateImageids(data.imageIds);
+      this.onUpdateImageIds(data.imageIds);
     });
 
     this.nav.present(this.removeModal, {animate: true});
   }
 
-  private updateImageids(imageIds:string[]) {
+  private onUpdateImageIds(imageIds:string[]) {
     this.imageIds = imageIds;
-    this.updateImagesIds.emit(this.imageIds);  // notify parent
-  }
+    this.updateImageIds.emit(this.imageIds);  // notify parent
+   }
 
 }
