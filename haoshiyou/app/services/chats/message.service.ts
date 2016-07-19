@@ -41,7 +41,6 @@ export class FirebaseMessageService implements IMessageService {
 
   // TODO(xinbenlv): optimize for performance
   observableBadgeCounter(threadId:string, lastCheckTime:number):Observable<number> {
-    console.log(`XXXX 1`);
     return this.af.database.list("/messages", {
       query: {
         orderByChild: 'sentAt',
