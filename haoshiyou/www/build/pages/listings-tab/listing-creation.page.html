@@ -20,7 +20,31 @@
         </ion-select>
         <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
             required
-        </p>
+        <
+  private deleteListing() {
+    let prompt = Alert.create({
+      title: '确认删除?',
+      buttons: [
+        {
+          text: '取消',
+          handler: data => {
+            this.nav.pop(); // alert
+          }
+        },
+        {
+          text: '删除',
+          handler: data => {
+            this.listingService.removeListing(this.listing.id).then(()=>{
+              this.nav.pop().then(()=>{
+                this.nav.pop();
+              }); // alert
+            });
+          }
+        }
+      ]
+    });
+    this.nav.present(prompt);
+  }/p>
     </ion-item>
     <ion-item>
         <ion-label fixed>标题</ion-label>
@@ -49,14 +73,10 @@
 
     <ion-item>
         <image-grid
-                (add)="pickPictures()"
-                (delete)="deletePictures()"
                 [imageIds]="listing.imageIds"
+                (updateImageIds)="updateImageIds($event)"
                 [isEdit]="true"
         ></image-grid>
-    </ion-item>
-    <ion-item *ngIf="!(platform.is('ios') || platform.is('android'))">
-        抱歉,网页版暂时不支持添加图片,请使用安卓或者iPhone添加图片。
     </ion-item>
     <button block danger (click)="deleteListing()">删除</button>
 </ion-content>

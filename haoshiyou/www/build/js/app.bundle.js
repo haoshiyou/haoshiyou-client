@@ -470,7 +470,6 @@ var ChatsTabPage = (function () {
                 return _this.messagesService.observableBadgeCounter(thread.id, thread.lastCheckTime ? thread.lastCheckTime[meId] : 0).subscribe(function (counter) {
                     _this.badgeCounters[index] = counter;
                     _this.allCounters.emit(_this.badgeCounters);
-                    console.log("xxx emit! " + _this.badgeCounters);
                 });
             });
         });
@@ -504,42 +503,33 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var core_1 = require("@angular/core");
 var image_id_to_url_pipe_1 = require("../../pipes/image-id-to-url.pipe");
 var image_service_1 = require("../../services/image.service");
+var credential_service_1 = require("../../services/credential.service");
+var log_service_1 = require("../../services/log.service");
+var remove_modal_1 = require("./remove.modal");
+var log4javascript_1 = require("log4javascript");
+var ionic_angular_1 = require("ionic-angular");
 var ImageGridComponent = (function () {
-    function ImageGridComponent(imageService) {
+    function ImageGridComponent(imageService, cred, nav, platform, logger) {
         this.imageService = imageService;
-        this.add = new core_1.EventEmitter();
-        this.delete = new core_1.EventEmitter();
+        this.cred = cred;
+        this.nav = nav;
+        this.platform = platform;
+        this.logger = logger;
+        this.updateImageIds = new core_1.EventEmitter();
     }
-    //noinspection JSUnusedGlobalSymbols: used in HTML
-    ImageGridComponent.prototype.clickAdd = function () {
-        this.add.emit(null);
+    ImageGridComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.platform.ready().then(function () {
+            _this.initUploader();
+        });
     };
-    //noinspection JSUnusedGlobalSymbols: used in HTML
-    ImageGridComponent.prototype.clickDelete = function () {
-        this.delete.emit(null);
-    };
-    ImageGridComponent.prototype.ngOnChanges = function (changes) {
-        if (changes['imageIds']) {
-            this.load();
-        }
-    };
-    ImageGridComponent.prototype.load = function () {
-        this.cacheGrid = [];
-        this.cacheUrls = this.imageIds.concat(["add", "delete"]);
-        var row;
-        for (var i = 0; i < this.cacheUrls.length; i++) {
-            if (i % 3 == 0) {
-                row = [];
-            }
-            row.push(this.cacheUrls[i]);
-            if (i % 3 == 0) {
-                this.cacheGrid.push(row);
-            }
-        }
-    };
+    //noinspection JSUnusedLocalSymbols, used in HTML
     ImageGridComponent.prototype.showImage = function (imageId) {
         var el = document.getElementsByTagName('body');
         // TODO(xinbenlv): modify the viewerjs to customize the following
@@ -561,35 +551,69 @@ var ImageGridComponent = (function () {
         });
         viewer.show();
     };
+    ImageGridComponent.prototype.initUploader = function () {
+        var _this = this;
+        // TODO(wrj): determine whether the cloudinaryCorsHtml is still needed
+        var cloudinaryCorsHtml = document.location.origin + "/cloudinary_cors.html";
+        var uploadImageFormData = {
+            "timestamp": $.now(),
+            "callback": cloudinaryCorsHtml,
+            "api_key": this.cred.get('CLOUDINARY_API_KEY'),
+            "upload_preset": this.cred.get('CLOUDINARY_UPLOAD_PRESET'),
+        };
+        var escapedFormData = JSON.stringify(uploadImageFormData);
+        $('.cloudinary-fileupload')
+            .attr("data-form-data", escapedFormData)
+            .bind('cloudinarydone', function (e, data) {
+            if (!_this.imageIds)
+                _this.imageIds = [];
+            _this.onUpdateImageIds(_this.imageIds.concat(data.result.public_id));
+            _this.logger.info("Listing added imageIds: " + JSON.stringify(data.result.public_id));
+            _this.logger.debug("Listing result imageIds: " + JSON.stringify(_this.imageIds));
+            return true;
+        })
+            .cloudinary_fileupload();
+    };
+    //noinspection JSUnusedLocalSymbols, used in HTML
+    ImageGridComponent.prototype.clickDelete = function () {
+        var _this = this;
+        this.removeModal = ionic_angular_1.Modal.create(remove_modal_1.RemoveModal, { imageIds: this.imageIds });
+        this.removeModal.onDismiss(function (data) {
+            _this.onUpdateImageIds(data.imageIds);
+        });
+        this.nav.present(this.removeModal, { animate: true });
+    };
+    ImageGridComponent.prototype.onUpdateImageIds = function (imageIds) {
+        this.imageIds = imageIds;
+        this.updateImageIds.emit(this.imageIds); // notify parent
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Array)
     ], ImageGridComponent.prototype, "imageIds", void 0);
     __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], ImageGridComponent.prototype, "updateImageIds", void 0);
+    __decorate([
         core_1.Input(), 
         __metadata('design:type', Boolean)
     ], ImageGridComponent.prototype, "isEdit", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], ImageGridComponent.prototype, "add", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], ImageGridComponent.prototype, "delete", void 0);
     ImageGridComponent = __decorate([
+        // jQuery
         core_1.Component({
             selector: 'image-grid',
             templateUrl: 'build/pages/listings-tab/image-grid.comp.html',
             pipes: [image_id_to_url_pipe_1.ImageIdToUrlPipe]
-        }), 
-        __metadata('design:paramtypes', [image_service_1.IImageService])
+        }),
+        __param(4, core_1.Inject(log_service_1.loggerToken)), 
+        __metadata('design:paramtypes', [image_service_1.IImageService, credential_service_1.ICredentialService, ionic_angular_1.NavController, ionic_angular_1.Platform, log4javascript_1.Logger])
     ], ImageGridComponent);
     return ImageGridComponent;
 }());
 exports.ImageGridComponent = ImageGridComponent;
 
-},{"../../pipes/image-id-to-url.pipe":20,"../../services/image.service":27,"@angular/core":167}],8:[function(require,module,exports){
+},{"../../pipes/image-id-to-url.pipe":20,"../../services/credential.service":26,"../../services/image.service":27,"../../services/log.service":30,"./remove.modal":13,"@angular/core":167,"ionic-angular":431,"log4javascript":520}],8:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -611,14 +635,10 @@ var uuid_1 = require("../../util/uuid");
 var listing_service_1 = require("../../services/listings/listing.service");
 var city_n_zip_pipe_1 = require("../../pipes/city-n-zip.pipe");
 var map_service_1 = require("../../services/map.service");
-var ionic_native_1 = require("ionic-native");
 var log4javascript_1 = require("log4javascript");
 var log_service_1 = require("../../services/log.service");
-var image_service_1 = require("../../services/image.service");
 var image_grid_comp_1 = require("./image-grid.comp");
-var image_id_to_url_pipe_ts_1 = require("../../pipes/image-id-to-url.pipe.ts");
 var user_service_1 = require("../../services/chats/user.service");
-var remove_modal_1 = require("./remove.modal");
 var notfication_service_1 = require("../../services/notfication.service");
 // TODO(xinbenlv):
 var DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
@@ -626,18 +646,18 @@ var DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
  * A page contains a map view and a list showing the listings.
  */
 var CreationPage = (function () {
-    function CreationPage(platform, params, listingService, nav, mapService, imageService, logger, userService, notificationService) {
+    function CreationPage(platform, params, listingService, nav, mapService, logger, userService, notificationService) {
         this.platform = platform;
         this.params = params;
         this.listingService = listingService;
         this.nav = nav;
         this.mapService = mapService;
-        this.imageService = imageService;
         this.logger = logger;
         this.userService = userService;
         this.notificationService = notificationService;
-        //noinspection JSUnusedLocalSymbols
+        //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
         this.typeOptions = listing_1.ListingType.values();
+        //noinspection JSMismatchedCollectionQueryUpdate used in HTML
         this.dirty = {};
         if (params.data.listing) {
             this.listing = params.data.listing;
@@ -677,7 +697,7 @@ var CreationPage = (function () {
             animation: google.maps.Animation.DROP,
             draggable: true,
         });
-        google.maps.event.addListener(this.marker, 'dragend', function (event) {
+        google.maps.event.addListener(this.marker, 'dragend', function () {
             _this.listing.lat = _this.marker.getPosition().lat();
             _this.listing.lng = _this.marker.getPosition().lng();
             _this.mapService.getLocality(new google.maps.LatLng(_this.listing.lat, _this.listing.lng))
@@ -686,11 +706,12 @@ var CreationPage = (function () {
             });
         });
     };
+    //noinspection JSUnusedLocalSymbols: used in HTML
     CreationPage.prototype.save = function () {
         var _this = this;
         if (this.validate()) {
             this.listing.lastUpdated = Date.now();
-            this.logger.debug("Creating listing on " + this.listing.lastUpdated);
+            this.logger.debug("Creating listing, timestamp=" + this.listing.lastUpdated + ", content=" + this.listing);
             this.userService.promiseMe().then(function (me) {
                 _this.listing.ownerId = me.id;
             }).then(function () {
@@ -710,29 +731,13 @@ var CreationPage = (function () {
             this.dirty['type'] = true;
         }
     };
-    CreationPage.prototype.pickPictures = function () {
-        var _this = this;
-        ionic_native_1.ImagePicker.getPictures({})
-            .then(function (urls) {
-            return _this.imageService.uploadImagesAndGetIds(urls);
-        })
-            .then(function (storedImageIds) {
-            if (!_this.listing.imageIds)
-                _this.listing.imageIds = [];
-            _this.listing.imageIds = _this.listing.imageIds.concat(storedImageIds);
-            _this.logger.info("Listing added imageIds: " + JSON.stringify(storedImageIds));
-            _this.logger.debug("Listing result imageIds: " + JSON.stringify(_this.listing.imageIds));
-        })
-            .catch(function (err) {
-            _this.logger.error("Creation page attempt to add images result in error! " + JSON.stringify(err));
-            // TODO(xinbenlv, #error-handling): handle error, using.
-            alert("Failed to upload images!");
-        });
+    CreationPage.prototype.validate = function () {
+        return (this.listing.title && this.listing.content && (this.listing.type != null));
     };
-    CreationPage.prototype.deletePictures = function () {
-        this.removeModal = ionic_angular_1.Modal.create(remove_modal_1.RemoveModal, { listing: this.listing });
-        this.nav.present(this.removeModal, { animate: true });
+    CreationPage.prototype.updateImageIds = function (imageIds) {
+        this.listing.imageIds = imageIds;
     };
+    //noinspection JSUnusedLocalSymbols, used in HTML,
     CreationPage.prototype.deleteListing = function () {
         var _this = this;
         var prompt = ionic_angular_1.Alert.create({
@@ -740,13 +745,13 @@ var CreationPage = (function () {
             buttons: [
                 {
                     text: '取消',
-                    handler: function (data) {
+                    handler: function () {
                         _this.nav.pop(); // alert
                     }
                 },
                 {
                     text: '删除',
-                    handler: function (data) {
+                    handler: function () {
                         _this.listingService.removeListing(_this.listing.id).then(function () {
                             _this.nav.pop().then(function () {
                                 _this.nav.pop();
@@ -758,23 +763,20 @@ var CreationPage = (function () {
         });
         this.nav.present(prompt);
     };
-    CreationPage.prototype.validate = function () {
-        return (this.listing.title && this.listing.content && (this.listing.type != null));
-    };
     CreationPage = __decorate([
         ionic_angular_1.Page({
             templateUrl: 'build/pages/listings-tab/listing-creation.page.html',
-            pipes: [enum_msg_pipe_1.EnumMsgPipe, city_n_zip_pipe_1.CityNZipPipe, image_id_to_url_pipe_ts_1.ImageIdsToUrlPipe],
+            pipes: [enum_msg_pipe_1.EnumMsgPipe, city_n_zip_pipe_1.CityNZipPipe],
             directives: [image_grid_comp_1.ImageGridComponent]
         }),
-        __param(6, core_1.Inject(log_service_1.loggerToken)), 
-        __metadata('design:paramtypes', [ionic_angular_1.Platform, ionic_angular_1.NavParams, listing_service_1.IListingService, ionic_angular_1.NavController, map_service_1.MapService, image_service_1.IImageService, log4javascript_1.Logger, user_service_1.IUserService, notfication_service_1.NotificationService])
+        __param(5, core_1.Inject(log_service_1.loggerToken)), 
+        __metadata('design:paramtypes', [ionic_angular_1.Platform, ionic_angular_1.NavParams, listing_service_1.IListingService, ionic_angular_1.NavController, map_service_1.MapService, log4javascript_1.Logger, user_service_1.IUserService, notfication_service_1.NotificationService])
     ], CreationPage);
     return CreationPage;
 }());
 exports.CreationPage = CreationPage;
 
-},{"../../models/listing":2,"../../pipes/city-n-zip.pipe":18,"../../pipes/enum-msg.pipe":19,"../../pipes/image-id-to-url.pipe.ts":20,"../../services/chats/user.service":25,"../../services/image.service":27,"../../services/listings/listing.service":29,"../../services/log.service":30,"../../services/map.service":31,"../../services/notfication.service":32,"../../util/uuid":34,"./image-grid.comp":7,"./remove.modal":13,"@angular/core":167,"ionic-angular":431,"ionic-native":454,"log4javascript":520}],9:[function(require,module,exports){
+},{"../../models/listing":2,"../../pipes/city-n-zip.pipe":18,"../../pipes/enum-msg.pipe":19,"../../services/chats/user.service":25,"../../services/listings/listing.service":29,"../../services/log.service":30,"../../services/map.service":31,"../../services/notfication.service":32,"../../util/uuid":34,"./image-grid.comp":7,"@angular/core":167,"ionic-angular":431,"log4javascript":520}],9:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -801,13 +803,15 @@ var log_service_1 = require("../../services/log.service");
 var core_1 = require("@angular/core");
 var log4javascript_1 = require("log4javascript");
 var listing_creation_page_1 = require("./listing-creation.page");
+var image_service_1 = require("../../services/image.service");
 var ListingDetailPage = (function () {
-    function ListingDetailPage(threadService, userService, nav, logger, params, logService) {
+    function ListingDetailPage(threadService, userService, nav, logger, params, imageService, logService) {
         var _this = this;
         this.threadService = threadService;
         this.userService = userService;
         this.nav = nav;
         this.logger = logger;
+        this.imageService = imageService;
         this.logService = logService;
         this.listing = params.data.listing;
         this.logger.info("Entering detail page for " + JSON.stringify(this.listing));
@@ -843,6 +847,29 @@ var ListingDetailPage = (function () {
             _this.nav.push(chat_window_page_1.ChatWindowPage, { thread: thread });
         });
     };
+    // TODO(xinbenlv): merge with the same piece of code in image-grid.
+    //noinspection JSUnusedLocalSymbols, used in HTML
+    ListingDetailPage.prototype.showImage = function (imageId) {
+        var el = document.getElementsByTagName('body');
+        // TODO(xinbenlv): modify the viewerjs to customize the following
+        // 1. click on background area to close
+        var url = this.imageService.getUrlFromId(imageId, 0, 0);
+        var viewer = new window.Viewer(el[0], {
+            url: function () {
+                return url;
+            },
+            inline: false,
+            toolbar: true,
+            title: false,
+            movable: true,
+            keyboard: false,
+            navbar: true,
+            hidden: function () {
+                viewer.destroy();
+            }
+        });
+        viewer.show();
+    };
     ListingDetailPage = __decorate([
         ionic_angular_1.Page({
             templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
@@ -850,13 +877,13 @@ var ListingDetailPage = (function () {
             directives: [image_grid_comp_1.ImageGridComponent, map_view_comp_1.MapViewComponent]
         }),
         __param(3, core_1.Inject(log_service_1.loggerToken)), 
-        __metadata('design:paramtypes', [thread_service_1.IThreadService, user_service_1.IUserService, ionic_angular_1.NavController, log4javascript_1.Logger, ionic_angular_1.NavParams, log_service_1.LogService])
+        __metadata('design:paramtypes', [thread_service_1.IThreadService, user_service_1.IUserService, ionic_angular_1.NavController, log4javascript_1.Logger, ionic_angular_1.NavParams, image_service_1.IImageService, log_service_1.LogService])
     ], ListingDetailPage);
     return ListingDetailPage;
 }());
 exports.ListingDetailPage = ListingDetailPage;
 
-},{"../../pipes/enum-msg.pipe.ts":19,"../../pipes/image-id-to-url.pipe":20,"../../pipes/time-from-now.pipe":21,"../../services/chats/thread.service":24,"../../services/chats/user.service":25,"../../services/log.service":30,"../chats-tab/chat-window.page":5,"./image-grid.comp":7,"./listing-creation.page":8,"./map-view.comp":12,"@angular/core":167,"ionic-angular":431,"log4javascript":520}],10:[function(require,module,exports){
+},{"../../pipes/enum-msg.pipe.ts":19,"../../pipes/image-id-to-url.pipe":20,"../../pipes/time-from-now.pipe":21,"../../services/chats/thread.service":24,"../../services/chats/user.service":25,"../../services/image.service":27,"../../services/log.service":30,"../chats-tab/chat-window.page":5,"./image-grid.comp":7,"./listing-creation.page":8,"./map-view.comp":12,"@angular/core":167,"ionic-angular":431,"log4javascript":520}],10:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1081,23 +1108,28 @@ var core_1 = require("@angular/core");
 var index_1 = require("ionic-angular/index");
 var image_id_to_url_pipe_1 = require("../../pipes/image-id-to-url.pipe");
 var RemoveModal = (function () {
-    function RemoveModal(nav, params) {
+    function RemoveModal(nav, params, viewCtrl) {
         this.nav = nav;
-        this.listing = params.data.listing;
-        this.checkboxes = new Array(this.listing.imageIds.length);
+        this.viewCtrl = viewCtrl;
+        this.imageIds = params.data.imageIds;
+        this.checkboxes = new Array(this.imageIds.length);
     }
+    RemoveModal.prototype.dismiss = function () {
+        var data = { imageIds: this.imageIds };
+        this.viewCtrl.dismiss(data);
+    };
     RemoveModal.prototype.save = function () {
         var imagesAfterSave = [];
         for (var i = 0; i < this.checkboxes.length; i++) {
             if (!this.checkboxes[i]) {
-                imagesAfterSave.push(this.listing.imageIds[i]);
+                imagesAfterSave.push(this.imageIds[i]);
             }
         }
-        this.listing.imageIds = imagesAfterSave;
-        this.nav.pop();
+        this.imageIds = imagesAfterSave;
+        this.dismiss();
     };
     RemoveModal.prototype.cancel = function () {
-        this.nav.pop();
+        this.dismiss();
     };
     RemoveModal = __decorate([
         core_1.Component({
@@ -1105,7 +1137,7 @@ var RemoveModal = (function () {
             templateUrl: 'build/pages/listings-tab/remove.modal.html',
             pipes: [image_id_to_url_pipe_1.ImageIdToUrlPipe]
         }), 
-        __metadata('design:paramtypes', [index_1.NavController, index_1.NavParams])
+        __metadata('design:paramtypes', [index_1.NavController, index_1.NavParams, index_1.ViewController])
     ], RemoveModal);
     return RemoveModal;
 }());
@@ -1647,7 +1679,6 @@ var FirebaseMessageService = (function () {
     };
     // TODO(xinbenlv): optimize for performance
     FirebaseMessageService.prototype.observableBadgeCounter = function (threadId, lastCheckTime) {
-        console.log("XXXX 1");
         return this.af.database.list("/messages", {
             query: {
                 orderByChild: 'sentAt',
@@ -1868,6 +1899,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+// TODO(xinbenlv): Ideally we want to use enum as the credId for retrieving the credentials,
+// but using enum or string alias is not yet supported in TS per
+// https://github.com/Microsoft/TypeScript/issues/1206 (Duplicates #2491, #5683, 8921)
+// We will revisit later once that becomes available.
+//
 var ICredentialService = (function () {
     function ICredentialService() {
     }
@@ -2019,8 +2055,8 @@ var CloudinaryImageService = (function () {
      * override
      */
     CloudinaryImageService.prototype.getUrlFromId = function (id, width, height) {
-        if (width === void 0) { width = 300; }
-        if (height === void 0) { height = 300; }
+        if (width === void 0) { width = 0; }
+        if (height === void 0) { height = 0; }
         var param;
         if (width == 0 && height == 0) {
             param = 'w_1242'; // 1242 is the width of iphone 6plus.
