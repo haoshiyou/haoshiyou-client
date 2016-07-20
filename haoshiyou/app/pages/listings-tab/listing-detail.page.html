@@ -22,7 +22,8 @@
         </ion-card-content>
         <map-view [listings]="[listing]"></map-view>
         <ion-item *ngFor="let imageId of listing.imageIds">
-            <img src="{{ imageId | imageIdToUrlPipe }}" alt="img-{{imageId}}">
+            <img src="{{ imageId | imageIdToUrlPipe }}" alt="img-{{imageId}}"
+                 (click)="showImage(imageId)">
         </ion-item>
         <ion-item *ngIf="!listing.imageIds">
             无照片

@@ -74,7 +74,7 @@
     <ion-item>
         <image-grid
                 [imageIds]="listing.imageIds"
-                (updateImageIds)="updateImageIds(imageIds)"
+                (updateImageIds)="updateImageIds($event)"
                 [isEdit]="true"
         ></image-grid>
     </ion-item>

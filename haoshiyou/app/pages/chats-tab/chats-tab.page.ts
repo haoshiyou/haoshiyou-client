@@ -67,7 +67,6 @@ export class ChatsTabPage implements OnInit, OnDestroy {
             thread.lastCheckTime ? thread.lastCheckTime[meId] : 0).subscribe((counter:number)=> {
           this.badgeCounters[index] = counter;
           this.allCounters.emit(this.badgeCounters);
-          console.log(`xxx emit! ${this.badgeCounters}`);
         });
       });
     });
