@@ -13,6 +13,9 @@ import {loggerToken, LogService} from "../../services/log.service";
 import {Inject} from "@angular/core";
 import {Logger} from "log4javascript";
 import {CreationPage} from "./listing-creation.page";
+import {IImageService} from "../../services/image.service";
+
+declare let window:any;
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
@@ -28,6 +31,7 @@ export class ListingDetailPage {
               @Inject(loggerToken)
               private logger:Logger,
               params:NavParams,
+              private imageService:IImageService,
               private logService:LogService) {
     this.listing = params.data.listing;
     this.logger.info(`Entering detail page for ${JSON.stringify(this.listing)}`);
@@ -63,7 +67,30 @@ export class ListingDetailPage {
     }).then(() => {
       this.nav.push(ChatWindowPage, {thread: thread});
     });
-
   }
 
+  // TODO(xinbenlv): merge with the same piece of code in image-grid.
+  //noinspection JSUnusedLocalSymbols, used in HTML
+  private showImage(imageId) {
+    let el = document.getElementsByTagName('body');
+    // TODO(xinbenlv): modify the viewerjs to customize the following
+    // 1. click on background area to close
+    let url = this.imageService.getUrlFromId(imageId, 0, 0);
+    let viewer = new window.Viewer(el[0],
+        {
+          url: () => {
+            return url;
+          },
+          inline:false,
+          toolbar: true,
+          title: false,
+          movable: true,
+          keyboard: false,
+          navbar: true,
+          hidden: () => {
+            viewer.destroy();
+          }
+        });
+    viewer.show();
+  }
 }
