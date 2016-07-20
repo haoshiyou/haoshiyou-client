@@ -54,7 +54,7 @@ export class StaticCredentialService {
   private credentials;
 
   constructor() {
-    this.env = "dev";
+    this.env = "prod";
     this.credentials = {
       prod: this.prodCredentials,
       dev: this.devCredentials
