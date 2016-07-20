@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 import {NavController, NavParams} from "ionic-angular/index";
 import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
-import {Listing} from "../../models/listing";
 
 @Component({
   selector: 'remove-modal',
@@ -9,23 +8,23 @@ import {Listing} from "../../models/listing";
   pipes: [ImageIdToUrlPipe]
 })
 export class RemoveModal {
-  private listing:Listing;
+  private imageIds:string[];
   private checkboxes:boolean[];
   constructor(
       private nav:NavController,
       params:NavParams) {
-    this.listing = params.data.listing;
-    this.checkboxes = new Array(this.listing.imageIds.length);
+    this.imageIds = params.data.imageIds;
+    this.checkboxes = new Array(this.imageIds.length);
   }
 
   save() {
     let imagesAfterSave:string[] = [];
     for (let i = 0; i < this.checkboxes.length; i++) {
       if (!this.checkboxes[i]) {
-        imagesAfterSave.push(this.listing.imageIds[i]);
+        imagesAfterSave.push(this.imageIds[i]);
       }
     }
-    this.listing.imageIds = imagesAfterSave;
+    this.imageIds = imagesAfterSave;
     this.nav.pop();
   }
 

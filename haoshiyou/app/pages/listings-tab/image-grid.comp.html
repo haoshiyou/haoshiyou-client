@@ -1,11 +1,17 @@
-<ion-row *ngFor="let row of cacheGrid; let rowIndex = index">
-    <ion-col width-33 *ngFor="let imageId of row; let colIndex = index">
-        <img *ngIf="imageId!='add' && imageId!='delete'"
-             src="{{imageId | imageIdToUrlPipe}}"
-             alt="Image row:{{rowIndex}}, col:{{colIndex}}"
-             id="image-{{rowIndex}}-{{colIndex}}"
+<ion-row wrap >
+    <ion-col width-33 *ngFor="let imageId of imageIds;">
+        <img src="{{imageId | imageIdToUrlPipe}}"
+             alt="Image {{imageId}}"
              (click)="showImage(imageId)">
-        <img *ngIf="imageId=='add' && isEdit" src="http://placehold.it/300x300?text=添加" (click)="clickAdd()">
-        <img *ngIf="imageId=='delete' && isEdit" src="http://placehold.it/300x300?text=删除" (click)="clickDelete()">
+    </ion-col>
+
+    <ion-col width-33 *ngIf="isEdit" width="300px" height="300px">
+        <label class="custom-file-upload">
+            <img src="http://placehold.it/300x300?text=添加" />
+            <input name="file" type="file" multiple="" class="cloudinary-fileupload" data-cloudinary-field="image_id" />
+        </label>
+    </ion-col>
+    <ion-col width-33 *ngIf="isEdit && imageIds.length > 0 ">
+        <img src="http://placehold.it/300x300?text=删除" (click)="clickDelete()">
     </ion-col>
 </ion-row>
