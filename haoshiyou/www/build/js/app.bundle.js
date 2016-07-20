@@ -1949,7 +1949,7 @@ var StaticCredentialService = (function () {
             GOOGLE_ANALYTICS_PROPERTY_ID: 'UA-55311687-3',
             LOG_SENSE_TOKEN: '85b11658-5721-4734-a396-cb552d8e5e96',
         };
-        this.env = "dev";
+        this.env = "prod";
         this.credentials = {
             prod: this.prodCredentials,
             dev: this.devCredentials
