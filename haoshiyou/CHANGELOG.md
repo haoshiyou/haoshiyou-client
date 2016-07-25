@@ -1,72 +1,51 @@
-###  3.3.1 2016-06-24
-Update Splash Screen and Logo
-Fixed invalid date when posting a new listing
-Image related
-- Image and Listing Deletion.
-- Image viewer now closable
-- Upload image in full resolution, display default low resolution
-- disallow anonymous user to login when create a listing or chat.
-Improve push notification
-- New message counting badge
-- New Listing push
-Cosmetic
-- Display image in detail page in flow instead of image-grid?
-- Fix Android Notification Icon problem
-- Show last message
+# Change Log
 
-TODO(xinbenlv): tide up the following release notes
+## [Unreleased](https://github.com/xinbenlv/rent.zzn.im/tree/HEAD)
 
-- Release 1: MVP for Early Adopter
-  - DONE Create, Save, Update, View, Sort a listing
-  - DONE LogIn, LogOut, Password Reset
-  - DONE Map Marker Listing Navigation
-  - DONE Chat
-  - DONE City and Zip Pipe
-  - DONE Create chat from listing.
-  - DONE Image picker
-  - DONE Google Map on Detail Page
-  - DONE Handle most frequent bad cases
-    - DONE No login
-    - DONE No internet connection
-  - DONE Strip to production credentials
-  - DONE Turn Off FB and LinkedIn Auth0 signin.
-  - DONE Disable Web Upload Image, Stop nav-back after upload image failure.
-    - DONE Add icon, splash screen, webpage icon
-    - DONE Sanitize
-    - DONE Publish on Android and iOS for beta testing.
-  - Bugs
-    - DONE Flash quit when adding picture
-    - DONE Flash quit when registering
-    - DONE Edit validation
-- Release 2: MVP for Growth
-  - DONE Make the detail page editable
-  - DONE Show image full screen view.
-  - DONE Push notification
-     - DONE FCM registration
-     - DONE Push for chat
-  - DONE Facebook and LinkedIn Sign-In Callback Fixing
-  - DONE Firebase event tracking
-  - Bugs
-     - DONE Already logged in, reload the page, and then try to 
-     load a listing, starting a chat will cause nullpointer exception.
+[Full Changelog](https://github.com/xinbenlv/rent.zzn.im/compare/3.4.0...HEAD)
 
-- Web Release
-  - Web image picker in creation page (wrj@)
+**Closed issues:**
 
-- Release 3: Prod
-  - DONE Use a production database
-  - DONE Update Splash Screen and Logo
-  - Bug
-    - DONE Invalid date when posting a new listing
-  - DONE Image Related Features
-    - DONE Image and Listing Deletion.
-    - DONE Image viewer now closable
-    - DONE Upload image in full resolution, display default low resolution
-  - DONE disallow anonymous user to login when create a listing or chat.
-    - Improve push notification
-    - DONE New message counting badge
-    - DONE(pending verification) New Listing push
-  - Cosmetic
-    - DONE Display image in detail page in flow instead of image-grid?
-    - DONE Fix Android Notification Icon problem
-    - DONE Show last message
+- \[moved\] [\#27](https://github.com/xinbenlv/rent.zzn.im/issues/27)
+
+## [3.4.0](https://github.com/xinbenlv/rent.zzn.im/tree/3.4.0) (2016-07-20)
+[Full Changelog](https://github.com/xinbenlv/rent.zzn.im/compare/3.3.1...3.4.0)
+
+**Merged pull requests:**
+
+- Dev [\#20](https://github.com/xinbenlv/rent.zzn.im/pull/20) ([xinbenlv](https://github.com/xinbenlv))
+
+## [3.3.1](https://github.com/xinbenlv/rent.zzn.im/tree/3.3.1) (2016-06-24)
+[Full Changelog](https://github.com/xinbenlv/rent.zzn.im/compare/3.3.0...3.3.1)
+
+## [3.3.0](https://github.com/xinbenlv/rent.zzn.im/tree/3.3.0) (2016-06-24)
+[Full Changelog](https://github.com/xinbenlv/rent.zzn.im/compare/angular-rc...3.3.0)
+
+## [angular-rc](https://github.com/xinbenlv/rent.zzn.im/tree/angular-rc) (2016-05-23)
+[Full Changelog](https://github.com/xinbenlv/rent.zzn.im/compare/create-flow-no-validation...angular-rc)
+
+**Closed issues:**
+
+- Login through WeChat [\#19](https://github.com/xinbenlv/rent.zzn.im/issues/19)
+- Input and display entry [\#18](https://github.com/xinbenlv/rent.zzn.im/issues/18)
+- On iOS app beta, click on main list, entry flash closed back to main list [\#17](https://github.com/xinbenlv/rent.zzn.im/issues/17)
+- Tasks for marketing and operations [\#16](https://github.com/xinbenlv/rent.zzn.im/issues/16)
+- Move Data Storage from Google Docs to MySQL [\#15](https://github.com/xinbenlv/rent.zzn.im/issues/15)
+- Share and like counter [\#11](https://github.com/xinbenlv/rent.zzn.im/issues/11)
+- Sort by share and like [\#9](https://github.com/xinbenlv/rent.zzn.im/issues/9)
+- Add basic filter support [\#7](https://github.com/xinbenlv/rent.zzn.im/issues/7)
+- Support Storing Picture or showing a profile link [\#6](https://github.com/xinbenlv/rent.zzn.im/issues/6)
+
+## [create-flow-no-validation](https://github.com/xinbenlv/rent.zzn.im/tree/create-flow-no-validation) (2015-06-24)
+**Closed issues:**
+
+- Add caching for sheet data [\#13](https://github.com/xinbenlv/rent.zzn.im/issues/13)
+- Unified Tracking and Logging Infrastructure [\#12](https://github.com/xinbenlv/rent.zzn.im/issues/12)
+- Update QR-code [\#5](https://github.com/xinbenlv/rent.zzn.im/issues/5)
+- Remove page navigation in view.html [\#4](https://github.com/xinbenlv/rent.zzn.im/issues/4)
+- Add home page view with on-demand loading [\#3](https://github.com/xinbenlv/rent.zzn.im/issues/3)
+- Add tracking infrastructure for Parse [\#1](https://github.com/xinbenlv/rent.zzn.im/issues/1)
+
+
+
+\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
