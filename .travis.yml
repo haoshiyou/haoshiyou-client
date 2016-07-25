@@ -3,7 +3,7 @@ cache:
   directories:
     - haoshiyou/node_modules
 notifications:
-  email: false
+  slack: haoshiyou:eSZq9zT9wMllEJYHMITggGky
 android:
   components:
     - build-tools-23.0.1
