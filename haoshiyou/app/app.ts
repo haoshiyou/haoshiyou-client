@@ -14,7 +14,7 @@ import {FirebaseListingService} from "./services/listings/fb-listing.service";
 import {MapService} from "./services/map.service";
 import {LogService, loggerToken} from "./services/log.service";
 import {IImageService, CloudinaryImageService} from "./services/image.service";
-import {ICredentialService, StaticCredentialService} from "./services/credential.service";
+import {ICredentialService, JsonCredentialService} from "./services/credential.service";
 import {Logger} from "log4javascript/log4javascript";
 import {NotificationService} from "./services/notfication.service";
 
@@ -26,10 +26,10 @@ declare let ga:any;
     tabSubPages: true
   }, // http://ionicframework.com/docs/v2/api/config/Config/
   providers: [
-    provide(ICredentialService, {useClass: StaticCredentialService}),
+    provide(ICredentialService, {useClass: JsonCredentialService}),
     provide(FirebaseUrl, {
       useFactory: (credService:ICredentialService) => {
-        return credService.get('FIREBASE_BASE_URL');
+        return credService.getCred('FIREBASE_BASE_URL');
       }, deps: [ICredentialService]
     }),
     provide(AuthHttp, {
@@ -72,7 +72,7 @@ export class MyApp {
               private http:Http,
               private logService:LogService) {
     this.platform.ready().then(()=> {
-      ga('create', this.credService.get('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
+      ga('create', this.credService.getCred('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
       ga('send', 'pageview');
       this.logService.logEvent('app', 'start');
 

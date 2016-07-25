@@ -30,7 +30,7 @@ export class NotificationService {
         return new Promise<string>((resolve, reject)=> {
           this.logger.info("Registering push notification");
           let coreOpt = {
-            "senderID": this.credService.get("FCM_SENDER_ID"),
+            "senderID": this.credService.getCred("FCM_SENDER_ID"),
             "topics": [NotificationService.TOPIC_LISTING]
           };
           if (meId) {
@@ -100,7 +100,7 @@ export class NotificationService {
     });
     let headers = new Headers({
       'Content-Type': 'application/json',
-      'Authorization':`key=${this.credService.get('FCM_KEY')}`
+      'Authorization':`key=${this.credService.getCred('FCM_KEY')}`
     });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(url, body, options).take(1).toPromise().then((ret)=>{
@@ -121,7 +121,7 @@ export class NotificationService {
     });
     let headers = new Headers({
       'Content-Type': 'application/json',
-      'Authorization': `key=${this.credService.get('FCM_KEY')}`
+      'Authorization': `key=${this.credService.getCred('FCM_KEY')}`
     });
     let options = new RequestOptions({headers: headers});
     return this.http.post(url, body, options).take(1).toPromise().then((ret)=> {

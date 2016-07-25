@@ -15,15 +15,18 @@ You need to install the following in your computer:
 1. Git clone the repo (contact xinbenlv@ for access.), and then 
 switch to branch "dev"
 
-```bash
+```shell
 git clone git@github.com:xinbenlv/rent.zzn.im.git
 cd rent.zzn.im
 git checkout -b dev origin/dev # checkout branch "dev"
+git submodule init
+git submodule sync
+git submodule update
 ```
 
 2. Install packages and setup ionic 
 
-```bash
+```shell
 cd lab/haoshiyou/
 npm install --dev
 ionic state restore
@@ -31,17 +34,22 @@ ionic state restore
 
 3. Run the Web
 
-```
+```shell
 ionic serve -l
 ```
 
 4. Run the ios emulator and android emulator
 
-```bash
+```shell
 ionic emulate ios
 ionic emulate android
 ```
 
+## Switch between PROD and DEV environment
+```shell
+git config -f .gitmodules submodule.config.branch prod # or dev
+
+```
 
 ## Create CHANGELOG
 Before releasing new version follow [github_changelog_generator]
@@ -58,7 +66,7 @@ github_changelog_generator -u xinbenlv -p rent.zzn.im
 
 For example
 
-```
+```shell
 typings install dt~firebase --save --global
 ```
 

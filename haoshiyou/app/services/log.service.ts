@@ -178,7 +178,7 @@ export class LogSenseAppender extends BaseRemoteAppender {
     if (this.ready) {
       let tmpEntries = this.entries;
       this.entries = []; //clear
-      let url = `http://logsene-receiver.sematext.com/${this.credService.get('LOG_SENSE_TOKEN')}/log/`;
+      let url = `http://logsene-receiver.sematext.com/${this.credService.getCred('LOG_SENSE_TOKEN')}/log/`;
       let headers = new Headers({
         'Content-Type': 'application/json',
       });

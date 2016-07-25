@@ -31,9 +31,9 @@ export class CloudinaryImageService implements IImageService {
   constructor(@Inject(loggerToken) private logger:Logger, private credService:ICredentialService) {
     // TODO(xinbenlv): update the credentials of CloudinaryImageService.
     this.config = <CloudinaryConfig>{
-      cloud_name: this.credService.get('CLOUDINARY_CLOUD_NAME'),
-      api_key: this.credService.get('CLOUDINARY_API_KEY'),
-      upload_preset: this.credService.get('CLOUDINARY_UPLOAD_PRESET')
+      cloud_name: this.credService.getCred('CLOUDINARY_CLOUD_NAME'),
+      api_key: this.credService.getCred('CLOUDINARY_API_KEY'),
+      upload_preset: this.credService.getCred('CLOUDINARY_UPLOAD_PRESET')
     };
   }
 

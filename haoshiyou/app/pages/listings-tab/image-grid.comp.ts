@@ -75,8 +75,8 @@ export class ImageGridComponent implements OnInit {
     var uploadImageFormData = {
       "timestamp":$.now(),
       "callback": cloudinaryCorsHtml,
-      "api_key":this.cred.get('CLOUDINARY_API_KEY'),
-      "upload_preset":this.cred.get('CLOUDINARY_UPLOAD_PRESET'),
+      "api_key":this.cred.getCred('CLOUDINARY_API_KEY'),
+      "upload_preset":this.cred.getCred('CLOUDINARY_UPLOAD_PRESET'),
     };
     var escapedFormData = JSON.stringify(uploadImageFormData);
     $('.cloudinary-fileupload')

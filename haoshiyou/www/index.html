@@ -66,18 +66,21 @@
   <script src="https://cdn.auth0.com/js/lock-9.1.min.js"></script>
   <!-- cordova.js required for cordova apps -->
   <script src="cordova.js"></script>
-  <!-- Polyfill needed for platforms without Promise and Collection support -->
-  <script src="build/js/es6-shim.min.js"></script>
-  <!-- Zone.js and Reflect-metadata  -->
-  <script src="build/js/Reflect.js"></script>
-  <script src="build/js/zone.js"></script>
-  <!-- the bundle which is built from the app's source code -->
-  <script src="build/js/app.bundle.js"></script>
+
   <!-- jQuery and Cloudinary -->
   <script src='jquery/jquery.min.js' type='text/javascript'></script>
   <script src='jquery/jquery.ui.min.js' type='text/javascript'></script>
   <script src='jquery/jquery.iframe-transport.min.js' type='text/javascript'></script>
   <script src='jquery/jquery.fileupload.min.js' type='text/javascript'></script>
   <script src='jquery/jquery.cloudinary.min.js' type='text/javascript'></script>
+
+  <!-- Polyfill needed for platforms without Promise and Collection support -->
+  <script src="build/js/es6-shim.min.js"></script>
+  <!-- Zone.js and Reflect-metadata  -->
+  <script src="build/js/Reflect.js"></script>
+  <script src="build/js/zone.js"></script>
+  <!-- the bundle which is built from the app's source code, needs to be the last -->
+  <script src="build/js/app.bundle.js"></script>
+
 </body>
 </html>

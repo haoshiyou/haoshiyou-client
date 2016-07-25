@@ -1,6 +1,7 @@
 // app/services/auth/auth.ts
-
 import {Injectable} from "@angular/core";
+
+declare let $; // jQuery
 
 // TODO(xinbenlv): Ideally we want to use enum as the credId for retrieving the credentials,
 // but using enum or string alias is not yet supported in TS per
@@ -10,66 +11,70 @@ import {Injectable} from "@angular/core";
 
 @Injectable()
 export class ICredentialService {
-  get(credId:string):string {
+  getCred(credId:string):string {
     throw "Not Implemented";
   }
 
-  setEnv(type:string) {
+  getFlag(flagId:string):any {
     throw "Not Implemented";
   }
 
   getEnv():string {
+    throw "Not Implemented";
+  }
+
+  getVersion():string {
     throw "Not Implemented";
   }
 }
 
 @Injectable()
-export class StaticCredentialService {
-  private prodCredentials:{[credId:string]:string} = {
-    FCM_SENDER_ID: '59094925347', // Same as dev
-    FCM_KEY: 'AIzaSyA8IczGUriov_yYY4bnrqKUkL7F4v6i9sc', // Same as dev
-    AUTH0_CLIENT_ID: 'gZaIRkEuSAlO1HXs7wWFpmZv5aDNEPSk',
-    AUTH0_ACCOUNT_DOMAIN: 'xinbenlv.auth0.com',
-    CLOUDINARY_CLOUD_NAME: 'xinbenlv',
-    CLOUDINARY_API_KEY: '999284541119412',
-    CLOUDINARY_UPLOAD_PRESET: 'haoshiyou-prod',
-    FIREBASE_BASE_URL: 'haoshiyou-prod.firebaseio.com',
-    GOOGLE_ANALYTICS_PROPERTY_ID: 'UA-55311687-4',
-    LOG_SENSE_TOKEN: 'd032d125-1a39-4129-bfb0-4e3e4afc17e9',
-  };
-
-  private devCredentials:{[credId:string]:string} = {
-    FCM_SENDER_ID: '59094925347',
-    FCM_KEY: 'AIzaSyA8IczGUriov_yYY4bnrqKUkL7F4v6i9sc',
-    AUTH0_CLIENT_ID: 'StjMTE6NRzI9qmUPT2ij4LvEzmlja8OY',
-    AUTH0_ACCOUNT_DOMAIN: 'xinbenlv.auth0.com',
-    CLOUDINARY_CLOUD_NAME: 'xinbenlv',
-    CLOUDINARY_API_KEY: '999284541119412',
-    CLOUDINARY_UPLOAD_PRESET: 'haoshiyou-dev',
-    FIREBASE_BASE_URL: 'haoshiyou-dev.firebaseio.com',
-    GOOGLE_ANALYTICS_PROPERTY_ID: 'UA-55311687-3',
-    LOG_SENSE_TOKEN: '85b11658-5721-4734-a396-cb552d8e5e96',
-  };
+export class JsonCredentialService {
+  private credentials:{[credId:string]:string};
   private env:string;
-  private credentials;
-
+  private flags:{[flagId:string]:any};
+  private version:string;
+  private CONFIG_URL:string = "config/config.json";
   constructor() {
-    this.env = "dev";
-    this.credentials = {
-      prod: this.prodCredentials,
-      dev: this.devCredentials
-    };
+    this.getConfigSync();
   }
 
-  get(credId:string):string {
-    return this.credentials[this.env][credId];
+  /**
+   * Sync get Config
+   */
+  private getConfigSync() {
+    //noinspection TypeScriptValidateJSTypes, jQuery TypeDefinition is not yet very good.
+    $.ajax({
+      dataType: "json",
+      url: this.CONFIG_URL,
+      success: (data) => {
+        this.credentials = data.cred;
+        this.env = data.env;
+        this.version = data.version;
+        this.flags = data.flags;
+        console.log("Successfully load config.");
+        console.log(`Version = ${this.version}`);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      async: false
+    });
   }
 
-  setEnv(type:string) {
-    this.env = type;
+  getCred(credId:string):string {
+    return this.credentials[credId];
+  }
+
+  getFlag(flagId:string):any {
+    return this.flags[flagId];
   }
 
   getEnv():string {
     return this.env;
+  }
+
+  getVersion():string {
+    return this.version;
   }
 }

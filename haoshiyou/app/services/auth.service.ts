@@ -100,8 +100,8 @@ export class AuthService {
               private logService:LogService,
               @Inject(loggerToken) private logger:Logger) {
     this.lock = new Auth0Lock(
-        this.credentialService.get("AUTH0_CLIENT_ID"),
-        this.credentialService.get("AUTH0_ACCOUNT_DOMAIN")
+        this.credentialService.getCred("AUTH0_CLIENT_ID"),
+        this.credentialService.getCred("AUTH0_ACCOUNT_DOMAIN")
     );
     this.zoneImpl = zone;
     this.userSubject = new Subject<User>();
