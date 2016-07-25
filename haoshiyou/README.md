@@ -1,5 +1,7 @@
 # Haoshiyou project (ionic v2)
 
+[![Build Status](https://travis-ci.org/xinbenlv/rent.zzn.im.svg)](https://travis-ci.org/xinbenlv/rent.zzn.im)
+
 This project is a project built with ionic v2
 
 ## Documents
