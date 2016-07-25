@@ -1,4 +1,0 @@
-[submodule "config"]
-	path = haoshiyou/www/config
-	url = https://github.com/xinbenlv/haoshiyou-security.git
-	branch = dev

@@ -1,9 +1,10 @@
+console.log(`isRelease=${isRelease}`);
 var gulp = require('gulp'),
     gulpWatch = require('gulp-watch'),
     del = require('del'),
     runSequence = require('run-sequence'),
-    argv = process.argv;
-
+    argv = process.argv,
+    fs = require('fs');
 
 /**
  * Ionic hooks
@@ -33,12 +34,11 @@ var buildSass = require('ionic-gulp-sass-build');
 var copyHTML = require('ionic-gulp-html-copy');
 var copyFonts = require('ionic-gulp-fonts-copy');
 var copyScripts = require('ionic-gulp-scripts-copy');
-
 var isRelease = argv.indexOf('--release') > -1;
-console.log(`isRelease=${isRelease}`);
+
 gulp.task('watch', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts'],
+    ['build'],
     function(){
       gulpWatch('app/**/*.scss', function(){ gulp.start('sass'); });
       gulpWatch('app/**/*.html', function(){ gulp.start('html'); });
@@ -49,7 +49,7 @@ gulp.task('watch', ['clean'], function(done){
 
 gulp.task('build', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts'],
+    ['config', 'sass', 'html', 'fonts', 'scripts'],
     function(){
       buildBrowserify({
         minify: isRelease,
@@ -68,6 +68,17 @@ gulp.task('sass', buildSass);
 gulp.task('html', copyHTML);
 gulp.task('fonts', copyFonts);
 gulp.task('scripts', copyScripts);
+gulp.task('config', function(cb) {
+   fs.stat('www/config/config.json', function(err) {
+        if(err) {
+            console.log('config.json does not exist. check docs/new-developer.md#config to set up config');
+            throw err;
+        } else {
+            console.log('config.json exists');
+            cb();
+        }
+   });
+});
 gulp.task('clean', function(){
   return del('www/build');
 });

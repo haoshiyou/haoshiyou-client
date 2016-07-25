@@ -19,9 +19,15 @@ switch to branch "dev"
 git clone git@github.com:xinbenlv/rent.zzn.im.git
 cd rent.zzn.im
 git checkout -b dev origin/dev # checkout branch "dev"
-git submodule init
-git submodule sync
-git submodule update
+```
+
+2. Check out config file {#config}
+
+```shell
+cd haoshiyou
+rm -rf www/config
+# change "dev" here to "prod" to get prod config file
+git clone -b dev git@github.com:xinbenlv/haoshiyou-security.git www/config
 ```
 
 2. Install packages and setup ionic 
