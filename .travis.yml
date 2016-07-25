@@ -9,7 +9,9 @@ android:
     - build-tools-23.0.1
     - android-23
 before_install:
-  - npm i -g npm@3.9.6
-  - npm install -g ionic@beta
-  - npm install -g cordova
-script: cd haoshiyou
+  - npm list -g npm@3.9.6 --depth=0 || npm i -g npm@3.9.6
+  - npm list -g ionic@2.0.0-beta.31 --depth=0 || npm install -g ionic@2.0.0-beta.31
+  - npm list -g cordova@6.2.0 --depth=0 || npm install -g cordova@6.2.0
+install: cd haoshiyou && npm install
+script: 
+  - cd haoshiyou && ionic build android # build
