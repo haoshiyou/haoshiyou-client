@@ -1,0 +1,15 @@
+language: android
+cache:
+  directories:
+    - haoshiyou/node_modules
+notifications:
+  email: false
+android:
+  components:
+    - build-tools-23.0.1
+    - android-23
+before_install:
+  - npm i -g npm@3.9.6
+  - npm install -g ionic@beta
+  - npm install -g cordova
+script: cd haoshiyou
