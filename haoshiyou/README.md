@@ -8,7 +8,8 @@ Documentation lives in [docs](docs)
 
 ## Road Map
 
-Released features are in [CHANGELOG.md](CHANGELOG.md)
+Released features are in [CHANGELOG.md](CHANGELOG.md),
+Some of the old feature are in [OLD_CHANGELOG.md](OLD_CHANGELOG.md)
 
 Future features are in the 
 [issues](https://github.com/xinbenlv/rent.zzn.im/issues)
