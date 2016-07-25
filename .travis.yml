@@ -1,4 +1,17 @@
-language: android
+language: node_js
+node_js:
+  - "4.4.4"
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+    - openjdk-7-jdk
+    - lib32stdc++6
+    - lib32z1
+env:
+  CXX=g++-4.8
 cache:
   directories:
     - haoshiyou/node_modules
@@ -9,11 +22,25 @@ android:
     - build-tools-23.0.1
     - android-23
 before_install:
+  - nvm install v4
   - npm list -g npm@3.9.6 --depth=0 || npm i -g npm@3.9.6
   - npm list -g ionic@2.0.0-beta.31 --depth=0 || npm install -g ionic@2.0.0-beta.31
   - npm list -g cordova@6.2.0 --depth=0 || npm install -g cordova@6.2.0
+  - wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
+  - tar -xvf android-sdk_r24.4-linux.tgz
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-23.0.2
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-23
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-support
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
+  - export ANDROID_HOME=$PWD/android-sdk-linux
+  - export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
 install: 
   - cd haoshiyou 
   - npm install
 script: 
-  - ionic build android # build
+  - ionic platform remove android  
+  - ionic platform add android
+  - ionic build android
+  - ls ionic info
