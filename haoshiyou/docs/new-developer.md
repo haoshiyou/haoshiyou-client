@@ -24,10 +24,9 @@ git checkout -b dev origin/dev # checkout branch "dev"
 2. Check out config file {#config}
 
 ```shell
-cd haoshiyou
-rm -rf www/config
+rm -rf haoshiyou/www/config
 # change "dev" here to "prod" to get prod config file
-git clone -b dev git@github.com:xinbenlv/haoshiyou-security.git www/config
+git clone -b dev git@github.com:xinbenlv/haoshiyou-security.git haoshiyou/www/config
 ```
 
 2. Install packages and setup ionic 
