@@ -6,6 +6,9 @@ You need to install the following in your computer:
 
 1. git, npm
 2. Ionic@beta
+    To install ionic, you need to install nodejs first. Please make sure your nodejs version is euqal or higher than 4.4.4. Otherwise you will see an error when running "ionic state restore" later.
+    if the vesion of your installed nodejs is like v0.12.2. Quit using npm to update nodejs. Follow the steps here: http://stackoverflow.com/a/12570971/6567635
+    up to here, you are good to go for the web part.
 3. Xcode and Iphone Emulator (if developing features related iOS)
 4. Android Studio and SDK (if developing features related to Android)
 5. (Optional)Genymotion for faster Android Emulation
