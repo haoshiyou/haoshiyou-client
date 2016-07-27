@@ -1,3 +1,4 @@
+# To test if your modification to this file works, go to http://lint.travis-ci.org/.
 language: node_js
 node_js:
   - "4.4.4"
@@ -32,4 +33,3 @@ script:
   - ionic platform remove android  
   - ionic platform add android
   - ionic build android
-  - ls -Rfl
