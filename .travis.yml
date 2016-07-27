@@ -9,6 +9,7 @@ cache:
 notifications:
   slack: haoshiyou:eSZq9zT9wMllEJYHMITggGky
 before_install:
+  - cd haoshiyou 
   # download config.json from haoshiyou-security repository with a token
   - ./travis/download-config.sh
   - nvm install v4
@@ -26,7 +27,6 @@ before_install:
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
 install: 
-  - cd haoshiyou 
   - npm install
 script:
   - ionic platform remove android  
