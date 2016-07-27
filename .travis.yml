@@ -40,6 +40,7 @@ install:
   - cd haoshiyou 
   - npm install
 before_script:
+  # download config.json from haoshiyou-security repository with a token
   - curl -H 'Authorization: token $HAOSHIYOU_SECURITY_TOKEN' -H 'Accept: application/vnd.github.v3.raw' -o www/config/config.json -O -L https://api.github.com/repos/xinbenlv/haoshiyou-security/config.json
 script: 
   - ionic platform remove android  
