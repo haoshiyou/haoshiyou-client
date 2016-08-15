@@ -1,4 +1,4 @@
-console.log(`isRelease=${isRelease}`);
+
 var gulp = require('gulp'),
     gulpWatch = require('gulp-watch'),
     del = require('del'),
@@ -35,7 +35,7 @@ var copyHTML = require('ionic-gulp-html-copy');
 var copyFonts = require('ionic-gulp-fonts-copy');
 var copyScripts = require('ionic-gulp-scripts-copy');
 var isRelease = argv.indexOf('--release') > -1;
-
+console.log(`isRelease=${isRelease}`);
 gulp.task('watch', ['clean'], function(done){
   runSequence(
     ['build'],

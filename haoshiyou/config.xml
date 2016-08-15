@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="org.haoshiyou.app" version="3.4.1" xmlns="http://www.w3.org/ns/widgets">
+<widget id="org.haoshiyou.app" version="3.5.12" xmlns="http://www.w3.org/ns/widgets">
   <name>haoshiyou</name>
   <description>帮助旧金山湾区小伙伴们找室友。</description>
   <author email="zzn@zzn.im" href="http://zzn.im/">Zainan Victor Zhou</author>
@@ -66,10 +66,7 @@
     <splash src="resources/ios/splash/Default@2x~iphone.png" width="640" height="960"/>
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
-
-  <!-- To resolve android "the connection to the server was unsuccessful" -->
   <preference name="loadUrlTimeoutValue" value="700000"/>
-
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

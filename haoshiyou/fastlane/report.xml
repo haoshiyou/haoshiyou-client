@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+      
+      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="0.228381">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: Verifying required fastlane version" time="0.000371">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: Switch to increment_version lane" time="0.000245">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: node scripts/increment_build_number.js" time="0.22439">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: Switch to ionic_android_build lane" time="0.000196">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: ionic build android --release" time="30.552972">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="6: Switch to ionic_ios_build lane" time="0.000187">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="7: ionic build ios --release" time="24.550705">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="8: Switch to android_deploy lane" time="0.000339">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="9: cd .. &amp;&amp; jarsigner -verbose -storepass 3c9KMeBA5vKE -sigalg SHA1withRSA -digestalg SHA1 -keystore fastlane/release-cred/haoshiyou-android.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name" time="1.225794">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="10: cd .. &amp;&amp; ${HOME}/Library/Android/sdk/build-tools/23.0.3/zipalign -f -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk releases/haoshiyou-android-release.apk" time="0.205548">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="11: Switch to ios_deploy lane" time="0.000175">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="12: sigh" time="3.750846">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="13: gym" time="19.912623">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="14: Switch to ios_upload lane" time="0.000231">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="15: deliver" time="32.99417">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="16: get_version_number" time="0.372587">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="17: slack" time="0.512054">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="18: Switch to android_upload lane" time="0.000193">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="19: supply" time="9.283712">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="20: slack" time="0.504095">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>

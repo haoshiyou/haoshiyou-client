@@ -1,0 +1,110 @@
+# A fastlane file, see https://fastlane.tools/ for reference
+
+# Update fastlane automatically if a new version is available:
+update_fastlane
+
+fastlane_version "1.100.0"
+
+ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
+android_release_path = "releases/haoshiyou-android-release.apk"
+
+before_all do
+  ENV["SLACK_URL"] =
+      "https://hooks.slack.com/services/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"
+end
+
+private_lane :increment_version do
+  sh("node scripts/increment_build_number.js")
+end
+
+
+desc "Do a new iOS build using ionic."
+private_lane :ionic_ios_build do
+  sh("ionic build ios --release")
+end
+
+desc "Do a new iOS deploy using sigh and gym"
+private_lane :ios_deploy do
+  sigh
+  gym(
+      scheme: "haoshiyou",
+      project: ios_project_path)
+end
+
+desc "Do a new iOS upload to iTunes Connect using deliver."
+private_lane :ios_upload do
+  deliver(force: true)
+  slack(message: "Successfully deployed to iTunes Connect at Version " +
+      "#{get_version_number(xcodeproj:ios_project_path)}.")
+end
+
+desc "Do a new Android build"
+private_lane :ionic_android_build do
+  sh("ionic build android --release")
+end
+
+desc "Do a new Android deploy using jarsigner and zipaliagn."
+private_lane :android_deploy do |options|
+  sh("cd .. && jarsigner -verbose " +
+         "-storepass #{options[:storepass]} " +
+         "-sigalg SHA1withRSA -digestalg SHA1 " +
+         "-keystore fastlane/release-cred/haoshiyou-android.keystore " +
+         "platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name")
+
+  sh("cd .. && ${HOME}/Library/Android/sdk/build-tools/23.0.3/zipalign -f " +
+         "-v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk " +
+         android_release_path)
+end
+
+desc "Do a new Android upload to Google Play Console using supply."
+private_lane :android_upload do
+  supply(
+      track: "alpha",
+      apk: android_release_path,
+      json_key: "fastlane/release-cred/haoshiyou-play-release-manager-credentail.json",
+      package_name: "org.haoshiyou.app"
+  )
+  slack(message: "Successfully deployed to Google Play.") # TODO(xinbenlv): add version
+end
+
+platform :ios do
+  desc "Deploy a new version to the App Store/"
+  lane :deploy do
+    increment_version
+    ionic_ios_build
+    ios_deploy
+    ios_upload
+  end
+end
+
+platform :android do
+  desc "Deploy a new version to the Google Play Store."
+  lane :deploy do |options|
+    increment_version
+    ionic_android_build
+    android_deploy(options)
+    android_upload
+  end
+end
+
+desc "Deploy to all platforms."
+lane :deploy_all do |options|
+  increment_version
+
+  ionic_android_build
+  ionic_ios_build
+
+  android_deploy(options)
+  ios_deploy
+
+  ios_upload
+  android_upload
+end
+
+# TODO(zzn):
+# - 1. add deployment for web
+# - 2. merge android, web ios
+# - 3. add other workflows: test, pilot, prod
+# - 4. add support "dev" scheme
+# - 5. add instructions to set-up fastlane environemnt: how to download release-cred, install
+#      zipalign, jarsigner, check for storepass when calling deploy, etc.
