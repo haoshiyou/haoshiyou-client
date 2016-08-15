@@ -1,72 +1,101 @@
-# Customise this file, documentation can be found here:
-# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
-# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
-# can also be listed using the `fastlane actions` command
+# A fastlane file, see https://fastlane.tools/ for reference
 
-# Change the syntax highlighting to Ruby
-# All lines starting with a # are ignored when running `fastlane`
-
-# If you want to automatically update fastlane if a new version is available:
+# Update fastlane automatically if a new version is available:
 update_fastlane
 
-# This is the minimum version number required.
-# Update this, if you use features of a newer version
 fastlane_version "1.100.0"
 
-default_platform :ios
+ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
+android_release_path = "releases/haoshiyou-android-release.apk"
 
-platform :ios do
-  before_all do
-    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
-    sigh
-  end
+before_all do
+  ENV["SLACK_URL"] =
+      "https://hooks.slack.com/services/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"
+end
 
-  desc "Runs all the tests"
-  lane :test do
-    scan
-  end
-
-  desc "Submit a new Beta Build to Apple TestFlight"
-  desc "This will also make sure the profile is up to date"
-  lane :beta do
-    # match(type: "appstore") # more information: https://codesigning.guide
-    gym # Build your app - more options available
-    pilot
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here (run `fastlane actions`)
-  end
-
-  desc "Deploy a new version to the App Store"
-  lane :appstore do
-    # match(type: "appstore")
-    # snapshot
-    gym(scheme: "haoshiyou") # Build your app - more options available
-    deliver(force: true)
-    # frameit
-  end
-
-  # You can define as many lanes as you want
-
-  after_all do |lane|
-    # This block is called, only if the executed lane was successful
-
-    # slack(
-    #   message: "Successfully deployed new App Update."
-    # )
-  end
-
-  error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
-  end
+lane :increment_version do
+  sh("node scripts/increment_build_number.js")
 end
 
 
-# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
-# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+desc "Do a new iOS build"
+private_lane :ionic_ios_build do
+  sh("ionic build ios --release")
+end
 
-# fastlane reports which actions are used
-# No personal data is recorded. Learn more at https://github.com/fastlane/enhancer
+desc "Do a new iOS deploy"
+private_lane :ios_deploy do
+  sigh
+  gym(
+      scheme: "haoshiyou",
+      project: ios_project_path)
+end
+
+private_lane :ios_upload do
+  deliver(force: true)
+  slack(message: "Successfully deployed to iTunes Connect at Version " +
+      "#{get_version_number(xcodeproj:ios_project_path)}.")
+end
+
+
+desc "Do a new Android build"
+private_lane :ionic_android_build do
+  sh("ionic build android --release")
+end
+
+private_lane :android_deploy do |options|
+  sh("cd .. && jarsigner -verbose " +
+         "-storepass #{options[:storepass]} " +
+         "-sigalg SHA1withRSA -digestalg SHA1 " +
+         "-keystore fastlane/release-cred/haoshiyou-android.keystore " +
+         "platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name")
+
+  sh("cd .. && ${HOME}/Library/Android/sdk/build-tools/23.0.3/zipalign -f " +
+         "-v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk " +
+         android_release_path)
+
+end
+private_lane :android_upload do
+  supply(
+      track: "alpha",
+      apk: android_release_path,
+      json_key: "fastlane/release-cred/haoshiyou-play-release-manager-credentail.json",
+      package_name: "org.haoshiyou.app"
+  )
+  slack(message: "Successfully deployed to Google Play.") # TODO(xinbenlv): add version
+end
+
+platform :ios do
+  desc "Deploy a new version to the App Store"
+  lane :deploy do
+    increment_version
+    ionic_ios_build
+    ios_deploy
+    ios_upload
+  end
+end
+
+platform :android do
+  lane :deploy do |options|
+    increment_version
+    ionic_android_build
+    android_deploy(options)
+    android_upload
+  end
+end
+
+lane :deploy_all do |options|
+  increment_version
+  ionic_android_build
+  ionic_ios_build
+
+  android_deploy(options)
+  ios_deploy
+
+  ios_upload
+  android_upload
+end
+
+# TODO(zzn):
+# - 1. add deployment for web
+# - 2. merge android, web ios

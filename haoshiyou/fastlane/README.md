@@ -5,24 +5,34 @@ fastlane documentation
 sudo gem install fastlane
 ```
 # Available Actions
-## iOS
-### ios test
+### increment_version
 ```
-fastlane ios test
+fastlane increment_version
 ```
-Runs all the tests
-### ios beta
-```
-fastlane ios beta
-```
-Submit a new Beta Build to Apple TestFlight
 
-This will also make sure the profile is up to date
-### ios appstore
+### deploy_all
 ```
-fastlane ios appstore
+fastlane deploy_all
+```
+
+
+----
+
+## iOS
+### ios deploy
+```
+fastlane ios deploy
 ```
 Deploy a new version to the App Store
+
+----
+
+## Android
+### android deploy
+```
+fastlane android deploy
+```
+
 
 ----
 

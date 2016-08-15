@@ -7,9 +7,9 @@
 
 var fs = require('fs');
 var xml2js = require('xml2js');
-
+var filePath = '../config.xml';
 // Read config.xml
-fs.readFile('config.xml', 'utf8', function(err, data) {
+fs.readFile(filePath, 'utf8', function(err, data) {
     if(err) {
         return console.log(err);
     }
@@ -40,7 +40,7 @@ fs.readFile('config.xml', 'utf8', function(err, data) {
         var xml = builder.buildObject(obj);
 
         // Write config.xml
-        fs.writeFile('config.xml', xml, function(err) {
+        fs.writeFile(filePath, xml, function(err) {
             if(err) {
                 return console.log(err);
             }
