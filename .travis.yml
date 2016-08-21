@@ -1,9 +1,13 @@
 # To test if your modification to this file works, go to http://lint.travis-ci.org/.
-language: c
+language: node_js
 env:
   CXX=g++-4.8
   ANDROID_HOME=$PWD/android-sdk-linux
   PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
+node_js:
+  - '4.4'
+matrix:
+  fast_finish: true
 os:
   - linux
   - osx
@@ -13,8 +17,6 @@ cache:
 notifications:
   slack: haoshiyou:eSZq9zT9wMllEJYHMITggGky
 before_install:
-  - $HOME/.nvm/nvm.sh
-  - nvm install 4.4.4
   - cd haoshiyou 
   # download config.json from haoshiyou-security repository with a token
   - ./travis/download-config.sh
