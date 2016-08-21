@@ -1,13 +1,12 @@
 # To test if your modification to this file works, go to http://lint.travis-ci.org/.
-language: node_js
-node_js:
-  - "4.4.4"
+language: c
 env:
   CXX=g++-4.8
   ANDROID_HOME=$PWD/android-sdk-linux
   PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
 os:
   - linux
+  - osx
 cache:
   directories:
     - haoshiyou/node_modules
@@ -17,13 +16,14 @@ before_install:
   - cd haoshiyou 
   # download config.json from haoshiyou-security repository with a token
   - ./travis/download-config.sh
-  - ./travis/install-android-sdk.sh
+  - ./travis/install-platform-sdk.sh
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
 install:
   - ./travis/install-ionic-sdk.sh
   - npm install
+
+script:
   - ionic platform remove android
   - ionic platform add android
-script:
   - ionic build android --release
