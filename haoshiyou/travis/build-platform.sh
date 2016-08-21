@@ -10,4 +10,4 @@ fi
 
 ionic platform remove $PLATFORM
 ionic platform add $PLATFORM
-ionic build android $PLATFORM
+ionic build $PLATFORM
