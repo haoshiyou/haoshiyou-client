@@ -5,7 +5,7 @@
   },
   "globalDependencies": {
     "firebase": "registry:dt/firebase#2.4.1+20160412125105",
-    "google.maps": "registry:dt/google.maps#3.20.0+20160414124451",
+    "google.maps": "registry:dt/google.maps#3.20.0+20160805173050",
     "log4javascript": "registry:dt/log4javascript#0.0.0+20160514173738",
     "phonegap-plugin-push": "registry:dt/phonegap-plugin-push#0.0.0+20160501153936",
     "underscore": "registry:dt/underscore#1.7.0+20160505190121"
@@ -13,5 +13,9 @@
   "dependencies": {
     "moment": "registry:npm/moment#2.10.5+20160211003958",
     "requirejs": "registry:npm/requirejs#2.2.0+20160319062357"
+  },
+  "globalDevDependencies": {
+    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
+    "node": "registry:dt/node#6.0.0+20160818175514"
   }
 }

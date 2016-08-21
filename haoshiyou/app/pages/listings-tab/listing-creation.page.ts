@@ -13,9 +13,8 @@ import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
 import {NotificationService} from "../../services/notfication.service";
 
-// TODO(xinbenlv):
-const DEFAULT_CENTER = new google.maps.LatLng(37.41666, -122.09106);
-
+const DEFAULT_LAT:number = 37.41666;
+const DEFAULT_LNG:number = -122.09106;
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -47,8 +46,8 @@ export class CreationPage implements OnInit {
       this.logger.debug(`Create a listing`);
       this.listing = <Listing>{};
       this.listing.id = uuid();
-      this.listing.lat = DEFAULT_CENTER.lat();
-      this.listing.lng = DEFAULT_CENTER.lng();
+      this.listing.lat = DEFAULT_LAT;
+      this.listing.lng = DEFAULT_LNG;
     }
     if (!this.listing.imageIds) this.listing.imageIds = [];
     this.logger.debug("Initialized CreationPage with listing %s", JSON.stringify(this.listing));
@@ -57,7 +56,7 @@ export class CreationPage implements OnInit {
   ngOnInit():any {
     this.platform.ready().then(() => {
       var minZoomLevel = 9;
-  
+
       // Load Google Maps
       /* TODO(xinbenlv): follow example here
        * https://codingwithspike.wordpress.com/2014/08/13/loading-google-maps-in-cordova-the-right-way/
