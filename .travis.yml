@@ -13,7 +13,7 @@ cache:
 notifications:
   slack: haoshiyou:eSZq9zT9wMllEJYHMITggGky
 before_install:
-  - . $HOME/.nvm/nvm.sh
+  - $HOME/.nvm/nvm.sh
   - nvm install v4
   - cd haoshiyou 
   # download config.json from haoshiyou-security repository with a token
