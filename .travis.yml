@@ -2,8 +2,6 @@
 language: node_js
 env:
   CXX=g++-4.8
-  ANDROID_HOME=$PWD/android-sdk-linux
-  PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
 node_js:
   - '4.4'
 matrix:
