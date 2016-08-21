@@ -17,13 +17,9 @@ before_install:
   # download config.json from haoshiyou-security repository with a token
   - ./travis/download-config.sh
   - ./travis/install-platform-sdk.sh
-  - export ANDROID_HOME=$PWD/android-sdk-linux
-  - export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
 install:
   - ./travis/install-ionic-sdk.sh
   - npm install
 
 script:
-  - ionic platform remove android
-  - ionic platform add android
-  - ionic build android --release
+  - ./travis/build-platform.sh

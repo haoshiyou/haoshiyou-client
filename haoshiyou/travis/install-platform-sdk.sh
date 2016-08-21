@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-  brew update
+  echo "nothing todo for osx"
 else
   wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
   tar -xvf android-sdk_r24.4-linux.tgz
