@@ -30,8 +30,9 @@
     "ionic-gulp-html-copy": "1.0.0",
     "ionic-gulp-sass-build": "1.0.0",
     "ionic-gulp-scripts-copy": "2.0.0",
+    "node-sass": "3.8.0",
     "run-sequence": "1.1.5",
-    "xml2js": "^0.4.17"
+    "xml2js": "0.4.17"
   },
   "cordovaPlugins": [
     "cordova-plugin-device",
