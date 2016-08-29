@@ -91,6 +91,6 @@ module.exports = function(config) {
     });
 
     if (process.env.TRAVIS || process.env.CIRCLECI) {
-        config.browsers = ['Chrome', 'PhantomJS'];
+        config.browsers = ['Chrome_travis_ci', 'PhantomJS'];
     }
 };

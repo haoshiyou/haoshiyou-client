@@ -19,7 +19,6 @@ before_install:
   # download config.json from haoshiyou-security repository with a token
   - ./travis/download-config.sh
   - ./travis/install-platform-sdk.sh
-  - npm install -g gulp
 install:
   - ./travis/install-ionic-sdk.sh
   - npm install
