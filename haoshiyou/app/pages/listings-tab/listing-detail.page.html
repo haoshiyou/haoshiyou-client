@@ -32,6 +32,9 @@
             <ion-badge class="{{ listing.type == 0 ? 'badge-secondary' : 'badge-primary'}}" item-left>
                 {{listing.type|enumMsgPipe}}
             </ion-badge>
+            <a primary clear item-left href="javascript:void(0)" (click)="longImage()">
+                下载长图片
+            </a>
             <button primary clear item-right (click)="startChat()">
                 私信<ion-icon name="chatbubbles"></ion-icon>
             </button>

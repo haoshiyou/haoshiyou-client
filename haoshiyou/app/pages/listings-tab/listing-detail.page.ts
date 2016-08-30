@@ -16,6 +16,8 @@ import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 
 declare let window:any;
+declare let $; // jQuery
+declare let html2canvas;
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
@@ -67,6 +69,28 @@ export class ListingDetailPage {
     }).then(() => {
       this.nav.push(ChatWindowPage, {thread: thread});
     });
+  }
+  
+  longImage() {
+    var dataUrl;
+    //TODO resize image
+    var element = $("ion-card");
+    var originWidth = element.width();
+    var originHeight = element.height();
+    var longImgWidth = 400;
+    var longImgHeight = longImgWidth * originHeight / originWidth;
+    var canvasHeight = $("ion-card").height() * 1.05;
+    var globalCanvas;
+    $("ion-card")[0].ownerDocument.defaultView.innerHeight = canvasHeight;
+    html2canvas($("ion-card"), {
+      onrendered: function(canvas) {
+        //ref: http://techslides.com/save-svg-as-an-image
+        var img = canvas.toDataURL()
+        window.open(img);
+      },
+      useCORS: true,
+      allowTaint: false
+    } );
   }
 
   // TODO(xinbenlv): merge with the same piece of code in image-grid.
