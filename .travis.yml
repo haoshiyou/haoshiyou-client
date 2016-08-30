@@ -15,6 +15,7 @@ cache:
 notifications:
   slack: haoshiyou:eSZq9zT9wMllEJYHMITggGky
 before_install:
+  - npm install -g gulp # needed by OSX env
   - cd haoshiyou 
   # download config.json from haoshiyou-security repository with a token
   - ./travis/download-config.sh
