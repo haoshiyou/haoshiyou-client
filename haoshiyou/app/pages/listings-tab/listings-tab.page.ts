@@ -5,7 +5,6 @@ import {OnInit, OnDestroy, Inject} from "@angular/core";
 import {CreationPage} from "./listing-creation.page.ts";
 import {ListingItem} from "./listing-item.comp";
 import {ListingDetailPage} from "./listing-detail.page";
-import LatLng = google.maps.LatLng;
 import {Observable} from "rxjs/Observable";
 import {loggerToken} from "../../services/log.service";
 import {Logger} from "log4javascript/log4javascript";

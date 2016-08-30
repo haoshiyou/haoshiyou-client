@@ -1,6 +1,9 @@
 # Specifies files to intentionally ignore when using Git
 # http://git-scm.com/docs/gitignore
+
+# credential information from https://github.com/xinbenlv/haoshiyou-security
 www/config
+
 npm-debug.log
 node_modules/
 www/build/
@@ -10,3 +13,8 @@ plugins/
 .DS_Store
 Thumbs.db
 .gitmodules
+*.mobileprovision
+
+haoshiyou.app.dSYM.zip
+haoshiyou.ipa
+release-cred/
