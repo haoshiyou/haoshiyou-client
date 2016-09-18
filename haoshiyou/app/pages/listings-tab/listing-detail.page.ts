@@ -16,12 +16,22 @@ import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 
 declare let window:any;
+declare let QRCode:any;
+
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
   directives: [ImageGridComponent, MapViewComponent]
 })
 export class ListingDetailPage {
+  generateQrCode(link:string = "http://haoshiyou.org"):any {
+    var el = document.getElementById('qrcode');
+    while (el.firstChild) {
+      el.removeChild(el.firstChild);
+    }
+    var qrcode = new QRCode(el);
+    qrcode.makeCode(link);
+  }
   private listing:Listing;
   private owner:User;
   private meId:string;
