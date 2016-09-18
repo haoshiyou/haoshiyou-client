@@ -12,7 +12,6 @@ plugins/
 *.swp
 .DS_Store
 Thumbs.db
-.gitmodules
 *.mobileprovision
 
 haoshiyou.app.dSYM.zip

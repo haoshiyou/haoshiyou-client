@@ -27,6 +27,7 @@ export class ListingDetailPage {
   private listing:Listing;
   private owner:User;
   private meId:string;
+  public static get GOOGLE_MAPS_KEY(): string { return 'AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY'; }
   constructor(private threadService:IThreadService,
               private userService:IUserService,
               private nav:NavController,
@@ -101,21 +102,22 @@ export class ListingDetailPage {
     var mapView = $("map-view"); 
     var size = mapView.width() + "x" + mapView.height();
     mapView.hide();
-    if ($("#staticmap").children().length == 0) {
+    if ($("#static-map").children().length == 0) {
       var img = new Image();
-      img.src = "https://maps.googleapis.com/maps/api/staticmap?"
+      var url = "https://maps.googleapis.com/maps/api/staticmap?"
           + "&zoom=9&size=" + size 
           + "&maptype=roadmap&markers=color:red|" 
           + this.listing.lat + "," + this.listing.lng
-          + "&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY";
-      $("#staticmap").append(img);
+          + "&key=" + ListingDetailPage.GOOGLE_MAPS_KEY;
+      img.src = url;
+      $("#static-map").append(img);
     }
-    $("#staticmap").show();
+    $("#static-map").show();
   }
 
   private recoverMap() {
     $("map-view").show();
-    $("#staticmap").hide();
+    $("#static-map").hide();
   }
 
   // TODO(xinbenlv): merge with the same piece of code in image-grid.
