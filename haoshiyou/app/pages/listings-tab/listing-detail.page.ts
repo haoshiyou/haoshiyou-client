@@ -26,6 +26,8 @@ declare let QRCode:any;
 export class ListingDetailPage {
   generateQrCode(link:string = "http://haoshiyou.org"):any {
     var el = document.getElementById('qrcode');
+
+    // Clear existing children inside of the qrcode div.
     while (el.firstChild) {
       el.removeChild(el.firstChild);
     }
