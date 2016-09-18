@@ -16,8 +16,9 @@ import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 
 declare let window:any;
+declare let $; // jQuery
+declare let html2canvas;
 declare let QRCode:any;
-
 @Page({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
@@ -37,6 +38,7 @@ export class ListingDetailPage {
   private listing:Listing;
   private owner:User;
   private meId:string;
+  public static get GOOGLE_MAPS_KEY(): string { return 'AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY'; }
   constructor(private threadService:IThreadService,
               private userService:IUserService,
               private nav:NavController,
@@ -79,6 +81,54 @@ export class ListingDetailPage {
     }).then(() => {
       this.nav.push(ChatWindowPage, {thread: thread});
     });
+  }
+  
+  longImage() {
+    this.reDrawMap();
+    //TODO resize image
+    var element = $("ion-card");
+    var originWidth = element.width();
+    var originHeight = element.height();
+    var longImgWidth = 400;
+    var longImgHeight = longImgWidth * originHeight / originWidth;
+    var canvasHeight = $("ion-card").height() * 1.05;
+    var globalCanvas;
+    $("ion-card")[0].ownerDocument.defaultView.innerHeight = canvasHeight;
+    html2canvas($("ion-card"), {
+      onrendered: (canvas)=>{
+        //ref1: http://techslides.com/save-svg-as-an-image
+        //ref2: https://blog.codepen.io/2013/10/08/cross-domain-images-tainted-canvas/
+        canvas.style.width = longImgWidth + 'px';
+        canvas.style.height = longImgHeight + 'px';
+        var img = canvas.toDataURL()
+        this.recoverMap();
+        window.open(img);
+      },
+      useCORS: true,
+      allowTaint: false
+    } );
+  }
+
+  private reDrawMap() {
+    var mapView = $("map-view"); 
+    var size = mapView.width() + "x" + mapView.height();
+    mapView.hide();
+    if ($("#static-map").children().length == 0) {
+      var img = new Image();
+      var url = "https://maps.googleapis.com/maps/api/staticmap?"
+          + "&zoom=9&size=" + size 
+          + "&maptype=roadmap&markers=color:red|" 
+          + this.listing.lat + "," + this.listing.lng
+          + "&key=" + ListingDetailPage.GOOGLE_MAPS_KEY;
+      img.src = url;
+      $("#static-map").append(img);
+    }
+    $("#static-map").show();
+  }
+
+  private recoverMap() {
+    $("map-view").show();
+    $("#static-map").hide();
   }
 
   // TODO(xinbenlv): merge with the same piece of code in image-grid.
