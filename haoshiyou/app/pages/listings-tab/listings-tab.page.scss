@@ -1,3 +1,105 @@
 .listings-tab {
 
 }
+.labelsNone{
+    
+}
+
+.labels {
+    margin-top:-3px;
+    padding: 5px;
+    position: absolute;
+    visibility: visible;
+    z-index: 1030;
+}
+.labels .arrow{
+    border-top-color: #0000FF;
+    border-right-color: rgba(0,0,0,0);
+    border-bottom-color: rgba(0,0,0,0);
+    border-left-color: rgba(0,0,0,0);
+    border-width: 5px 5px 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-style: solid;
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+.labels .inner{
+    background-color: #0000FF;
+    border-radius: 4px;
+    color: #FFFFFF;
+    max-width: 200px;
+    padding: 3px 8px;
+    text-align: center;
+    text-decoration: none;  
+}
+
+
+.labelsRoom {
+    margin-top:-3px;
+    padding: 5px;
+    position: absolute;
+    visibility: visible;
+    z-index: 1030;
+}
+/*want room: blue*/
+.labelsRoom .arrow{
+    border-top-color: #387ef5;
+    border-right-color: rgba(0,0,0,0);
+    border-bottom-color: rgba(0,0,0,0);
+    border-left-color: rgba(0,0,0,0);
+    border-width: 5px 5px 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-style: solid;
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+.labelsRoom .inner{
+    background-color: #387ef5;
+    border-radius: 4px;
+    color: #FFFFFF;
+    max-width: 200px;
+    padding: 3px 4px;
+    text-align: center;
+    text-decoration: none;  
+}
+
+
+.labelsRoomMate {
+    margin-top:-3px;
+    padding: 5px;
+    position: absolute;
+    visibility: visible;
+    z-index: 1030;
+}
+/*want roommate: green*/
+
+.labelsRoomMate .arrow{
+    border-top-color: #32db64;
+    border-right-color: rgba(0,0,0,0);
+    border-bottom-color: rgba(0,0,0,0);
+    border-left-color: rgba(0,0,0,0);
+    border-width: 5px 5px 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-style: solid;
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+.labelsRoomMate .inner{
+    background-color: #32db64;
+    border-radius: 4px;
+    color: #FFFFFF;
+    max-width: 200px;
+    padding: 3px 4px;
+    text-align: center;
+    text-decoration: none;  
+    font-weight: 900;
+}

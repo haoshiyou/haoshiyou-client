@@ -1,6 +1,6 @@
 import {Page, Platform, NavController, Alert} from "ionic-angular";
 import {IListingService} from "../../services/listings/listing.service.ts";
-import {Listing} from "../../models/listing";
+import {ListingType, Listing} from "../../models/listing";
 import {OnInit, OnDestroy, Inject} from "@angular/core";
 import {CreationPage} from "./listing-creation.page.ts";
 import {ListingItem} from "./listing-item.comp";
@@ -10,6 +10,7 @@ import {Observable} from "rxjs/Observable";
 import {loggerToken} from "../../services/log.service";
 import {Logger} from "log4javascript/log4javascript";
 import {AuthService} from "../../services/auth.service";
+declare let MarkerWithLabel:any;
 
 /**
  * A page contains a map view and a list showing the listings.
@@ -35,7 +36,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private nav:NavController,
               private auth:AuthService,
               @Inject(loggerToken) private logger:Logger) {
-
   }
 
   ngOnInit() {
@@ -60,7 +60,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       this.updateMarkers();
     });
 
-
     this.listingObservable = this.listingService.observableListings();
     this.listingObservable.subscribe((listings:Listing[]) => {
       /* TODO(xinbenlv): currently get all, need to narrow down. */
@@ -69,17 +68,50 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     });
   }
 
+
   private updateMarkers() {
     if(this.mapReady && this.listings) {
       this.markers = [];
       for (let listing of this.listings) {
-        let opt:google.maps.MarkerOptions = <google.maps.MarkerOptions>{};
-        opt.position = new google.maps.LatLng(listing.lat, listing.lng);
-        opt.animation = google.maps.Animation.DROP;
-        opt.map = this.map;
-        let marker = new google.maps.Marker(opt);
+        //let opt:google.maps.MarkerOptions = <google.maps.MarkerOptions>{};
+        //opt.position = new google.maps.LatLng(listing.lat, listing.lng);
+        //opt.animation = google.maps.Animation.DROP;
+        //opt.map = this.map;
+        //let marker = new google.maps.Marker(opt);
+
+        //MarkerWithLabel.prototype = new google.maps.OverlayView();
+        //MarkerWithLabel.prototype.onRemove= function(){}
+
+
+        var priceConent= listing.price === undefined ? "<div class='arrow'></div><div class='inner'></div>" : "<div class='arrow'></div><div class='inner'>" + listing.price + "</div>";
+        var image = {
+            //url: 'http://i.imgur.com/2CRELHa.png',
+            //url:'http://res.cloudinary.com/xinbenlv/image/upload/c_scale,q_100,w_40/v1473638008/roomies_pin.png',
+            url:'http://res.cloudinary.com/haoshiyou/image/upload/c_scale,h_1,w_1/v1474262457/empty_yn5xxx.png',
+            // This marker is 20 pixels wide by 32 pixels high.
+            size: new google.maps.Size(20, 32),
+            // The origin for this image is (0, 0).
+            origin: new google.maps.Point(0, 0),
+            // The anchor for this image is the base of the flagpole at (0, 32).
+            anchor: new google.maps.Point(0,0)
+        };
+        var labelCss = (listing.type== ListingType.ROOMMATE_WANTED ? "labelsRoomMate":"labelsRoom"); 
+        var labelanchor= listing.price===undefined? new google.maps.Point(11, 17):new google.maps.Point(20, 30);
+        var marker = new MarkerWithLabel({
+          position: new google.maps.LatLng(listing.lat, listing.lng),
+          map: this.map,
+          labelContent: priceConent,
+          labelAnchor: labelanchor,//new google.maps.Point(20, 30),
+          labelClass: labelCss, // the CSS class for the label 
+          title:listing.title,
+          icon: image,
+          labelStyle: {opacity: 0.95},
+          anchor: new google.maps.Point(0, 0)
+        });
         marker.addListener('click', () => this.gotoDetail(listing));
-        this.markers.push(marker);
+        //if(! listing.price) maker.setVisible(false);
+
+       this.markers.push(marker);
       }
     }
   }

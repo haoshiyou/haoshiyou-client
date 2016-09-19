@@ -1,9 +1,14 @@
 <ion-item *ngIf="listing" (click)="gotoDetail()">
     <h2>{{ listing.title }}</h2>
-    <p>{{ listing.content }}</p>
+    <p> 
+    	{{ listing.content }}
+    </p>
+
     <p>{{ listing.lastUpdated | timeFromNow }}
         <ion-badge class="{{ listing.type == 0 ? 'badge-secondary' : 'badge-primary'}}">
             {{listing.type|enumMsgPipe}}
         </ion-badge>
+        <font color= "{{listing.type==0? '#32db64':'#387ef5'}}">{{listing.price==undefined? ' ':('$'+listing.price)}}</font>
     </p>
+
 </ion-item>

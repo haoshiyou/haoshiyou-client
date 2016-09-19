@@ -9,53 +9,39 @@
 
 <ion-content class="creation" id="page-container">
     <ion-item>
-        <ion-label>位置</ion-label>
-        <ion-label>{{localityText}}</ion-label>
-    </ion-item>
-    <div style="width:100%;height:250px" id="map_drag_canvas"></div>
-    <ion-item>
-        <ion-label>类型</ion-label>
-        <ion-select required [(ngModel)]="listing.type" (change)="dirty['type']=true">
-            <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
-        </ion-select>
-        <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
-            required
-        <
-  private deleteListing() {
-    let prompt = Alert.create({
-      title: '确认删除?',
-      buttons: [
-        {
-          text: '取消',
-          handler: data => {
-            this.nav.pop(); // alert
-          }
-        },
-        {
-          text: '删除',
-          handler: data => {
-            this.listingService.removeListing(this.listing.id).then(()=>{
-              this.nav.pop().then(()=>{
-                this.nav.pop();
-              }); // alert
-            });
-          }
-        }
-      ]
-    });
-    this.nav.present(prompt);
-  }/p>
-    </ion-item>
-    <ion-item>
         <ion-label fixed>标题</ion-label>
-        <ion-input required [(ngModel)]="listing.title" (change)="dirty['content']=true"></ion-input>
+        <ion-input required [(ngModel)]="listing.title" (change)="dirty['title']=true"></ion-input>
         <p style="color: red;" item-right *ngIf="dirty['title'] && !listing.title">
         required
         </p>
     </ion-item>
 
+
     <ion-item>
-        <ion-label>详情</ion-label>
+        <ion-label fixed>类型</ion-label>
+        <ion-select required [(ngModel)]="listing.type" (change)="dirty['type']=true">
+            <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
+        </ion-select>
+        <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
+            required
+        </p>
+    </ion-item>
+
+
+    <ion-item>
+        <ion-label fixed>价格</ion-label>
+        <ion-input type="number" [(ngModel)]="listing.price" (change)="dirty['price']=true"></ion-input>
+    </ion-item>
+
+
+    <ion-item>
+        <ion-label fixed>位置</ion-label>
+        <ion-label>{{localityText}}</ion-label>
+    </ion-item>
+    <div style="width:100%;height:250px" id="map_drag_canvas"></div>
+
+    <ion-item>
+        <ion-label fixed>详情</ion-label>
         <ion-textarea required [(ngModel)]="listing.content" (change)="dirty['content']=true"></ion-textarea>
         <p style="color: red;" item-right *ngIf="dirty['content'] && !listing.content">
             required

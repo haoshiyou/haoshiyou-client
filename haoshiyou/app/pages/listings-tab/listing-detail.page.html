@@ -15,7 +15,9 @@
         </ion-item>
         <ion-item>
             <h2>{{listing.title}}</h2>
-            <p>{{listing.lastUpdated|timeFromNow}}</p>
+            <p>{{listing.lastUpdated|timeFromNow}}
+                <font color= "{{listing.type==0? '#32db64':'#387ef5'}}">{{listing.price==undefined? ' ':('$'+listing.price)}}</font>
+            </p>
         </ion-item>
         <ion-card-content>
             <p style="white-space: pre-line">{{listing.content}}</p>

@@ -20,4 +20,5 @@ export interface Listing {
   ownerId:string;
   lastUpdated:number; // in UTC Milliseconds
   imageIds:string[]; // ids
+  price:number;
 }

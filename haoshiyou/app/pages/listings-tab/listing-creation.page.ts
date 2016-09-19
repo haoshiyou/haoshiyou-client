@@ -73,6 +73,8 @@ export class CreationPage implements OnInit {
       this.marker.setMap(this.map);
     });
 
+    
+
     this.marker = new google.maps.Marker(<google.maps.MarkerOptions>{
       position: new google.maps.LatLng(this.listing.lat, this.listing.lng),
       animation: google.maps.Animation.DROP,
@@ -110,6 +112,7 @@ export class CreationPage implements OnInit {
       this.dirty['title'] = true;
       this.dirty['content'] = true;
       this.dirty['type'] = true;
+      this.dirty['price']=true;
     }
   }
 
