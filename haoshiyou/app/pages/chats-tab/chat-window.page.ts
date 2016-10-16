@@ -1,4 +1,7 @@
-import {OnInit, OnDestroy, ElementRef, ViewChild, Inject, ChangeDetectorRef} from "@angular/core";
+import {
+    OnInit, OnDestroy, ElementRef, ViewChild, Inject, ChangeDetectorRef,
+    Component
+} from "@angular/core";
 import {FORM_DIRECTIVES} from "@angular/common";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {User, Thread, Message} from "../../models/models";
@@ -9,7 +12,7 @@ import {Subscription} from "rxjs/Subscription";
 import {Logger} from "log4javascript/log4javascript";
 import {loggerToken} from "../../services/log.service";
 import {NotificationService} from "../../services/notfication.service";
-@Page({
+@Component({
   selector: 'chat-window',
   directives: [ChatMessageComp, FORM_DIRECTIVES],
   templateUrl: 'build/pages/chats-tab/chat-window.page.html'

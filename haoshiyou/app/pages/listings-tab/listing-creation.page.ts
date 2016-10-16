@@ -1,5 +1,5 @@
 import {Page, Platform, NavParams, NavController, Alert} from "ionic-angular";
-import {OnInit, Inject} from "@angular/core";
+import {OnInit, Inject, Component} from "@angular/core";
 import {EnumMsgPipe} from "../../pipes/enum-msg.pipe";
 import {ListingType, Listing} from "../../models/listing";
 import {uuid} from "../../util/uuid";
@@ -18,7 +18,7 @@ const DEFAULT_LNG:number = -122.09106;
 /**
  * A page contains a map view and a list showing the listings.
  */
-@Page({
+@Component({
   templateUrl: 'build/pages/listings-tab/listing-creation.page.html',
   pipes: [EnumMsgPipe, CityNZipPipe],
   directives: [ImageGridComponent]

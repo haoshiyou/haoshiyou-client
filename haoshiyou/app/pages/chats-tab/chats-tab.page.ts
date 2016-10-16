@@ -1,5 +1,5 @@
 import {Page} from "ionic-angular";
-import {OnInit, OnDestroy, Inject, Output, EventEmitter} from "@angular/core";
+import {OnInit, OnDestroy, Inject, Output, EventEmitter, Component} from "@angular/core";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {ChatWindowPage} from "./chat-window.page";
 import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe.ts";
@@ -13,7 +13,7 @@ import {AuthService} from "../../services/auth.service";
 /**
  * TODO(xinbenlv): optimize the messages update process and ChangeDetection for optimal user experience.
  */
-@Page({
+@Component({
   selector: 'chat-app',
   templateUrl: 'build/pages/chats-tab/chats-tab.page.html',
   directives: [ChatWindowPage, ChatThreadComp],

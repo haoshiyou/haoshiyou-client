@@ -1,12 +1,13 @@
-<ion-navbar *navbar>
-    <ion-title>
-        创建
-    </ion-title>
-    <ion-buttons end>
-        <button (click)="save()">保存</button>
-    </ion-buttons>
-</ion-navbar>
-
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            创建
+        </ion-title>
+        <ion-buttons end>
+            <button (click)="save()">保存</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
 <ion-content class="creation" id="page-container">
     <ion-item>
         <ion-label>位置</ion-label>
@@ -15,7 +16,7 @@
     <div style="width:100%;height:250px" id="map_drag_canvas"></div>
     <ion-item>
         <ion-label>类型</ion-label>
-        <ion-select required [(ngModel)]="listing.type" (change)="dirty['type']=true">
+        <ion-select required [(ngModel)]="listing.type" (ionChange)="dirty['type']=true">
             <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
         </ion-select>
         <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">

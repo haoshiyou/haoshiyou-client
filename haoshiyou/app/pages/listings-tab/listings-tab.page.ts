@@ -1,7 +1,7 @@
 import {Page, Platform, NavController, Alert} from "ionic-angular";
 import {IListingService} from "../../services/listings/listing.service.ts";
 import {Listing} from "../../models/listing";
-import {OnInit, OnDestroy, Inject} from "@angular/core";
+import {OnInit, OnDestroy, Inject, Component} from "@angular/core";
 import {CreationPage} from "./listing-creation.page.ts";
 import {ListingItem} from "./listing-item.comp";
 import {ListingDetailPage} from "./listing-detail.page";
@@ -13,7 +13,7 @@ import {AuthService} from "../../services/auth.service";
 /**
  * A page contains a map view and a list showing the listings.
  */
-@Page({
+@Component({
   templateUrl: 'build/pages/listings-tab/listings-tab.page.html',
   directives: [ListingItem]
 })

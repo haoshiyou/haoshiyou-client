@@ -5,7 +5,7 @@ import {ICredentialService} from "../../services/credential.service";
 import {loggerToken} from "../../services/log.service";
 import {RemoveModal} from "./remove.modal";
 import {Logger} from "log4javascript";
-import {Modal, NavController, Platform} from "ionic-angular";
+import {Modal, NavController, ModalController, Platform} from "ionic-angular";
 
 declare let window;
 declare let $; // jQuery
@@ -41,6 +41,7 @@ export class ImageGridComponent implements OnInit {
       private imageService:IImageService,
       private cred:ICredentialService,
       private nav:NavController,
+      private modalCtrl:ModalController,
       private platform:Platform,
       @Inject(loggerToken) private logger:Logger) {
   }
@@ -94,12 +95,12 @@ export class ImageGridComponent implements OnInit {
 
   //noinspection JSUnusedLocalSymbols, used in HTML
   private clickDelete() {
-    this.removeModal = Modal.create(RemoveModal, {imageIds: this.imageIds});
-    this.removeModal.onDismiss((data)=>{
+    this.removeModal = this.modalCtrl.create(RemoveModal, {imageIds: this.imageIds});
+    this.removeModal.onDidDismiss((data)=>{
       this.onUpdateImageIds(data.imageIds);
     });
 
-    this.nav.present(this.removeModal, {animate: true});
+    this.removeModal.present();
   }
 
   private onUpdateImageIds(imageIds:string[]) {

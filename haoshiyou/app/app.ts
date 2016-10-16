@@ -1,6 +1,6 @@
-import {App, Platform} from "ionic-angular";
+import {Platform, ionicBootstrap} from "ionic-angular";
 import {TabsPage} from "./pages/tabs/tabs";
-import {provide, Inject} from "@angular/core";
+import {provide, Inject, Component} from "@angular/core";
 import {Http, HTTP_PROVIDERS} from "@angular/http";
 import {AuthHttp, AuthConfig} from "angular2-jwt";
 import {AuthService} from "./services/auth.service.ts";
@@ -20,42 +20,8 @@ import {NotificationService} from "./services/notfication.service";
 
 declare let ga:any;
 
-@App({
-  template: '<ion-nav [root]="rootPage"></ion-nav>',
-  config: {
-    tabSubPages: true
-  }, // http://ionicframework.com/docs/v2/api/config/Config/
-  providers: [
-    provide(ICredentialService, {useClass: JsonCredentialService}),
-    provide(FirebaseUrl, {
-      useFactory: (credService:ICredentialService) => {
-        return credService.getCred('FIREBASE_BASE_URL');
-      }, deps: [ICredentialService]
-    }),
-    provide(AuthHttp, {
-      useFactory: (http) => {
-        return new AuthHttp(new AuthConfig(), http);
-      },
-      deps: [Http]
-    }),
-    AuthService,
-    provide(IUserService, {useClass: FirebaseUserService}),
-    provide(IThreadService, {useClass: FirebaseThreadService}),
-    provide(IMessageService, {useClass: FirebaseMessageService}),
-    provide(IListingService, {useClass: FirebaseListingService}),
-    provide(IImageService, {useClass: CloudinaryImageService}),
-    NotificationService,
-    LogService,
-
-    provide(loggerToken, {
-      useFactory: (logService:LogService) => {
-        return logService.getLogger();
-      }, deps: [LogService]
-    }),
-    MapService,
-    FIREBASE_PROVIDERS,
-    HTTP_PROVIDERS
-  ]
+@Component({
+  template: '<ion-nav [root]="rootPage"></ion-nav>'
 })
 export class MyApp {
 
@@ -120,3 +86,45 @@ export class MyApp {
 
   }
 }
+
+
+
+// Pass the main app component as the first argument
+// Pass any providers for your app in the second argument
+// Set any config for your app as the third argument:
+// http://ionicframework.com/docs/v2/api/config/Config/
+
+ionicBootstrap(MyApp, [
+  provide(ICredentialService, {useClass: JsonCredentialService}),
+  provide(FirebaseUrl, {
+    useFactory: (credService:ICredentialService) => {
+      return credService.getCred('FIREBASE_BASE_URL');
+    }, deps: [ICredentialService]
+  }),
+  provide(AuthHttp, {
+    useFactory: (http) => {
+      return new AuthHttp(new AuthConfig(), http);
+    },
+    deps: [Http]
+  }),
+  AuthService,
+  provide(IUserService, {useClass: FirebaseUserService}),
+  provide(IThreadService, {useClass: FirebaseThreadService}),
+  provide(IMessageService, {useClass: FirebaseMessageService}),
+  provide(IListingService, {useClass: FirebaseListingService}),
+  provide(IImageService, {useClass: CloudinaryImageService}),
+  NotificationService,
+  LogService,
+
+  provide(loggerToken, {
+    useFactory: (logService:LogService) => {
+      return logService.getLogger();
+    }, deps: [LogService]
+  }),
+  MapService,
+  FIREBASE_PROVIDERS,
+  HTTP_PROVIDERS
+], {
+      tabsHideOnSubPages: true
+}, // http://ionicframework.com/docs/v2/api/config/Config/
+);

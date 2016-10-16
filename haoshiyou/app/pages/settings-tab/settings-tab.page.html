@@ -1,9 +1,10 @@
-<ion-navbar *navbar>
-    <ion-title>
-        设置
-    </ion-title>
-</ion-navbar>
-
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            设置
+        </ion-title>
+    </ion-navbar>
+</ion-header>
 <ion-content padding *ngIf="!auth.authenticated()">
 
     <button block (click)="auth.login()">登录</button>

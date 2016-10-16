@@ -10,7 +10,7 @@ import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 import {ImageGridComponent} from "./image-grid.comp";
 import {MapViewComponent} from "./map-view.comp";
 import {loggerToken, LogService} from "../../services/log.service";
-import {Inject} from "@angular/core";
+import {Inject, Component} from "@angular/core";
 import {Logger} from "log4javascript";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
@@ -18,7 +18,7 @@ import {IImageService} from "../../services/image.service";
 declare let window:any;
 declare let QRCode:any;
 
-@Page({
+@Component({
   templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
   pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
   directives: [ImageGridComponent, MapViewComponent]
