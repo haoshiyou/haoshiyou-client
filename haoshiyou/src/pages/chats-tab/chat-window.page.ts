@@ -14,8 +14,7 @@ import {loggerToken} from "../../services/log.service";
 import {NotificationService} from "../../services/notfication.service";
 @Component({
   selector: 'chat-window',
-  directives: [ChatMessageComp, FORM_DIRECTIVES],
-  templateUrl: 'build/pages/chats-tab/chat-window.page.html'
+  templateUrl: 'chat-window.page.html'
 })
 export class ChatWindowPage implements OnInit, OnDestroy {
   @ViewChild(Content) content:Content;

@@ -7,8 +7,7 @@ import {EnumMsgPipe} from "../../pipes/enum-msg.pipe";
 
 @Component({
   selector: 'listing-item',
-  templateUrl: 'build/pages/listings-tab/listing-item.comp.html',
-  pipes: [TimeFromNowPipe, EnumMsgPipe]
+  templateUrl: 'listing-item.comp.html',
 })
 export class ListingItem {
   @Input() listing:Listing;

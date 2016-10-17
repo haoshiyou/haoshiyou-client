@@ -4,9 +4,9 @@
             <ion-thumbnail item-left>
                 <img src="{{imageId | imageIdToUrlPipe }}" alt="Image {{imageId}">
             </ion-thumbnail>
-            <ion-checkbox dark [(ngModel)]="checkboxes[i]" item-right></ion-checkbox>
+            <ion-checkbox color="dark" [(ngModel)]="checkboxes[i]" item-right></ion-checkbox>
         </ion-item>
-        <button block primary (click)="save()">完毕</button>
-        <button block clear (click)="cancel()" >取消</button>
+        <button ion-button block color="primary" (click)="save()">完毕</button>
+        <button ion-button block clear (click)="cancel()" >取消</button>
     </ion-list>
 </ion-content>

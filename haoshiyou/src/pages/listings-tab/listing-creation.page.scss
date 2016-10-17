@@ -1,46 +1,48 @@
-.creation {
-  textarea.text-input {
-    height: 150px;
+creation-page {
+  .creation {
+    textarea.text-input {
+      height: 150px;
+    }
   }
-}
 
-.cloudinary-fileupload {
-  display: none;
-}
-.custom-file-upload {
-  position: relative;
-  float:left;
-  display: inline-block;
-}
+  .cloudinary-fileupload {
+    display: none;
+  }
+  .custom-file-upload {
+    position: relative;
+    float: left;
+    display: inline-block;
+  }
 
-.preview {
-  display: inline;
-}
-.preview div {
-  display: inline-block;
-}
+  .preview {
+    display: inline;
+  }
+  .preview div {
+    display: inline-block;
+  }
 
-div.show-image {
-  position: relative;
-  float:left;
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
+  div.show-image {
+    position: relative;
+    float: left;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 
-div.show-image:hover input {
-  display: inline-block;
-}
+  div.show-image:hover input {
+    display: inline-block;
+  }
 
-div.show-image input {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: none;
-}
+  div.show-image input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+  }
 
-input.delete-image {
-  color: #900;
-  border: 1px solid #900;
-  font-size: 150%;
+  input.delete-image {
+    color: #900;
+    border: 1px solid #900;
+    font-size: 150%;
+  }
 }

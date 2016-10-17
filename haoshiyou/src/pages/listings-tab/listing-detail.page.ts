@@ -19,9 +19,7 @@ declare let window:any;
 declare let QRCode:any;
 
 @Component({
-  templateUrl: 'build/pages/listings-tab/listing-detail.page.html',
-  pipes: [EnumMsgPipe, TimeFromNowPipe, ImageIdToUrlPipe],
-  directives: [ImageGridComponent, MapViewComponent]
+  templateUrl: 'listing-detail.page.html',
 })
 export class ListingDetailPage {
   generateQrCode(link:string = "http://haoshiyou.org"):any {

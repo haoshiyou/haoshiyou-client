@@ -4,7 +4,7 @@
             创建
         </ion-title>
         <ion-buttons end>
-            <button (click)="save()">保存</button>
+            <button ion-button (click)="save()">保存</button>
         </ion-buttons>
     </ion-navbar>
 </ion-header>
@@ -79,5 +79,5 @@
                 [isEdit]="true"
         ></image-grid>
     </ion-item>
-    <button block danger (click)="deleteListing()">删除</button>
+    <button ion-button block color="danger" (click)="deleteListing()">删除</button>
 </ion-content>

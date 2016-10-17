@@ -6,7 +6,7 @@ import {IUserService} from "../../services/chats/user.service";
 
 @Component({
   selector: 'chat-thread',
-  templateUrl: 'build/pages/chats-tab/chat-thread.comp.html'
+  templateUrl: 'chat-thread.comp.html'
 })
 export class ChatThreadComp implements OnChanges {
   ngOnChanges(changes:{[propertyName:string]:SimpleChange}) {

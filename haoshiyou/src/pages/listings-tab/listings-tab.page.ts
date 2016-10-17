@@ -14,8 +14,7 @@ import {AuthService} from "../../services/auth.service";
  * A page contains a map view and a list showing the listings.
  */
 @Component({
-  templateUrl: 'build/pages/listings-tab/listings-tab.page.html',
-  directives: [ListingItem]
+  templateUrl: 'listings-tab.page.html',
 })
 export class ListingsTabPage implements OnInit, OnDestroy {
   ngOnDestroy():any {

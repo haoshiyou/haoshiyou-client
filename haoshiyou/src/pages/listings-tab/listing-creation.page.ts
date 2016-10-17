@@ -19,9 +19,8 @@ const DEFAULT_LNG:number = -122.09106;
  * A page contains a map view and a list showing the listings.
  */
 @Component({
-  templateUrl: 'build/pages/listings-tab/listing-creation.page.html',
-  pipes: [EnumMsgPipe, CityNZipPipe],
-  directives: [ImageGridComponent]
+  selector: 'creation-page',
+  templateUrl: 'listing-creation.page.html',
 })
 export class CreationPage implements OnInit {
   //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate

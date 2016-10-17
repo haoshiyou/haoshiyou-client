@@ -11,8 +11,7 @@ declare let window;
 declare let $; // jQuery
 @Component({
   selector: 'image-grid',
-  templateUrl: 'build/pages/listings-tab/image-grid.comp.html',
-  pipes: [ImageIdToUrlPipe]
+  templateUrl: 'image-grid.comp.html',
 })
 export class ImageGridComponent implements OnInit {
   ngOnInit():any {

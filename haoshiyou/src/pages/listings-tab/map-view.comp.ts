@@ -3,7 +3,7 @@ import {Listing} from "../../models/listing";
 
 @Component({
   selector: 'map-view',
-  templateUrl: 'build/pages/listings-tab/map-view.comp.html'
+  templateUrl: 'map-view.comp.html'
 })
 export class MapViewComponent implements OnChanges {
   private map:google.maps.Map;

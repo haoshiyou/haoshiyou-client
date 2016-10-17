@@ -4,8 +4,7 @@ import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 
 @Component({
   selector: 'remove-modal',
-  templateUrl: 'build/pages/listings-tab/remove.modal.html',
-  pipes: [ImageIdToUrlPipe]
+  templateUrl: 'remove.modal.html',
 })
 export class RemoveModal {
   private imageIds:string[];

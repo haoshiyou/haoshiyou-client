@@ -4,8 +4,7 @@ import {User, Message} from "../../models/models";
 
 @Component({
   selector: 'chat-message',
-  pipes: [TimeFromNowPipe],
-  templateUrl: 'build/pages/chats-tab/chat-message.comp.html'
+  templateUrl: 'chat-message.comp.html'
 })
 export class ChatMessageComp {
 

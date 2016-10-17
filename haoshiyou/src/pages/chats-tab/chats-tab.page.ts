@@ -14,10 +14,8 @@ import {AuthService} from "../../services/auth.service";
  * TODO(xinbenlv): optimize the messages update process and ChangeDetection for optimal user experience.
  */
 @Component({
-  selector: 'chat-app',
-  templateUrl: 'build/pages/chats-tab/chats-tab.page.html',
-  directives: [ChatWindowPage, ChatThreadComp],
-  pipes: [TimeFromNowPipe]
+  selector: 'chat-tab',
+  templateUrl: 'chats-tab.page.html',
 })
 export class ChatsTabPage implements OnInit, OnDestroy {
   private meId:string;
