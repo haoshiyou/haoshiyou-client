@@ -6,6 +6,7 @@ import {loggerToken} from "./log.service";
 import {Logger} from "log4javascript/log4javascript";
 import {ICredentialService} from "./credential.service";
 import {Http, Headers, RequestOptions} from "@angular/http";
+import {Push} from "ionic-native";
 
 @Injectable()
 export class NotificationService {
@@ -23,7 +24,7 @@ export class NotificationService {
   register(meId:string):Promise<string> {
     this.logger.info("Try register push notification");
     return this.platform.ready().then(() => {
-      if (typeof PushNotification === "undefined") {
+      if (typeof Push === "undefined") {
         this.logger.info("Not setting up push notification since there is no PushNotification");
         return Promise.resolve(null);
       } else {
@@ -52,7 +53,7 @@ export class NotificationService {
             }
           }
           this.logger.info(`Registering up push notification using opt=${JSON.stringify(opt)}`);
-          this.push = PushNotification.init(opt);
+          this.push = Push.init(opt);
           this.push.on('registration', (data) => {
             this.logger.info(`Push notification registration completed: registrationId=${data.registrationId}`);
             this.registrationId = data.registrationId;
@@ -76,7 +77,7 @@ export class NotificationService {
 
   unregister():Promise<void> {
     this.logger.info("Try unregister push notification");
-    if (typeof PushNotification === "undefined") {
+    if (typeof Push === "undefined") {
       this.logger.info("Not unregistering because PushNotification is undefined");
       return Promise.resolve();
     } else {

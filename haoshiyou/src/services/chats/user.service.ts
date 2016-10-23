@@ -63,7 +63,7 @@ export class FirebaseUserService implements IUserService { // use "class" IUserS
   createOrUpdateUser(user:User):Promise<void> {
     // TODO(xinbenlv): handle when user.id does not exist;
     if (user && user.id) {
-      return this.af.database.object("/users/" + user.id).update(user);
+      return this.af.database.object("/users/" + user.id).update(user) as Promise<void>;
     } else {
       this.logger.warn("user or user.id does not exit");
       return;

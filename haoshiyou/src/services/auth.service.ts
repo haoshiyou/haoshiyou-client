@@ -1,6 +1,6 @@
 // app/services/auth/auth.ts
 
-import {Storage, LocalStorage} from "ionic-angular";
+import {Storage} from "@ionic/storage";
 import {AuthHttp, JwtHelper, tokenNotExpired} from "angular2-jwt";
 import {Injectable, NgZone, Inject} from "@angular/core";
 import {IThreadService} from "./chats/thread.service";
@@ -89,7 +89,6 @@ export class AuthService {
   public user:Object;
   private jwtHelper:JwtHelper = new JwtHelper();
   private lock;
-  private local:Storage = new Storage(LocalStorage);
   private refreshSubscription:any;
   private zoneImpl:NgZone;
   private userSubject:Subject<User>;
@@ -98,7 +97,8 @@ export class AuthService {
               private threadService:IThreadService,
               private credentialService:ICredentialService,
               private logService:LogService,
-              @Inject(loggerToken) private logger:Logger) {
+              @Inject(loggerToken) private logger:Logger,
+              private local:Storage) {
     this.lock = new Auth0Lock(
         this.credentialService.getCred("AUTH0_CLIENT_ID"),
         this.credentialService.getCred("AUTH0_ACCOUNT_DOMAIN")

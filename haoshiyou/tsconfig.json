@@ -10,10 +10,15 @@
     ],
     "module": "es2015",
     "moduleResolution": "node",
-    "target": "es5"
+    "target": "es5",
+    "types": [
+      "firebase",
+      "googlemaps",
+    ]
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "test"
   ],
   "compileOnSave": false,
   "atom": {

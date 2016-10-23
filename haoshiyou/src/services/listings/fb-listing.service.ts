@@ -33,7 +33,7 @@ export class FirebaseListingService implements IListingService {
    * @param id
    */
   getListingById(id:ListingId):Promise<Listing> {
-    return this.af.database.object("/listings/" + id).take(1).toPromise();
+    return this.af.database.object("/listings/" + id).take(1).toPromise() as Promise<Listing>;
   }
 
   /**
@@ -46,7 +46,7 @@ export class FirebaseListingService implements IListingService {
       this.logger.assert(listing.id == listing["$key"]);
       delete  listing["$key"]; // strip $key before update
     }
-    return this.af.database.object("/listings/" + listing.id).update(listing);
+    return this.af.database.object("/listings/" + listing.id).update(listing) as Promise<void>;
   }
 
   /**
@@ -54,6 +54,6 @@ export class FirebaseListingService implements IListingService {
    * @param listingId
    */
   removeListing(listingId:string):Promise<void> {
-    return this.af.database.object("/listings/" + listingId).remove();
+    return this.af.database.object("/listings/" + listingId).remove() as Promise<void>;
   }
 }

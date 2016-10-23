@@ -1,9 +1,8 @@
-import {Page, Platform, NavController, Alert} from "ionic-angular";
-import {IListingService} from "../../services/listings/listing.service.ts";
+import {Platform, NavController, AlertController} from "ionic-angular";
+import {IListingService} from "../../services/listings/listing.service";
 import {Listing} from "../../models/listing";
 import {OnInit, OnDestroy, Inject, Component} from "@angular/core";
-import {CreationPage} from "./listing-creation.page.ts";
-import {ListingItem} from "./listing-item.comp";
+import {CreationPage} from "./listing-creation.page";
 import {ListingDetailPage} from "./listing-detail.page";
 import {Observable} from "rxjs/Observable";
 import {loggerToken} from "../../services/log.service";
@@ -31,9 +30,9 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   constructor(private platform:Platform,
               private listingService:IListingService,
               private nav:NavController,
+              private alertCtrl: AlertController,
               private auth:AuthService,
               @Inject(loggerToken) private logger:Logger) {
-
   }
 
   ngOnInit() {
@@ -88,11 +87,11 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       //causing the nav controller to animate the new page in
       this.nav.push(CreationPage);
     } else {
-      let alert = Alert.create({
+      let alert = this.alertCtrl.create({
         title: '请登录后发帖',
         buttons: ['好的']
       });
-      this.nav.present(alert);
+      alert.present();
     }
   }
 

@@ -1,9 +1,5 @@
-import {Page} from "ionic-angular";
 import {OnInit, OnDestroy, Inject, Output, EventEmitter, Component} from "@angular/core";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
-import {ChatWindowPage} from "./chat-window.page";
-import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe.ts";
-import {ChatThreadComp} from "./chat-thread.comp.ts";
 import {Thread, User} from "../../models/models";
 import {Subscription} from "rxjs/Subscription";
 import {loggerToken} from "../../services/log.service";

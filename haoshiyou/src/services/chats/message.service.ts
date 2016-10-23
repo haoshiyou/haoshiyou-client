@@ -58,9 +58,13 @@ export class FirebaseMessageService implements IMessageService {
   createMessage(message:Message):Promise<void> {
     this.logService.logEvent("message", "sent");
     if (message.id) {
-      return this.af.database.object("/messages/" + message.id).update(message);
+      return this.af.database.object("/messages/" + message.id).update(message) as Promise<void>;
     } else {
-      return this.af.database.list("/messages").push(message);
+      // TODO(xinbenlv): handle when message.id is not set
+      // currently do nothing
+
+      // The following line is uncommented due to compile error.
+      // return this.af.database.list("/messages").push(message) as Promise<void>;
     }
   }
 

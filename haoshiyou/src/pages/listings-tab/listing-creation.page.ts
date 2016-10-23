@@ -1,14 +1,11 @@
-import {Page, Platform, NavParams, NavController, Alert} from "ionic-angular";
+import {Platform, NavParams, NavController, AlertController} from "ionic-angular";
 import {OnInit, Inject, Component} from "@angular/core";
-import {EnumMsgPipe} from "../../pipes/enum-msg.pipe";
 import {ListingType, Listing} from "../../models/listing";
 import {uuid} from "../../util/uuid";
 import {IListingService} from "../../services/listings/listing.service";
-import {CityNZipPipe} from "../../pipes/city-n-zip.pipe";
 import {MapService, ILocality} from "../../services/map.service";
 import {Logger} from "log4javascript";
 import {loggerToken} from "../../services/log.service";
-import {ImageGridComponent} from "./image-grid.comp";
 import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
 import {NotificationService} from "../../services/notfication.service";
@@ -24,7 +21,7 @@ const DEFAULT_LNG:number = -122.09106;
 })
 export class CreationPage implements OnInit {
   //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
-  private typeOptions:ListingType[] = ListingType.values();
+  private typeOptions:ListingType[] = [ListingType.ROOMMATE_WANTED, ListingType.ROOM_WANTED];
   private map:google.maps.Map;
   private marker:google.maps.Marker;
   private listing:Listing;
@@ -34,6 +31,7 @@ export class CreationPage implements OnInit {
   constructor(private platform:Platform, private params:NavParams,
               private listingService:IListingService,
               private nav:NavController,
+              private alertCtrl:AlertController,
               private mapService:MapService,
               @Inject(loggerToken) private logger:Logger,
               private userService:IUserService,
@@ -120,7 +118,7 @@ export class CreationPage implements OnInit {
   }
   //noinspection JSUnusedLocalSymbols, used in HTML,
   private deleteListing(): void {
-    let prompt = Alert.create({
+    let prompt = this.alertCtrl.create({
       title: '确认删除?',
       buttons: [
         {
@@ -141,6 +139,6 @@ export class CreationPage implements OnInit {
         }
       ]
     });
-    this.nav.present(prompt);
+    prompt.present();
   }
 }

@@ -45,19 +45,13 @@
 
 
   </script>
-  <link rel="stylesheet" href="viewerjs/viewer.min.css">
-  <link ios-href="build/css/app.ios.css" rel="stylesheet">
-  <link md-href="build/css/app.md.css" rel="stylesheet">
-  <link wp-href="build/css/app.wp.css" rel="stylesheet">
+  <link rel="stylesheet" href="build/main.css">
+  <link rel="stylesheet" href="assets/viewerjs/viewer.min.css">
 </head>
 <body>
 
   <!-- this Ionic's root component and where the app will load -->
   <ion-app></ion-app>
-  <!-- Google Maps Javascript SDK -->
-  <!-- Aaha(xinbenlv): this Google API Key has to be ether "iOS Key" or "Android Key" instead of "Browser Key",
-       otherwise, a device loading Google Maps will fail with RefererNotAllowedMapError -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY"></script>
   <script src="assets/viewerjs/viewer.min.js"></script>
   <!-- TODO(xinbenlv): swtich to use Browserify to bundle the underscore js from npm package
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>-->
@@ -74,13 +68,15 @@
   <script src='assets/jquery/jquery.fileupload.min.js' type='text/javascript'></script>
   <script src='assets/jquery/jquery.cloudinary.min.js' type='text/javascript'></script>
 
-  <!-- Polyfill needed for platforms without Promise and Collection support -->
-  <script src="build/js/es6-shim.min.js"></script>
-  <!-- Zone.js and Reflect-metadata  -->
-  <script src="build/js/Reflect.js"></script>
-  <script src="build/js/zone.js"></script>
-  <!-- the bundle which is built from the app's source code, needs to be the last -->
-  <script src="build/js/app.bundle.js"></script>
+  <!-- The polyfills js is generated during the build process -->
+  <script src="build/polyfills.js"></script>
 
+  <!-- The bundle js is generated during the build process -->
+  <script src="build/main.js"></script>
+
+  <!-- Google Maps Javascript SDK -->
+  <!-- Aaha(xinbenlv): this Google API Key has to be ether "iOS Key" or "Android Key" instead of "Browser Key",
+       otherwise, a device loading Google Maps will fail with RefererNotAllowedMapError -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY"></script>
 </body>
 </html>

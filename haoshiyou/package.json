@@ -6,7 +6,8 @@
     "emulate:before": "build",
     "deploy:before": "build",
     "build:before": "build",
-    "run:before": "build"
+    "run:before": "build",
+    "postinstall": "typings install"
   },
   "dependencies": {
     "@angular/common": "^2.0.0",
@@ -18,24 +19,28 @@
     "@angular/platform-browser": "^2.0.0",
     "@angular/platform-browser-dynamic": "^2.0.0",
     "@angular/platform-server": "^2.0.0",
-    "@angular/router": "^2.0.0",
-    "angular2-jwt": "0.1.15",
-    "angularfire2": "2.0.0-beta.0",
+    "@angular/router": "3.1.0",
+    "@ionic/storage": "^1.1.6",
+    "angular2-jwt": "0.1.24",
+    "angularfire2": "^2.0.0-beta.5",
     "es6-shim": "0.35.1",
-    "firebase": "2.4.2",
-    "@ionic/storage": "^1.0.3",
+    "firebase": "^3.5.1",
     "ionic-angular": "^2.0.0-rc.1",
     "ionic-native": "^2.2.3",
     "ionicons": "^3.0.0",
     "log4javascript": "1.4.15",
-    "moment": "2.13.0",
-    "reflect-metadata": "0.1.3",
+    "moment": "2.15.1",
+    "reflect-metadata": "0.1.8",
     "rxjs": "5.0.0-beta.12",
     "underscore": "1.8.3",
-    "zone.js": "^0.6.21"
+    "zone.js": "^0.6.25"
   },
   "devDependencies": {
     "@ionic/app-scripts": "^0.0.36",
+    "@types/googlemaps": "3.25.35",
+    "@types/lodash": "4.14.37",
+    "@types/request": "0.0.30",
+    "browserify": "13.1.0",
     "browserify-istanbul": "2.0.0",
     "codecov.io": "0.1.6",
     "del": "2.2.0",
@@ -56,6 +61,7 @@
     "tsify": "1.0.3",
     "tslint": "3.14.0",
     "typescript": "^2.0.3",
+    "watchify": "3.7.0",
     "xml2js": "0.4.17"
   },
   "cordovaPlugins": [

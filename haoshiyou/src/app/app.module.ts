@@ -1,10 +1,10 @@
-import {HaoshiyouApp} from './app.component';
-import {Platform, ionicBootstrap, IonicApp, IonicModule} from "ionic-angular";
-import {provide, Inject, Component, NgModule} from "@angular/core";
-import {Http, HTTP_PROVIDERS} from "@angular/http";
+import { BrowserModule } from '@angular/platform-browser';
+import {HaoshiyouApp} from "./app.component";
+import {IonicApp, IonicModule} from "ionic-angular";
+import {NgModule} from "@angular/core";
+import {Http} from "@angular/http";
 import {AuthHttp, AuthConfig} from "angular2-jwt";
-import {FIREBASE_PROVIDERS, AngularFire, FirebaseUrl} from "angularfire2";
-import {Logger} from "log4javascript/log4javascript";
+import {FIREBASE_PROVIDERS, FirebaseUrl} from "angularfire2";
 import {ChatMessageComp} from "../pages/chats-tab/chat-message.comp";
 import {ChatThreadComp} from "../pages/chats-tab/chat-thread.comp";
 import {ChatWindowPage} from "../pages/chats-tab/chat-window.page";
@@ -34,8 +34,19 @@ import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {EnumMsgPipe} from "../pipes/enum-msg.pipe";
 import {ImageIdsToUrlPipe} from "../pipes/image-id-to-url.pipe";
 import {TimeFromNowPipe} from "../pipes/time-from-now.pipe";
+import { AngularFireModule } from 'angularfire2';
 
-const _components = [
+// Must export the config
+// TODO(xinbenlv): move to config.json
+export const firebaseConfig = {
+  apiKey: 'AIzaSyAK328nb2kR3lyexYU88d_wv_MQooHHrWo',
+  authDomain: 'tmp-haoshyou-dev.firebaseapp.com',
+  databaseURL: 'https://tmp-haoshyou-dev.firebaseio.com',
+  storageBucket: "tmp-haoshyou-dev.appspot.com",
+  messagingSenderId: "913346566572"
+};
+
+const _components:Object[] = [
   HaoshiyouApp,
   TabsPage,
   ChatMessageComp,
@@ -53,19 +64,43 @@ const _components = [
   DisconnectModal,
 ];
 
-const _pipes = [
+const _pipes:Object[] = [
   CityNZipPipe,
   EnumMsgPipe,
   ImageIdsToUrlPipe,
   TimeFromNowPipe,
 ];
 
+
 @NgModule({
   declarations: [
+    // All Components
+    HaoshiyouApp,
+    TabsPage,
+    ChatMessageComp,
+    ChatThreadComp,
+    ChatWindowPage,
+    ChatsTabPage,
+    ImageGridComponent,
+    CreationPage,
+    ListingDetailPage,
+    ListingItem,
+    ListingsTabPage,
+    MapViewComponent,
+    RemoveModal,
+    SettingsTabPage,
+    DisconnectModal,
 
-  ] + _components + _pipes,
+    // All Pipes
+    CityNZipPipe,
+    EnumMsgPipe,
+    ImageIdsToUrlPipe,
+    TimeFromNowPipe,
+  ],
   imports: [
-    IonicModule.forRoot(HaoshiyouApp)
+    IonicModule.forRoot(HaoshiyouApp),
+    BrowserModule,
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -73,34 +108,37 @@ const _pipes = [
     TabsPage
   ],
   providers: [
-    provide(ICredentialService, {useClass: JsonCredentialService}),
-    provide(FirebaseUrl, {
+    {provide: ICredentialService, useClass: JsonCredentialService},
+    {
+      provide: FirebaseUrl,
       useFactory: (credService:ICredentialService) => {
         return credService.getCred('FIREBASE_BASE_URL');
       }, deps: [ICredentialService]
-    }),
-    provide(AuthHttp, {
+    },
+    {
+      provide: AuthHttp,
       useFactory: (http) => {
         return new AuthHttp(new AuthConfig(), http);
       },
       deps: [Http]
-    }),
+    },
     AuthService,
-    provide(IUserService, {useClass: FirebaseUserService}),
-    provide(IThreadService, {useClass: FirebaseThreadService}),
-    provide(IMessageService, {useClass: FirebaseMessageService}),
-    provide(IListingService, {useClass: FirebaseListingService}),
-    provide(IImageService, {useClass: CloudinaryImageService}),
+    {provide: IUserService, useClass: FirebaseUserService},
+    {provide: IThreadService, useClass: FirebaseThreadService},
+    {provide: IMessageService, useClass: FirebaseMessageService},
+    {provide: IListingService, useClass: FirebaseListingService},
+    {provide: IImageService, useClass: CloudinaryImageService},
     NotificationService,
     LogService,
-    provide(loggerToken, {
+    {
+      provide: loggerToken,
       useFactory: (logService:LogService) => {
         return logService.getLogger();
       }, deps: [LogService]
-    }),
+    },
     MapService,
     FIREBASE_PROVIDERS,
-    HTTP_PROVIDERS
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

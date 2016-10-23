@@ -2,16 +2,16 @@ import {Platform} from "ionic-angular";
 import {TabsPage} from "../pages/tabs/tabs";
 import {Inject, Component} from "@angular/core";
 import {Http} from "@angular/http";
-import {AuthService} from "../services/auth.service.ts";
-import {IMessageService} from "../services/chats/message.service.ts";
-import {IThreadService} from "../services/chats/thread.service.ts";
+import {AuthService} from "../services/auth.service";
+import {IMessageService} from "../services/chats/message.service";
+import {IThreadService} from "../services/chats/thread.service";
 import {IUserService} from "../services/chats/user.service";
 import {AngularFire} from "angularfire2";
 import {User} from "../models/models";
 import {LogService, loggerToken} from "../services/log.service";
 import {ICredentialService} from "../services/credential.service";
-import {Logger} from "log4javascript/log4javascript";
 import {NotificationService} from "../services/notfication.service";
+import {Logger} from "log4javascript/log4javascript";
 
 declare let ga:any;
 
@@ -69,7 +69,7 @@ export class HaoshiyouApp {
             if (regId) {
               return this.userService.addRegistrationId(regId);
             } else {
-              this.logger.debug("no regid, return directly");
+              //this.logger.debug("no regid, return directly");
               return Promise.resolve(); // TODO(xinbenlv): need to do anything special?
             }
           });

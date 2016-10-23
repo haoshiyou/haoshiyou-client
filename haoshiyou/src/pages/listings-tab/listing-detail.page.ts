@@ -1,14 +1,9 @@
-import {Page, NavParams, NavController} from "ionic-angular";
+import {NavParams, NavController} from "ionic-angular";
 import {Listing} from "../../models/listing";
-import {EnumMsgPipe} from "../../pipes/enum-msg.pipe.ts";
-import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe";
 import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
 import {IUserService} from "../../services/chats/user.service";
 import {ChatWindowPage} from "../chats-tab/chat-window.page";
-import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
-import {ImageGridComponent} from "./image-grid.comp";
-import {MapViewComponent} from "./map-view.comp";
 import {loggerToken, LogService} from "../../services/log.service";
 import {Inject, Component} from "@angular/core";
 import {Logger} from "log4javascript";

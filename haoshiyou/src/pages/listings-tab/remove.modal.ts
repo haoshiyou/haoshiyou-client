@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 import {NavController, NavParams, ViewController} from "ionic-angular/index";
-import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 
 @Component({
   selector: 'remove-modal',

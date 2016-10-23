@@ -2,11 +2,9 @@ import {
     OnInit, OnDestroy, ElementRef, ViewChild, Inject, ChangeDetectorRef,
     Component
 } from "@angular/core";
-import {FORM_DIRECTIVES} from "@angular/common";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {User, Thread, Message} from "../../models/models";
-import {Page, NavParams, Content} from "ionic-angular/index";
-import {ChatMessageComp} from "./chat-message.comp";
+import {NavParams, Content} from "ionic-angular/index";
 import {uuid} from "../../util/uuid";
 import {Subscription} from "rxjs/Subscription";
 import {Logger} from "log4javascript/log4javascript";

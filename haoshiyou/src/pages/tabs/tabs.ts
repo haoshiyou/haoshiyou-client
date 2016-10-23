@@ -1,7 +1,7 @@
 import {OnInit, OnDestroy, Inject, Component} from "@angular/core";
 import {NavController, Modal, ModalController, Platform} from "ionic-angular";
 import {ChatsTabPage} from "../chats-tab/chats-tab.page";
-import {ListingsTabPage} from "../listings-tab/listings-tab.page.ts";
+import {ListingsTabPage} from "../listings-tab/listings-tab.page";
 import {SettingsTabPage} from "../settings-tab/settings-tab.page";
 import {Network} from "ionic-native";
 import {Logger} from "log4javascript";
@@ -10,7 +10,7 @@ import {Subscription} from "rxjs";
 import {loggerToken} from "../../services/log.service";
 
 @Component({
-  templateUrl: 'build/pages/tabs/tabs.html',
+  templateUrl: 'tabs.html',
 })
 export class TabsPage implements OnInit, OnDestroy {
   private onDisconnect:Subscription;

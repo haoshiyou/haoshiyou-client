@@ -1,5 +1,4 @@
 import {Component, Input} from "@angular/core";
-import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe";
 import {User, Message} from "../../models/models";
 
 @Component({

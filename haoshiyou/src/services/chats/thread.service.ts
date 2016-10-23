@@ -37,9 +37,13 @@ export class FirebaseThreadService implements IThreadService {
     this.logService.logEvent("thread", "created");
     if (thread.id) {
       if (thread["$key"]) delete thread["$key"];
-      return this.af.database.object("/threads/" + thread.id).update(thread);
+      return this.af.database.object("/threads/" + thread.id).update(thread) as Promise<void>;
     } else {
-      return this.af.database.list("/threads").push(thread);
+      // TODO(xinbenlv): handle when message.id is not set
+      // currently do nothing
+
+      // The following line is uncommented due to compile error.
+      // return this.af.database.list("/threads").push(thread) as Promise<void>;
     }
 
   }

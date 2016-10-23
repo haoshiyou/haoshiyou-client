@@ -4,12 +4,6 @@ export enum ListingType {
   ROOM_WANTED,
 }
 
-export namespace ListingType {
-  export function values() {
-    return [ListingType.ROOMMATE_WANTED, ListingType.ROOM_WANTED];
-  }
-}
-
 export interface Listing {
   id:ListingId;
   lat:number; // latitude

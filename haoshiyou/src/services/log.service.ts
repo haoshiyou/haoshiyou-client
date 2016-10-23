@@ -1,7 +1,8 @@
 import * as log4javascript from "log4javascript";
 import {Logger, LoggingEvent, Level} from "log4javascript";
 import {OpaqueToken, Injectable} from "@angular/core";
-import {Platform, Storage, LocalStorage} from "ionic-angular";
+import {Platform} from "ionic-angular";
+import {Storage} from "@ionic/storage";
 import {Device} from "ionic-native";
 import {AngularFire} from "angularfire2/angularfire2";
 import {uuid} from "../util/uuid";
@@ -22,12 +23,13 @@ export class LogService {
               private cred:ICredentialService,
               private af:AngularFire,
               private credService:ICredentialService,
+              private local:Storage,
               private http:Http) {
     this.logger = log4javascript.getLogger();
     let layout = new log4javascript.PatternLayout("%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5p %m");
     platform.ready().then(()=> {
-      let fbAppender:FbAppender = new FbAppender(af);
-      let logSenseAppender = new LogSenseAppender(http, credService);
+      let fbAppender:FbAppender = new FbAppender(af, this.local);
+      let logSenseAppender = new LogSenseAppender(http, credService, this.local);
       let browserAppender = new log4javascript.BrowserConsoleAppender();
       let gaAppender = new GaAppender();
 
@@ -73,8 +75,7 @@ export class BaseRemoteAppender extends log4javascript.Appender {
   protected device = {};
   protected ready:boolean = false;
   protected entries = [];
-  private local:Storage = new Storage(LocalStorage);
-  constructor() {
+  constructor(private local:Storage) {
     super();
     this.local.get('deviceId').then(deviceId => {
       if (deviceId) {
@@ -144,8 +145,8 @@ export class BaseRemoteAppender extends log4javascript.Appender {
 
 @Injectable()
 export class FbAppender extends BaseRemoteAppender {
-  constructor(private af:AngularFire) {
-    super()
+  constructor(private af:AngularFire, local:Storage) {
+    super(local)
   }
 
   upload() {
@@ -171,8 +172,8 @@ export class FbAppender extends BaseRemoteAppender {
 
 @Injectable()
 export class LogSenseAppender extends BaseRemoteAppender {
-  constructor(private http:Http, private credService:ICredentialService) {
-    super();
+  constructor(private http:Http, private credService:ICredentialService, local:Storage) {
+    super(local);
   }
   upload() {
     if (this.ready) {
