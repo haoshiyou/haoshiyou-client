@@ -1,21 +1,22 @@
 import {Injectable, Inject} from "@angular/core";
 import {Logger} from "log4javascript";
+import * as g from "googlemaps";
 import {loggerToken} from "./log.service";
 
 @Injectable()
 export class MapService {
   // TODO(xinbenlv): consider add caching.
-  private geocoder:google.maps.Geocoder;
+  private geocoder:g.google.maps.Geocoder;
 
   constructor(@Inject(loggerToken) private logger:Logger) {
-    this.geocoder = new google.maps.Geocoder();
+    this.geocoder = new g.google.maps.Geocoder();
     this.logger.debug("Initialized MapService.");
   }
 
-  public getLocality(latlng:google.maps.LatLng):Promise<ILocality> {
+  public getLocality(latlng:g.google.maps.LatLng):Promise<ILocality> {
     return new Promise<ILocality>((resolve, reject) => {
-      this.geocoder.geocode(<google.maps.GeocoderRequest>{'latLng': latlng}, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
+      this.geocoder.geocode(<g.google.maps.GeocoderRequest>{'latLng': latlng}, function (results, status) {
+        if (status == g.google.maps.GeocoderStatus.OK) {
           if (results[1]) {
             let zip:string = "";
             let city:string = "";

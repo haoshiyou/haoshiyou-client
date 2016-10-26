@@ -1,5 +1,6 @@
 import {Pipe, PipeTransform} from "@angular/core";
 import {MapService, ILocality} from "../services/map.service";
+import {google} from "googlemaps";
 
 @Pipe({
   name: 'cityNZipPipe',

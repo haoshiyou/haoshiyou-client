@@ -10,6 +10,8 @@ import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
 import {NotificationService} from "../../services/notfication.service";
 
+import {google} from "googlemaps";
+
 const DEFAULT_LAT:number = 37.41666;
 const DEFAULT_LNG:number = -122.09106;
 /**

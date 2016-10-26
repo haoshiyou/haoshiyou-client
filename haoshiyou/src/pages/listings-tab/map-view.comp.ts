@@ -1,6 +1,7 @@
 import {Component, OnChanges, Input, SimpleChange} from "@angular/core";
 import {Listing} from "../../models/listing";
 
+import {google} from "googlemaps";
 @Component({
   selector: 'map-view',
   templateUrl: 'map-view.comp.html'

@@ -9,6 +9,9 @@
     "run:before": "build",
     "postinstall": "typings install"
   },
+  "config": {
+    "ionic_rollup": "ionic_rollup.config.js"
+  },
   "dependencies": {
     "@angular/common": "^2.0.0",
     "@angular/compiler": "^2.0.0",

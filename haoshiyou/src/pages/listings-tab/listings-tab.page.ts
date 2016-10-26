@@ -9,6 +9,7 @@ import {loggerToken} from "../../services/log.service";
 import {Logger} from "log4javascript/log4javascript";
 import {AuthService} from "../../services/auth.service";
 
+import {google} from "googlemaps";
 /**
  * A page contains a map view and a list showing the listings.
  */
