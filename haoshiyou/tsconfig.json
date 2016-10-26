@@ -11,6 +11,9 @@
     "module": "es2015",
     "moduleResolution": "node",
     "target": "es5",
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
     "types": [
       "firebase"
     ]

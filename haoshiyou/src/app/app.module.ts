@@ -3,7 +3,7 @@ import {HaoshiyouApp} from "./app.component";
 import {IonicApp, IonicModule} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
-import {AuthHttp, AuthConfig} from "angular2-jwt";
+import { AuthConfig, AuthHttp } from 'angular2-jwt';
 import {FIREBASE_PROVIDERS, FirebaseUrl} from "angularfire2";
 import {ChatMessageComp} from "../pages/chats-tab/chat-message.comp";
 import {ChatThreadComp} from "../pages/chats-tab/chat-thread.comp";
@@ -23,18 +23,16 @@ import {IImageService, CloudinaryImageService} from "../services/image.service";
 import {NotificationService} from "../services/notfication.service";
 import {IListingService} from "../services/listings/listing.service";
 import {FirebaseListingService} from "../services/listings/fb-listing.service";
-import {LogService, loggerToken} from "../services/log.service";
-import {MapService} from "../services/map.service";
 import {AuthService} from "../services/auth.service";
 import {IUserService, FirebaseUserService} from "../services/chats/user.service";
 import {IThreadService, FirebaseThreadService} from "../services/chats/thread.service";
 import {IMessageService, FirebaseMessageService} from "../services/chats/message.service";
 import {TabsPage} from "../pages/tabs/tabs";
-import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {EnumMsgPipe} from "../pipes/enum-msg.pipe";
 import {ImageIdsToUrlPipe} from "../pipes/image-id-to-url.pipe";
 import {TimeFromNowPipe} from "../pipes/time-from-now.pipe";
 import { AngularFireModule } from 'angularfire2';
+import { Storage } from '@ionic/storage';
 
 // Must export the config
 // TODO(xinbenlv): move to config.json
@@ -65,11 +63,18 @@ const _components:Object[] = [
 ];
 
 const _pipes:Object[] = [
-  CityNZipPipe,
   EnumMsgPipe,
   ImageIdsToUrlPipe,
   TimeFromNowPipe,
 ];
+
+let storage: Storage = new Storage();
+export function getAuthHttp(http) {
+  return new AuthHttp(new AuthConfig({
+    globalHeaders: [{'Accept': 'application/json'}],
+    tokenGetter: (() => storage.get('id_token'))
+  }), http);
+}
 
 
 @NgModule({
@@ -92,10 +97,9 @@ const _pipes:Object[] = [
     DisconnectModal,
 
     // All Pipes
-    CityNZipPipe,
     EnumMsgPipe,
     ImageIdsToUrlPipe,
-    TimeFromNowPipe,
+    TimeFromNowPipe
   ],
   imports: [
     IonicModule.forRoot(HaoshiyouApp),
@@ -115,29 +119,19 @@ const _pipes:Object[] = [
         return credService.getCred('FIREBASE_BASE_URL');
       }, deps: [ICredentialService]
     },
-    {
-      provide: AuthHttp,
-      useFactory: (http) => {
-        return new AuthHttp(new AuthConfig(), http);
-      },
-      deps: [Http]
-    },
-    AuthService,
     {provide: IUserService, useClass: FirebaseUserService},
     {provide: IThreadService, useClass: FirebaseThreadService},
     {provide: IMessageService, useClass: FirebaseMessageService},
     {provide: IListingService, useClass: FirebaseListingService},
     {provide: IImageService, useClass: CloudinaryImageService},
     NotificationService,
-    LogService,
-    {
-      provide: loggerToken,
-      useFactory: (logService:LogService) => {
-        return logService.getLogger();
-      }, deps: [LogService]
-    },
-    MapService,
     FIREBASE_PROVIDERS,
+    AuthService,
+    {
+      provide: AuthHttp,
+      useFactory: getAuthHttp,
+      deps: [Http]
+    }
   ]
 })
 export class AppModule {

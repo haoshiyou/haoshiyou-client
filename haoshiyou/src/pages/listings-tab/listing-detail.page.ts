@@ -4,9 +4,7 @@ import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
 import {IUserService} from "../../services/chats/user.service";
 import {ChatWindowPage} from "../chats-tab/chat-window.page";
-import {loggerToken, LogService} from "../../services/log.service";
 import {Inject, Component} from "@angular/core";
-import {Logger} from "log4javascript";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 
@@ -33,15 +31,10 @@ export class ListingDetailPage {
   constructor(private threadService:IThreadService,
               private userService:IUserService,
               private nav:NavController,
-              @Inject(loggerToken)
-              private logger:Logger,
               params:NavParams,
-              private imageService:IImageService,
-              private logService:LogService) {
+              private imageService:IImageService) {
     this.listing = params.data.listing;
-    this.logger.info(`Entering detail page for ${JSON.stringify(this.listing)}`);
     this.userService.observableUserById(this.listing.ownerId).subscribe((owner:User)=> {
-      this.logger.debug(`owner=${JSON.stringify(owner)}`);
       this.owner = owner;
     });
     this.userService.promiseMe().then((me:User)=>{
@@ -50,7 +43,6 @@ export class ListingDetailPage {
       }
     });
     this.userService.observableMeId().subscribe((meId:string)=>{
-      this.logger.debug(`meId=${meId}`);
       this.meId = meId;
     });
   }
@@ -60,14 +52,12 @@ export class ListingDetailPage {
   }
 
   startChat() {
-    this.logService.logEvent("listing-detail", "start-chat");
     // TODO(xinbenlv): handle when not yet logged in.
     let thread:Thread = <Thread>{};
     this.userService.promiseMe().then((me:User)=> {
       let newThreadId:string = me.id + '|' + this.listing.id;
       thread.id = newThreadId;
       thread.userIds = [me.id, this.listing.ownerId];
-      this.logger.debug(`Creating chat thread ${JSON.stringify(thread)}`);
       return this.threadService.createThread(thread);
     }).then(() => {
       this.nav.push(ChatWindowPage, {thread: thread});

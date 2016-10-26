@@ -1,6 +1,4 @@
 import {Injectable, Inject} from "@angular/core";
-import {loggerToken} from "./log.service";
-import {Logger} from "log4javascript";
 import {Transfer} from "ionic-native";
 import {ICredentialService} from "./credential.service";
 @Injectable()
@@ -28,7 +26,7 @@ export class IImageService {
 export class CloudinaryImageService implements IImageService {
   private config:CloudinaryConfig;
 
-  constructor(@Inject(loggerToken) private logger:Logger, private credService:ICredentialService) {
+  constructor(private credService:ICredentialService) {
     // TODO(xinbenlv): update the credentials of CloudinaryImageService.
     this.config = <CloudinaryConfig>{
       cloud_name: this.credService.getCred('CLOUDINARY_CLOUD_NAME'),
@@ -45,15 +43,12 @@ export class CloudinaryImageService implements IImageService {
     var uploadUrl:string = "https://api.cloudinary.com/v1_1/" + this.config.cloud_name + "/image/upload";
     return Promise.all(
         localUris.map((uri:string) => {
-          this.logger.info(`Uploading file ${uri}...`);
           return fileTransfer.upload(uri, uploadUrl, {
             params: this.config
           }).then((result)=> {
             let data = JSON.parse(result.response);
-            this.logger.info(`Uploaded file ${uri}, returned id=${data.public_id}`);
             return data.public_id;
           }).catch((error)=> {
-            this.logger.error(`Uploaded file ${uri} failed with error=${JSON.stringify(error)}`);
           });
         })
     );

@@ -2,8 +2,6 @@ import {Injectable, Inject} from "@angular/core";
 import {User} from "../../models/models";
 import {Observable} from "rxjs";
 import {AngularFire} from "angularfire2/angularfire2";
-import {Logger} from "log4javascript";
-import {loggerToken} from "../log.service";
 import {Subject} from "rxjs/Subject";
 
 @Injectable()
@@ -38,8 +36,7 @@ export class IUserService { // use as interface, angular2 does not support injec
 export class FirebaseUserService implements IUserService { // use "class" IUserService as "interface"
   private meId:string = null; // explicitly default to null
   private meIdSubject:Subject<string> = new Subject<string>();
-  constructor(private af:AngularFire, @Inject(loggerToken) private logger:Logger) {
-    this.logger.debug("Initialized FirebaseUserService.");
+  constructor(private af:AngularFire) {
   }
 
   setMeId(id:string):void {
@@ -49,7 +46,6 @@ export class FirebaseUserService implements IUserService { // use "class" IUserS
 
   promiseMe():Promise<User> {
     if (this.meId) {
-      this.logger.info(`Promise me returns a meId = ${this.meId}`);
       return this.observableUserById(this.meId).take(1).toPromise();
     } else {
       return Promise.resolve(<User>null);
@@ -65,7 +61,6 @@ export class FirebaseUserService implements IUserService { // use "class" IUserS
     if (user && user.id) {
       return this.af.database.object("/users/" + user.id).update(user) as Promise<void>;
     } else {
-      this.logger.warn("user or user.id does not exit");
       return;
     }
   }
@@ -79,15 +74,12 @@ export class FirebaseUserService implements IUserService { // use "class" IUserS
       if (me) {
         if (!me.regIds) me.regIds = [];
         me.regIds.push(regId);
-        this.logger.info(`Adding a new registrationId for meId=${me.id}, regId=${regId}.`);
         return me;
       } else {
-        this.logger.warn("Attempt to add registrationId, but not logged in yet");
         return null;
       }
     }).then((me:User) => {
       if (me) {
-        this.logger.info(`Trying to update user with new registrationId`);
         return this.createOrUpdateUser(me);
       } else
         return null;

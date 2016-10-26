@@ -4,10 +4,8 @@ import {ChatsTabPage} from "../chats-tab/chats-tab.page";
 import {ListingsTabPage} from "../listings-tab/listings-tab.page";
 import {SettingsTabPage} from "../settings-tab/settings-tab.page";
 import {Network} from "ionic-native";
-import {Logger} from "log4javascript";
 import {DisconnectModal} from "./disconnect.modal";
 import {Subscription} from "rxjs";
-import {loggerToken} from "../../services/log.service";
 
 @Component({
   templateUrl: 'tabs.html',
@@ -26,24 +24,20 @@ export class TabsPage implements OnInit, OnDestroy {
 
   constructor(private nav:NavController,
               private modalCtrl: ModalController,
-              private platform:Platform,
-              @Inject(loggerToken) private logger:Logger) {
+              private platform:Platform) {
   }
 
   ngOnInit():void {
     // TODO(zzn): add unread message counts
     this.platform.ready().then(()=> {
       if (this.platform.is("ios") || this.platform.is("android")) {
-        this.logger.debug(`The platform is ios or android, setting up disconnectModal.`);
         this.disconnectModal = this.modalCtrl.create(DisconnectModal);
 
         this.onDisconnect = Network.onDisconnect().subscribe(() => {
-          this.logger.debug(`Disconnected, show disconnectModal.`);
           this.disconnectModal.present();
         });
 
         this.onConnect = Network.onConnect().subscribe(() => {
-          this.logger.debug(`Connected, show disconnectModal.`);
           this.disconnectModal.dismiss();
         });
 

@@ -1,10 +1,7 @@
 import {Component, Input, Output, EventEmitter, Inject, OnInit} from "@angular/core";
-import {ImageIdToUrlPipe} from "../../pipes/image-id-to-url.pipe";
 import {IImageService} from "../../services/image.service";
 import {ICredentialService} from "../../services/credential.service";
-import {loggerToken} from "../../services/log.service";
 import {RemoveModal} from "./remove.modal";
-import {Logger} from "log4javascript";
 import {Modal, NavController, ModalController, Platform} from "ionic-angular";
 
 declare let window;
@@ -41,8 +38,7 @@ export class ImageGridComponent implements OnInit {
       private cred:ICredentialService,
       private nav:NavController,
       private modalCtrl:ModalController,
-      private platform:Platform,
-      @Inject(loggerToken) private logger:Logger) {
+      private platform:Platform) {
   }
 
   //noinspection JSUnusedLocalSymbols, used in HTML
@@ -85,8 +81,6 @@ export class ImageGridComponent implements OnInit {
             (e, data) => {
               if (!this.imageIds) this.imageIds = [];
               this.onUpdateImageIds( this.imageIds.concat(data.result.public_id));
-              this.logger.info(`Listing added imageIds: ${JSON.stringify(data.result.public_id)}`);
-              this.logger.debug(`Listing result imageIds: ${JSON.stringify(this.imageIds)}`);
               return true;
             })
         .cloudinary_fileupload();

@@ -1,15 +1,20 @@
 import {
-    OnInit, OnDestroy, ElementRef, ViewChild, Inject, ChangeDetectorRef,
+    OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectorRef,
     Component
 } from "@angular/core";
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {User, Thread, Message} from "../../models/models";
-import {NavParams, Content} from "ionic-angular/index";
+import {NavParams, Content} from "ionic-angular";
 import {uuid} from "../../util/uuid";
 import {Subscription} from "rxjs/Subscription";
-import {Logger} from "log4javascript/log4javascript";
-import {loggerToken} from "../../services/log.service";
 import {NotificationService} from "../../services/notfication.service";
+
+export class MessageInfo {
+  message:Message;
+  author:User;
+  incoming:boolean;
+}
+
 @Component({
   selector: 'chat-window',
   templateUrl: 'chat-window.page.html'
@@ -29,7 +34,6 @@ export class ChatWindowPage implements OnInit, OnDestroy {
               private threadsService:IThreadService,
               private userService:IUserService,
               private el:ElementRef, private params:NavParams,
-              @Inject(loggerToken) private logger:Logger,
               private cd:ChangeDetectorRef,
               private ns:NotificationService) {
     this.currentThread = params.data.thread;
@@ -107,15 +111,11 @@ export class ChatWindowPage implements OnInit, OnDestroy {
                 notificationRegIds = notificationRegIds.concat(user.regIds);
               };
             }).catch((e)=>{
-              this.logger.error(e);
+
             }));
       }
       Promise.all(promises).then(()=>{
-        this.logger.debug(`Try to send push notification.` +
-                          `regIds:${notificationRegIds}, author:${this.me.name}, text:${m.text}`);
         this.ns.sendPushMessage(notificationRegIds, m.text, this.me.name).then(()=>{
-          this.logger.debug(`Done sending push notification.` +
-              `regIds:${notificationRegIds}, author:${this.me.name}, text:${m.text}`);
         });
       });
     });
@@ -127,10 +127,4 @@ export class ChatWindowPage implements OnInit, OnDestroy {
     let dimensions = this.content.getContentDimensions();
     this.content.scrollTo(0, dimensions.scrollBottom, 0);
   }
-}
-
-class MessageInfo {
-  message:Message;
-  author:User;
-  incoming:boolean;
 }

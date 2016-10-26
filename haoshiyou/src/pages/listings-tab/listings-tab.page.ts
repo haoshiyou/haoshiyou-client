@@ -5,11 +5,7 @@ import {OnInit, OnDestroy, Inject, Component} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {ListingDetailPage} from "./listing-detail.page";
 import {Observable} from "rxjs/Observable";
-import {loggerToken} from "../../services/log.service";
-import {Logger} from "log4javascript/log4javascript";
 import {AuthService} from "../../services/auth.service";
-
-import {google} from "googlemaps";
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -32,27 +28,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private listingService:IListingService,
               private nav:NavController,
               private alertCtrl: AlertController,
-              private auth:AuthService,
-              @Inject(loggerToken) private logger:Logger) {
+              private auth:AuthService) {
   }
 
   ngOnInit() {
     // ChatFakeDataLoader.init(this.messagesService, this.threadsService, this.userService);
     let initMap:Promise<any> = this.platform.ready().then(() => {
-      var minZoomLevel = 9;
 
-      // Load Google Maps
-      /* TODO(xinbenlv): follow example here
-       * https://codingwithspike.wordpress.com/2014/08/13/loading-google-maps-in-cordova-the-right-way/
-       * To load the Google Maps JS API based on device connection.
-       *
-       * Or use Google Maps TS Definition Files.
-       */
-      this.map = new google.maps.Map(document.getElementById('map_canvas'), {
-        zoom: minZoomLevel,
-        center: new google.maps.LatLng(37.41666, -122.09106), // Google
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
     }).then(()=>{
       this.mapReady = true;
       this.updateMarkers();
@@ -69,16 +51,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
 
   private updateMarkers() {
     if(this.mapReady && this.listings) {
-      this.markers = [];
-      for (let listing of this.listings) {
-        let opt:google.maps.MarkerOptions = <google.maps.MarkerOptions>{};
-        opt.position = new google.maps.LatLng(listing.lat, listing.lng);
-        opt.animation = google.maps.Animation.DROP;
-        opt.map = this.map;
-        let marker = new google.maps.Marker(opt);
-        marker.addListener('click', () => this.gotoDetail(listing));
-        this.markers.push(marker);
-      }
+
     }
   }
 

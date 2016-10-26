@@ -8,10 +8,8 @@ import {IThreadService} from "../services/chats/thread.service";
 import {IUserService} from "../services/chats/user.service";
 import {AngularFire} from "angularfire2";
 import {User} from "../models/models";
-import {LogService, loggerToken} from "../services/log.service";
 import {ICredentialService} from "../services/credential.service";
 import {NotificationService} from "../services/notfication.service";
-import {Logger} from "log4javascript/log4javascript";
 
 declare let ga:any;
 
@@ -28,14 +26,11 @@ export class HaoshiyouApp {
               private messageService:IMessageService,
               private authService:AuthService,
               private credService:ICredentialService,
-              @Inject(loggerToken) private logger:Logger,
               private notificationService:NotificationService,
-              private http:Http,
-              private logService:LogService) {
+              private http:Http) {
     this.platform.ready().then(()=> {
       ga('create', this.credService.getCred('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
       ga('send', 'pageview');
-      this.logService.logEvent('app', 'start');
 
       if (authService.getUser()) {
         userService.setMeId(AuthService.createHsyUser(authService.getUser()).id);
@@ -61,7 +56,6 @@ export class HaoshiyouApp {
 
       // Setup notification
       authService.userObservable().subscribe((user:User)=> {
-        this.logger.debug(`Push notification gets user= ${JSON.stringify(user)}`);
         if (user == null) {
           this.notificationService.unregister();
         } else {

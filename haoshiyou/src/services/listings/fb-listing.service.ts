@@ -2,14 +2,12 @@ import {Listing, ListingId} from "../../models/listing";
 import {IListingService} from "./listing.service";
 import {Injectable, Inject} from "@angular/core";
 import {AngularFire, FirebaseListObservable} from "angularfire2/angularfire2";
-import {loggerToken} from "../log.service";
-import {Logger} from "log4javascript/log4javascript";
 import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class FirebaseListingService implements IListingService {
   private listingsObservable: FirebaseListObservable<Listing[]>;
-  constructor(private af:AngularFire, @Inject(loggerToken) private logger:Logger) {
+  constructor(private af:AngularFire) {
     this.listingsObservable = this.af.database.list("/listings", {
       query: {
         orderByChild: 'lastUpdated'
@@ -41,9 +39,7 @@ export class FirebaseListingService implements IListingService {
    * @param listing: the value of listing for creation.
    */
   createListing(listing:Listing):Promise<void> {
-    this.logger.debug(`Create or saving ${JSON.stringify(listing)}`);
     if (listing["$key"]) {
-      this.logger.assert(listing.id == listing["$key"]);
       delete  listing["$key"]; // strip $key before update
     }
     return this.af.database.object("/listings/" + listing.id).update(listing) as Promise<void>;

@@ -51,7 +51,7 @@ var rollupConfig = {
             ],
             namedExports: {
                 'node_modules/firebase/firebase.js': ['initializeApp', 'auth', 'database'],
-                'node_modules/firebase/firebase-browser.js': ['initializeApp', 'auth', 'database'],
+                'node_modules/angularfire2/node_modules/firebase/firebase-browser.js': ['initializeApp', 'auth', 'database'],
                 'node_modules/log4javascript/log4javascript.js': ['Logger']
             }
         }),

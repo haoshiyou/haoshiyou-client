@@ -2,8 +2,6 @@ import {OnInit, OnDestroy, Inject, Output, EventEmitter, Component} from "@angul
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {Thread, User} from "../../models/models";
 import {Subscription} from "rxjs/Subscription";
-import {loggerToken} from "../../services/log.service";
-import {Logger} from "log4javascript";
 import {AuthService} from "../../services/auth.service";
 
 /**
@@ -23,24 +21,20 @@ export class ChatsTabPage implements OnInit, OnDestroy {
   constructor(private messagesService:IMessageService,
               private threadsService:IThreadService,
               private userService:IUserService,
-              @Inject(loggerToken) private logger:Logger,
               private auth:AuthService) {
     this.userService.observableMeId().subscribe((meId:string) => {
-      this.logger.info(`Receiving me in the chat tab. me=${JSON.stringify(meId)}`);
       this.retrieveMe(meId);
     });
   }
 
   ngOnInit() {
     this.userService.promiseMe().then((me:User)=> {
-      this.logger.info(`Aggressively getting me me in the chat tab. me=${JSON.stringify(me)}`);
       this.retrieveMe(me ? me.id : null);
     });
   }
 
 
   ngOnDestroy() {
-    this.logger.debug(`ChatsTabPage ngOnDestroy`);
     if (this.subscription) this.subscription.unsubscribe();
   }
 
@@ -49,7 +43,6 @@ export class ChatsTabPage implements OnInit, OnDestroy {
     if (!meId) {
       return;
     }
-    this.logger.info(`Setting me in retrieve me. me=${JSON.stringify(this.meId)}`);
     if (this.subscription) this.subscription.unsubscribe();
     this.threadsService.obserbableThreadsByUserId(meId).subscribe((threads:Thread[])=> {
       this.threads = threads;
