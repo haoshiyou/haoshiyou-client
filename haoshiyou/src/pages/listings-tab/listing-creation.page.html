@@ -21,31 +21,7 @@
         </ion-select>
         <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
             required
-        <
-  private deleteListing() {
-    let prompt = Alert.create({
-      title: '确认删除?',
-      buttons: [
-        {
-          text: '取消',
-          handler: data => {
-            this.nav.pop(); // alert
-          }
-        },
-        {
-          text: '删除',
-          handler: data => {
-            this.listingService.removeListing(this.listing.id).then(()=>{
-              this.nav.pop().then(()=>{
-                this.nav.pop();
-              }); // alert
-            });
-          }
-        }
-      ]
-    });
-    this.nav.present(prompt);
-  }/p>
+        </p>
     </ion-item>
     <ion-item>
         <ion-label fixed>标题</ion-label>

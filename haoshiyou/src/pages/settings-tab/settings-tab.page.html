@@ -1,19 +1,15 @@
 <ion-header>
-    <ion-navbar>
+    <ion-toolbar>
         <ion-title>
             设置
         </ion-title>
-    </ion-navbar>
+    </ion-toolbar>
 </ion-header>
-<ion-content padding *ngIf="!auth.authenticated()">
 
-    <button ion-button block (click)="auth.login()">登录</button>
+<ion-content padding>
 
-</ion-content>
-
-<ion-content padding *ngIf="auth.authenticated()">
-
-    <ion-card>
+    <button ion-button block (click)="auth.login()" *ngIf="!auth.authenticated()">登录</button>
+    <ion-card *ngIf="auth.authenticated()">
 
         <ion-item *ngIf="auth.user">
             <ion-avatar item-left>
@@ -25,6 +21,5 @@
 
     </ion-card>
 
-    <button ion-button block (click)="auth.logout()">登出</button>
-
+    <button ion-button block (click)="auth.logout()" *ngIf="auth.authenticated()">登出</button>
 </ion-content>

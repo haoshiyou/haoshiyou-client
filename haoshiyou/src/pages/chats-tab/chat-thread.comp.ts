@@ -3,6 +3,7 @@ import {Thread, User} from "../../models/models";
 import {NavController} from "ionic-angular/index";
 import {ChatWindowPage} from "./chat-window.page";
 import {IUserService} from "../../services/chats/user.service";
+import 'rxjs/Rx'; // used by Observable.take()
 
 @Component({
   selector: 'chat-thread',

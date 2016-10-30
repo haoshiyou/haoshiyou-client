@@ -4,7 +4,6 @@ import {IonicApp, IonicModule} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
-import {FIREBASE_PROVIDERS, FirebaseUrl} from "angularfire2";
 import {ChatMessageComp} from "../pages/chats-tab/chat-message.comp";
 import {ChatThreadComp} from "../pages/chats-tab/chat-thread.comp";
 import {ChatWindowPage} from "../pages/chats-tab/chat-window.page";
@@ -29,7 +28,7 @@ import {IThreadService, FirebaseThreadService} from "../services/chats/thread.se
 import {IMessageService, FirebaseMessageService} from "../services/chats/message.service";
 import {TabsPage} from "../pages/tabs/tabs";
 import {EnumMsgPipe} from "../pipes/enum-msg.pipe";
-import {ImageIdsToUrlPipe} from "../pipes/image-id-to-url.pipe";
+import {ImageIdsToUrlPipe, ImageIdToUrlPipe} from "../pipes/image-id-to-url.pipe";
 import {TimeFromNowPipe} from "../pipes/time-from-now.pipe";
 import { AngularFireModule } from 'angularfire2';
 import { Storage } from '@ionic/storage';
@@ -37,11 +36,11 @@ import { Storage } from '@ionic/storage';
 // Must export the config
 // TODO(xinbenlv): move to config.json
 export const firebaseConfig = {
-  apiKey: 'AIzaSyAK328nb2kR3lyexYU88d_wv_MQooHHrWo',
-  authDomain: 'tmp-haoshyou-dev.firebaseapp.com',
-  databaseURL: 'https://tmp-haoshyou-dev.firebaseio.com',
-  storageBucket: "tmp-haoshyou-dev.appspot.com",
-  messagingSenderId: "913346566572"
+  apiKey: 'AIzaSyAb4Zt88HUsXQYL6_q6xAbO4I0TIR2PMJA',
+  authDomain: 'haoshiyou-dev.firebaseapp.com',
+  databaseURL: 'https://haoshiyou-dev.firebaseio.com',
+  storageBucket: "firebase-haoshiyou-dev.appspot.com",
+  messagingSenderId: "104841816267"
 };
 
 const _components:Object[] = [
@@ -99,6 +98,7 @@ export function getAuthHttp(http) {
     // All Pipes
     EnumMsgPipe,
     ImageIdsToUrlPipe,
+    ImageIdToUrlPipe,
     TimeFromNowPipe
   ],
   imports: [
@@ -109,29 +109,36 @@ export function getAuthHttp(http) {
   bootstrap: [IonicApp],
   entryComponents: [
     HaoshiyouApp,
-    TabsPage
+    TabsPage,
+    ChatMessageComp,
+    ChatThreadComp,
+    ChatWindowPage,
+    ChatsTabPage,
+    ImageGridComponent,
+    CreationPage,
+    ListingDetailPage,
+    ListingItem,
+    ListingsTabPage,
+    MapViewComponent,
+    RemoveModal,
+    SettingsTabPage,
+    DisconnectModal,
   ],
   providers: [
     {provide: ICredentialService, useClass: JsonCredentialService},
-    {
-      provide: FirebaseUrl,
-      useFactory: (credService:ICredentialService) => {
-        return credService.getCred('FIREBASE_BASE_URL');
-      }, deps: [ICredentialService]
-    },
     {provide: IUserService, useClass: FirebaseUserService},
     {provide: IThreadService, useClass: FirebaseThreadService},
     {provide: IMessageService, useClass: FirebaseMessageService},
     {provide: IListingService, useClass: FirebaseListingService},
     {provide: IImageService, useClass: CloudinaryImageService},
     NotificationService,
-    FIREBASE_PROVIDERS,
     AuthService,
     {
       provide: AuthHttp,
       useFactory: getAuthHttp,
       deps: [Http]
-    }
+    },
+    Storage
   ]
 })
 export class AppModule {

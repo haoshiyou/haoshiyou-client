@@ -10,6 +10,7 @@ import {AuthService} from "../../services/auth.service";
  * A page contains a map view and a list showing the listings.
  */
 @Component({
+  selector: 'listing-tab',
   templateUrl: 'listings-tab.page.html',
 })
 export class ListingsTabPage implements OnInit, OnDestroy {

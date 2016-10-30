@@ -34,7 +34,7 @@ export class JsonCredentialService {
   private env:string;
   private flags:{[flagId:string]:any};
   private version:string;
-  private CONFIG_URL:string = "config/config.json";
+  private CONFIG_URL:string = "assets/config/config.json";
   constructor() {
     this.getConfigSync();
   }

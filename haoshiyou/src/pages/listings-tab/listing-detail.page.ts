@@ -4,7 +4,7 @@ import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
 import {IUserService} from "../../services/chats/user.service";
 import {ChatWindowPage} from "../chats-tab/chat-window.page";
-import {Inject, Component} from "@angular/core";
+import {Component, AfterViewInit} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 
@@ -12,9 +12,15 @@ declare let window:any;
 declare let QRCode:any;
 
 @Component({
-  templateUrl: 'listing-detail.page.html',
+  selector: 'listing-detail',
+  templateUrl: 'listing-detail.page.html'
 })
-export class ListingDetailPage {
+export class ListingDetailPage implements AfterViewInit {
+
+  ngAfterViewInit():void {
+    console.log("XXX generateQrCode code");
+    this.generateQrCode();
+  }
   generateQrCode(link:string = "http://haoshiyou.org"):any {
     var el = document.getElementById('qrcode');
 

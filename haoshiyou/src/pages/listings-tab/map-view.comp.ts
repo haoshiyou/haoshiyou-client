@@ -15,6 +15,4 @@ export class MapViewComponent implements OnChanges {
 
   private render() {
   }
-
-
 }

@@ -2,8 +2,6 @@ import {Component, Input} from "@angular/core";
 import {NavController} from "ionic-angular";
 import {Listing} from "../../models/listing";
 import {ListingDetailPage} from "./listing-detail.page";
-import {TimeFromNowPipe} from "../../pipes/time-from-now.pipe";
-import {EnumMsgPipe} from "../../pipes/enum-msg.pipe";
 
 @Component({
   selector: 'listing-item',

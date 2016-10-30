@@ -1,9 +1,8 @@
 // app/services/auth/auth.ts
 
 import {Storage} from "@ionic/storage";
-import {AuthHttp, JwtHelper, tokenNotExpired} from "angular2-jwt";
-import {Injectable, NgZone, Inject} from "@angular/core";
-import {IThreadService} from "./chats/thread.service";
+import {tokenNotExpired, JwtHelper} from "angular2-jwt";
+import {Injectable, NgZone} from "@angular/core";
 import {User} from "../models/models";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
@@ -11,6 +10,7 @@ import {ICredentialService} from "./credential.service";
 
 // Avoid name not found warnings
 declare var Auth0Lock:any;
+declare var Auth0:any;
 
 // TODO(xinbenlv): update Auth0 once my pull request is pulled. https://github.com/auth0/lock/pull/447
 let zhDict = {
@@ -85,20 +85,51 @@ let zhDict = {
 export class AuthService {
 
   public user:Object;
-  private jwtHelper:JwtHelper = new JwtHelper();
-  private lock;
-  private refreshSubscription:any;
+  private auth0/*:Auth0*/;
+  private lock/*:Auth0Lock*/;
   private zoneImpl:NgZone;
   private userSubject:Subject<User>;
+  private idToken:string;
+  //noinspection JSUnusedLocalSymbols
+  private jwtHelper: JwtHelper = new JwtHelper(); // do nothing
+  private refreshSubscription: any;
 
-  constructor(private authHttp:AuthHttp, zone:NgZone,
-              private threadService:IThreadService,
+  constructor(zone:NgZone,
               private credentialService:ICredentialService,
               private local:Storage) {
+    this.auth0 = new Auth0({
+      clientID: this.credentialService.getCred("AUTH0_CLIENT_ID"),
+      domain: this.credentialService.getCred("AUTH0_ACCOUNT_DOMAIN")
+    });
     this.lock = new Auth0Lock(
         this.credentialService.getCred("AUTH0_CLIENT_ID"),
         this.credentialService.getCred("AUTH0_ACCOUNT_DOMAIN")
     );
+    this.lock.on('authenticated', authResult => {
+      console.log("XXX Successfully logged in");
+      this.local.set('id_token', authResult.idToken);
+      this.idToken = authResult.idToken;
+
+      // Fetch profile information
+      this.lock.getProfile(authResult.idToken, (err, profile) => {
+        if (err) {
+          alert(err); // TODO(xinbenlv): handle error
+        } else {
+          // If authentication is successful, save the items
+          // in local storage
+          console.log(`XXX profile=${profile}`);
+          this.local.set('profile', JSON.stringify(profile));
+          this.local.set('id_token', this.idToken);
+          this.local.set('refresh_token', authResult.refreshToken);
+          this.zoneImpl.run(() => this.user = profile);
+          // Schedule a token refresh
+          this.scheduleRefresh();
+
+          this.userSubject.next(AuthService.createHsyUser(this.user));
+        }
+      });
+
+    });
     this.zoneImpl = zone;
     this.userSubject = new Subject<User>();
     // If there is a profile saved in local storage
@@ -112,7 +143,7 @@ export class AuthService {
 
   public authenticated() {
     // Check if there's an unexpired JWT
-    return tokenNotExpired();
+    return tokenNotExpired('id_token', this.idToken);
   }
 
   public getUser() {
@@ -121,24 +152,14 @@ export class AuthService {
 
   public login() {
     // Show the Auth0 Lock widget
+    console.log("XXX start login!");
+
     this.lock.show({
-      authParams: {
-        scope: 'openid offline_access',
-        device: 'Mobile device',
-      },
-      dict: zhDict,
-      icon: 'res/icon.png'
-    }, (err, profile, token, accessToken, state, refreshToken) => {
-      if (err) {
-        alert(err); // TODO(xinbenlv): handle error
-      } else {
-        // If authentication is successful, save the items
-        // in local storage
-        this.local.set('profile', JSON.stringify(profile));
-        this.local.set('id_token', token);
-        this.local.set('refresh_token', refreshToken);
-        this.zoneImpl.run(() => this.user = profile);
-        this.userSubject.next(AuthService.createHsyUser(this.user));
+      auth: {
+        redirect: false,
+        params: {scope: 'openid offline_access'},
+        dict: zhDict,
+        icon: 'assets/res/icon.png'
       }
     });
   }
@@ -149,6 +170,8 @@ export class AuthService {
     this.local.remove('refresh_token');
     this.zoneImpl.run(() => this.user = null);
     this.userSubject.next(null); // logout
+    // Unschedule the token refresh
+    this.unscheduleRefresh();
   }
 
   /**
@@ -165,5 +188,82 @@ export class AuthService {
       name: user['name'],
       avatarSrc: user['picture']
     };
+  }
+
+  public scheduleRefresh() {
+    // If the user is authenticated, use the token stream
+    // provided by angular2-jwt and flatMap the token
+
+    let source = Observable.of(this.idToken).flatMap(
+        token => {
+          console.log('token here', token);
+          // The delay to generate in this case is the difference
+          // between the expiry time and the issued at time
+          let jwtIat = this.jwtHelper.decodeToken(token).iat;
+          let jwtExp = this.jwtHelper.decodeToken(token).exp;
+          let iat = new Date(0);
+          let exp = new Date(0);
+
+          let delay = (exp.setUTCSeconds(jwtExp) - iat.setUTCSeconds(jwtIat));
+
+          return Observable.interval(delay);
+        });
+
+    this.refreshSubscription = source.subscribe(() => {
+      this.getNewJwt();
+    });
+  }
+
+  public unscheduleRefresh() {
+    // Unsubscribe fromt the refresh
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
+    }
+  }
+
+  public getNewJwt() {
+    // Get a new JWT from Auth0 using the refresh token saved
+    // in local storage
+    this.local.get('refresh_token').then(token => {
+      this.auth0.refreshToken(token, (err, delegationRequest) => {
+        if (err) {
+          alert(err);
+        }
+        this.local.set('id_token', delegationRequest.id_token);
+        this.idToken = delegationRequest.id_token;
+      });
+    }).catch(error => {
+      console.log(error);
+    });
+
+  }
+
+  startupTokenRefresh() {
+    // If the user is authenticated, use the token stream
+    // provided by angular2-jwt and flatMap the token
+    if (this.authenticated()) {
+      let source = Observable.of(this.idToken).flatMap(
+          token => {
+            // Get the expiry time to generate
+            // a delay in milliseconds
+            let now: number = new Date().valueOf();
+            let jwtExp: number = this.jwtHelper.decodeToken(token).exp;
+            let exp: Date = new Date(0);
+            exp.setUTCSeconds(jwtExp);
+            let delay: number = exp.valueOf() - now;
+
+            // Use the delay in a timer to
+            // run the refresh at the proper time
+            return Observable.timer(delay);
+          });
+
+      // Once the delay time from above is
+      // reached, get a new JWT and schedule
+      // additional refreshes
+      source.subscribe(() => {
+        this.getNewJwt();
+        this.scheduleRefresh();
+      });
+    }
   }
 }

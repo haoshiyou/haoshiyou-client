@@ -8,7 +8,7 @@ import {NavParams, Content} from "ionic-angular";
 import {uuid} from "../../util/uuid";
 import {Subscription} from "rxjs/Subscription";
 import {NotificationService} from "../../services/notfication.service";
-
+import 'rxjs/Rx'; // used by Observable.take()
 export class MessageInfo {
   message:Message;
   author:User;

@@ -33,7 +33,7 @@
             <div style="margin: 20%" id="qrcode" ></div>
         </ion-item>
         <ion-item>
-            <ion-badge class="{{ listing.type == 0 ? 'badge-secondary' : 'badge-primary'}}" item-left>
+            <ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}" item-left>
                 {{listing.type|enumMsgPipe}}
             </ion-badge>
             <button ion-button color="primary" clear item-right (click)="generateQrCode()">

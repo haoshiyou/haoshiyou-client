@@ -10,7 +10,7 @@ import {AngularFire} from "angularfire2";
 import {User} from "../models/models";
 import {ICredentialService} from "../services/credential.service";
 import {NotificationService} from "../services/notfication.service";
-
+import 'rxjs/Rx'; // used by Observable.take()
 declare let ga:any;
 
 @Component({
@@ -53,6 +53,8 @@ export class HaoshiyouApp {
           });
         }
       });
+      // Schedule a token refresh on app start up
+      authService.startupTokenRefresh();
 
       // Setup notification
       authService.userObservable().subscribe((user:User)=> {

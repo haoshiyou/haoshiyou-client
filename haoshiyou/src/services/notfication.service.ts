@@ -1,7 +1,7 @@
 // app/services/auth/auth.ts
 
 import {Platform} from "ionic-angular";
-import {Injectable, Inject} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {ICredentialService} from "./credential.service";
 import {Http, Headers, RequestOptions} from "@angular/http";
 import {Push} from "ionic-native";
@@ -19,9 +19,11 @@ export class NotificationService {
 
   register(meId:string):Promise<string> {
     return this.platform.ready().then(() => {
-      if (typeof Push === "undefined") {
+      if (!this.platform.is('cordova')) {
+        console.log('XXX NotificationService is not cordova');
         return Promise.resolve(null);
       } else {
+        console.log('XXX NotificationService is cordova');
         return new Promise<string>((resolve, reject)=> {
           let coreOpt = {
             "senderID": this.credService.getCred("FCM_SENDER_ID"),
