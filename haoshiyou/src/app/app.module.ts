@@ -32,6 +32,8 @@ import {ImageIdsToUrlPipe, ImageIdToUrlPipe} from "../pipes/image-id-to-url.pipe
 import {TimeFromNowPipe} from "../pipes/time-from-now.pipe";
 import { AngularFireModule } from 'angularfire2';
 import { Storage } from '@ionic/storage';
+import {MapService} from "../services/map.service";
+import {CityNZipPipe} from "../services/city-n-zip";
 
 // Must export the config
 // TODO(xinbenlv): move to config.json
@@ -64,9 +66,10 @@ const _components:Object[] = [
 const _pipes:Object[] = [
   EnumMsgPipe,
   ImageIdsToUrlPipe,
+  ImageIdToUrlPipe,
   TimeFromNowPipe,
+  CityNZipPipe
 ];
-
 let storage: Storage = new Storage();
 export function getAuthHttp(http) {
   return new AuthHttp(new AuthConfig({
@@ -99,7 +102,8 @@ export function getAuthHttp(http) {
     EnumMsgPipe,
     ImageIdsToUrlPipe,
     ImageIdToUrlPipe,
-    TimeFromNowPipe
+    TimeFromNowPipe,
+    CityNZipPipe
   ],
   imports: [
     IonicModule.forRoot(HaoshiyouApp),
@@ -132,6 +136,7 @@ export function getAuthHttp(http) {
     {provide: IListingService, useClass: FirebaseListingService},
     {provide: IImageService, useClass: CloudinaryImageService},
     NotificationService,
+    MapService,
     AuthService,
     {
       provide: AuthHttp,
