@@ -4,6 +4,7 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "noImplicitAny": false, // needed by google.maps
     "lib": [
       "dom",
       "es2015"

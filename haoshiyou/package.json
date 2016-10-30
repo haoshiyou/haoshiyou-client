@@ -15,7 +15,6 @@
   "dependencies": {
     "@angular/common": "^2.0.0",
     "@angular/compiler": "^2.0.0",
-    "@angular/compiler-cli": "0.6.2",
     "@angular/core": "^2.0.0",
     "@angular/forms": "^2.0.0",
     "@angular/http": "^2.0.0",
@@ -39,6 +38,7 @@
     "zone.js": "^0.6.25"
   },
   "devDependencies": {
+    "@angular/compiler-cli": "^2.1.1",
     "@ionic/app-scripts": "^0.0.36",
     "@types/googlemaps": "3.25.35",
     "@types/lodash": "4.14.37",
