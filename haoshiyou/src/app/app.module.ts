@@ -33,7 +33,7 @@ import {TimeFromNowPipe} from "../pipes/time-from-now.pipe";
 import { AngularFireModule } from 'angularfire2';
 import { Storage } from '@ionic/storage';
 import {MapService} from "../services/map.service";
-import {CityNZipPipe} from "../services/city-n-zip";
+import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 
 // Must export the config
 // TODO(xinbenlv): move to config.json
