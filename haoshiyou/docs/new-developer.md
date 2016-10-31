@@ -53,6 +53,11 @@ ionic emulate ios
 ionic emulate android
 ```
 
+5. Run the ios device (need to connect your mac to an physical iPhone/iPad)
+```shell
+ionic run ios --device # needs --device to work
+```
+
 ## Switch between PROD and DEV environment
 ```shell
 git config -f .gitmodules submodule.config.branch prod # or dev

@@ -11,7 +11,7 @@ import {Subscription} from "rxjs/Subscription";
   templateUrl: 'chats-tab.page.html',
 })
 export class ChatsTabPage implements OnInit, OnDestroy {
-  private meId:string;
+  meId:string;
   private threads:Thread[];
   private subscription:Subscription;
   private badgeCounters:number[];

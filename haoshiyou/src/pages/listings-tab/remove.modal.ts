@@ -6,8 +6,8 @@ import {NavController, NavParams, ViewController} from "ionic-angular/index";
   templateUrl: 'remove.modal.html',
 })
 export class RemoveModal {
-  private imageIds:string[];
-  private checkboxes:boolean[];
+  imageIds:string[];
+  checkboxes:boolean[];
   constructor(
       private nav:NavController,
       params:NavParams,

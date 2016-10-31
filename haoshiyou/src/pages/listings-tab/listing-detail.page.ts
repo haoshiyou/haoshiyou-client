@@ -31,9 +31,9 @@ export class ListingDetailPage implements AfterViewInit {
     var qrcode = new QRCode(el);
     qrcode.makeCode(link);
   }
-  private listing:Listing;
-  private owner:User;
-  private meId:string;
+  listing:Listing;
+  owner:User;
+  meId:string;
   constructor(private threadService:IThreadService,
               private userService:IUserService,
               private nav:NavController,

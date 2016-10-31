@@ -21,13 +21,13 @@ const DEFAULT_LNG:number = -122.09106;
 })
 export class CreationPage implements OnInit {
   //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
-  private typeOptions:ListingType[] = [ListingType.ROOMMATE_WANTED, ListingType.ROOM_WANTED];
-  private listing:Listing;
-  private localityText:string;
+  typeOptions:ListingType[] = [ListingType.ROOMMATE_WANTED, ListingType.ROOM_WANTED];
+  listing:Listing;
+  localityText:string;
   private map:any; /*google.maps.Map*/
   private marker:any; /*google.maps.Marker*/
   //noinspection JSMismatchedCollectionQueryUpdate used in HTML
-  private dirty:{[field:string]: boolean} = {};
+  dirty:{[field:string]: boolean} = {};
   constructor(private platform:Platform, private params:NavParams,
               private listingService:IListingService,
               private nav:NavController,
@@ -80,9 +80,7 @@ export class CreationPage implements OnInit {
     });
   }
 
-
-  //noinspection JSUnusedLocalSymbols: used in HTML
-  private save() {
+  save() {
     if (this.validate()) {
       this.listing.lastUpdated = Date.now();
       this.userService.promiseMe().then((me:User)=> {
@@ -109,8 +107,8 @@ export class CreationPage implements OnInit {
   updateImageIds(imageIds:string[]) {
     this.listing.imageIds = imageIds;
   }
-  //noinspection JSUnusedLocalSymbols, used in HTML,
-  private deleteListing(): void {
+
+  deleteListing(): void {
     let prompt = this.alertCtrl.create({
       title: '确认删除?',
       buttons: [

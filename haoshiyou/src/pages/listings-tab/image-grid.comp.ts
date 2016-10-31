@@ -19,10 +19,10 @@ export class ImageGridComponent implements OnInit {
 
   // TODO(xinbenlv): merge input and output to a single [()]
   @Input()
-  private imageIds: string[];
+  imageIds: string[];
 
   @Output()
-  private updateImageIds = new EventEmitter<string[]>();
+  updateImageIds = new EventEmitter<string[]>();
 
   private removeModal:Modal;
 

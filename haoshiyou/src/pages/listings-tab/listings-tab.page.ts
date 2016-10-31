@@ -22,7 +22,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
 
   private map:any; // Actually google.maps.Map;
   private markers:any[]; // Actually google.maps.Marker[];
-  private listings:Listing[];
+  listings:Listing[];
   private listingObservable: Observable<Listing[]>;
   private mapReady:boolean = false;
   constructor(private platform:Platform,

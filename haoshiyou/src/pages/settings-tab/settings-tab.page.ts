@@ -5,7 +5,7 @@ import {Component} from "@angular/core";
   templateUrl: 'settings-tab.page.html'
 })
 export class SettingsTabPage {
-  constructor(private auth:AuthService) {
+  constructor(public auth:AuthService) {
 
   }
 }

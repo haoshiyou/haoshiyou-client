@@ -6,21 +6,20 @@
     "emulate:before": "build",
     "deploy:before": "build",
     "build:before": "build",
-    "run:before": "build",
-    "postinstall": "typings install"
+    "run:before": "build"
   },
   "config": {
     "ionic_rollup": "./config/rollup.config.js"
   },
   "dependencies": {
-    "@angular/common": "2.0.0",
-    "@angular/compiler": "2.0.0",
-    "@angular/core": "2.0.0",
-    "@angular/forms": "2.0.0",
-    "@angular/http": "2.0.0",
-    "@angular/platform-browser": "2.0.0",
-    "@angular/platform-browser-dynamic": "2.0.0",
-    "@angular/platform-server": "2.0.0",
+    "@angular/common": "2.1.0",
+    "@angular/compiler": "2.1.0",
+    "@angular/core": "2.1.0",
+    "@angular/forms": "2.1.0",
+    "@angular/http": "2.1.0",
+    "@angular/platform-browser": "2.1.0",
+    "@angular/platform-browser-dynamic": "2.1.0",
+    "@angular/platform-server": "2.1.0",
     "@angular/router": "3.0.0",
     "@ionic/storage": "^1.1.6",
     "angular2-jwt": "0.1.25",
@@ -46,6 +45,7 @@
     "browserify-istanbul": "2.0.0",
     "codecov.io": "0.1.6",
     "del": "2.2.0",
+    "ios-deploy": "^1.9.0",
     "isparta": "4.0.0",
     "jasmine-core": "2.4.1",
     "karma": "1.2.0",
