@@ -3,26 +3,21 @@ language: node_js
 env:
   CXX=g++-4.8
 node_js:
-  - '4.4'
+  - '6.9'
 matrix:
   fast_finish: true
 os:
   - linux
   - osx
-cache:
-  directories:
-    - haoshiyou/node_modules
 notifications:
   slack: haoshiyou:eSZq9zT9wMllEJYHMITggGky
 before_install:
-  - npm install -g gulp # needed by OSX env
-  - cd haoshiyou 
+  - cd haoshiyou
   # download config.json from haoshiyou-security repository with a token
   - ./travis/download-config.sh
-  - ./travis/install-platform-sdk.sh
 install:
+  - ./travis/install-platform-sdk.sh
   - ./travis/install-ionic-sdk.sh
   - npm install
 script:
   - ./travis/build-platform.sh
-  - gulp  --gulpfile test/gulpfile.ts --cwd ./ unit-test 
