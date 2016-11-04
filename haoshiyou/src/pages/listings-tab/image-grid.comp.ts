@@ -66,11 +66,8 @@ export class ImageGridComponent implements OnInit {
   }
 
   private initUploader() {
-    // TODO(wrj): determine whether the cloudinaryCorsHtml is still needed
-    var cloudinaryCorsHtml = document.location.origin + "/cloudinary_cors.html";
     var uploadImageFormData = {
       "timestamp":$.now(),
-      "callback": cloudinaryCorsHtml,
       "api_key":this.cred.getCred('CLOUDINARY_API_KEY'),
       "upload_preset":this.cred.getCred('CLOUDINARY_UPLOAD_PRESET'),
     };
@@ -99,6 +96,6 @@ export class ImageGridComponent implements OnInit {
   private onUpdateImageIds(imageIds:string[]) {
     this.imageIds = imageIds;
     this.updateImageIds.emit(this.imageIds);  // notify parent
-   }
+  }
 
 }
