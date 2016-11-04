@@ -6,6 +6,8 @@ import {Modal, NavController, ModalController, Platform} from "ionic-angular";
 
 declare let window;
 declare let $; // jQuery
+declare let document;
+declare let JSON;
 @Component({
   selector: 'image-grid',
   templateUrl: 'image-grid.comp.html',
