@@ -42,4 +42,6 @@ haoshiyou.ipa
 release-cred/
 # credential information from https://github.com/xinbenlv/haoshiyou-security
 www/config
-
+Gemfile.lock
+res/
+releases/

@@ -45,7 +45,6 @@
     "browserify-istanbul": "2.0.0",
     "codecov.io": "0.1.6",
     "del": "2.2.0",
-    "ios-deploy": "^1.9.0",
     "isparta": "4.0.0",
     "jasmine-core": "2.4.1",
     "karma": "1.2.0",
