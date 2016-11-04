@@ -2,9 +2,11 @@
 
 import {Platform} from "ionic-angular";
 import {Injectable} from "@angular/core";
-import {ICredentialService} from "./credential.service";
 import {Http, Headers, RequestOptions} from "@angular/http";
 import {Push} from "ionic-native";
+import {Env} from "../app/env";
+declare let console;
+declare let JSON;
 
 @Injectable()
 export class NotificationService {
@@ -13,7 +15,6 @@ export class NotificationService {
   private push:any/* PushNotification, no typed definition yet. */;
 
   constructor(private platform:Platform,
-              private credService:ICredentialService,
               private http:Http) {
   }
 
@@ -26,7 +27,7 @@ export class NotificationService {
         console.log('XXX NotificationService is cordova');
         return new Promise<string>((resolve, reject)=> {
           let coreOpt = {
-            "senderID": this.credService.getCred("FCM_SENDER_ID"),
+            "senderID": Env.configFirebaseCloudMessage.senderId,
             "topics": [NotificationService.TOPIC_LISTING]
           };
           if (meId) {
@@ -87,7 +88,7 @@ export class NotificationService {
     });
     let headers = new Headers({
       'Content-Type': 'application/json',
-      'Authorization':`key=${this.credService.getCred('FCM_KEY')}`
+      'Authorization':`key=${Env.configFirebaseCloudMessage.key}`
     });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(url, body, options).take(1).toPromise().then((ret)=>{
@@ -106,7 +107,7 @@ export class NotificationService {
     });
     let headers = new Headers({
       'Content-Type': 'application/json',
-      'Authorization': `key=${this.credService.getCred('FCM_KEY')}`
+      'Authorization': `key=${Env.configFirebaseCloudMessage.key}`
     });
     let options = new RequestOptions({headers: headers});
     return this.http.post(url, body, options).take(1).toPromise().then((ret)=> {

@@ -17,7 +17,6 @@ import {MapViewComponent} from "../pages/listings-tab/map-view.comp";
 import {RemoveModal} from "../pages/listings-tab/remove.modal";
 import {SettingsTabPage} from "../pages/settings-tab/settings-tab.page";
 import {DisconnectModal} from "../pages/tabs/disconnect.modal";
-import {ICredentialService, JsonCredentialService} from "../services/credential.service";
 import {IImageService, CloudinaryImageService} from "../services/image.service";
 import {NotificationService} from "../services/notfication.service";
 import {IListingService} from "../services/listings/listing.service";
@@ -34,16 +33,7 @@ import { AngularFireModule } from 'angularfire2';
 import { Storage } from '@ionic/storage';
 import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
-
-// Must export the config
-// TODO(xinbenlv): move to config.json
-export const firebaseConfig = {
-  apiKey: 'AIzaSyAb4Zt88HUsXQYL6_q6xAbO4I0TIR2PMJA',
-  authDomain: 'haoshiyou-dev.firebaseapp.com',
-  databaseURL: 'https://haoshiyou-dev.firebaseio.com',
-  storageBucket: "firebase-haoshiyou-dev.appspot.com",
-  messagingSenderId: "104841816267"
-};
+import {Env} from "../app/env";
 
 const _components:Object[] = [
   HaoshiyouApp,
@@ -108,7 +98,7 @@ export function getAuthHttp(http) {
   imports: [
     IonicModule.forRoot(HaoshiyouApp),
     BrowserModule,
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(Env.configFirebase)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -129,7 +119,6 @@ export function getAuthHttp(http) {
     DisconnectModal,
   ],
   providers: [
-    {provide: ICredentialService, useClass: JsonCredentialService},
     {provide: IUserService, useClass: FirebaseUserService},
     {provide: IThreadService, useClass: FirebaseThreadService},
     {provide: IMessageService, useClass: FirebaseMessageService},

@@ -3,7 +3,9 @@ var commonjs = require('rollup-plugin-commonjs');
 var globals = require('rollup-plugin-node-globals');
 var builtins = require('rollup-plugin-node-builtins');
 var json = require('rollup-plugin-json');
+var replace = require('rollup-plugin-replace');
 
+var isProd  = (process.env.IONIC_ENV === 'prod');
 
 // https://github.com/rollup/rollup/wiki/JavaScript-API
 
@@ -64,8 +66,7 @@ var rollupConfig = {
         }),
         globals(),
         json()
-    ]
-
+    ],
 };
 
 

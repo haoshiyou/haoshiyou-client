@@ -6,12 +6,12 @@ import {Injectable, NgZone} from "@angular/core";
 import {User} from "../models/models";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
-import {ICredentialService} from "./credential.service";
+import {Env} from "../app/env";
 
 // Avoid name not found warnings
-declare var Auth0Lock:any;
-declare var Auth0:any;
-
+declare let Auth0Lock:any;
+declare let Auth0:any;
+declare let console, alert, JSON, Date;
 // TODO(xinbenlv): update Auth0 once my pull request is pulled. https://github.com/auth0/lock/pull/447
 let zhDict = {
   "//": "This is an automatic translation. Help us to improve it.",
@@ -95,15 +95,14 @@ export class AuthService {
   private refreshSubscription: any;
 
   constructor(zone:NgZone,
-              private credentialService:ICredentialService,
               private local:Storage) {
     this.auth0 = new Auth0({
-      clientID: this.credentialService.getCred("AUTH0_CLIENT_ID"),
-      domain: this.credentialService.getCred("AUTH0_ACCOUNT_DOMAIN")
+      clientID: Env.configAuth0.clientId,
+      domain: Env.configAuth0.accountDomain
     });
     this.lock = new Auth0Lock(
-        this.credentialService.getCred("AUTH0_CLIENT_ID"),
-        this.credentialService.getCred("AUTH0_ACCOUNT_DOMAIN")
+        Env.configAuth0.clientId,
+        Env.configAuth0.accountDomain
     );
     this.lock.on('authenticated', authResult => {
       console.log("XXX Successfully logged in");

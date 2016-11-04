@@ -1,6 +1,6 @@
 import {Injectable, Inject} from "@angular/core";
 import {Transfer} from "ionic-native";
-import {ICredentialService} from "./credential.service";
+import {Env} from "../app/env";
 @Injectable()
 export class IImageService {
 
@@ -26,12 +26,12 @@ export class IImageService {
 export class CloudinaryImageService implements IImageService {
   private config:CloudinaryConfig;
 
-  constructor(private credService:ICredentialService) {
+  constructor() {
     // TODO(xinbenlv): update the credentials of CloudinaryImageService.
     this.config = <CloudinaryConfig>{
-      cloud_name: this.credService.getCred('CLOUDINARY_CLOUD_NAME'),
-      api_key: this.credService.getCred('CLOUDINARY_API_KEY'),
-      upload_preset: this.credService.getCred('CLOUDINARY_UPLOAD_PRESET')
+      cloud_name: Env.configCloudinary.clientName,
+      api_key: Env.configCloudinary.apiKey,
+      upload_preset: Env.configCloudinary.uploadPreset
     };
   }
 

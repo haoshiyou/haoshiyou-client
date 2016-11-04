@@ -8,9 +8,9 @@ import {IThreadService} from "../services/chats/thread.service";
 import {IUserService} from "../services/chats/user.service";
 import {AngularFire} from "angularfire2";
 import {User} from "../models/models";
-import {ICredentialService} from "../services/credential.service";
 import {NotificationService} from "../services/notfication.service";
 import 'rxjs/Rx'; // used by Observable.take()
+import {Env} from "../app/env";
 declare let ga:any;
 
 @Component({
@@ -25,11 +25,10 @@ export class HaoshiyouApp {
               private threadService:IThreadService,
               private messageService:IMessageService,
               private authService:AuthService,
-              private credService:ICredentialService,
               private notificationService:NotificationService,
               private http:Http) {
     this.platform.ready().then(()=> {
-      ga('create', this.credService.getCred('GOOGLE_ANALYTICS_PROPERTY_ID'), 'none');
+      ga('create', Env.configGoogleAnalytics.propertyId, 'none');
       ga('send', 'pageview');
 
       if (authService.getUser()) {

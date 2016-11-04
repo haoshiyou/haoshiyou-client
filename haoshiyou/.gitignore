@@ -45,3 +45,6 @@ www/config
 Gemfile.lock
 res/
 releases/
+
+src/app/env.prod.ts
+src/app/env.dev.ts
