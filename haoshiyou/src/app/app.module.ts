@@ -33,7 +33,7 @@ import { AngularFireModule } from 'angularfire2';
 import { Storage } from '@ionic/storage';
 import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
-import {Env} from "../app/env";
+import {Env} from "./env";
 
 const _components:Object[] = [
   HaoshiyouApp,

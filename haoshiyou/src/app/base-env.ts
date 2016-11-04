@@ -1,33 +1,4 @@
 export class BaseEnv {
-  static version = "3.5.0";
-  static envType:EnvType = EnvType.Dev;
-  static flags = {};
-  static configFirebase:ConfigFirebase = {
-    apiKey: 'N/A',
-    authDomain: 'N/A',
-    databaseURL: 'N/A',
-    storageBucket: "N/A",
-    messagingSenderId: "N/A"
-  };
-  static configAuth0:ConfigAuth0 = {
-    clientId: 'N/A',
-    accountDomain: 'N/A',
-  };
-  static configCloudinary:ConfigCloudinary = {
-    cloudName: 'N/A',
-    apiKey: 'N/A',
-    uploadPreset: 'N/A',
-  };
-  static configFirebaseCloudMessage:ConfigFirebaseCloudMessage = {
-    senderId: 'N/A',
-    key: 'N/A',
-  };
-  static configGoogleAnalytics:ConfigGoogleAnalytics = {
-    propertyId: 'N/A'
-  };
-  static configLogSense:ConfigLogSense = {
-    token: 'N/A'
-  };
 }
 
 export class ConfigFirebase {
