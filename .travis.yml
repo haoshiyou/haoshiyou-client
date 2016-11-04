@@ -13,8 +13,8 @@ notifications:
   slack: haoshiyou:eSZq9zT9wMllEJYHMITggGky
 before_install:
   - cd haoshiyou
-  # download config.json from haoshiyou-security repository with a token
-  - ./travis/download-config.sh
+  # download env.dev.ts from haoshiyou-security repository with a token
+  - ./travis/setup-env.sh
 install:
   - ./travis/install-platform-sdk.sh
   - ./travis/install-ionic-sdk.sh
