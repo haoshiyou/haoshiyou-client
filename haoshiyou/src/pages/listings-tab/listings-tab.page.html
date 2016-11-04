@@ -1,0 +1,18 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            好室友
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="gotoCreationPage()">
+                <ion-icon name="add"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content class="listing-tab">
+    <ion-list>
+        <listing-item *ngFor="let listing of listings; let i = index"
+                      [listing]=listing></listing-item>
+    </ion-list>
+</ion-content>

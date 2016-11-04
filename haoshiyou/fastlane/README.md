@@ -5,16 +5,11 @@ fastlane documentation
 sudo gem install fastlane
 ```
 # Available Actions
-### increment_version
-```
-fastlane increment_version
-```
-
 ### deploy_all
 ```
 fastlane deploy_all
 ```
-
+Deploy to all platforms.
 
 ----
 
@@ -23,7 +18,7 @@ fastlane deploy_all
 ```
 fastlane ios deploy
 ```
-Deploy a new version to the App Store
+Deploy a new version to the App Store/
 
 ----
 
@@ -32,7 +27,7 @@ Deploy a new version to the App Store
 ```
 fastlane android deploy
 ```
-
+Deploy a new version to the Google Play Store.
 
 ----
 

@@ -1,19 +1,47 @@
 # Specifies files to intentionally ignore when using Git
 # http://git-scm.com/docs/gitignore
 
-# credential information from https://github.com/xinbenlv/haoshiyou-security
-www/config
+*~
+*.sw[mnpcod]
+*.log
+*.tmp
+*.tmp.*
+log.txt
+*.sublime-project
+*.sublime-workspace
+.vscode/
+npm-debug.log*
 
-npm-debug.log
+.idea/
+.sass-cache/
+.tmp/
+.versions/
+coverage/
+dist/
 node_modules/
-www/build/
+tmp/
+temp/
+hooks/
 platforms/
 plugins/
-*.swp
+plugins/android.json
+plugins/ios.json
+www/
+$RECYCLE.BIN/
+
 .DS_Store
 Thumbs.db
-*.mobileprovision
+UserInterfaceState.xcuserstate
 
+# ==========================
+# Haoshiyou Specific gitignores
+
+*.mobileprovision
 haoshiyou.app.dSYM.zip
 haoshiyou.ipa
 release-cred/
+# credential information from https://github.com/xinbenlv/haoshiyou-security
+www/config
+Gemfile.lock
+res/
+releases/

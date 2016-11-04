@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+        群聊({{currentThread.userIds.length}})
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-list>
+        <chat-message
+                *ngFor="let messageInfo of messageInfos"
+                [message]="messageInfo.message" [author]="messageInfo.author" [incoming]="messageInfo.incoming">
+        </chat-message>
+    </ion-list>
+</ion-content>
+ <ion-footer>
+    <ion-toolbar position="bottom">
+        <ion-row>
+            <ion-textarea block placeholder="Write your message here..."
+                          (keydown.enter)="onEnter($event)"
+                          [(ngModel)]="draftMessageText"></ion-textarea>
+            <button ion-button clear outline royal (click)="onEnter($event)">
+                Send
+                <ion-icon name="send"></ion-icon>
+            </button>
+        </ion-row>
+    </ion-toolbar>
+ </ion-footer>

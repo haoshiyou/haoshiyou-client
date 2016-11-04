@@ -3,7 +3,7 @@
 # Update fastlane automatically if a new version is available:
 update_fastlane
 
-fastlane_version "1.100.0"
+fastlane_version "1.106.2"
 
 ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
 android_release_path = "releases/haoshiyou-android-release.apk"
@@ -61,7 +61,7 @@ private_lane :android_upload do
   supply(
       track: "alpha",
       apk: android_release_path,
-      json_key: "fastlane/release-cred/haoshiyou-play-release-manager-credentail.json",
+      json_key: "fastlane/release-cred/haoshiyou-play-release-manager-credentials.json",
       package_name: "org.haoshiyou.app"
   )
   slack(message: "Successfully deployed to Google Play.") # TODO(xinbenlv): add version
@@ -103,8 +103,6 @@ end
 
 # TODO(zzn):
 # - 1. add deployment for web
-# - 2. merge android, web ios
+# - 2. merge web flow into deploy_all
 # - 3. add other workflows: test, pilot, prod
 # - 4. add support "dev" scheme
-# - 5. add instructions to set-up fastlane environemnt: how to download release-cred, install
-#      zipalign, jarsigner, check for storepass when calling deploy, etc.

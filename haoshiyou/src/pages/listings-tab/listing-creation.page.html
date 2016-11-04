@@ -1,0 +1,55 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            创建
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="save()">保存</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content class="creation" id="page-container">
+    <ion-item>
+        <ion-label>位置</ion-label>
+        <ion-label>{{localityText}}</ion-label>
+    </ion-item>
+    <div style="width:100%;height:250px" id="map_drag_canvas"></div>
+    <ion-item>
+        <ion-label>类型</ion-label>
+        <ion-select required [(ngModel)]="listing.type" (ionChange)="dirty['type']=true">
+            <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
+        </ion-select>
+        <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
+            required
+        </p>
+    </ion-item>
+    <ion-item>
+        <ion-label fixed>标题</ion-label>
+        <ion-input required [(ngModel)]="listing.title" (change)="dirty['content']=true"></ion-input>
+        <p style="color: red;" item-right *ngIf="dirty['title'] && !listing.title">
+        required
+        </p>
+    </ion-item>
+
+    <ion-item>
+        <ion-label>详情</ion-label>
+        <ion-textarea required [(ngModel)]="listing.content" (change)="dirty['content']=true"></ion-textarea>
+        <p style="color: red;" item-right *ngIf="dirty['content'] && !listing.content">
+            required
+        </p>
+    </ion-item>
+
+    <ion-item>
+        <ion-label fixed>图片</ion-label>
+        <ion-input fixed disabled></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <image-grid
+                [imageIds]="listing.imageIds"
+                (updateImageIds)="updateImageIds($event)"
+                [isEdit]="true"
+        ></image-grid>
+    </ion-item>
+    <button ion-button block color="danger" (click)="deleteListing()">删除</button>
+</ion-content>
