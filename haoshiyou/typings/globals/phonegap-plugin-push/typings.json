@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/e42fdcf8b754727afbab9e402665bde60b0f0bf1/phonegap-plugin-push/phonegap-plugin-push.d.ts",
-    "raw": "registry:dt/phonegap-plugin-push#0.0.0+20160501153936",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/e42fdcf8b754727afbab9e402665bde60b0f0bf1/phonegap-plugin-push/phonegap-plugin-push.d.ts"
-  }
-}

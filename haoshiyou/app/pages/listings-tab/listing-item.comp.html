@@ -1,9 +1,0 @@
-<ion-item *ngIf="listing" (click)="gotoDetail()">
-    <h2>{{ listing.title }}</h2>
-    <p>{{ listing.content }}</p>
-    <p>{{ listing.lastUpdated | timeFromNow }}
-        <ion-badge class="{{ listing.type == 0 ? 'badge-secondary' : 'badge-primary'}}">
-            {{listing.type|enumMsgPipe}}
-        </ion-badge>
-    </p>
-</ion-item>

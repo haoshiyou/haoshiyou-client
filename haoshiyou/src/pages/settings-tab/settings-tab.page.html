@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            设置
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <button ion-button block (click)="auth.login()" *ngIf="!auth.authenticated()">登录</button>
+    <ion-card *ngIf="auth.authenticated()">
+
+        <ion-item *ngIf="auth.user">
+            <ion-avatar item-left>
+                <img src="{{ auth.user.picture }}">
+            </ion-avatar>
+            <h2>{{ auth.user.nickname }}</h2>
+            <p>{{ auth.user.email }}</p>
+        </ion-item>
+
+    </ion-card>
+
+    <button ion-button block (click)="auth.logout()" *ngIf="auth.authenticated()">登出</button>
+</ion-content>

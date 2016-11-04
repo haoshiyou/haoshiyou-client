@@ -1,7 +1,10 @@
 # Haoshiyou project (ionic v2)
 
-- Master: [![Build Status](https://travis-ci.org/xinbenlv/rent.zzn.im.svg?branch=master)](https://travis-ci.org/xinbenlv/rent.zzn.im)
-- Dev: [![Build Status](https://travis-ci.org/xinbenlv/rent.zzn.im.svg?branch=dev)](https://travis-ci.org/xinbenlv/rent.zzn.im)
+## Master Status 
+[![Build Status](https://travis-ci.org/xinbenlv/rent.zzn.im.svg?branch=master)](https://travis-ci.org/xinbenlv/rent.zzn.im)
+
+## Dev Status
+[![Build Status](https://travis-ci.org/xinbenlv/rent.zzn.im.svg?branch=dev)](https://travis-ci.org/xinbenlv/rent.zzn.im)
 
 
 This project is a project built with ionic v2
