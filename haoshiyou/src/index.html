@@ -44,9 +44,19 @@
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
   </script>
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#00A4FF">
   <link rel="stylesheet" href="build/main.css">
   <link rel="stylesheet" href="assets/viewerjs/viewer.min.css">
+
+  <!-- un-comment this code to enable service worker-->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('service worker installed'))
+        .catch(err => console.log('Error', err));
+    }
+  </script>
 </head>
 <body>
 

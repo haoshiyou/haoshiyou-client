@@ -48,3 +48,4 @@ releases/
 
 src/app/env.prod.ts
 src/app/env.dev.ts
+src/app/env.ts
