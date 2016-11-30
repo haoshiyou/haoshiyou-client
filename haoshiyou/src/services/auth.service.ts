@@ -166,6 +166,7 @@ export class AuthService {
   public logout() {
     this.local.remove('profile');
     this.local.remove('id_token');
+    this.idToken = null;
     this.local.remove('refresh_token');
     this.zoneImpl.run(() => this.user = null);
     this.userSubject.next(null); // logout
