@@ -152,6 +152,7 @@ lane :deploy_all do |options|
   prepare
   android deploy(options)
   ios deploy
+  web_deploy
 end
 
 # TODO(zzn):
