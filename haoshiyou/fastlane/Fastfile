@@ -85,6 +85,7 @@ lane :web_upload do
   # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
   # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
 
+  sh("echo 'Assumming you are checking out from dev branch'")
   sh("git checkout -- ../config.xml report.xml")
   sh("git checkout release-web-dev")
   sh("git merge dev")
@@ -93,8 +94,8 @@ lane :web_upload do
   sh("git commit -m 'web-release';true")
 
   sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
-  #
-  # git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages
+  sh("git checkout -- report.xml")
+  sh("git checkout dev")
   slack(message: "Successfully deployed to haoshiyou.org Web.") # TODO(xinbenlv): add version
 end
 
