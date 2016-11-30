@@ -35,8 +35,6 @@ import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {Env} from "./env";
 
-console.log("XXXX good app module 10");
-
 let storage: Storage = new Storage();
 export function getAuthHttp(http) {
   return new AuthHttp(new AuthConfig({

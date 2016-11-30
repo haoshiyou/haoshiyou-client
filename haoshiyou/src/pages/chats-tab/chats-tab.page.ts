@@ -2,6 +2,7 @@ import {OnInit, OnDestroy, Output, EventEmitter, Component} from "@angular/core"
 import {IMessageService, IThreadService, IUserService} from "../../services/services";
 import {Thread, User} from "../../models/models";
 import {Subscription} from "rxjs/Subscription";
+import {AuthService} from "../../services/auth.service";
 
 /**
  * TODO(xinbenlv): optimize the messages update process and ChangeDetection for optimal user experience.
@@ -17,7 +18,7 @@ export class ChatsTabPage implements OnInit, OnDestroy {
   private badgeCounters:number[];
   @Output()
   allCounters = new EventEmitter<number[]>();
-  constructor(private messagesService:IMessageService,
+  constructor(public auth:AuthService, private messagesService:IMessageService,
               private threadsService:IThreadService,
               private userService:IUserService) {
     this.userService.observableMeId().subscribe((meId:string) => {
