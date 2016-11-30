@@ -3,102 +3,74 @@
   <testsuite name="fastlane.lanes">
     
       
-      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="3.156">
+      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="3.071084">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: Verifying required fastlane version" time="0.0004">
+      <testcase classname="fastlane.lanes" name="1: Verifying required fastlane version" time="0.000468">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: Switch to prepare lane" time="0.000165">
+      <testcase classname="fastlane.lanes" name="2: Switch to prepare lane" time="0.000195">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: echo 'Incrementing Version for PROD release.'" time="0.005082">
+      <testcase classname="fastlane.lanes" name="3: echo 'Incrementing Version for PROD release.'" time="0.005436">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: node scripts/increment_build_number.js" time="0.239733">
+      <testcase classname="fastlane.lanes" name="4: node scripts/increment_build_number.js" time="0.19479">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: cd .. &amp;&amp; ./travis/setup-env.sh" time="1.060978">
+      <testcase classname="fastlane.lanes" name="5: cd .. &amp;&amp; ./travis/setup-env.sh" time="1.110171">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: Switch to prepare lane" time="0.000233">
+      <testcase classname="fastlane.lanes" name="6: Switch to prepare lane" time="0.000244">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="7: echo 'Incrementing Version for PROD release.'" time="0.004262">
+      <testcase classname="fastlane.lanes" name="7: echo 'Incrementing Version for PROD release.'" time="0.004376">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="8: node scripts/increment_build_number.js" time="0.181537">
+      <testcase classname="fastlane.lanes" name="8: node scripts/increment_build_number.js" time="0.186511">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="9: cd .. &amp;&amp; ./travis/setup-env.sh" time="0.582183">
+      <testcase classname="fastlane.lanes" name="9: cd .. &amp;&amp; ./travis/setup-env.sh" time="0.611437">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="10: Switch to ios ionic_ios_build lane" time="0.000216">
+      <testcase classname="fastlane.lanes" name="10: git checkout release-web-dev" time="0.02471">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="11: ionic build ios --release" time="53.328494">
+      <testcase classname="fastlane.lanes" name="11: git merge master" time="0.006145">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="12: Switch to ios ios_deploy lane" time="0.000192">
+      <testcase classname="fastlane.lanes" name="12: git add ../../haoshiyou/www/ -f" time="0.005605">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="13: cert" time="3.756468">
+      <testcase classname="fastlane.lanes" name="13: git commit -m 'web-release'" time="0.021466">
         
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="14: sigh" time="1.97085">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="15: gym" time="18.165028">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="16: Switch to ios ios_upload lane" time="0.00027">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="17: deliver" time="35.951502">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="18: get_version_number" time="0.358066">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="19: slack" time="1.007853">
+          <failure message="/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/actions/actions_helper.rb:33:in `execute_action'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/fast_file.rb:175:in `sh'&#10;Fastfile:92:in `block in parsing_binding'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/lane.rb:33:in `call'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/runner.rb:49:in `block in execute'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/runner.rb:45:in `chdir'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/runner.rb:45:in `execute'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/lane_manager.rb:52:in `cruise_lane'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/command_line_handler.rb:30:in `handle'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/commands_generator.rb:95:in `block (2 levels) in run'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/commander-4.4.0/lib/commander/command.rb:178:in `call'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/commander-4.4.0/lib/commander/command.rb:153:in `run'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/commander-4.4.0/lib/commander/runner.rb:444:in `run_active_command'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane_core-0.57.2/lib/fastlane_core/ui/fastlane_runner.rb:38:in `run!'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/commander-4.4.0/lib/commander/delegates.rb:15:in `run!'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/commands_generator.rb:292:in `run'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/commands_generator.rb:36:in `start'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/lib/fastlane/cli_tools_distributor.rb:58:in `take_off'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/gems/fastlane-1.111.0/bin/fastlane:5:in `&lt;top (required)&gt;'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/bin/fastlane:23:in `load'&#10;/Users/zzn/.rvm/gems/ruby-2.3.1@fastlane_gemset/bin/fastlane:23:in `&lt;main&gt;'&#10;&#10;Exit status of command 'git commit -m 'web-release'' was 1 instead of 0.&#10;On branch release-web-dev&#10;Changes not staged for commit:&#10;	modified:   ../config.xml&#10;	modified:   Fastfile&#10;	modified:   README.md&#10;	modified:   report.xml&#10;&#10;no changes added to commit&#10;" />
         
       </testcase>
     

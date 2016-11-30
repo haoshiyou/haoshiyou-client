@@ -5,6 +5,11 @@ fastlane documentation
 sudo gem install fastlane
 ```
 # Available Actions
+### web_upload
+```
+fastlane web_upload
+```
+Do a new upload to haoshiyou.org Web.
 ### web_deploy
 ```
 fastlane web_deploy
