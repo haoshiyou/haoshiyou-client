@@ -34,6 +34,7 @@ import { Storage } from '@ionic/storage';
 import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {Env} from "./env";
+import {QrCodeTabPage} from "../pages/qrcode-tab/qrcode-tab-page";
 
 let storage: Storage = new Storage();
 export function getAuthHttp(http) {
@@ -62,6 +63,7 @@ export function getAuthHttp(http) {
     RemoveModal,
     SettingsTabPage,
     DisconnectModal,
+    QrCodeTabPage,
 
     // All Pipes
     EnumMsgPipe,
@@ -100,6 +102,7 @@ export function getAuthHttp(http) {
     RemoveModal,
     SettingsTabPage,
     DisconnectModal,
+    QrCodeTabPage
   ],
   providers: [
     {provide: IUserService, useClass: FirebaseUserService},

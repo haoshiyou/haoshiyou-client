@@ -7,6 +7,7 @@ import {Network, Deeplinks} from "ionic-native";
 import {DisconnectModal} from "./disconnect.modal";
 import {Subscription} from "rxjs";
 import {ListingDetailPage} from "../listings-tab/listing-detail.page";
+import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
 
 @Component({
   templateUrl: 'tabs.html',
@@ -20,7 +21,7 @@ export class TabsPage implements OnInit, OnDestroy, AfterViewInit {
   tab1Root:any = ChatsTabPage;
   tab2Root:any = ListingsTabPage;
   tab3Root:any = SettingsTabPage;
-
+  tab4Root:any = QrCodeTabPage;
   unreadMessagesCount:number;
 
   constructor(private nav:NavController,
