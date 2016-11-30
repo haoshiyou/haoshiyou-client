@@ -3,72 +3,97 @@
   <testsuite name="fastlane.lanes">
     
       
-      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="2.011572">
+      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="2.216045">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: Verifying required fastlane version" time="0.000418">
+      <testcase classname="fastlane.lanes" name="1: Verifying required fastlane version" time="0.000367">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: Switch to android prepare lane" time="0.000193">
+      <testcase classname="fastlane.lanes" name="2: Switch to prepare lane" time="0.000166">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: echo 'Incrementing Version for PROD release.'" time="0.005233">
+      <testcase classname="fastlane.lanes" name="3: echo 'Incrementing Version for PROD release.'" time="0.005675">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: node scripts/increment_build_number.js" time="0.25127">
+      <testcase classname="fastlane.lanes" name="4: node scripts/increment_build_number.js" time="0.244235">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: cd .. &amp;&amp; ./travis/setup-env.sh" time="1.092502">
+      <testcase classname="fastlane.lanes" name="5: cd .. &amp;&amp; ./travis/setup-env.sh" time="1.077284">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: Switch to android ionic_android_build lane" time="0.000307">
+      <testcase classname="fastlane.lanes" name="6: Switch to prepare lane" time="0.000275">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="7: ionic build android --release" time="54.506665">
+      <testcase classname="fastlane.lanes" name="7: echo 'Incrementing Version for PROD release.'" time="0.005486">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="8: Switch to android android_deploy lane" time="0.000364">
+      <testcase classname="fastlane.lanes" name="8: node scripts/increment_build_number.js" time="0.17726">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="9: cd .. &amp;&amp; jarsigner -verbose -storepass 3c9KMeBA5vKE -sigalg SHA1withRSA -digestalg SHA1 -keystore fastlane/release-cred/haoshiyou-android.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name" time="1.064004">
+      <testcase classname="fastlane.lanes" name="9: cd .. &amp;&amp; ./travis/setup-env.sh" time="0.574197">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="10: cd .. &amp;&amp; ${HOME}/Library/Android/sdk/build-tools/23.0.3/zipalign -f -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk releases/haoshiyou-android-release.apk" time="0.307635">
+      <testcase classname="fastlane.lanes" name="10: Switch to prepare lane" time="0.000186">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="11: Switch to android android_upload lane" time="0.000168">
+      <testcase classname="fastlane.lanes" name="11: echo 'Incrementing Version for PROD release.'" time="0.004336">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="12: supply" time="11.609119">
+      <testcase classname="fastlane.lanes" name="12: node scripts/increment_build_number.js" time="0.177796">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="13: slack" time="0.634307">
+      <testcase classname="fastlane.lanes" name="13: cd .. &amp;&amp; ./travis/setup-env.sh" time="0.67748">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="14: Switch to ionic_web_build lane" time="0.000251">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="15: ionic build --release" time="72.900229">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="16: Switch to web_upload lane" time="0.000189">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="17: git branch" time="0.019834">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="18: slack" time="0.716941">
         
       </testcase>
     

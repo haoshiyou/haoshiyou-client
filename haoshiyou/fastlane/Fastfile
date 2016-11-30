@@ -21,7 +21,7 @@ private_lane :prepare do
   sh("cd .. && ./travis/setup-env.sh")
 end
 
-
+# ===== iOS Private Lanes =====
 desc "Do a new iOS build using ionic."
 private_lane :ionic_ios_build do
   sh("ionic build ios --release")
@@ -48,6 +48,7 @@ private_lane :ionic_android_build do
   sh("ionic build android --release")
 end
 
+# ===== Android Private Lanes =====
 desc "Do a new Android deploy using jarsigner and zipaliagn."
 private_lane :android_deploy do |options|
   # require storepass to be specified
@@ -73,10 +74,24 @@ private_lane :android_upload do
   slack(message: "Successfully deployed to Google Play.") # TODO(xinbenlv): add version
 end
 
+desc "Do a new Web build using ionic."
+private_lane :ionic_web_build do
+  sh("ionic build --release")
+end
+
+desc "Do a new upload to haoshiyou.org Web."
+private_lane :web_upload do
+  sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
+  sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
+  #
+  # git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages
+  slack(message: "Successfully deployed to haoshiyou.org Web.") # TODO(xinbenlv): add version
+end
+
 platform :ios do
+  prepare
   desc "Deploy a new version to the App Store/"
   lane :deploy do
-    prepare
     ionic_ios_build
     ios_deploy
     ios_upload
@@ -84,13 +99,13 @@ platform :ios do
 end
 
 platform :android do
+  prepare
   desc "Deploy a new version to the Google Play Store."
   lane :deploy do |options|
     if options[:storepass].nil? || options[:storepass].empty?
       sh("echo 'please specify storepass:<android keystore password>'")
       exit
     else
-      prepare
       ionic_android_build
       android_deploy(options)
       android_upload
@@ -98,18 +113,18 @@ platform :android do
   end
 end
 
+desc "Deploy a new version to the App Store/"
+lane :web_deploy do
+  prepare
+  ionic_web_build
+  web_upload
+end
+
 desc "Deploy to all platforms."
 lane :deploy_all do |options|
   prepare
-
-  ionic_android_build
-  ionic_ios_build
-
-  android_deploy(options)
-  ios_deploy
-
-  ios_upload
-  android_upload
+  android deploy(options)
+  ios deploy
 end
 
 # TODO(zzn):

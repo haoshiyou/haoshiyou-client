@@ -5,6 +5,11 @@ fastlane documentation
 sudo gem install fastlane
 ```
 # Available Actions
+### web_deploy
+```
+fastlane web_deploy
+```
+Deploy a new version to the App Store/
 ### deploy_all
 ```
 fastlane deploy_all
