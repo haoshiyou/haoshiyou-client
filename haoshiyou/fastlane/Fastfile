@@ -82,21 +82,37 @@ end
 desc "Do a new upload to haoshiyou.org Web."
 lane :web_upload do
   # First time should do this
-  # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
-  # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
 
-  sh("echo 'Assumming you are checking out from dev branch'")
-  sh("git checkout -- ../config.xml report.xml")
-  sh("git checkout release-web-dev")
-  sh("git merge dev")
-  sh("ionic build ios --release")
-  sh("git add ../../haoshiyou/www/ -f")
-  sh("git commit -m 'web-release';true")
+  if ENV["IONIC_ENV"] == "prod"
+    sh("echo 'Assumming you are checking out from dev branch'")
+    sh("git checkout -- ../config.xml report.xml")
+    sh("git checkout release-web-prod")
+    sh("git merge dev")
+    sh("ionic build ios --release")
+    sh("git add ../../haoshiyou/www/ -f")
+    sh("git commit -m 'web-release';true")
 
-  sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
-  sh("git checkout -- report.xml")
-  sh("git checkout dev")
-  slack(message: "Successfully deployed to haoshiyou.org Web.") # TODO(xinbenlv): add version
+    sh("cd .. && cd .. && git push publish-prod `git subtree split --prefix haoshiyou/www/ release-web-prod`:gh-pages --force")
+    sh("git checkout -- report.xml")
+    sh("git checkout dev")
+    slack(message: "Successfully deployed to www.haoshiyou.org Web.") # TODO(xinbenlv): add version
+  else
+
+    # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
+    # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
+    sh("echo 'Assumming you are checking out from dev branch'")
+    sh("git checkout -- ../config.xml report.xml")
+    sh("git checkout release-web-dev")
+    sh("git merge dev")
+    sh("ionic build ios --release")
+    sh("git add ../../haoshiyou/www/ -f")
+    sh("git commit -m 'web-release';true")
+
+    sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
+    sh("git checkout -- report.xml")
+    sh("git checkout dev")
+    slack(message: "Successfully deployed to dev.haoshiyou.org Web.") # TODO(xinbenlv): add version
+  end
 end
 
 platform :ios do
