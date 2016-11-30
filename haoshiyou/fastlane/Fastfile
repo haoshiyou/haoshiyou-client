@@ -85,7 +85,7 @@ lane :web_upload do
 
   if ENV["IONIC_ENV"] == "prod"
     sh("echo 'Assumming you are checking out from dev branch'")
-    sh("git checkout -- ../config.xml report.xml")
+    sh("git checkout -- ../config.xml")
     sh("git checkout release-web-prod")
     sh("git merge dev")
     sh("ionic build ios --release")
