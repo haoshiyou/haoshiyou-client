@@ -85,11 +85,12 @@ lane :web_upload do
   # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
   # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
 
+  sh("git checkout -- ../config.xml report.xml")
   sh("git checkout release-web-dev")
-  sh("git merge master")
+  sh("git merge dev")
   sh("ionic build ios --release")
   sh("git add ../../haoshiyou/www/ -f")
-  sh("git commit -m 'web-release'")
+  sh("git commit -m 'web-release';true")
 
   sh("git push publish-dev `git subtree split --prefix ../../haoshiyou/www/ release-web-dev`:gh-pages --force")
   #
