@@ -1,7 +1,7 @@
 import {Platform, NavController, AlertController} from "ionic-angular";
 import {IListingService} from "../../services/listings/listing.service";
 import {Listing} from "../../models/listing";
-import {OnInit, OnDestroy, Inject, Component} from "@angular/core";
+import {OnInit, OnDestroy, Component} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {ListingDetailPage} from "./listing-detail.page";
 import {Observable} from "rxjs/Observable";

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {HaoshiyouApp} from "./app.component";
-import {IonicApp, IonicModule} from "ionic-angular";
+import {IonicApp, IonicModule, NavController} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
@@ -35,31 +35,8 @@ import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {Env} from "./env";
 
-const _components:Object[] = [
-  HaoshiyouApp,
-  TabsPage,
-  ChatMessageComp,
-  ChatThreadComp,
-  ChatWindowPage,
-  ChatsTabPage,
-  ImageGridComponent,
-  CreationPage,
-  ListingDetailPage,
-  ListingItem,
-  ListingsTabPage,
-  MapViewComponent,
-  RemoveModal,
-  SettingsTabPage,
-  DisconnectModal,
-];
+console.log("XXXX good app module 10");
 
-const _pipes:Object[] = [
-  EnumMsgPipe,
-  ImageIdsToUrlPipe,
-  ImageIdToUrlPipe,
-  TimeFromNowPipe,
-  CityNZipPipe
-];
 let storage: Storage = new Storage();
 export function getAuthHttp(http) {
   return new AuthHttp(new AuthConfig({
@@ -96,7 +73,15 @@ export function getAuthHttp(http) {
     CityNZipPipe
   ],
   imports: [
-    IonicModule.forRoot(HaoshiyouApp),
+    IonicModule.forRoot(HaoshiyouApp, {
+      mode: 'ios'
+    }, {
+      links: [
+        {segment: 'listing/:id', component: ListingDetailPage, name: 'ListingDetailPage'},
+        // As of 2016-11-14 per https://github.com/driftyco/ionic/issues/9012,
+        // Ionic deeplinker and navigation does not work well with Tab structures.
+      ]
+    }),
     BrowserModule,
     AngularFireModule.initializeApp(Env.configFirebase)
   ],
@@ -132,7 +117,7 @@ export function getAuthHttp(http) {
       useFactory: getAuthHttp,
       deps: [Http]
     },
-    Storage
+    Storage,
   ]
 })
 export class AppModule {

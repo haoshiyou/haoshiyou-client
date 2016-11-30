@@ -1,7 +1,7 @@
 import {Component, OnChanges, Input, SimpleChange} from "@angular/core";
 import {Listing} from "../../models/listing";
 
-declare let google:any;
+declare let google, document;
 
 @Component({
   selector: 'map-view',

@@ -7,7 +7,7 @@ import {ChatWindowPage} from "../chats-tab/chat-window.page";
 import {Component, AfterViewInit} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
-
+import {IListingService} from "../../services/listings/listing.service";
 declare let window:any;
 declare let QRCode:any;
 
@@ -16,11 +16,12 @@ declare let QRCode:any;
   templateUrl: 'listing-detail.page.html'
 })
 export class ListingDetailPage implements AfterViewInit {
-
   ngAfterViewInit():void {
-    console.log("XXX generateQrCode code");
-    this.generateQrCode();
+  // TODO(xinbenlv): add back later
+  //   console.log("XXX generateQrCode code");
+  //   this.generateQrCode();
   }
+
   generateQrCode(link:string = "http://haoshiyou.org"):any {
     var el = document.getElementById('qrcode');
 
@@ -36,27 +37,44 @@ export class ListingDetailPage implements AfterViewInit {
   meId:string;
   constructor(private threadService:IThreadService,
               private userService:IUserService,
+              private listingService:IListingService,
               private nav:NavController,
               params:NavParams,
               private imageService:IImageService) {
-    this.listing = params.data.listing;
-    this.userService.observableUserById(this.listing.ownerId).subscribe((owner:User)=> {
-      this.owner = owner;
-    });
-    this.userService.promiseMe().then((me:User)=>{
-      if (me) {
-        this.meId = me.id;
-      }
-    });
-    this.userService.observableMeId().subscribe((meId:string)=>{
-      this.meId = meId;
-    });
+
+    console.log("XXX ListingDetailPage load 2");
+    if (params.data['listing'] != null) {
+      console.log(`XXXX param = ${JSON.stringify(params)}`);
+      this.listing = params.data.listing;
+      params.data.id = this.listing.id;
+      this.initListeners();
+    } else {
+      let id = params.data.id;
+      this.listingService.getListingById(id).then((listing) => {
+        this.listing = listing;
+        this.initListeners();
+      });
+    }
+
   }
 
   edit() {
     this.nav.push(CreationPage, {listing: this.listing});
   }
 
+  private initListeners() {
+    this.userService.observableUserById(this.listing.ownerId).subscribe((owner:User)=> {
+      this.owner = owner;
+    });
+    this.userService.promiseMe().then((me:User)=> {
+      if (me) {
+        this.meId = me.id;
+      }
+    });
+    this.userService.observableMeId().subscribe((meId:string)=> {
+      this.meId = meId;
+    });
+  }
   startChat() {
     // TODO(xinbenlv): handle when not yet logged in.
     let thread:Thread = <Thread>{};

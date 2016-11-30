@@ -14,8 +14,11 @@ before_all do
 end
 
 private_lane :prepare do
-  sh("node scripts/increment_build_number.js")
-  sh("travis/setup-env.sh")
+  if ENV["IONIC_ENV"] == "prod"
+    sh("echo 'Incrementing Version for PROD release.'")
+    sh("node scripts/increment_build_number.js")
+  end
+  sh("cd .. && ./travis/setup-env.sh")
 end
 
 
@@ -26,6 +29,7 @@ end
 
 desc "Do a new iOS deploy using sigh and gym"
 private_lane :ios_deploy do
+  cert
   sigh
   gym(
       scheme: "haoshiyou",
@@ -46,6 +50,7 @@ end
 
 desc "Do a new Android deploy using jarsigner and zipaliagn."
 private_lane :android_deploy do |options|
+  # require storepass to be specified
   sh("cd .. && jarsigner -verbose " +
          "-storepass #{options[:storepass]} " +
          "-sigalg SHA1withRSA -digestalg SHA1 " +
@@ -81,10 +86,15 @@ end
 platform :android do
   desc "Deploy a new version to the Google Play Store."
   lane :deploy do |options|
-    prepare
-    ionic_android_build
-    android_deploy(options)
-    android_upload
+    if options[:storepass].nil? || options[:storepass].empty?
+      sh("echo 'please specify storepass:<android keystore password>'")
+      exit
+    else
+      prepare
+      ionic_android_build
+      android_deploy(options)
+      android_upload
+    end
   end
 end
 

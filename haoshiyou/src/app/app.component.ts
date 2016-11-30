@@ -1,6 +1,6 @@
 import {Platform} from "ionic-angular";
 import {TabsPage} from "../pages/tabs/tabs";
-import {Inject, Component} from "@angular/core";
+import {Component} from "@angular/core";
 import {Http} from "@angular/http";
 import {AuthService} from "../services/auth.service";
 import {IMessageService} from "../services/chats/message.service";
@@ -17,7 +17,6 @@ declare let ga:any;
   template: '<ion-nav [root]="rootPage"></ion-nav>'
 })
 export class HaoshiyouApp {
-
   rootPage:any = TabsPage;
   constructor(private platform:Platform,
               private af:AngularFire,
