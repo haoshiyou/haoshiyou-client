@@ -3,97 +3,102 @@
   <testsuite name="fastlane.lanes">
     
       
-      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="2.216045">
+      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="2.297659">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: Verifying required fastlane version" time="0.000367">
+      <testcase classname="fastlane.lanes" name="1: Verifying required fastlane version" time="0.000383">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: Switch to prepare lane" time="0.000166">
+      <testcase classname="fastlane.lanes" name="2: Switch to prepare lane" time="0.000218">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: echo 'Incrementing Version for PROD release.'" time="0.005675">
+      <testcase classname="fastlane.lanes" name="3: echo 'Incrementing Version for PROD release.'" time="0.005976">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: node scripts/increment_build_number.js" time="0.244235">
+      <testcase classname="fastlane.lanes" name="4: node scripts/increment_build_number.js" time="0.254506">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: cd .. &amp;&amp; ./travis/setup-env.sh" time="1.077284">
+      <testcase classname="fastlane.lanes" name="5: cd .. &amp;&amp; ./travis/setup-env.sh" time="0.609702">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: Switch to prepare lane" time="0.000275">
+      <testcase classname="fastlane.lanes" name="6: Switch to prepare lane" time="0.000245">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="7: echo 'Incrementing Version for PROD release.'" time="0.005486">
+      <testcase classname="fastlane.lanes" name="7: echo 'Incrementing Version for PROD release.'" time="0.004486">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="8: node scripts/increment_build_number.js" time="0.17726">
+      <testcase classname="fastlane.lanes" name="8: node scripts/increment_build_number.js" time="0.191224">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="9: cd .. &amp;&amp; ./travis/setup-env.sh" time="0.574197">
+      <testcase classname="fastlane.lanes" name="9: cd .. &amp;&amp; ./travis/setup-env.sh" time="0.53564">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="10: Switch to prepare lane" time="0.000186">
+      <testcase classname="fastlane.lanes" name="10: Switch to ios ionic_ios_build lane" time="0.000204">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="11: echo 'Incrementing Version for PROD release.'" time="0.004336">
+      <testcase classname="fastlane.lanes" name="11: ionic build ios --release" time="53.864934">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="12: node scripts/increment_build_number.js" time="0.177796">
+      <testcase classname="fastlane.lanes" name="12: Switch to ios ios_deploy lane" time="0.000232">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="13: cd .. &amp;&amp; ./travis/setup-env.sh" time="0.67748">
+      <testcase classname="fastlane.lanes" name="13: cert" time="3.212762">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="14: Switch to ionic_web_build lane" time="0.000251">
+      <testcase classname="fastlane.lanes" name="14: sigh" time="2.445744">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="15: ionic build --release" time="72.900229">
+      <testcase classname="fastlane.lanes" name="15: gym" time="17.736052">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="16: Switch to web_upload lane" time="0.000189">
+      <testcase classname="fastlane.lanes" name="16: Switch to ios ios_upload lane" time="0.000297">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="17: git branch" time="0.019834">
+      <testcase classname="fastlane.lanes" name="17: deliver" time="37.304587">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="18: slack" time="0.716941">
+      <testcase classname="fastlane.lanes" name="18: get_version_number" time="0.39118">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="19: slack" time="0.632127">
         
       </testcase>
     
