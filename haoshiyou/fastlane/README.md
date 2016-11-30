@@ -14,19 +14,19 @@ Do a new upload to haoshiyou.org Web.
 ```
 fastlane web_deploy
 ```
-Deploy a new version to the App Store/
-### deploy_all
+Deploy a new version to the web
+### publish_all
 ```
-fastlane deploy_all
+fastlane publish_all
 ```
 Deploy to all platforms.
 
 ----
 
 ## iOS
-### ios deploy
+### ios publish
 ```
-fastlane ios deploy
+fastlane ios publish
 ```
 Deploy a new version to the App Store/
 
