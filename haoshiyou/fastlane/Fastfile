@@ -87,7 +87,7 @@ lane :web_upload do
 
   sh("git checkout release-web-dev")
   sh("git merge master")
-  # sh("ionic build ios --release")
+  sh("ionic build ios --release")
   sh("git add ../../haoshiyou/www/ -f")
   sh("git commit -m 'web-release'")
 
