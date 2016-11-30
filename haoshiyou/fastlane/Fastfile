@@ -86,7 +86,7 @@ lane :web_upload do
   if ENV["IONIC_ENV"] == "prod"
     sh("echo 'Assumming you are checking out from dev branch'")
     sh("git checkout -- ../config.xml report.xml")
-    sh("git checkout -b release-web-prod")
+    sh("git checkout release-web-prod")
     sh("git merge dev")
     sh("ionic build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
@@ -152,6 +152,7 @@ lane :deploy_all do |options|
   prepare
   android deploy(options)
   ios deploy
+  web_deploy
 end
 
 # TODO(zzn):
