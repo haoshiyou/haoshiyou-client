@@ -92,7 +92,7 @@ lane :web_upload do
   sh("git add ../../haoshiyou/www/ -f")
   sh("git commit -m 'web-release';true")
 
-  sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix ../../haoshiyou/www/ release-web-dev`:gh-pages --force")
+  sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
   #
   # git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages
   slack(message: "Successfully deployed to haoshiyou.org Web.") # TODO(xinbenlv): add version
