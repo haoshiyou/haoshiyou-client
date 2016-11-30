@@ -93,7 +93,6 @@ lane :web_upload do
     sh("git commit -m 'web-release';true")
 
     sh("cd .. && cd .. && git push publish-prod `git subtree split --prefix haoshiyou/www/ release-web-prod`:gh-pages --force")
-    sh("git checkout -- report.xml")
     sh("git checkout dev")
     slack(message: "Successfully deployed to www.haoshiyou.org Web.") # TODO(xinbenlv): add version
   else
@@ -109,7 +108,6 @@ lane :web_upload do
     sh("git commit -m 'web-release';true")
 
     sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
-    sh("git checkout -- report.xml")
     sh("git checkout dev")
     slack(message: "Successfully deployed to dev.haoshiyou.org Web.") # TODO(xinbenlv): add version
   end
