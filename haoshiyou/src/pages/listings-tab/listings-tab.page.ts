@@ -69,8 +69,4 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       alert.present();
     }
   }
-
-  gotoDetail(listing:Listing) {
-    this.nav.push(ListingDetailPage, {listing: listing});
-  }
 }
