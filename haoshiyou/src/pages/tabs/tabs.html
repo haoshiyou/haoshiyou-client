@@ -1,5 +1,12 @@
-<ion-tabs>
-    <ion-tab [root]="tab4Root" tabTitle="旧版本" tabIcon="qr-scanner"></ion-tab>
+<ion-tabs *ngIf="shouldShowQrCode">
+    <ion-tab [root]="tab4Root" tabTitle="旧版本" tabIcon="qr-scanner" ></ion-tab>
+    <ion-tab [root]="tab2Root" tabTitle="信息" tabIcon="map" [tabUrlPath]="'listing'"></ion-tab>
+    <ion-tab [root]="tab1Root" tabTitle="对话" tabIcon="chatbubbles"
+             tabBadge="{{unreadMessagesCount}}" ></ion-tab>
+    <ion-tab [root]="tab3Root" tabTitle="设置" tabIcon="cog" [tabUrlPath]="''"></ion-tab>
+</ion-tabs>
+
+<ion-tabs *ngIf="!shouldShowQrCode">
     <ion-tab [root]="tab2Root" tabTitle="信息" tabIcon="map" [tabUrlPath]="'listing'"></ion-tab>
     <ion-tab [root]="tab1Root" tabTitle="对话" tabIcon="chatbubbles"
              tabBadge="{{unreadMessagesCount}}" ></ion-tab>

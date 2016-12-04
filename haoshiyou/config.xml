@@ -15,6 +15,7 @@
   <allow-navigation href="http://192.168.1.104:8100"/>
   <allow-navigation href="http://192.168.43.252:8100"/>
   <allow-navigation href="http://192.168.2.195:8100"/>
+  <allow-navigation href="http://192.168.0.21:8100"/>
   <platform name="android">
     <allow-intent href="market:*"/>
     <preference name="android-targetSdkVersion" value="23"/>
