@@ -6,27 +6,26 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-list>
-        <button *ngIf="!shouldShow" id="show_qrcode_btn" ion-button block (click)="shouldShow = true">
-            点此扫描二维码入群
-        </button>
-    </ion-list>
-    <div *ngIf="shouldShow">
-        <div style="text-align: center">
+    <button *ngIf="!shouldShow" id="show_qrcode_btn" ion-button block (click)="shouldShow = true">
+        点此扫描二维码入群
+    </button>
+    <ion-list  *ngIf="shouldShow">
+        <ion-item style="text-align: center">
             <img src="https://dl.dropboxusercontent.com/u/4198082/Haoshiyou/intro.jpg"
                  style="max-width: 400px"
                  alt="好室友微信群介绍">
-        </div>
-        <div style="text-align: center">
+        </ion-item>
+        <ion-item style="text-align: center">
             <img  src="https://dl.dropboxusercontent.com/u/4198082/Haoshiyou/entry.jpg"
                   style="max-width: 400px"
                   alt="好室友微信总群入口">
-        </div>
-        <div style="text-align: center">
+        </ion-item>
+        <ion-item style="text-align: center">
             <img  src="https://dl.dropboxusercontent.com/u/4198082/Haoshiyou/short.jpg"
                   style="max-width: 400px"
                   alt="好室友短租流动微信群入口">
-        </div>
-    </div>
+        </ion-item>
+    </ion-list>
+
 
 </ion-content>

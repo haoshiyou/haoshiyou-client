@@ -14,72 +14,106 @@ declare let Auth0:any;
 declare let console, alert, JSON, Date;
 // TODO(xinbenlv): update Auth0 once my pull request is pulled. https://github.com/auth0/lock/pull/447
 let zhDict = {
-  "//": "This is an automatic translation. Help us to improve it.",
-  "loadingTitle": "请稍候。。。",
-  "close": "关闭",
-  "noConnectionError": "网络连接已中断。",
-  "signin": {
-    "title": "登录",
-    "action": "登录",
-    "all": "不是您的账户?",
-    "strategyEmailEmpty": "电子邮件是空的。",
-    "strategyEmailInvalid": "电子邮件是无效的。",
-    "strategyDomainInvalid": "指定域 {domain} 无效。",
-    "signinText": "登录",
-    "signupText": "注册",
-    "forgotText": "忘记密码？",
-    "emailPlaceholder": "电子邮件",
-    "usernamePlaceholder": "用户名",
-    "passwordPlaceholder": "密码",
-    "separatorText": "或",
-    "serverErrorText": "处理服务器请求时出错。",
-    "returnUserLabel": "上次登录账户为：",
-    "wrongEmailPasswordErrorText": "电子邮件或密码不匹配。",
-    "popupCredentials": "请在弹出窗口内登录",
-    "or": "...或使用登录",
-    "loadingMessage": "连接 {connection}..."
+  error: {
+    forgotPassword: {
+      "too_many_requests": "您尝试登录次数过多 请稍后再试。",
+      "lock.fallback": "对不起，请求修改密码时出现错误。"
+    },
+    login: {
+      "blocked_user": "该账号已被锁定。",
+      "invalid_user_password": "密码错误",
+      "lock.fallback": "对不起，请求登陆时出现错误。",
+      "lock.invalid_code": "代码错误。",
+      "lock.invalid_email_password": "邮箱或密码错误。",
+      "lock.invalid_username_password": "账号或密码错误。",
+      "lock.network": "无法连接到服务器，请检查网络连接后重试。",
+      "lock.popup_closed": "弹出窗口被关闭，请重试",
+      "lock.unauthorized": "权限不足，请重试。",
+      "password_change_required": "由于这是第一次登录或者您的密码已过期，请更新密码。",
+      "password_leaked": "由于您的密码在其他网站已泄露，该账户已被锁定，请查看邮件解除锁定。",
+      "too_many_attempts": "由于登录操作太频繁，您的帐号已被锁定。"
+    },
+    passwordless: {
+      "bad.email": "邮箱错误",
+      "bad.phone_number": "手机号码格式不正确。",
+      "lock.fallback": "对不起，出现错误。"
+    },
+    signUp: {
+      "invalid_password": "密码错误",
+      "lock.fallback": "对不起，请求注册时出现错误。",
+      "password_dictionary_error": "密码过于常见。",
+      "password_no_user_info_error": "密码中出现账号信息。",
+      "password_strength_error": "密码过于简单。",
+      "user_exists": "该账号已存在。",
+      "username_exists": "该用户名已存在。"
+    }
   },
-  "signup": {
-    "description": "",
-    "title": "注册",
-    "action": "注册",
-    "signinText": "登录",
-    "signupText": "注册",
-    "emailPlaceholder": "电子邮件",
-    "passwordPlaceholder": "密码",
-    "cancelAction": "取消",
-    "headerText": "请输入您的电子邮件和密码",
-    "footerText": "",
-    "signupOnSSODomainErrorText": "指定此域 {domain} 已配置为单一登录，且您不能创建一个帐户。请尝试登录其他方法。",
-    "serverErrorText": "处理服务器请求时出错。"
+  success: {
+    logIn: "登录成功",
+    forgotPassword: "重置密码的邮件已发送",
+    magicLink: "已向您发送链接<br />到 %s 登录", // This one needs review
+    signUp: "感谢您的注册。"
   },
-  "newReset": {
-    "title": "重置密码",
-    "action": "发送",
-    "emailPlaceholder": "电子邮件",
-    "cancelAction": "取消",
-    "footerText": "",
-    "successText": "我们刚刚已经向您发送一封电子邮件，请查看以重置您的密码。",
-    "headerText": "请输入您的电子邮件地址。我们会向您发送电子邮件重设密码。",
-    "serverErrorText": "处理重置密码时出错。",
-    "userDoesNotExistErrorText": "用户不存在。",
-    "tooManyRequestsErrorText": "您已达密码重置尝试的极限。请稍候再试。"
+  blankErrorHint: "不能为空",
+  codeInputPlaceholder: "您的代码",
+  databaseEnterpriseLoginInstructions: "",
+  databaseEnterpriseAlternativeLoginInstructions: "或",
+  databaseSignUpInstructions: "",
+  databaseAlternativeSignUpInstructions: "或",
+  emailInputPlaceholder: "yours@example.com",
+  enterpriseLoginIntructions: "请用您的企业账号登录",  // This one needs review
+  enterpriseActiveLoginInstructions: "请输入您的企业账号 %s。",  // This one needs review
+  failedLabel: "失败!",
+  forgotPasswordAction: "忘记您的密码？",
+  forgotPasswordInstructions: "请输入您的邮箱，我们将为你发送重置密码的邮件。",
+  forgotPasswordSubmitLabel: "发电子邮件", // needs review
+  invalidErrorHint: "错误",
+  lastLoginInstructions: "上次登陆的信息为",
+  loginAtLabel: "登录到 %s",
+  loginLabel: "登录",
+  loginSubmitLabel: "登录", // needs review
+  loginWithLabel: "用 %s 登录",
+  notYourAccountAction: "不是您的账号?",
+  passwordInputPlaceholder: "您的密码",
+  passwordStrength: {
+    containsAtLeast: "至少包含%d个以下%d种字符:",
+    identicalChars: "不能多于%d个相同的字符在同一行(例如,不允许出现 \"%s\" )",
+    nonEmpty: "密码不能为空",
+    numbers: "数字 (如 0-9)",
+    lengthAtLeast: "最少长度为%d个字符",
+    lowerCase: "小写字母(a-z)",
+    shouldContain: "应包含:",
+    specialCharacters: "特殊字符 (如 !@#$%^&*)",
+    upperCase: "大写字母(A-Z)"
   },
-  "reset": {
-    "title": "更改密码",
-    "action": "发送",
-    "emailPlaceholder": "电子邮件",
-    "passwordPlaceholder": "新密码",
-    "repeatPasswordPlaceholder": "再次输入新密码",
-    "cancelAction": "取消",
-    "successText": "我们刚刚已经向您发送一封电子邮件，重置您的密码。",
-    "enterSamePasswordText": "请输入相同的密码。",
-    "headerText": "请输入您的电子邮件和新的密码。我们将向您发送邮件以确认密码更改。",
-    "serverErrorText": "处理重置密码时出错。",
-    "userDoesNotExistErrorText": "用户不存在。",
-    "tooManyRequestsErrorText": "您已达密码重置尝试的极限。重试前请稍候。",
-    "invalidPassword": "密码太弱。"
-  }
+  passwordlessEmailAlternativeInstructions: "您还可以通过邮箱登录<br>或者创建账号", // This one needs review
+  passwordlessEmailCodeInstructions: "代码已通过邮件发送到 %s。",
+  passwordlessEmailInstructions: "输入邮箱登录<br>或者创建账号。",
+  passwordlessSMSAlternativeInstructions: "您还可以通过手机号码登录<br>或者创建账号。",
+  passwordlessSMSCodeInstructions: "代码已通过短信发送到<br> %s。",
+  passwordlessSMSInstructions: "输入手机号码登录<br>或者创建账号",
+  phoneNumberInputPlaceholder: "您的手机号码",
+  resendCodeAction: "没有收到号码?",
+  resendLabel: "重新发送",
+  resendingLabel: "重新发送中...",
+  retryLabel: "重试",
+  sentLabel: "发送!",
+  signUpLabel: "注册",
+  signUpSubmitLabel: "注册", // needs review
+  signUpTerms: "",
+  signUpWithLabel: "通过 %s 注册",
+  socialLoginInstructions: "",
+  socialSignUpInstructions: "",
+  ssoEnabled: "单点登录已激活",
+  submitLabel: "提交", // needs review
+  unrecoverableError: "出现错误。<br />请联系技术人员。",
+  usernameFormatErrorHint: "请使用%d-%d个字母, 数字或 \"_\"的组合",
+  usernameInputPlaceholder: "您的用户名",
+  usernameOrEmailInputPlaceholder: "用户名/邮箱",
+  title: "好室友",
+  welcome: "欢迎 %s!",
+  windowsAuthInstructions: "您已连接到组织网络&hellip;",
+  windowsAuthLabel: "Windows认证"
 };
 @Injectable()
 export class AuthService {
@@ -102,7 +136,19 @@ export class AuthService {
     });
     this.lock = new Auth0Lock(
         Env.configAuth0.clientId,
-        Env.configAuth0.accountDomain
+        Env.configAuth0.accountDomain,
+        {
+          auth: {
+            redirect: false,
+            params: {
+              scope: 'openid email offline_access' // Learn about scopes: https://auth0.com/docs/scopes
+            }
+          },
+          theme: {
+            logo: "assets/res/icon.png",
+          },
+          languageDictionary: zhDict,
+        }
     );
     this.lock.on('authenticated', authResult => {
       console.log("XXX Successfully logged in");
@@ -153,14 +199,7 @@ export class AuthService {
     // Show the Auth0 Lock widget
     console.log("XXX start login!");
 
-    this.lock.show({
-      auth: {
-        redirect: false,
-        params: {scope: 'openid offline_access'},
-        dict: zhDict,
-        icon: 'assets/res/icon.png'
-      }
-    });
+    this.lock.show();
   }
 
   public logout() {
