@@ -25,6 +25,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   listings:Listing[];
   private listingObservable: Observable<Listing[]>;
   private mapReady:boolean = false;
+  public mapToggleOn:boolean = false;
   constructor(private platform:Platform,
               private listingService:IListingService,
               private nav:NavController,
@@ -68,9 +69,5 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       });
       alert.present();
     }
-  }
-
-  gotoDetail(listing:Listing) {
-    this.nav.push(ListingDetailPage, {listing: listing});
   }
 }

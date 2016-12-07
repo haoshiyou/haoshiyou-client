@@ -80,21 +80,63 @@ private_lane :ionic_web_build do
 end
 
 desc "Do a new upload to haoshiyou.org Web."
-private_lane :web_upload do
-  sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
-  sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
-  #
-  # git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages
-  slack(message: "Successfully deployed to haoshiyou.org Web.") # TODO(xinbenlv): add version
+lane :web_upload do
+  # First time should do this
+
+  if ENV["IONIC_ENV"] == "prod"
+    sh("echo 'Assumming you are checking out from dev branch'")
+    sh("git checkout -- ../config.xml")
+    sh("git checkout release-web-prod")
+    sh("git merge dev")
+    sh("ionic build ios --release")
+    sh("git add ../../haoshiyou/www/ -f")
+    sh("git commit -m 'web-release';true")
+
+    sh("cd .. && cd .. && git push publish-prod `git subtree split --prefix haoshiyou/www/ release-web-prod`:gh-pages --force")
+    sh("git checkout dev")
+    slack(message: "Successfully deployed to www.haoshiyou.org Web.") # TODO(xinbenlv): add version
+  else
+
+    # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
+    # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
+    sh("echo 'Assumming you are checking out from dev branch'")
+    sh("git checkout -- ../config.xml")
+    sh("git checkout release-web-dev")
+    sh("git merge dev")
+    sh("ionic build ios --release")
+    sh("git add ../../haoshiyou/www/ -f")
+    sh("git commit -m 'web-release';true")
+
+    sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
+    sh("git checkout dev")
+    slack(message: "Successfully deployed to dev.haoshiyou.org Web.") # TODO(xinbenlv): add version
+  end
+end
+
+desc "Deploy a new version to the App Store/"
+private_lane :ios_publish do
+  ionic_ios_build
+  ios_deploy
+  ios_upload
+end
+
+desc "Deploy a new version to the Google Play Store."
+private_lane :android_publish do |options|
+  if options[:storepass].nil? || options[:storepass].empty?
+    sh("echo 'please specify storepass:<android keystore password>'")
+    exit
+  else
+    ionic_android_build
+    android_deploy(options)
+    android_upload
+  end
 end
 
 platform :ios do
-  prepare
   desc "Deploy a new version to the App Store/"
-  lane :deploy do
-    ionic_ios_build
-    ios_deploy
-    ios_upload
+  lane :publish do
+    prepare
+    ios_publish
   end
 end
 
@@ -102,29 +144,30 @@ platform :android do
   prepare
   desc "Deploy a new version to the Google Play Store."
   lane :deploy do |options|
-    if options[:storepass].nil? || options[:storepass].empty?
-      sh("echo 'please specify storepass:<android keystore password>'")
-      exit
-    else
-      ionic_android_build
-      android_deploy(options)
-      android_upload
-    end
+    prepare
+    android_publish(options)
   end
 end
 
-desc "Deploy a new version to the App Store/"
+desc "Deploy a new version to the web"
 lane :web_deploy do
   prepare
+  web_publish
+end
+
+
+desc "Publish a new version to the web"
+private_lane :web_publish do
   ionic_web_build
   web_upload
 end
 
 desc "Deploy to all platforms."
-lane :deploy_all do |options|
+lane :publish_all do |options|
   prepare
-  android deploy(options)
-  ios deploy
+  android_publish(options)
+  ios_publish
+  web_publish
 end
 
 # TODO(zzn):

@@ -7,6 +7,7 @@ import {Network, Deeplinks} from "ionic-native";
 import {DisconnectModal} from "./disconnect.modal";
 import {Subscription} from "rxjs";
 import {ListingDetailPage} from "../listings-tab/listing-detail.page";
+import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
 
 @Component({
   templateUrl: 'tabs.html',
@@ -20,9 +21,9 @@ export class TabsPage implements OnInit, OnDestroy, AfterViewInit {
   tab1Root:any = ChatsTabPage;
   tab2Root:any = ListingsTabPage;
   tab3Root:any = SettingsTabPage;
-
+  tab4Root:any = QrCodeTabPage;
   unreadMessagesCount:number;
-
+  public shouldShowQrCode:boolean = true;
   constructor(private nav:NavController,
               private modalCtrl: ModalController,
               private platform:Platform,
@@ -31,7 +32,12 @@ export class TabsPage implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit():void {
     // TODO(zzn): add unread message counts
+
     this.platform.ready().then(()=> {
+
+      this.shouldShowQrCode = !this.platform.is('cordova');
+      console.log(`XXX this.platform.is('cordova') = ${this.platform.is('cordova')}`);
+      console.log(`XXX this.shouldShowQrCode = ${this.shouldShowQrCode}`);
       if (this.platform.is("ios") || this.platform.is("android")) {
         this.disconnectModal = this.modalCtrl.create(DisconnectModal);
 
@@ -55,7 +61,6 @@ export class TabsPage implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     console.log("XXXX trying to set route 1");
     this.platform.ready().then(() => {
-
       console.log("XXXX trying to set route 2");
 
       Deeplinks.routeWithNavController(this.navController, {

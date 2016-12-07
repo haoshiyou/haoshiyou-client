@@ -71,7 +71,7 @@ export class NotificationService {
       return Promise.resolve();
     } else {
       return new Promise((resolve, reject) => {
-        this.push.unregister(resolve, reject);
+        if(this.push) this.push.unregister(resolve, reject);
       }).then(() => {
       });
     }
