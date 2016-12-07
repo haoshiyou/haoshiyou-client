@@ -65,7 +65,17 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     } else {
       let alert = this.alertCtrl.create({
         title: '请登录后发帖',
-        buttons: ['好的']
+        buttons: [
+          {
+            text: '取消',
+          },
+          {
+            text: '登陆',
+            handler: () => {
+              this.auth.login();
+            }
+          }
+        ]
       });
       alert.present();
     }
