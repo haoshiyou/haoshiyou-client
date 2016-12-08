@@ -56,7 +56,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         equalTo: 0 // ListingType.ROOMMATE_WANTED
       }
     }).take(1).toPromise() as Promise<Listing[]>).then((l) => {
-      this.listingsRoomWanted = l;
+      this.listingsRoommateWanted = l;
     });
 
     (this.af.database.list("/listings", {
@@ -65,7 +65,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         equalTo: 1 //ListingType.ROOM_WANTED
       }
     }).take(1).toPromise() as Promise<Listing[]>).then((l) => {
-      this.listingsRoommateWanted = l;
+      this.listingsRoomWanted = l;
     });
   }
 
