@@ -7,6 +7,7 @@ import {User} from "../models/models";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 import {Env} from "../app/env";
+import {ToastController} from "ionic-angular/index";
 
 // Avoid name not found warnings
 declare let Auth0Lock:any;
@@ -129,7 +130,8 @@ export class AuthService {
   private refreshSubscription: any;
 
   constructor(zone:NgZone,
-              private local:Storage) {
+              private local:Storage,
+              private toastCtrl: ToastController) {
     this.auth0 = new Auth0({
       clientID: Env.configAuth0.clientId,
       domain: Env.configAuth0.accountDomain
@@ -139,7 +141,7 @@ export class AuthService {
         Env.configAuth0.accountDomain,
         {
           auth: {
-            redirect: false,
+            redirect: false, // For cordova to work it has to be false
             params: {
               scope: 'openid email offline_access' // Learn about scopes: https://auth0.com/docs/scopes
             }
@@ -148,8 +150,14 @@ export class AuthService {
             logo: "assets/res/icon.png",
           },
           languageDictionary: zhDict,
+          autoclose: true
         }
     );
+
+    this.lock.on('authenticated_error', (err) => {
+      console.log("XXXX After login!!!");
+      this.showLoginErrorToast(err);
+    });
     this.lock.on('authenticated', authResult => {
       console.log("XXX Successfully logged in");
       this.local.set('id_token', authResult.idToken);
@@ -174,6 +182,7 @@ export class AuthService {
         }
       });
 
+      this.showLoginSuccessToast();
     });
     this.zoneImpl = zone;
     this.userSubject = new Subject<User>();
@@ -196,10 +205,8 @@ export class AuthService {
   }
 
   public login() {
-    // Show the Auth0 Lock widget
-    console.log("XXX start login!");
 
-    this.lock.show();
+    this.lock.show({autoclose: true});
   }
 
   public logout() {
@@ -304,5 +311,20 @@ export class AuthService {
         this.scheduleRefresh();
       });
     }
+  }
+
+  private showLoginSuccessToast() {
+    let toast = this.toastCtrl.create({
+      message: '登录成功!',
+      duration: 10000
+    });
+    toast.present();
+  }
+  private showLoginErrorToast(error) {
+    let toast = this.toastCtrl.create({
+      message: `登录失败!原因: ${error}`,
+      duration: 10000
+    });
+    toast.present();
   }
 }
