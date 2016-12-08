@@ -157,7 +157,7 @@ end
 
 
 desc "Publish a new version to the web"
-private_lane :web_publish do
+lane :web_publish do
   ionic_web_build
   web_upload
 end

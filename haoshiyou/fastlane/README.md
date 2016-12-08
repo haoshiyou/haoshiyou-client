@@ -15,6 +15,11 @@ Do a new upload to haoshiyou.org Web.
 fastlane web_deploy
 ```
 Deploy a new version to the web
+### web_publish
+```
+fastlane web_publish
+```
+Publish a new version to the web
 ### publish_all
 ```
 fastlane publish_all
