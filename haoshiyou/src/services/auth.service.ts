@@ -316,14 +316,14 @@ export class AuthService {
   private showLoginSuccessToast() {
     let toast = this.toastCtrl.create({
       message: '登录成功!',
-      duration: 10000
+      duration: 5000
     });
     toast.present();
   }
   private showLoginErrorToast(error) {
     let toast = this.toastCtrl.create({
       message: `登录失败!原因: ${error}`,
-      duration: 10000
+      duration: 5000
     });
     toast.present();
   }
