@@ -7,7 +7,7 @@
     </ion-navbar>
 </ion-header>
 <ion-content id="page-container">
-    <ion-card>
+    <ion-card *ngIf="!loading">
         <ion-item *ngIf="owner" >
             <ion-avatar item-left>
                 <img src="{{owner.avatarSrc}}" alt=""/>
@@ -43,6 +43,9 @@
                 私聊<ion-icon name="chatbubbles"></ion-icon>
             </button>
         </ion-item>
+    </ion-card>
 
+    <ion-card *ngIf="loading">
+        loading
     </ion-card>
 </ion-content>

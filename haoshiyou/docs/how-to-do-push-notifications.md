@@ -1,6 +1,6 @@
 # How to do push notifications
 
-This document describe how to do notifications.
+This document describes how to do push notifications through Firebase Cloud Messaging(FCM) Services.
 
 ### Install Push Notification
 
@@ -24,7 +24,7 @@ https://iid.googleapis.com/iid/v1/IID_TOKEN/rel/topics/TOPIC_NAME
 
 https://iid.googleapis.com/iid/info/n2dmZrF1I_E:APA91bHA7Y1wQxcaYvJiIAm-jxE1-d7G1gEY78xnlA_SuerHFV25tzklW37EwSIO2gIQilll-RzdSGPtkBnZ9E37vvZjenbp9f4YfsJIzPSZ23wj07E1OqvLIkO7HgLRMZ8bPlxBl70t?details=true
 
-```
+```shell
 # Create a topic "topic" (IID_TOKEN can be any registration id of a instance)
 curl --header "Authorization: key=AIzaSyA8IczGUriov_yYY4bnrqKUkL7F4v6i9sc" \
 https://iid.googleapis.com/iid/v1/n2dmZrF1I_E:APA91bHA7Y1wQxcaYvJiIAm-jxE1-d7G1gEY78xnlA_SuerHFV25tzklW37EwSIO2gIQilll-RzdSGPtkBnZ9E37vvZjenbp9f4YfsJIzPSZ23wj07E1OqvLIkO7HgLRMZ8bPlxBl70t/rel/topics/listing -d "\{\}"
@@ -38,10 +38,9 @@ https://iid.googleapis.com/iid/info/n2dmZrF1I_E:APA91bHA7Y1wQxcaYvJiIAm-jxE1-d7G
 
 curl -X GET --header "Authorization: key=AIzaSyA8IczGUriov_yYY4bnrqKUkL7F4v6i9sc" \
 https://iid.googleapis.com/iid/info/fPc3Ql8YybY:APA91bHMHA-Isz1fqp0gIC9qDJP-LK86onoEi6gY8s0dlEZkLlVzthZQuK6m1BtcwBtUTaWW0YY85H4SeEgK-zmds8oycR1qlmjCQxJm8h2yyUw6GZdkXJ0SVqL-uKiRTs3uKaoFdwBb?details=true
-
 ```
 
-TODO(xinbenlv): FCM topic message still pending verify
+TODO(xinbenlv): FCM topic message still pending verification
 
 ## Android push icon issue
 https://github.com/phonegap/phonegap-plugin-push/blob/c63a41a0a58ec37b4ce23546802177c0e5f554f4/docs/PAYLOAD.md

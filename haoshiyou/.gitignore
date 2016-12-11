@@ -45,3 +45,8 @@ www/config
 Gemfile.lock
 res/
 releases/
+# fastlane's latency report
+fastlane/report.xml
+src/app/env.prod.ts
+src/app/env.dev.ts
+src/app/env.ts

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {HaoshiyouApp} from "./app.component";
-import {IonicApp, IonicModule} from "ionic-angular";
+import {IonicApp, IonicModule, NavController} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
@@ -17,7 +17,6 @@ import {MapViewComponent} from "../pages/listings-tab/map-view.comp";
 import {RemoveModal} from "../pages/listings-tab/remove.modal";
 import {SettingsTabPage} from "../pages/settings-tab/settings-tab.page";
 import {DisconnectModal} from "../pages/tabs/disconnect.modal";
-import {ICredentialService, JsonCredentialService} from "../services/credential.service";
 import {IImageService, CloudinaryImageService} from "../services/image.service";
 import {NotificationService} from "../services/notfication.service";
 import {IListingService} from "../services/listings/listing.service";
@@ -34,42 +33,9 @@ import { AngularFireModule } from 'angularfire2';
 import { Storage } from '@ionic/storage';
 import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
+import {Env} from "./env";
+import {QrCodeTabPage} from "../pages/qrcode-tab/qrcode-tab-page";
 
-// Must export the config
-// TODO(xinbenlv): move to config.json
-export const firebaseConfig = {
-  apiKey: 'AIzaSyAb4Zt88HUsXQYL6_q6xAbO4I0TIR2PMJA',
-  authDomain: 'haoshiyou-dev.firebaseapp.com',
-  databaseURL: 'https://haoshiyou-dev.firebaseio.com',
-  storageBucket: "firebase-haoshiyou-dev.appspot.com",
-  messagingSenderId: "104841816267"
-};
-
-const _components:Object[] = [
-  HaoshiyouApp,
-  TabsPage,
-  ChatMessageComp,
-  ChatThreadComp,
-  ChatWindowPage,
-  ChatsTabPage,
-  ImageGridComponent,
-  CreationPage,
-  ListingDetailPage,
-  ListingItem,
-  ListingsTabPage,
-  MapViewComponent,
-  RemoveModal,
-  SettingsTabPage,
-  DisconnectModal,
-];
-
-const _pipes:Object[] = [
-  EnumMsgPipe,
-  ImageIdsToUrlPipe,
-  ImageIdToUrlPipe,
-  TimeFromNowPipe,
-  CityNZipPipe
-];
 let storage: Storage = new Storage();
 export function getAuthHttp(http) {
   return new AuthHttp(new AuthConfig({
@@ -97,6 +63,7 @@ export function getAuthHttp(http) {
     RemoveModal,
     SettingsTabPage,
     DisconnectModal,
+    QrCodeTabPage,
 
     // All Pipes
     EnumMsgPipe,
@@ -106,9 +73,17 @@ export function getAuthHttp(http) {
     CityNZipPipe
   ],
   imports: [
-    IonicModule.forRoot(HaoshiyouApp),
+    IonicModule.forRoot(HaoshiyouApp, {
+      mode: 'ios'
+    }, {
+      links: [
+        {segment: 'listing/:id', component: ListingDetailPage, name: 'ListingDetailPage'},
+        // As of 2016-11-14 per https://github.com/driftyco/ionic/issues/9012,
+        // Ionic deeplinker and navigation does not work well with Tab structures.
+      ]
+    }),
     BrowserModule,
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(Env.configFirebase)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -127,9 +102,9 @@ export function getAuthHttp(http) {
     RemoveModal,
     SettingsTabPage,
     DisconnectModal,
+    QrCodeTabPage
   ],
   providers: [
-    {provide: ICredentialService, useClass: JsonCredentialService},
     {provide: IUserService, useClass: FirebaseUserService},
     {provide: IThreadService, useClass: FirebaseThreadService},
     {provide: IMessageService, useClass: FirebaseMessageService},
@@ -143,7 +118,7 @@ export function getAuthHttp(http) {
       useFactory: getAuthHttp,
       deps: [Http]
     },
-    Storage
+    Storage,
   ]
 })
 export class AppModule {

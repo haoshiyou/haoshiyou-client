@@ -1,7 +1,7 @@
 import {Listing, ListingId} from "../../models/listing";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-
+declare let Date, Math;
 @Injectable()
 export class IListingService {
   /**

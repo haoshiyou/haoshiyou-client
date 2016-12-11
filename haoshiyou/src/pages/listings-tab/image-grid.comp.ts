@@ -1,11 +1,12 @@
 import {Component, Input, Output, EventEmitter, Inject, OnInit} from "@angular/core";
 import {IImageService} from "../../services/image.service";
-import {ICredentialService} from "../../services/credential.service";
 import {RemoveModal} from "./remove.modal";
 import {Modal, NavController, ModalController, Platform} from "ionic-angular";
-
+import {Env} from "../../app/env";
 declare let window;
 declare let $; // jQuery
+declare let document;
+declare let JSON;
 @Component({
   selector: 'image-grid',
   templateUrl: 'image-grid.comp.html',
@@ -35,7 +36,6 @@ export class ImageGridComponent implements OnInit {
 
   constructor(
       private imageService:IImageService,
-      private cred:ICredentialService,
       private nav:NavController,
       private modalCtrl:ModalController,
       private platform:Platform) {
@@ -68,8 +68,8 @@ export class ImageGridComponent implements OnInit {
   private initUploader() {
     var uploadImageFormData = {
       "timestamp":$.now(),
-      "api_key":this.cred.getCred('CLOUDINARY_API_KEY'),
-      "upload_preset":this.cred.getCred('CLOUDINARY_UPLOAD_PRESET'),
+      "api_key":Env.configCloudinary.apiKey,
+      "upload_preset":Env.configCloudinary.uploadPreset,
     };
     var escapedFormData = JSON.stringify(uploadImageFormData);
     $('.cloudinary-fileupload')

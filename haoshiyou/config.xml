@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="org.haoshiyou.app" version="3.6.10" xmlns="http://www.w3.org/ns/widgets">
+<widget id="org.haoshiyou.app" version="3.8.4" xmlns="http://www.w3.org/ns/widgets">
   <name>haoshiyou</name>
   <description>帮助旧金山湾区小伙伴们找室友。</description>
   <author email="zzn@zzn.im" href="http://zzn.im/">Zainan Victor Zhou</author>
@@ -12,6 +12,11 @@
   <allow-intent href="mailto:*"/>
   <allow-intent href="geo:*"/>
   <allow-navigation href="*"/>
+  <allow-navigation href="http://192.168.1.104:8100"/>
+  <allow-navigation href="http://192.168.43.252:8100"/>
+  <allow-navigation href="http://192.168.2.195:8100"/>
+  <allow-navigation href="http://192.168.0.21:8100"/>
+  <allow-navigation href="http://10.10.120.188:8100"/>
   <platform name="android">
     <allow-intent href="market:*"/>
     <preference name="android-targetSdkVersion" value="23"/>
@@ -90,6 +95,11 @@
   <plugin name="cordova-plugin-file-transfer" spec="~1.5.1"/>
   <plugin name="phonegap-plugin-push" spec="~1.8.3">
     <variable name="SENDER_ID" value="59094925347"/>
+  </plugin>
+  <plugin name="ionic-plugin-deeplinks" spec="~1.0.8">
+    <variable name="URL_SCHEME" value="haoshiyou"/>
+    <variable name="DEEPLINK_SCHEME" value="http"/>
+    <variable name="DEEPLINK_HOST" value="haoshiyou.org"/>
   </plugin>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
 </widget>

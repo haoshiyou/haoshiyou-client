@@ -1,12 +1,12 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            Chats
+            对话
         </ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content>
-    <ion-list *ngIf="meId">
+    <ion-list *ngIf="auth.authenticated()">
         <chat-thread
                 *ngFor="let thread of threads; let i = index"
                 [thread]="thread"
@@ -15,7 +15,7 @@
         <ion-item *ngIf="!threads || !threads.length"> 没有任何消息 </ion-item>
     </ion-list>
 
-    <ion-list *ngIf="!meId">
+    <ion-list *ngIf="!auth.authenticated()">
         <ion-item>
             <ion-label>请登录</ion-label>
             <button ion-button item-right (click)="auth.login()">登录</button>

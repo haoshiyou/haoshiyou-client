@@ -1,5 +1,10 @@
 <ion-header>
-    <ion-navbar>
+    <ion-toolbar>
+        <ion-buttons start>
+            <button ion-button icon-only (click)="mapToggleOn=!mapToggleOn">
+                <ion-icon name="ios-map-outline"></ion-icon>
+            </button>
+        </ion-buttons>
         <ion-title>
             好室友
         </ion-title>
@@ -8,10 +13,11 @@
                 <ion-icon name="add"></ion-icon>
             </button>
         </ion-buttons>
-    </ion-navbar>
+    </ion-toolbar>
 </ion-header>
 <ion-content class="listing-tab">
     <ion-list>
+        <map-view [listings]="listings" *ngIf="mapToggleOn"></map-view>
         <listing-item *ngFor="let listing of listings; let i = index"
                       [listing]=listing></listing-item>
     </ion-list>
