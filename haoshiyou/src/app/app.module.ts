@@ -35,6 +35,7 @@ import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {Env} from "./env";
 import {QrCodeTabPage} from "../pages/qrcode-tab/qrcode-tab-page";
+import {SDKBrowserModule} from "../loopbacksdk/index";
 
 let storage: Storage = new Storage();
 export function getAuthHttp(http) {
@@ -83,7 +84,8 @@ export function getAuthHttp(http) {
       ]
     }),
     BrowserModule,
-    AngularFireModule.initializeApp(Env.configFirebase)
+    AngularFireModule.initializeApp(Env.configFirebase),
+    SDKBrowserModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -11,6 +11,9 @@ import {User} from "../models/models";
 import {NotificationService} from "../services/notfication.service";
 import 'rxjs/Rx'; // used by Observable.take()
 import {Env} from "../app/env";
+import {LoopBackConfig} from "../loopbacksdk/lb.config";
+import {HsyListing} from "../loopbacksdk/models/HsyListing";
+import {HsyListingApi} from "../loopbacksdk/services/custom/HsyListing";
 declare let ga:any;
 
 @Component({
@@ -18,6 +21,7 @@ declare let ga:any;
 })
 export class HaoshiyouApp {
   rootPage:any = TabsPage;
+  private hsyListing:HsyListing = new HsyListing();
   constructor(private platform:Platform,
               private af:AngularFire,
               private userService:IUserService,
@@ -25,7 +29,21 @@ export class HaoshiyouApp {
               private messageService:IMessageService,
               private authService:AuthService,
               private notificationService:NotificationService,
-              private http:Http) {
+              private http:Http,
+              private hsyListingApi:HsyListingApi
+              ) {
+    console.log('XXX before connecting!');
+    LoopBackConfig.setBaseURL('http://127.0.0.1:4001');
+    LoopBackConfig.setApiVersion('api');
+    console.log('XXX start creating hys api!');
+    this.hsyListing.uid = '1234';
+    this.hsyListing.title = 'a good listing';
+    this.hsyListing.price = 12;
+    this.hsyListingApi.create(this.hsyListing).subscribe((created: HsyListing) => {
+      console.log('XXX created!');
+      console.log(`XXX ${created}`);
+    });
+    console.log('XXX finihed!');
     this.platform.ready().then(()=> {
       ga('create', Env.configGoogleAnalytics.propertyId, 'none');
       ga('send', 'pageview');
