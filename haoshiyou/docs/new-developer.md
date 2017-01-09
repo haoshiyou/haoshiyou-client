@@ -3,15 +3,22 @@
 
 ## Prerequisite
 You need to install the following in your computer:
+### Install git 
 
-1. git, npm
-2. Ionic@beta
-    To install ionic, you need to install nodejs first. Please make sure your nodejs version is euqal or higher than 4.4.4. Otherwise you will see an error when running "ionic state restore" later.
-    if the vesion of your installed nodejs is like v0.12.2. Quit using npm to update nodejs. Follow the steps here: http://stackoverflow.com/a/12570971/6567635
-    up to here, you are good to go for the web part.
-3. Xcode and Iphone Emulator (if developing features related iOS)
-4. Android Studio and SDK (if developing features related to Android)
-5. (Optional)Genymotion for faster Android Emulation
+
+
+### 
+1. Install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- zzn currently uses git 2.8.1).
+3. Install [node](https://nodejs.org/en/download/) - zzn uses 6.9.1
+2. Install [npm](https://docs.npmjs.com/getting-started/installing-node) - zzn uses 3.10.8
+4. Install [ionic](http://ionicframework.com/docs/v2/setup/installation/) - zzn uses 2.1.4
+5. Install [Cordova](https://cordova.apache.org/docs/en/latest/guide/cli/) - zzn uses 6.4.0
+6. [Xcode](https://developer.apple.com/download/)
+7. [Iphone Emulator](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/GettingStartedwithiOSSimulator/GettingStartedwithiOSSimulator.html)
+(if developing features related iOS)
+8. [Android Studio / SDK](https://developer.android.com/studio/index.html) 
+(if developing features related to Android)
 
 ## Quick Start
 
