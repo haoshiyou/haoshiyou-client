@@ -131,7 +131,8 @@ export class ListingDetailPage implements AfterViewInit {
     var despHeight = this.preCalculateHeight(ctx,description,550,25)
     var lat = this.listing.lat;
     var lng = this.listing.lng;
-    var canvasHeight = 350 + despHeight + 400 * this.listing.imageIds.length + 400;
+    var imageCnt = this.listing.imageIds === undefined ? 0 : this.listing.imageIds.length;
+    var canvasHeight = 350 + despHeight + 400 * imageCnt + 400;
     c.height = canvasHeight;
     var promises = new Array();
 
@@ -146,48 +147,40 @@ export class ListingDetailPage implements AfterViewInit {
     map_image.crossOrigin = 'Anonymous';
     promises.push(new Promise(function(resolve,reject){
       map_image.onload = function(){
-        ctx.drawImage(map_image, 0, 100 + despHeight);
         resolve();
       };
     }));
     map_image.src = map_src;
     
-    var base_image = new Image();
-    base_image.crossOrigin = 'Anonymous';
-    base_image.src = 'http://res.cloudinary.com/xinbenlv/image/upload/q_70,w_600/' + this.listing.imageIds[0];
-    promises.push(new Promise(function(resolve,reject){
-      base_image.onload = function(){
-        ctx.drawImage(base_image, 0, 350 + despHeight);
-        resolve();
-      };
-    }));
-    
-    if (this.listing.imageIds.length > 1) {
-        var base_image2 = new Image();
-        base_image2.crossOrigin = 'Anonymous';
-        base_image2.src = 'http://res.cloudinary.com/xinbenlv/image/upload/q_70,w_600/' + this.listing.imageIds[1];
+    let base_images = new Array(imageCnt);
+    for (let i = 0; i < imageCnt; i++) {
+        base_images[i] = new Image();
+        base_images[i].crossOrigin = 'Anonymous';
+        base_images[i].src = 'http://res.cloudinary.com/xinbenlv/image/upload/q_70,w_600/' + this.listing.imageIds[i];
         promises.push(new Promise(function(resolve,reject){
-          base_image2.onload = function(){
-            ctx.drawImage(base_image2, 0, 750 + despHeight);
+          base_images[i].onload = function(){
             resolve();
           };
         }));
     }
 
-    var qrcodeY = 0;
-    if (this.listing.imageIds.length == 1) {
-      qrcodeY = 830 + despHeight;
-    } else {
-      qrcodeY = 1230 + despHeight;
-    }
     // promises.push(new Promise(function(resolve,reject){
           var qrcode_image = <HTMLImageElement> this.getQrcodeImage('http://haoshiyou.org');
-          ctx.drawImage(qrcode_image, 150, qrcodeY);
-          // resolve();
+    //       resolve();
     // }));
 
     // download image
     Promise.all(promises).then(values => {
+      ctx.drawImage(map_image, 0, 100 + despHeight);
+      let imageY = 350 + despHeight;
+      for (let i = 0; i < imageCnt; i++) {
+          if (i > 0) { imageY += 400; }
+          console.log(i + "th imageY: " + imageY);
+          ctx.drawImage(base_images[i], 0, imageY);
+      }
+      var qrcodeY = 430 + despHeight + 400 * imageCnt;
+      ctx.drawImage(qrcode_image, 150, qrcodeY);
+
       if (navigator.userAgent.indexOf("MSIE") > 0 ||
           navigator.userAgent.match(/Trident.*rv\:11\./))
       {
