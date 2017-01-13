@@ -44,6 +44,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CookieBrowser } from './storage/cookie.browser';
 import { HsyListingApi } from './services/custom/HsyListing';
+import { HsyUserApi } from './services/custom/HsyUser';
 /**
 * @module SDKBrowserModule
 * @description
@@ -71,6 +72,7 @@ export class SDKBrowserModule {
         JSONSearchParams,
         SDKModels,
         HsyListingApi,
+        HsyUserApi,
         { provide: InternalStorage, useClass: CookieBrowser }
       ]
     };

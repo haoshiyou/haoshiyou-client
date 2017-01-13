@@ -36,13 +36,7 @@ export class HaoshiyouApp {
     LoopBackConfig.setBaseURL('http://127.0.0.1:4001');
     LoopBackConfig.setApiVersion('api');
     console.log('XXX start creating hys api!');
-    this.hsyListing.uid = '1234';
-    this.hsyListing.title = 'a good listing';
-    this.hsyListing.price = 12;
-    this.hsyListingApi.create(this.hsyListing).subscribe((created: HsyListing) => {
-      console.log('XXX created!');
-      console.log(`XXX ${created}`);
-    });
+
     console.log('XXX finihed!');
     this.platform.ready().then(()=> {
       ga('create', Env.configGoogleAnalytics.propertyId, 'none');

@@ -6,7 +6,10 @@ import {CreationPage} from "./listing-creation.page";
 import {Observable} from "rxjs/Observable";
 import {AuthService} from "../../services/auth.service";
 import {AngularFire} from "angularfire2/index";
-import 'rxjs/Rx'; // used by Observable.take()
+import 'rxjs/Rx';
+import {HsyListing} from "../../loopbacksdk/models/HsyListing";
+import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
+import {GeoPoint} from "../../loopbacksdk/models/BaseModels"; // used by Observable.take()
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -34,7 +37,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private nav:NavController,
               private alertCtrl: AlertController,
               private auth:AuthService,
-              private af:AngularFire) {
+              private af:AngularFire,
+              private api:HsyListingApi) {
   }
 
   ngOnInit() {
@@ -49,6 +53,24 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       /* TODO(xinbenlv): currently get all, need to narrow down. */
       this.listings = listings.reverse();
       this.updateMarkers();
+      return this.api.createMany(
+      listings.map((listing) => {
+        var hl:HsyListing = new HsyListing();
+        hl.title = listing.title;
+        hl.imageIds = listing.imageIds;
+        hl.lastUpdated = new Date(listing.lastUpdated);
+        hl.uid = listing.id;
+        hl.ownerId = listing.ownerId;
+        hl.content = listing.content;
+        hl.location = { lat: listing.lat, lng: listing.lng};
+        hl.type = listing.type;
+        return hl;
+      })).toPromise().then((_)=>{
+        console.log(`XXX Finished creating hsyListing`);
+        console.log(`XXX ${JSON.stringify(_)}`);
+      }).catch((err)=>{
+        console.error(err);
+      });
     });
     (this.af.database.list("/listings", {
       query: {
