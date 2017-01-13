@@ -121,4 +121,132 @@ export class ListingDetailPage implements AfterViewInit {
         });
     viewer.show();
   }
+
+  generateLongImage() {
+    var c = <HTMLCanvasElement> document.createElement('canvas');
+    c.width = 600;
+    var ctx = <CanvasRenderingContext2D> c.getContext('2d');
+    var title = this.listing.title;
+    var description = this.listing.content;
+    var despHeight = this.preCalculateHeight(ctx,description,550,25)
+    var lat = this.listing.lat;
+    var lng = this.listing.lng;
+    var canvasHeight = 350 + despHeight + 400 * this.listing.imageIds.length + 400;
+    c.height = canvasHeight;
+    var promises = new Array();
+
+    ctx.font = "30px Arial";
+    ctx.fillText(title, 10, 50);
+    ctx.font = "20px Arial";
+    this.fillMultiLines(ctx,description,25,80,550,25)
+
+    var map_image = new Image();
+    var map_src = 'https://maps.googleapis.com/maps/api/staticmap?&zoom=12&size=598x250&maptype=roadmap&markers=color:red|'
+                + lat + ',' + lng + '&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY';
+    map_image.crossOrigin = 'Anonymous';
+    promises.push(new Promise(function(resolve,reject){
+      map_image.onload = function(){
+        ctx.drawImage(map_image, 0, 100 + despHeight);
+        resolve();
+      };
+    }));
+    map_image.src = map_src;
+    
+    var base_image = new Image();
+    base_image.crossOrigin = 'Anonymous';
+    base_image.src = 'http://res.cloudinary.com/xinbenlv/image/upload/q_70,w_600/' + this.listing.imageIds[0];
+    promises.push(new Promise(function(resolve,reject){
+      base_image.onload = function(){
+        ctx.drawImage(base_image, 0, 350 + despHeight);
+        resolve();
+      };
+    }));
+    
+    if (this.listing.imageIds.length > 1) {
+        var base_image2 = new Image();
+        base_image2.crossOrigin = 'Anonymous';
+        base_image2.src = 'http://res.cloudinary.com/xinbenlv/image/upload/q_70,w_600/' + this.listing.imageIds[1];
+        promises.push(new Promise(function(resolve,reject){
+          base_image2.onload = function(){
+            ctx.drawImage(base_image2, 0, 750 + despHeight);
+            resolve();
+          };
+        }));
+    }
+
+    var qrcodeY = 0;
+    if (this.listing.imageIds.length == 1) {
+      qrcodeY = 830 + despHeight;
+    } else {
+      qrcodeY = 1230 + despHeight;
+    }
+    // promises.push(new Promise(function(resolve,reject){
+          var qrcode_image = <HTMLImageElement> this.getQrcodeImage('http://haoshiyou.org');
+          ctx.drawImage(qrcode_image, 150, qrcodeY);
+          // resolve();
+    // }));
+
+    // download image
+    Promise.all(promises).then(values => {
+      if (navigator.userAgent.indexOf("MSIE") > 0 ||
+          navigator.userAgent.match(/Trident.*rv\:11\./))
+      {
+        var blob = c.msToBlob();
+        window.navigator.msSaveBlob(blob, 'test_file1.png');
+      } else {
+        var a = document.getElementById("downloadLink");
+        console.log(" --- " + a + " --- ");
+        a.setAttribute("href", c.toDataURL());
+        a.setAttribute("download", "test_file2.png");
+        a.click();
+      }
+    });
+  }
+
+  private getQrcodeImage(link) {
+    var el = document.createElement('div');
+    el.style.margin = "20%";
+    var qrcode = new QRCode(el);
+    qrcode.makeCode(link);
+    return el.firstChild;
+  }
+
+
+  private preCalculateHeight(context, text, maxWidth, lineHeight) {
+    var words = text.split(' ');
+    var line = '';
+
+    var lines = 0;
+    for(var n = 0; n < words.length; n++) {
+      var testLine = line + words[n] + ' ';
+      var metrics = context.measureText(testLine);
+      var testWidth = metrics.width;
+      if (testWidth > maxWidth && n > 0) {
+        lines++;
+      }
+    }
+    return lines * lineHeight; // height
+  }
+
+  private fillMultiLines(context, text, x, y, maxWidth, lineHeight) {
+    var words = text.split(' ');
+    var line = '';
+
+    var lines = 0;
+    for(var n = 0; n < words.length; n++) {
+      var testLine = line + words[n] + ' ';
+      var metrics = context.measureText(testLine);
+      var testWidth = metrics.width;
+      if (testWidth > maxWidth && n > 0) {
+        context.fillText(line, x, y);
+        line = words[n] + ' ';
+        y += lineHeight;
+        lines++;
+      }
+      else {
+        line = testLine;
+      }
+    }
+    context.fillText(line, x, y);
+  }
 }

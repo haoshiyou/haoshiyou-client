@@ -63,21 +63,6 @@ export class TabsPage implements OnInit, OnDestroy, AfterViewInit {
     this.platform.ready().then(() => {
       console.log("XXXX trying to set route 2");
 
-      Deeplinks.routeWithNavController(this.navController, {
-        'listing/:id': ListingDetailPage
-      }, {}, /*success*/(match) => {
-        // match.$route - the route we matched, which is the matched entry from the arguments to route()
-        // match.$args - the args passed in the link
-        // match.$link - the full link data
-        console.log('Successfully matched route', JSON.stringify(match));
-        console.log('Successfully matched route.$route', JSON.stringify(match.$route));
-        console.log('Successfully matched route.$args', JSON.stringify(match.$args));
-        console.log('Successfully matched route.$link', JSON.stringify(match.$link));
-      }, /*error*/(nomatch) => {
-        // nomatch.$link - the full link data
-        console.error('Got a deeplink that didn\'t match', JSON.stringify(nomatch));
-      });
-
       // Deeplinks.route({
       //   'listing/:id': ListingDetailPage
       // }).subscribe((match) => {
