@@ -52,12 +52,14 @@ All dimensions are in Pixels, Width X Height
 
 ### Google Play
 
+| | |
 |------:| -------:|
 |Feature | 1024x500 24bit PNG or JPG|
 |icon    | 512x512 24bit PNG|
 
 ### iOS
 
+|||
 |----------:| -------:|
 |icon        |  1024x1024 JPG or PNG 72DPI+ RGB |
 |Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, iPad, iPad Pro|
