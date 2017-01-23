@@ -37,10 +37,7 @@
             <ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}" item-left>
                 {{listing.type|enumMsgPipe}}
             </ion-badge>
-            <button ion-button color="primary" clear item-left (click)="generateLongImage()">
-                下载长图片 <ion-icon name="ios-long-image"></ion-icon>
-            </button>
-            <a id="downloadLink"></a>
+            <long-image [listing]="listing"></long-image>
             <button ion-button color="primary" clear item-right (click)="generateQrCode()">
                 二维码 <ion-icon name="ios-qr-scanner"></ion-icon>
             </button>

@@ -14,6 +14,7 @@ import {ListingDetailPage} from "../pages/listings-tab/listing-detail.page";
 import {ListingItem} from "../pages/listings-tab/listing-item.comp";
 import {ListingsTabPage} from "../pages/listings-tab/listings-tab.page";
 import {MapViewComponent} from "../pages/listings-tab/map-view.comp";
+import {LongImageComponent} from "../pages/listings-tab/long-image.comp";
 import {RemoveModal} from "../pages/listings-tab/remove.modal";
 import {SettingsTabPage} from "../pages/settings-tab/settings-tab.page";
 import {DisconnectModal} from "../pages/tabs/disconnect.modal";
@@ -60,6 +61,7 @@ export function getAuthHttp(http) {
     ListingItem,
     ListingsTabPage,
     MapViewComponent,
+    LongImageComponent,
     RemoveModal,
     SettingsTabPage,
     DisconnectModal,
@@ -99,6 +101,7 @@ export function getAuthHttp(http) {
     ListingItem,
     ListingsTabPage,
     MapViewComponent,
+    LongImageComponent,
     RemoveModal,
     SettingsTabPage,
     DisconnectModal,
