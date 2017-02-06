@@ -9,7 +9,8 @@ import {AngularFire} from "angularfire2/index";
 import 'rxjs/Rx';
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
-import {GeoPoint} from "../../loopbacksdk/models/BaseModels"; // used by Observable.take()
+import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
+import {LoopBackFilter} from "../../loopbacksdk/models/BaseModels"; // used by Observable.take()
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -27,8 +28,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private map:any; // Actually google.maps.Map;
   private markers:any[]; // Actually google.maps.Marker[];
   listings:Listing[];
-  listingsRoomWanted:Listing[] = [];
-  listingsRoommateWanted:Listing[] = [];
+  listingsRoomWanted:HsyListing[] = [];
+  listingsRoommateWanted:HsyListing[] = [];
   private listingObservable: Observable<Listing[]>;
   private mapReady:boolean = false;
   public mapToggleOn:boolean = false;
@@ -41,54 +42,19 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private api:HsyListingApi) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     let initMap:Promise<any> = this.platform.ready().then(() => {
     }).then(()=>{
       this.mapReady = true;
       this.updateMarkers();
     });
+    let l = await this.api
+        .find<HsyListing>({ order: 'lastUpdated DESC' })
+        .take(1)
+        .toPromise();
 
-    this.listingObservable = this.listingService.observableListings();
-    this.listingObservable.subscribe((listings:Listing[]) => {
-      /* TODO(xinbenlv): currently get all, need to narrow down. */
-      this.listings = listings.reverse();
-      this.updateMarkers();
-      return this.api.createMany(
-      listings.map((listing) => {
-        var hl:HsyListing = new HsyListing();
-        hl.title = listing.title;
-        hl.imageIds = listing.imageIds;
-        hl.lastUpdated = new Date(listing.lastUpdated);
-        hl.uid = listing.id;
-        hl.ownerId = listing.ownerId;
-        hl.content = listing.content;
-        hl.location = { lat: listing.lat, lng: listing.lng};
-        hl.type = listing.type;
-        return hl;
-      })).toPromise().then((_)=>{
-        console.log(`XXX Finished creating hsyListing`);
-        console.log(`XXX ${JSON.stringify(_)}`);
-      }).catch((err)=>{
-        console.error(err);
-      });
-    });
-    (this.af.database.list("/listings", {
-      query: {
-        orderByChild: 'type',
-        equalTo: 0 // ListingType.ROOMMATE_WANTED
-      }
-    }).take(1).toPromise() as Promise<Listing[]>).then((l) => {
-      this.listingsRoommateWanted = l;
-    });
-
-    (this.af.database.list("/listings", {
-      query: {
-        orderByChild: 'type',
-        equalTo: 1 //ListingType.ROOM_WANTED
-      }
-    }).take(1).toPromise() as Promise<Listing[]>).then((l) => {
-      this.listingsRoomWanted = l;
-    });
+    this.listingsRoommateWanted = l;
+    this.listingsRoomWanted = l;
   }
 
   private updateMarkers() {
