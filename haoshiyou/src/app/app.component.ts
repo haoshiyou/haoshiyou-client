@@ -33,7 +33,7 @@ export class HaoshiyouApp {
               private hsyListingApi:HsyListingApi
               ) {
     console.log('XXX before connecting!');
-    LoopBackConfig.setBaseURL('http://127.0.0.1:4001');
+    LoopBackConfig.setBaseURL('http://haoshiyou-server-dev.herokuapp.com');
     LoopBackConfig.setApiVersion('api');
     console.log('XXX start creating hys api!');
 

@@ -5,27 +5,31 @@ import {
 
 declare var Object: any;
 export interface HsyListingInterface {
-  title: string;
-  price: number;
-  uid: string;
-  location?: GeoPoint;
-  content?: string;
-  type?: number;
-  ownerId?: string;
-  lastUpdated: Date;
+  content?: any;
+  hsyGroupEnum?: string;
   imageIds?: Array<string>;
+  lastUpdated?: Date;
+  location?: GeoPoint;
+  ownerId: string;
+  price?: number;
+  title?: string;
+  type?: number;
+  uid: string;
+  wechatId?: string;
 }
 
 export class HsyListing implements HsyListingInterface {
-  title: string = '';
-  price: number = 0;
-  uid: string = '';
-  location: GeoPoint = <any>null;
-  content: string = '';
-  type: number = 0;
-  ownerId: string = '';
-  lastUpdated: Date = new Date(0);
+  content: any = <any>null;
+  hsyGroupEnum: string = '';
   imageIds: Array<string> = <any>[];
+  lastUpdated: Date = new Date(0);
+  location: GeoPoint = <any>null;
+  ownerId: string = '';
+  price: number = 0;
+  title: string = '';
+  type: number = 0;
+  uid: string = '';
+  wechatId: string = '';
   constructor(data?: HsyListingInterface) {
     Object.assign(this, data);
   }
@@ -57,41 +61,49 @@ export class HsyListing implements HsyListingInterface {
       name: 'HsyListing',
       plural: 'HsyListings',
       properties: {
-        title: {
-          name: 'title',
+        content: {
+          name: 'content',
+          type: 'any'
+        },
+        hsyGroupEnum: {
+          name: 'hsyGroupEnum',
+          type: 'string'
+        },
+        imageIds: {
+          name: 'imageIds',
+          type: 'Array&lt;string&gt;'
+        },
+        lastUpdated: {
+          name: 'lastUpdated',
+          type: 'Date'
+        },
+        location: {
+          name: 'location',
+          type: 'GeoPoint'
+        },
+        ownerId: {
+          name: 'ownerId',
           type: 'string'
         },
         price: {
           name: 'price',
           type: 'number'
         },
-        uid: {
-          name: 'uid',
-          type: 'string'
-        },
-        location: {
-          name: 'location',
-          type: 'GeoPoint'
-        },
-        content: {
-          name: 'content',
+        title: {
+          name: 'title',
           type: 'string'
         },
         type: {
           name: 'type',
           type: 'number'
         },
-        ownerId: {
-          name: 'ownerId',
+        uid: {
+          name: 'uid',
           type: 'string'
         },
-        lastUpdated: {
-          name: 'lastUpdated',
-          type: 'Date'
-        },
-        imageIds: {
-          name: 'imageIds',
-          type: 'Array&lt;string&gt;'
+        wechatId: {
+          name: 'wechatId',
+          type: 'string'
         },
       },
       relations: {
