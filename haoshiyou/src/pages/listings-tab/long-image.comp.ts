@@ -1,8 +1,11 @@
 import {Component, Input} from "@angular/core";
+import {File,Transfer} from "ionic-native";
+import {Platform} from 'ionic-angular';
 import {Listing} from "../../models/listing";
 
 declare let google, document;
 declare let QRCode:any;
+declare var cordova: any;
 
 @Component({
   selector: 'long-image',
@@ -12,22 +15,24 @@ export class LongImageComponent {
   @Input() listing:Listing;
   canvasHeight:number;
 
-  private generateLongImage() {
-    console.log(" SSS -- generateLongImage " );
-    var c = <HTMLCanvasElement> document.createElement('canvas');
+  constructor(private platform:Platform) {
+    console.log(this.platform.versions());
+  }
+
+  public generateLongImage() {
+    console.log(" --- generateLongImage... --- ");
+    let c: HTMLCanvasElement = document.createElement('canvas');
     c.width = 600;
-    var ctx = <CanvasRenderingContext2D> c.getContext('2d');
+    let ctx: CanvasRenderingContext2D = c.getContext('2d');
     var title = this.listing.title;
     var description = this.listing.content;
-    var despHeight = this.preCalculateHeight(ctx,description,550,25)
+    var despHeight = this.preCalculateHeight(ctx,description,550,25);
     this.canvasHeight = 350 + despHeight + 400; // initial height without images
 
-    console.log(" SSS: before async calls");
     var promises = new Array();
     let images = this.preloadElements(promises);
     let imagesHeight = 0;
     Promise.all(promises).then(values => {
-        console.log(" SSS how may promises: " + promises.length);
         this.resizeCanvas(c, images);
         this.drawElements(c, despHeight, title, description, images);
     });
@@ -60,7 +65,7 @@ export class LongImageComponent {
         }));
     }
 
-    var qrcode_image = <HTMLImageElement> this.getQrcodeImage(document.location.href);
+    let qrcode_image: HTMLImageElement = this.getQrcodeImage(document.location.href);
 
     return {
       map_image: map_image,
@@ -72,18 +77,18 @@ export class LongImageComponent {
   private resizeCanvas(c, images) {
     let imageCnt = images.base_images == undefined ? 0 : images.base_images.length;
     let imagesHeight = 0;
-    console.log(" SSS 1 -- imageCnt: " + imageCnt);
-    console.log(" SSS 2 -- imagesHeight: " + imagesHeight);
     for (let i = 0; i < imageCnt; i++) {
       imagesHeight += images.base_images[i].height;
-      console.log(" SSS 2." + i + " : " + images.base_images[i].height);
     }
-    console.log(" SSS 3 -- imagesHeight: " + imagesHeight);
     c.height = this.canvasHeight + imagesHeight;
-    console.log(" SSS 4 -- c.height: " + c.height);
   }
 
   private drawElements(c, despHeight, title, description, images) {
+      console.log(" --- What's c1? --- ")
+      console.log(c);
+      console.log(" --- What's c1? --- ")
+
+      console.log(" --- drawElements... --- ");
       let imageCnt = images.base_images == undefined ? 0 : images.base_images.length;
 
       let ctx = <CanvasRenderingContext2D> c.getContext('2d');
@@ -96,28 +101,67 @@ export class LongImageComponent {
 
       let imageY = 350 + despHeight;
       for (let i = 0; i < imageCnt; i++) {
-          console.log(i + "th imageY: " + imageY);
           ctx.drawImage(images.base_images[i], 0, imageY);
           imageY += images.base_images[i].height;
       }
 
       var qrcodeY = imageY + 70;
-      console.log("qrcodeY: " + qrcodeY);
       ctx.drawImage(images.qrcode_image, 150, qrcodeY);
 
-      if (navigator.userAgent.indexOf("MSIE") > 0 ||
-          navigator.userAgent.match(/Trident.*rv\:11\./))
-      {
-        var blob = c.msToBlob();
-        window.navigator.msSaveBlob(blob, 'haoshiyou-longimage1.png');
-      } else {
-        var a = document.getElementById("downloadLink");
-        console.log(" --- " + a + " --- ");
-        a.setAttribute("href", c.toDataURL());
-        a.setAttribute("download", "haoshiyou-longimage2.png");
-        a.click();
+      console.log(" --- Begin to download... --- ");
+      var tempImg = document.getElementById('tempImg');
+      tempImg.setAttribute('src', c.toDataURL());
+      if (this.platform.is('core')) {
+        if (navigator.userAgent.indexOf("MSIE") > 0 ||
+            navigator.userAgent.match(/Trident.*rv\:11\./))
+        {
+          var blob = c.msToBlob();
+          window.navigator.msSaveBlob(blob, 'haoshiyou-longimage1.png');
+        } else {
+          var a = document.getElementById("downloadLink");
+          a.setAttribute("href", c.toDataURL());
+          a.setAttribute("download", "haoshiyou-longimage2.png");
+          a.click();
+        }
+      }
+      else { // in cell-phone app
+        var imgDataUrl = c.toDataURL();
+        // imgData = imgData.substring("data:image/png;base64,".length);
+        console.log(' --- imgData ready ---');
+
+        let fileTransfer = new Transfer();
+        var targetPath = cordova.file.dataDirectory + "/haoshiyou/" + "current-house.png";
+        var options = {};
+        fileTransfer.download(imgDataUrl, targetPath, true)
+          .then(function(result) {
+            // Success!
+            console.log("Download");
+          }, function(err) {
+            // Error
+            console.log("Not Download");
+          });
+
+        // let fs = cordova.file.dataDirectory;
+        // File.writeFile(fs, "longImage_1.png", imgData, {replace: true}
+        // ).then(
+        //   _ => {console.log(" -- write complete... -- ")}
+        // ).catch(
+        //   err => {
+        //     console.log(" -- file create failed... -- ",err);
+        //   }
+        // );
+
+        // cordova.plugins.imagesaver.saveImageToGallery(imgData, this.onSaveImageSuccess, this.onSaveImageError);
       }
   }
+
+  // private onSaveImageSuccess() {
+  //     console.log('--------------success');
+  // }
+  //                                             
+  // private onSaveImageError() {
+  //     console.log('--------------error: ');
+  // }
 
   private getQrcodeImage(link) {
     var el = document.createElement('div');
