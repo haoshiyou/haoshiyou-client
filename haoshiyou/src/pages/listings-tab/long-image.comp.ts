@@ -13,16 +13,18 @@ declare var cordova: any;
 })
 export class LongImageComponent {
   @Input() listing:Listing;
+  canvasWidth:number;
   canvasHeight:number;
 
   constructor(private platform:Platform) {
+    this.canvasWidth = 600;
     console.log(this.platform.versions());
   }
 
   public generateLongImage() {
     console.log(" --- generateLongImage... --- ");
     let c: HTMLCanvasElement = document.createElement('canvas');
-    c.width = 600;
+    c.width = this.canvasWidth;
     let ctx: CanvasRenderingContext2D = c.getContext('2d');
     var title = this.listing.title;
     var description = this.listing.content;
@@ -52,6 +54,16 @@ export class LongImageComponent {
     }));
     map_image.src = map_src;
 
+    var qrcenter_image = new Image();
+    var qrcenter_src = '/assets/res/favicon/apple-touch-icon-72x72.png'
+    qrcenter_image.crossOrigin = 'Anonymous';
+    promises.push(new Promise(function(resolve,reject){
+      qrcenter_image.onload = function(){
+        resolve();
+      };
+    }));
+    qrcenter_image.src = qrcenter_src;
+
     var imageCnt = this.listing.imageIds === undefined ? 0 : this.listing.imageIds.length;
     let base_images = new Array(imageCnt);
     for (let i = 0; i < imageCnt; i++) {
@@ -70,7 +82,8 @@ export class LongImageComponent {
     return {
       map_image: map_image,
       base_images: base_images,
-      qrcode_image: qrcode_image
+      qrcode_image: qrcode_image,
+      qrcenter_image: qrcenter_image
     }
   }
 
@@ -84,14 +97,11 @@ export class LongImageComponent {
   }
 
   private drawElements(c, despHeight, title, description, images) {
-      console.log(" --- What's c1? --- ")
-      console.log(c);
-      console.log(" --- What's c1? --- ")
-
       console.log(" --- drawElements... --- ");
       let imageCnt = images.base_images == undefined ? 0 : images.base_images.length;
 
       let ctx = <CanvasRenderingContext2D> c.getContext('2d');
+      ctx.fillStyle = "black";
       ctx.font = "30px Arial";
       ctx.fillText(title, 10, 50);
       ctx.font = "20px Arial";
@@ -106,31 +116,38 @@ export class LongImageComponent {
       }
 
       var qrcodeY = imageY + 70;
-      ctx.drawImage(images.qrcode_image, 150, qrcodeY);
+      ctx.drawImage(images.qrcode_image, 170, qrcodeY);
+      ctx.drawImage(images.qrcenter_image, (this.canvasWidth-72)/2, qrcodeY + 95);
+
+      // draw boundaries
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0,0,this.canvasWidth,c.height);//for white background
+      ctx.globalCompositeOperation = "source-over";
+      ctx.lineWidth = 2;
+      ctx.strokeStyle="#000000";
+      ctx.strokeRect(0,0,this.canvasWidth,c.height);//for white background
 
       console.log(" --- Begin to download... --- ");
-      var tempImg = document.getElementById('tempImg');
-      tempImg.setAttribute('src', c.toDataURL());
+      //TODO
+      let fileName = 'haoshiyou-' + (new Date(this.listing.lastUpdated)).toISOString() + '.png';
       if (this.platform.is('core')) {
         if (navigator.userAgent.indexOf("MSIE") > 0 ||
             navigator.userAgent.match(/Trident.*rv\:11\./))
         {
           var blob = c.msToBlob();
-          window.navigator.msSaveBlob(blob, 'haoshiyou-longimage1.png');
+          window.navigator.msSaveBlob(blob, fileName);
         } else {
           var a = document.getElementById("downloadLink");
           a.setAttribute("href", c.toDataURL());
-          a.setAttribute("download", "haoshiyou-longimage2.png");
+          a.setAttribute("download", fileName);
           a.click();
         }
       }
       else { // in cell-phone app
         var imgDataUrl = c.toDataURL();
-        // imgData = imgData.substring("data:image/png;base64,".length);
-        console.log(' --- imgData ready ---');
-
         let fileTransfer = new Transfer();
-        var targetPath = cordova.file.dataDirectory + "/haoshiyou/" + "current-house.png";
+        var targetPath = cordova.file.dataDirectory + "/haoshiyou/" + fileName;
         var options = {};
         fileTransfer.download(imgDataUrl, targetPath, true)
           .then(function(result) {
@@ -140,28 +157,8 @@ export class LongImageComponent {
             // Error
             console.log("Not Download");
           });
-
-        // let fs = cordova.file.dataDirectory;
-        // File.writeFile(fs, "longImage_1.png", imgData, {replace: true}
-        // ).then(
-        //   _ => {console.log(" -- write complete... -- ")}
-        // ).catch(
-        //   err => {
-        //     console.log(" -- file create failed... -- ",err);
-        //   }
-        // );
-
-        // cordova.plugins.imagesaver.saveImageToGallery(imgData, this.onSaveImageSuccess, this.onSaveImageError);
       }
   }
-
-  // private onSaveImageSuccess() {
-  //     console.log('--------------success');
-  // }
-  //                                             
-  // private onSaveImageError() {
-  //     console.log('--------------error: ');
-  // }
 
   private getQrcodeImage(link) {
     var el = document.createElement('div');
