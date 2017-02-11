@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {HaoshiyouApp} from "./app.component";
-import {IonicApp, IonicModule, NavController} from "ionic-angular";
+import {IonicApp, IonicModule} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
@@ -19,8 +19,6 @@ import {SettingsTabPage} from "../pages/settings-tab/settings-tab.page";
 import {DisconnectModal} from "../pages/tabs/disconnect.modal";
 import {IImageService, CloudinaryImageService} from "../services/image.service";
 import {NotificationService} from "../services/notfication.service";
-import {IListingService} from "../services/listings/listing.service";
-import {FirebaseListingService} from "../services/listings/fb-listing.service";
 import {AuthService} from "../services/auth.service";
 import {IUserService, FirebaseUserService} from "../services/chats/user.service";
 import {IThreadService, FirebaseThreadService} from "../services/chats/thread.service";
@@ -110,7 +108,6 @@ export function getAuthHttp(http) {
     {provide: IUserService, useClass: FirebaseUserService},
     {provide: IThreadService, useClass: FirebaseThreadService},
     {provide: IMessageService, useClass: FirebaseMessageService},
-    {provide: IListingService, useClass: FirebaseListingService},
     {provide: IImageService, useClass: CloudinaryImageService},
     NotificationService,
     MapService,

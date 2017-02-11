@@ -1,12 +1,13 @@
 import {Platform, NavParams, NavController, AlertController} from "ionic-angular";
 import {OnInit, Component} from "@angular/core";
-import {ListingType, Listing} from "../../models/listing";
 import {uuid} from "../../util/uuid";
-import {IListingService} from "../../services/listings/listing.service";
 import {IUserService} from "../../services/chats/user.service";
 import {User} from "../../models/models";
 import {NotificationService} from "../../services/notfication.service";
 import {ILocality, MapService} from "../../services/map.service";
+import {HsyListing} from "../../loopbacksdk/models/HsyListing";
+import {GeoPoint} from "../../../.tmp/loopbacksdk/models/BaseModels";
+import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 
 declare let google:any;
 
@@ -21,27 +22,31 @@ const DEFAULT_LNG:number = -122.09106;
 })
 export class CreationPage implements OnInit {
   //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
-  typeOptions:ListingType[] = [ListingType.ROOMMATE_WANTED, ListingType.ROOM_WANTED];
-  listing:Listing;
+  // TODO(xinbenlv) uncomment this
+  // typeOptions:ListingType[] = [ListingType.ROOMMATE_WANTED, ListingType.ROOM_WANTED];
+  listing:HsyListing;
   localityText:string;
   private map:any; /*google.maps.Map*/
   private marker:any; /*google.maps.Marker*/
   //noinspection JSMismatchedCollectionQueryUpdate used in HTML
   dirty:{[field:string]: boolean} = {};
   constructor(private platform:Platform, private params:NavParams,
-              private listingService:IListingService,
               private nav:NavController,
               private alertCtrl:AlertController,
               private userService:IUserService,
               private notificationService:NotificationService,
-              private mapService:MapService) {
+              private mapService:MapService,
+              private api:HsyListingApi) {
     if (params.data.listing) {
       this.listing = params.data.listing;
     } else {
-      this.listing = <Listing>{};
-      this.listing.id = uuid();
-      this.listing.lat = DEFAULT_LAT;
-      this.listing.lng = DEFAULT_LNG;
+      this.listing = <HsyListing>{};
+      this.listing.uid = uuid();
+      let loc:GeoPoint = {
+        lat: DEFAULT_LAT,
+        lng: DEFAULT_LNG
+      };
+      this.listing.location = loc;
     }
     if (!this.listing.imageIds) this.listing.imageIds = [];
   }
@@ -59,21 +64,25 @@ export class CreationPage implements OnInit {
        */
       this.map = new google.maps.Map(document.getElementById('map_drag_canvas'), {
         zoom: minZoomLevel,
-        center: new google.maps.LatLng(this.listing.lat, this.listing.lng), // Google
+        center: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng), // Google
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
       this.marker.setMap(this.map);
     });
 
     this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/{
-      position: new google.maps.LatLng(this.listing.lat, this.listing.lng),
+      position: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng),
       animation: google.maps.Animation.DROP,
       draggable: true,
     });
     google.maps.event.addListener(this.marker, 'dragend', () => {
-      this.listing.lat = this.marker.getPosition().lat();
-      this.listing.lng = this.marker.getPosition().lng();
-      this.mapService.getLocality(new google.maps.LatLng(this.listing.lat, this.listing.lng))
+      let loc:GeoPoint = {
+        lat:  this.marker.getPosition().lat(),
+        lng: this.marker.getPosition().lng()
+      };
+      this.listing.location = loc;
+      this.mapService.getLocality(new google.maps.LatLng(
+          this.listing.location.lat, this.listing.location.lng))
           .then((locality:ILocality)=> {
             this.localityText = locality.city + ", " + locality.zip;
           });
@@ -82,11 +91,11 @@ export class CreationPage implements OnInit {
 
   save() {
     if (this.validate()) {
-      this.listing.lastUpdated = Date.now();
+      this.listing.lastUpdated = new Date();
       this.userService.promiseMe().then((me:User)=> {
         this.listing.ownerId = me.id;
       }).then(()=> {
-        return this.listingService.createListing(this.listing);
+        return this.api.create<HsyListing>(this.listing);
       }).then(()=> {
         // succeed.
         return this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
@@ -121,7 +130,7 @@ export class CreationPage implements OnInit {
         {
           text: '删除',
           handler: () => {
-            this.listingService.removeListing(this.listing.id).then(()=>{
+            this.api.deleteById(this.listing.uid).take(1).toPromise().then(()=>{
               this.nav.pop().then(()=>{
                 this.nav.pop();
               }); // alert

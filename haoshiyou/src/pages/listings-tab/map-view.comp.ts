@@ -1,5 +1,5 @@
 import {Component, OnChanges, Input, SimpleChange} from "@angular/core";
-import {Listing} from "../../models/listing";
+import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 
 declare let google, document;
 
@@ -8,7 +8,7 @@ declare let google, document;
   templateUrl: 'map-view.comp.html'
 })
 export class MapViewComponent implements OnChanges {
-  @Input() listings:Listing[];
+  @Input() listings:HsyListing[];
   private map = google.maps.Maps;
   ngOnChanges(changes:{[propertyName:string]:SimpleChange}) {
     if (changes['listings']) {
@@ -23,11 +23,11 @@ export class MapViewComponent implements OnChanges {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     let latAve:number = 0, lngAve:number = 0, n = this.listings.length;
-    this.listings.map((listing:Listing) => {
-      latAve += listing.lat/n;
-      lngAve += listing.lng/n;
+    this.listings.map((listing:HsyListing) => {
+      latAve += listing.location.lat/n;
+      lngAve += listing.location.lng/n;
       let marker = new google.maps.Marker({
-        position: new google.maps.LatLng(listing.lat, listing.lng),
+        position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
       });
       marker.setMap(this.map);
     });

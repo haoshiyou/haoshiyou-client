@@ -1,16 +1,11 @@
 import {Platform, NavController, AlertController} from "ionic-angular";
-import {IListingService} from "../../services/listings/listing.service";
-import {Listing,ListingType} from "../../models/listing";
 import {OnInit, OnDestroy, Component} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {Observable} from "rxjs/Observable";
 import {AuthService} from "../../services/auth.service";
-import {AngularFire} from "angularfire2/index";
 import 'rxjs/Rx';
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
-import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
-import {LoopBackFilter} from "../../loopbacksdk/models/BaseModels"; // used by Observable.take()
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -27,18 +22,14 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   public segmentModel:string = 'ROOMMATE_WANTED'; // by default for rent
   private map:any; // Actually google.maps.Map;
   private markers:any[]; // Actually google.maps.Marker[];
-  listings:Listing[];
   listingsRoomWanted:HsyListing[] = [];
   listingsRoommateWanted:HsyListing[] = [];
-  private listingObservable: Observable<Listing[]>;
   private mapReady:boolean = false;
   public mapToggleOn:boolean = false;
   constructor(private platform:Platform,
-              private listingService:IListingService,
               private nav:NavController,
               private alertCtrl: AlertController,
               private auth:AuthService,
-              private af:AngularFire,
               private api:HsyListingApi) {
   }
 
@@ -58,9 +49,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   private updateMarkers() {
-    if(this.mapReady && this.listings) {
-
-    }
+    // TODO(xinbenlv): update markers
   }
 
   gotoCreationPage() {
