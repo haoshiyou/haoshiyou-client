@@ -2,11 +2,23 @@
 
 declare var Object: any;
 export interface HsyUserInterface {
+  avatarId?: string;
   id: string;
+  name?: string;
+  pushNotificationRegIds?: Array<string>;
+  weixin?: string;
+  created?: Date;
+  lastUpdated?: Date;
 }
 
 export class HsyUser implements HsyUserInterface {
+  avatarId: string = '';
   id: string = '';
+  name: string = '';
+  pushNotificationRegIds: Array<string> = <any>[];
+  weixin: string = '';
+  created: Date = new Date(0);
+  lastUpdated: Date = new Date(0);
   constructor(data?: HsyUserInterface) {
     Object.assign(this, data);
   }
@@ -38,9 +50,33 @@ export class HsyUser implements HsyUserInterface {
       name: 'HsyUser',
       plural: 'HsyUsers',
       properties: {
+        avatarId: {
+          name: 'avatarId',
+          type: 'string'
+        },
         id: {
           name: 'id',
           type: 'string'
+        },
+        name: {
+          name: 'name',
+          type: 'string'
+        },
+        pushNotificationRegIds: {
+          name: 'pushNotificationRegIds',
+          type: 'Array&lt;string&gt;'
+        },
+        weixin: {
+          name: 'weixin',
+          type: 'string'
+        },
+        created: {
+          name: 'created',
+          type: 'Date'
+        },
+        lastUpdated: {
+          name: 'lastUpdated',
+          type: 'Date'
         },
       },
       relations: {

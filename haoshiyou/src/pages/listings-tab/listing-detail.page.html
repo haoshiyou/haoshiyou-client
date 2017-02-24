@@ -9,7 +9,7 @@
 <ion-content id="page-container">
     <ion-card *ngIf="!loading">
         <ion-item *ngIf="owner" >
-            <ion-avatar item-left>
+            <ion-avatar *ngIf="owner.avatarSrc && owner.avatarSrc.length > 0" item-left>
                 <img src="{{owner.avatarSrc}}" alt=""/>
             </ion-avatar>
             {{ owner.name }}

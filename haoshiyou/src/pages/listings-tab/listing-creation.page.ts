@@ -6,7 +6,7 @@ import {User} from "../../models/models";
 import {NotificationService} from "../../services/notfication.service";
 import {ILocality, MapService} from "../../services/map.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
-import {GeoPoint} from "../../../.tmp/loopbacksdk/models/BaseModels";
+import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 
 declare let google:any;
