@@ -48,7 +48,7 @@ export class CloudinaryImageService implements IImageService {
           return fileTransfer.upload(uri, uploadUrl, {
             params: this.config
           }).then((result)=> {
-            let data = JSON.parse(result.response);
+            let data = JSON.parse(result['response']);
             return data.public_id;
           }).catch((error)=> {
           });

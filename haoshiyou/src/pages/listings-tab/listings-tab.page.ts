@@ -1,12 +1,11 @@
 import {Platform, NavController, AlertController} from "ionic-angular";
-import {IListingService} from "../../services/listings/listing.service";
-import {Listing,ListingType} from "../../models/listing";
 import {OnInit, OnDestroy, Component} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {Observable} from "rxjs/Observable";
 import {AuthService} from "../../services/auth.service";
-import {AngularFire} from "angularfire2/index";
-import 'rxjs/Rx'; // used by Observable.take()
+import 'rxjs/Rx';
+import {HsyListing} from "../../loopbacksdk/models/HsyListing";
+import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -23,56 +22,34 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   public segmentModel:string = 'ROOMMATE_WANTED'; // by default for rent
   private map:any; // Actually google.maps.Map;
   private markers:any[]; // Actually google.maps.Marker[];
-  listings:Listing[];
-  listingsRoomWanted:Listing[] = [];
-  listingsRoommateWanted:Listing[] = [];
-  private listingObservable: Observable<Listing[]>;
+  listingsRoomWanted:HsyListing[] = [];
+  listingsRoommateWanted:HsyListing[] = [];
   private mapReady:boolean = false;
   public mapToggleOn:boolean = false;
   constructor(private platform:Platform,
-              private listingService:IListingService,
               private nav:NavController,
               private alertCtrl: AlertController,
               private auth:AuthService,
-              private af:AngularFire) {
+              private api:HsyListingApi) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     let initMap:Promise<any> = this.platform.ready().then(() => {
     }).then(()=>{
       this.mapReady = true;
       this.updateMarkers();
     });
+    let l = await this.api
+        .find<HsyListing>({ order: 'lastUpdated DESC' })
+        .take(1)
+        .toPromise();
 
-    this.listingObservable = this.listingService.observableListings();
-    this.listingObservable.subscribe((listings:Listing[]) => {
-      /* TODO(xinbenlv): currently get all, need to narrow down. */
-      this.listings = listings.reverse();
-      this.updateMarkers();
-    });
-    (this.af.database.list("/listings", {
-      query: {
-        orderByChild: 'type',
-        equalTo: 0 // ListingType.ROOMMATE_WANTED
-      }
-    }).take(1).toPromise() as Promise<Listing[]>).then((l) => {
-      this.listingsRoommateWanted = l;
-    });
-
-    (this.af.database.list("/listings", {
-      query: {
-        orderByChild: 'type',
-        equalTo: 1 //ListingType.ROOM_WANTED
-      }
-    }).take(1).toPromise() as Promise<Listing[]>).then((l) => {
-      this.listingsRoomWanted = l;
-    });
+    this.listingsRoommateWanted = l;
+    this.listingsRoomWanted = l;
   }
 
   private updateMarkers() {
-    if(this.mapReady && this.listings) {
-
-    }
+    // TODO(xinbenlv): update markers
   }
 
   gotoCreationPage() {
