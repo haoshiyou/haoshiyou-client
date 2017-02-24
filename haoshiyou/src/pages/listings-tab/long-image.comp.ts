@@ -29,7 +29,11 @@ export class LongImageComponent {
     var title = this.listing.title;
     var description = this.listing.content;
     var despHeight = this.preCalculateHeight(ctx,description,550,25);
-    this.canvasHeight = 350 + despHeight + 400; // initial height without images
+    var qrcodeHeight = 400;
+    this.canvasHeight = 100 + despHeight + qrcodeHeight; // title + description
+    if (this.hasLocation()) {
+      this.canvasHeight += 250;
+    }
 
     var promises = new Array();
     let images = this.preloadElements(promises);
@@ -41,18 +45,23 @@ export class LongImageComponent {
   }
 
   private preloadElements(promises) {
-    var map_image = new Image();
-    var lat = this.listing.lat;
-    var lng = this.listing.lng;
-    var map_src = 'https://maps.googleapis.com/maps/api/staticmap?&zoom=12&size=598x250&maptype=roadmap&markers=color:red|'
-                + lat + ',' + lng + '&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY';
-    map_image.crossOrigin = 'Anonymous';
-    promises.push(new Promise(function(resolve,reject){
-      map_image.onload = function(){
-        resolve();
-      };
-    }));
-    map_image.src = map_src;
+    var map_image = null;
+    if (this.hasLocation()) {
+      map_image = new Image();
+      var lat = this.listing.lat;
+      var lng = this.listing.lng;
+      var map_size = '598x250'
+      var map_src = 'https://maps.googleapis.com/maps/api/staticmap?&zoom=12&size='
+                  + map_size + '&maptype=roadmap&markers=color:red|'
+                  + lat + ',' + lng + '&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY';
+      map_image.crossOrigin = 'Anonymous';
+      promises.push(new Promise(function(resolve,reject){
+        map_image.onload = function(){
+          resolve();
+        };
+      }));
+      map_image.src = map_src;
+    }
 
     var qrcenter_image = new Image();
     var qrcenter_src = '/assets/res/favicon/apple-touch-icon-72x72.png'
@@ -79,11 +88,22 @@ export class LongImageComponent {
 
     let qrcode_image: HTMLImageElement = this.getQrcodeImage(document.location.href);
 
+    var goto_image = new Image();
+    var goto_src = '/assets/res/long-image/haoshiyou-goto.png'
+    goto_image.crossOrigin = 'Anonymous';
+    promises.push(new Promise(function(resolve,reject){
+      goto_image.onload = function(){
+        resolve();
+      };
+    }));
+    goto_image.src = goto_src;
+
     return {
       map_image: map_image,
       base_images: base_images,
       qrcode_image: qrcode_image,
-      qrcenter_image: qrcenter_image
+      qrcenter_image: qrcenter_image,
+      goto_image: goto_image
     }
   }
 
@@ -96,6 +116,10 @@ export class LongImageComponent {
     c.height = this.canvasHeight + imagesHeight;
   }
 
+  private hasLocation() {
+    return this.listing.lat != undefined && this.listing.lat != 0;
+  }
+
   private drawElements(c, despHeight, title, description, images) {
       console.log(" --- drawElements... --- ");
       let imageCnt = images.base_images == undefined ? 0 : images.base_images.length;
@@ -106,10 +130,13 @@ export class LongImageComponent {
       ctx.fillText(title, 10, 50);
       ctx.font = "20px Arial";
       this.fillMultiLines(ctx,description,25,80,550,25);
+      
+      let imageY = 100 + despHeight;
+      if (this.hasLocation()) {
+        ctx.drawImage(images.map_image, 0, imageY);
+        imageY += 250;
+      }
 
-      ctx.drawImage(images.map_image, 0, 100 + despHeight);
-
-      let imageY = 350 + despHeight;
       for (let i = 0; i < imageCnt; i++) {
           ctx.drawImage(images.base_images[i], 0, imageY);
           imageY += images.base_images[i].height;
@@ -118,6 +145,9 @@ export class LongImageComponent {
       var qrcodeY = imageY + 70;
       ctx.drawImage(images.qrcode_image, 170, qrcodeY);
       ctx.drawImage(images.qrcenter_image, (this.canvasWidth-72)/2, qrcodeY + 95);
+
+      var gotoY = qrcodeY + 270;
+      ctx.drawImage(images.goto_image, 6, gotoY);
 
       // draw boundaries
       ctx.globalCompositeOperation = "destination-over";
@@ -129,7 +159,6 @@ export class LongImageComponent {
       ctx.strokeRect(0,0,this.canvasWidth,c.height);//for white background
 
       console.log(" --- Begin to download... --- ");
-      //TODO
       let fileName = 'haoshiyou-' + (new Date(this.listing.lastUpdated)).toISOString() + '.png';
       if (this.platform.is('core')) {
         if (navigator.userAgent.indexOf("MSIE") > 0 ||
