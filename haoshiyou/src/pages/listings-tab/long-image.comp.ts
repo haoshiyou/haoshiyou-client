@@ -88,6 +88,7 @@ export class LongImageComponent {
 
     let qrcode_image: HTMLImageElement = this.getQrcodeImage(document.location.href);
 
+    /*
     var goto_image = new Image();
     var goto_src = '/assets/res/long-image/haoshiyou-goto.png'
     goto_image.crossOrigin = 'Anonymous';
@@ -97,13 +98,14 @@ export class LongImageComponent {
       };
     }));
     goto_image.src = goto_src;
+    */
 
     return {
       map_image: map_image,
       base_images: base_images,
       qrcode_image: qrcode_image,
-      qrcenter_image: qrcenter_image,
-      goto_image: goto_image
+      qrcenter_image: qrcenter_image
+      // goto_image: goto_image
     }
   }
 
@@ -146,8 +148,15 @@ export class LongImageComponent {
       ctx.drawImage(images.qrcode_image, 170, qrcodeY);
       ctx.drawImage(images.qrcenter_image, (this.canvasWidth-72)/2, qrcodeY + 95);
 
-      var gotoY = qrcodeY + 270;
-      ctx.drawImage(images.goto_image, 6, gotoY);
+      var qrcodeHintY = qrcodeY - 20;
+      ctx.fillStyle = "black";
+      ctx.font = "20px Arial";
+      var gotoY = qrcodeY + 300;
+      ctx.fillText('扫描二维码查看详情，可私信po主', 160, qrcodeHintY);
+      ctx.fillStyle = "black";
+      ctx.font = "30px Arial";
+      ctx.fillText('更多咨询请查看haoshiyou.org', 100, gotoY);
+      // ctx.drawImage(images.goto_image, 6, gotoY);
 
       // draw boundaries
       ctx.globalCompositeOperation = "destination-over";
