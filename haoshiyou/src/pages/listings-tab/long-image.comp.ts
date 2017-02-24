@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {File,Transfer} from "ionic-native";
 import {Platform} from 'ionic-angular';
-import {Listing} from "../../models/listing";
+import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 
 declare let google, document;
 declare let QRCode:any;
@@ -12,7 +12,7 @@ declare var cordova: any;
   templateUrl: 'long-image.comp.html'
 })
 export class LongImageComponent {
-  @Input() listing:Listing;
+  @Input() listing:HsyListing;
   canvasWidth:number;
   canvasHeight:number;
 
@@ -48,8 +48,8 @@ export class LongImageComponent {
     var map_image = null;
     if (this.hasLocation()) {
       map_image = new Image();
-      var lat = this.listing.lat;
-      var lng = this.listing.lng;
+      var lat = this.listing.location.lat;
+      var lng = this.listing.location.lng;
       var map_size = '598x250'
       var map_src = 'https://maps.googleapis.com/maps/api/staticmap?&zoom=12&size='
                   + map_size + '&maptype=roadmap&markers=color:red|'
@@ -119,7 +119,7 @@ export class LongImageComponent {
   }
 
   private hasLocation() {
-    return this.listing.lat != undefined && this.listing.lat != 0;
+    return this.listing.location != undefined && this.listing.location.lat != 0;
   }
 
   private drawElements(c, despHeight, title, description, images) {

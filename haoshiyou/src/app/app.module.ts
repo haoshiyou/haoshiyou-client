@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {HaoshiyouApp} from "./app.component";
-import {IonicApp, IonicModule, NavController} from "ionic-angular";
+import {IonicApp, IonicModule} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
@@ -20,8 +20,6 @@ import {SettingsTabPage} from "../pages/settings-tab/settings-tab.page";
 import {DisconnectModal} from "../pages/tabs/disconnect.modal";
 import {IImageService, CloudinaryImageService} from "../services/image.service";
 import {NotificationService} from "../services/notfication.service";
-import {IListingService} from "../services/listings/listing.service";
-import {FirebaseListingService} from "../services/listings/fb-listing.service";
 import {AuthService} from "../services/auth.service";
 import {IUserService, FirebaseUserService} from "../services/chats/user.service";
 import {IThreadService, FirebaseThreadService} from "../services/chats/thread.service";
@@ -36,6 +34,7 @@ import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {Env} from "./env";
 import {QrCodeTabPage} from "../pages/qrcode-tab/qrcode-tab-page";
+import {SDKBrowserModule} from "../loopbacksdk/index";
 
 let storage: Storage = new Storage();
 export function getAuthHttp(http) {
@@ -85,7 +84,8 @@ export function getAuthHttp(http) {
       ]
     }),
     BrowserModule,
-    AngularFireModule.initializeApp(Env.configFirebase)
+    AngularFireModule.initializeApp(Env.configFirebase),
+    SDKBrowserModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -111,7 +111,6 @@ export function getAuthHttp(http) {
     {provide: IUserService, useClass: FirebaseUserService},
     {provide: IThreadService, useClass: FirebaseThreadService},
     {provide: IMessageService, useClass: FirebaseMessageService},
-    {provide: IListingService, useClass: FirebaseListingService},
     {provide: IImageService, useClass: CloudinaryImageService},
     NotificationService,
     MapService,

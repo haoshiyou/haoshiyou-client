@@ -1,9 +1,9 @@
-import {OnInit, OnDestroy, Component, AfterViewInit} from "@angular/core";
+import {OnInit, OnDestroy, Component} from "@angular/core";
 import {NavController, Modal, ModalController, Platform} from "ionic-angular";
 import {ChatsTabPage} from "../chats-tab/chats-tab.page";
 import {ListingsTabPage} from "../listings-tab/listings-tab.page";
 import {SettingsTabPage} from "../settings-tab/settings-tab.page";
-import {Network, Deeplinks} from "ionic-native";
+import {Network} from "ionic-native";
 import {DisconnectModal} from "./disconnect.modal";
 import {Subscription} from "rxjs";
 import {ListingDetailPage} from "../listings-tab/listing-detail.page";
@@ -12,7 +12,7 @@ import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
 @Component({
   templateUrl: 'tabs.html',
 })
-export class TabsPage implements OnInit, OnDestroy, AfterViewInit {
+export class TabsPage implements OnInit, OnDestroy {
   private onDisconnect:Subscription;
   private onConnect:Subscription;
   private disconnectModal:Modal;

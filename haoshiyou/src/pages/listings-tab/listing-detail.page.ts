@@ -1,13 +1,15 @@
 import {NavParams, NavController} from "ionic-angular";
-import {Listing} from "../../models/listing";
 import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
 import {IUserService} from "../../services/chats/user.service";
 import {ChatWindowPage} from "../chats-tab/chat-window.page";
-import {Component, AfterViewInit, OnInit} from "@angular/core";
+import {Component, AfterViewInit} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
-import {IListingService} from "../../services/listings/listing.service";
+import {HsyListing} from "../../loopbacksdk/models/HsyListing";
+import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
+import {HsyUserApi} from "../../loopbacksdk/services/custom/HsyUser";
+import {HsyUser} from "../../loopbacksdk/models/HsyUser";
 declare let window:any;
 declare let QRCode:any;
 
@@ -16,7 +18,7 @@ declare let QRCode:any;
   templateUrl: 'listing-detail.page.html'
 })
 export class ListingDetailPage implements AfterViewInit {
-  listing:Listing;
+  listing:HsyListing;
   owner:User;
   meId:string;
   public loading:boolean = true;
@@ -27,43 +29,52 @@ export class ListingDetailPage implements AfterViewInit {
   //   console.log("XXX generateQrCode code");
   //   this.generateQrCode();
   }
-  ngOnInit():void {
+  async ngOnInit():Promise<void> {
     console.log("XXX ListingDetailPage load 2");
     if (this.params.data['listing'] != null) {
       console.log(`XXXX param = ${JSON.stringify(this.params)}`);
       this.listing = this.params.data.listing;
-      this.params.data.id = this.listing.id;
+      this.params.data.id = this.listing.uid;
       this.initListeners();
       this.loading = false;
     } else {
       let id = this.params.data.id;
-      this.listingService.getListingById(id).then((listing) => {
-        this.listing = listing;
-        this.initListeners();
-        this.loading = false;
+      let listing = await this.api.findById(id)
+          .take(1)
+          .toPromise() as HsyListing;
+      this.listing = listing;
+      this.initListeners();
+      this.loading = false;
 
-        console.log("XXX Finish loading");
-      });
+      console.log("XXX Finish loading");
     }
   }
 
   constructor(private threadService:IThreadService,
               private userService:IUserService,
-              private listingService:IListingService,
               private nav:NavController,
               private params:NavParams,
-              private imageService:IImageService) {
-
-  }
+              private imageService:IImageService,
+              private api:HsyListingApi,private hsyUserApi:HsyUserApi) {}
 
   edit() {
     this.nav.push(CreationPage, {listing: this.listing});
   }
 
-  private initListeners() {
-    this.userService.observableUserById(this.listing.ownerId).subscribe((owner:User)=> {
-      this.owner = owner;
-    });
+  private async initListeners() {
+    console.log(`XXX DEBUG start init listeners`);
+    let ownernHsyUser:HsyUser = await this.hsyUserApi
+        .findById<HsyUser>(this.listing.ownerId).take(1).toPromise();
+    console.log(`XXX DEBUG ownernHsyUser = ${JSON.stringify(ownernHsyUser)}`);
+
+    this.owner = {
+      id: ownernHsyUser.id,
+      name: ownernHsyUser.name,
+      avatarSrc: ownernHsyUser.avatarId, // TODO(xinbenlv): update the URL using cloudinary
+      regIds: []
+    };
+    console.log(`loaded user ${JSON.stringify(ownernHsyUser)}`);
+
     this.userService.promiseMe().then((me:User)=> {
       if (me) {
         this.meId = me.id;
@@ -77,7 +88,7 @@ export class ListingDetailPage implements AfterViewInit {
     // TODO(xinbenlv): handle when not yet logged in.
     let thread:Thread = <Thread>{};
     this.userService.promiseMe().then((me:User)=> {
-      let newThreadId:string = me.id + '|' + this.listing.id;
+      let newThreadId:string = me.id + '|' + this.listing.uid;
       thread.id = newThreadId;
       thread.userIds = [me.id, this.listing.ownerId];
       return this.threadService.createThread(thread);

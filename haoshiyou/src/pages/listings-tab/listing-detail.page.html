@@ -9,7 +9,7 @@
 <ion-content id="page-container">
     <ion-card *ngIf="!loading">
         <ion-item *ngIf="owner" >
-            <ion-avatar item-left>
+            <ion-avatar *ngIf="owner.avatarSrc && owner.avatarSrc.length > 0" item-left>
                 <img src="{{owner.avatarSrc}}" alt=""/>
             </ion-avatar>
             {{ owner.name }}
@@ -21,8 +21,7 @@
         <ion-card-content>
             <p style="white-space: pre-line">{{listing.content}}</p>
         </ion-card-content>
-        <!-- [listing] is the current item -->
-        <map-view [listings]="[listing]"></map-view>
+        <map-view [listings]="[listing]" *ngIf="listing.location !== undefined"></map-view>
         <ion-item *ngFor="let imageId of listing.imageIds">
             <img src="{{ imageId | imageIdToUrlPipe }}" alt="img-{{imageId}}"
                  (click)="showImage(imageId)">
@@ -34,9 +33,9 @@
             <div style="margin: 20%" id="qrcode" ></div>
         </ion-item>
         <ion-item>
-            <ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}" item-left>
-                {{listing.type|enumMsgPipe}}
-            </ion-badge>
+            <!--<ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}" item-left>-->
+                <!--{{listing.type|enumMsgPipe}}-->
+            <!--</ion-badge>-->
             <long-image [listing]="listing"></long-image>
             <button ion-button color="primary" clear item-right (click)="generateQrCode()">
                 二维码 <ion-icon name="ios-qr-scanner"></ion-icon>
