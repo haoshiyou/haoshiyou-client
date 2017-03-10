@@ -21,7 +21,10 @@
         <ion-card-content>
             <p style="white-space: pre-line">{{listing.content}}</p>
         </ion-card-content>
-        <map-view [listings]="[listing]" *ngIf="listing.location !== undefined"></map-view>
+        <map-view [listings]="[listing]"
+                  *ngIf="listing.location !== undefined && listing.location !== null">
+            
+        </map-view>
         <ion-item *ngFor="let imageId of listing.imageIds">
             <img src="{{ imageId | imageIdToUrlPipe }}" alt="img-{{imageId}}"
                  (click)="showImage(imageId)">
