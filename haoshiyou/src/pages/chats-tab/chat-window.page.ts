@@ -125,6 +125,6 @@ export class ChatWindowPage implements OnInit, OnDestroy {
 
   private scrollToBottom():void {
     let dimensions = this.content.getContentDimensions();
-    this.content.scrollTo(0, dimensions.scrollBottom, 0);
+    // this.content.scrollTo(0, dimensions.scrollBottom, 0);
   }
 }
