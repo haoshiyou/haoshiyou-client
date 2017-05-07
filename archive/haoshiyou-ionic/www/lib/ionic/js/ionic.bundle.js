@@ -10642,7 +10642,7 @@ function setupModuleLoader(window) {
            * @param {Function} configFn Execute this function on module load. Useful for service
            *    configuration.
            * @description
-           * Use this method to register work which needs to be performed on module loading.
+           * Use this method to register work which needs to be performed on module isLoading.
            * For more about how to configure services, see
            * {@link providers#provider-recipe Provider Recipe}.
            */
@@ -10656,7 +10656,7 @@ function setupModuleLoader(window) {
            *    Useful for application initialization.
            * @description
            * Use this method to register work which should be performed when the injector is done
-           * loading all modules.
+           * isLoading all modules.
            */
           run: function(block) {
             runBlocks.push(block);
@@ -11448,7 +11448,7 @@ var JQLitePrototype = JQLite.prototype = {
       setTimeout(trigger);
     } else {
       this.on('DOMContentLoaded', trigger); // works for modern browsers and IE9
-      // we can not use jqLite since we are not done loading and jQuery could be loaded later.
+      // we can not use jqLite since we are not done isLoading and jQuery could be loaded later.
       // jshint -W064
       JQLite(window).on('load', trigger); // fallback to window.onload for others
       // jshint +W064
@@ -23643,7 +23643,7 @@ function adjustMatchers(matchers) {
  * The default instance of `$sceDelegate` should work out of the box with little pain.  While you
  * can override it completely to change the behavior of `$sce`, the common case would
  * involve configuring the {@link ng.$sceDelegateProvider $sceDelegateProvider} instead by setting
- * your own whitelists and blacklists for trusting URLs used for loading AngularJS resources such as
+ * your own whitelists and blacklists for trusting URLs used for isLoading AngularJS resources such as
  * templates.  Refer {@link ng.$sceDelegateProvider#resourceUrlWhitelist
  * $sceDelegateProvider.resourceUrlWhitelist} and {@link
  * ng.$sceDelegateProvider#resourceUrlBlacklist $sceDelegateProvider.resourceUrlBlacklist}
@@ -23677,7 +23677,7 @@ function adjustMatchers(matchers) {
  *    $sceDelegateProvider.resourceUrlWhitelist([
  *      // Allow same origin resource loads.
  *      'self',
- *      // Allow loading from our assets domain.  Notice the difference between * and **.
+ *      // Allow isLoading from our assets domain.  Notice the difference between * and **.
  *      'http://srv*.assets.example.com/**'
  *    ]);
  *
@@ -23922,7 +23922,7 @@ function $SceDelegateProvider() {
           return maybeTrusted;
         } else {
           throw $sceMinErr('insecurl',
-              'Blocked loading resource from url not allowed by $sceDelegate policy.  URL: {0}',
+              'Blocked isLoading resource from url not allowed by $sceDelegate policy.  URL: {0}',
               maybeTrusted.toString());
         }
       } else if (type === SCE_CONTEXTS.HTML) {
@@ -38237,7 +38237,7 @@ angular.module('ui.router.util').service('$resolve', $Resolve);
  * @requires $injector
  *
  * @description
- * Service. Manages loading of templates.
+ * Service. Manages isLoading of templates.
  */
 $TemplateFactory.$inject = ['$http', '$templateCache', '$injector'];
 function $TemplateFactory(  $http,   $templateCache,   $injector) {
@@ -40511,7 +40511,7 @@ function $StateProvider(   $urlRouterProvider,   $urlMatcherFactory) {
        * @description
        * Fired when a requested state **cannot be found** using the provided state name during transition.
        * The event is broadcast allowing any handlers a single chance to deal with the error (usually by
-       * lazy-loading the unfound state). A special `unfoundState` object is passed to the listener handler,
+       * lazy-isLoading the unfound state). A special `unfoundState` object is passed to the listener handler,
        * you can see its three properties in the example. You can use `event.preventDefault()` to abort the
        * transition and the promise returned from `go` will be rejected with a `'transition aborted'` value.
        *
@@ -41210,7 +41210,7 @@ function $ViewProvider() {
          * @eventType broadcast on root scope
          * @description
          *
-         * Fired once the view **begins loading**, *before* the DOM is rendered.
+         * Fired once the view **begins isLoading**, *before* the DOM is rendered.
          *
          * @param {Object} event Event object.
          * @param {Object} viewConfig The view config properties (template, controller, etc).
@@ -42200,7 +42200,7 @@ jqLite.prototype.removeClass = function(cssClasses) {
  * @name $ionicBackdrop
  * @module ionic
  * @description
- * Shows and hides a backdrop over the UI.  Appears behind popups, loading,
+ * Shows and hides a backdrop over the UI.  Appears behind popups, isLoading,
  * and other overlays.
  *
  * Often, multiple UI components require a backdrop, but only one backdrop is
@@ -43993,8 +43993,8 @@ IonicModule
 
 
 var LOADING_TPL =
-  '<div class="loading-container">' +
-    '<div class="loading">' +
+  '<div class="isLoading-container">' +
+    '<div class="isLoading">' +
     '</div>' +
   '</div>';
 
@@ -44074,14 +44074,14 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
     /**
      * @ngdoc method
      * @name $ionicLoading#show
-     * @description Shows a loading indicator. If the indicator is already shown,
+     * @description Shows a isLoading indicator. If the indicator is already shown,
      * it will set the options given and keep the indicator shown.
-     * @param {object} opts The options for the loading indicator. Available properties:
+     * @param {object} opts The options for the isLoading indicator. Available properties:
      *  - `{string=}` `template` The html content of the indicator.
      *  - `{string=}` `templateUrl` The url of an html template to load as the content of the indicator.
      *  - `{object=}` `scope` The scope to be a child of. Default: creates a child of $rootScope.
      *  - `{boolean=}` `noBackdrop` Whether to hide the backdrop. By default it will be shown.
-     *  - `{boolean=}` `hideOnStateChange` Whether to hide the loading spinner when navigating
+     *  - `{boolean=}` `hideOnStateChange` Whether to hide the isLoading spinner when navigating
      *    to a new state. Default false.
      *  - `{number=}` `delay` How many milliseconds to delay showing the indicator. By default there is no delay.
      *  - `{number=}` `duration` How many milliseconds to wait until automatically
@@ -44091,7 +44091,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
     /**
      * @ngdoc method
      * @name $ionicLoading#hide
-     * @description Hides the loading indicator, if shown.
+     * @description Hides the isLoading indicator, if shown.
      */
     hide: hideLoader,
     /**
@@ -44120,7 +44120,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
             self.hasBackdrop = !options.noBackdrop && options.showBackdrop !== false;
             if (self.hasBackdrop) {
               $ionicBackdrop.retain();
-              $ionicBackdrop.getElement().addClass('backdrop-loading');
+              $ionicBackdrop.getElement().addClass('backdrop-isLoading');
             }
           }
 
@@ -44133,10 +44133,10 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
           }
 
           deregisterBackAction();
-          //Disable hardware back button while loading
+          //Disable hardware back button while isLoading
           deregisterBackAction = $ionicPlatform.registerBackButtonAction(
             noop,
-            IONIC_BACK_PRIORITY.loading
+            IONIC_BACK_PRIORITY.isLoading
           );
 
           templatePromise.then(function(html) {
@@ -44152,7 +44152,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
               ionic.requestAnimationFrame(function() {
                 if (self.isShown) {
                   self.element.addClass('active');
-                  $ionicBody.addClass('loading-active');
+                  $ionicBody.addClass('isLoading-active');
                 }
               });
             }
@@ -44166,10 +44166,10 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
           if (self.isShown) {
             if (self.hasBackdrop) {
               $ionicBackdrop.release();
-              $ionicBackdrop.getElement().removeClass('backdrop-loading');
+              $ionicBackdrop.getElement().removeClass('backdrop-isLoading');
             }
             self.element.removeClass('active');
-            $ionicBody.removeClass('loading-active');
+            $ionicBody.removeClass('isLoading-active');
             setTimeout(function() {
               !self.isShown && self.element.removeClass('visible');
             }, 200);
@@ -44195,7 +44195,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
       deregisterStateListener2 = $rootScope.$on('$stateChangeError', hideLoader);
     }
 
-    //If loading.show() was called previously, cancel it and show with our new options
+    //If isLoading.show() was called previously, cancel it and show with our new options
     $timeout.cancel(loadingShowDelay);
     loadingShowDelay = $timeout(noop, delay);
     loadingShowDelay.then(getLoader).then(function(loader) {
@@ -44716,7 +44716,7 @@ IonicModule
          *   Dismiss modal = 200
          *   Close action sheet = 300
          *   Dismiss popup = 400
-         *   Dismiss loading overlay = 500
+         *   Dismiss isLoading overlay = 500
          *
          * Your back button action will override each of the above actions
          * whose priority is less than the priority you provide. For example,
@@ -51971,16 +51971,16 @@ function headerFooterBarDirective(isHeader) {
  *
  * The expression you pass in for `on-infinite` is called when the user scrolls
  * greater than `distance` away from the bottom of the content.  Once `on-infinite`
- * is done loading new data, it should broadcast the `scroll.infiniteScrollComplete`
+ * is done isLoading new data, it should broadcast the `scroll.infiniteScrollComplete`
  * event from your controller (see below example).
  *
  * @param {expression} on-infinite What to call when the scroller reaches the
  * bottom.
  * @param {string=} distance The distance from the bottom that the scroll must
  * reach to trigger the on-infinite expression. Default: 1%.
- * @param {string=} spinner The {@link ionic.directive:ionSpinner} to show while loading. The SVG
+ * @param {string=} spinner The {@link ionic.directive:ionSpinner} to show while isLoading. The SVG
  * {@link ionic.directive:ionSpinner} is now the default, replacing rotating font icons.
- * @param {string=} icon The icon to show while loading. Default: 'ion-load-d'.  This is depreicated
+ * @param {string=} icon The icon to show while isLoading. Default: 'ion-load-d'.  This is depreicated
  * in favor of the SVG {@link ionic.directive:ionSpinner}.
  * @param {boolean=} immediate-check Whether to check the infinite scroll bounds immediately on load.
  *
@@ -52020,7 +52020,7 @@ function headerFooterBarDirective(isHeader) {
  * ```html
  * <ion-infinite-scroll
  *   ng-if="moreDataCanBeLoaded()"
- *   icon="ion-loading-c"
+ *   icon="ion-isLoading-c"
  *   on-infinite="loadMoreData()">
  * </ion-infinite-scroll>
  * ```
@@ -53300,7 +53300,7 @@ IonicModule
  * </script>
  * ```
  *
- * This is good to do because the template will be cached for very fast loading, instead of
+ * This is good to do because the template will be cached for very fast isLoading, instead of
  * having to fetch them from the network.
  *
  * ## Caching
@@ -53317,7 +53317,7 @@ IonicModule
  *
  * Note that because we are caching these views, *we aren’t destroying scopes*. Instead, scopes
  * are being disconnected from the watch cycle. Because scopes are not being destroyed and
- * recreated, controllers are not loading again on a subsequent viewing. If the app/controller
+ * recreated, controllers are not isLoading again on a subsequent viewing. If the app/controller
  * needs to know when a view has entered or has left, then view events emitted from the
  * {@link ionic.directive:ionView} scope, such as `$ionicView.enter`, may be useful.
  *
@@ -55001,7 +55001,7 @@ function($ionicTabsDelegate, $ionicConfig) {
           // variable to inform child tabs that they're all being blown away
           // used so that while destorying an individual tab, each one
           // doesn't select the next tab as the active one, which causes unnecessary
-          // loading of tab views when each will eventually all go away anyway
+          // isLoading of tab views when each will eventually all go away anyway
           $scope.$tabsDestroy = true;
           deregisterInstance();
           tabsCtrl.$tabsElement = tabsCtrl.$element = tabsCtrl.$scope = innerElement = null;

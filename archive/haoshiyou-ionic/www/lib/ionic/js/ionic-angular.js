@@ -290,7 +290,7 @@ jqLite.prototype.removeClass = function(cssClasses) {
  * @name $ionicBackdrop
  * @module ionic
  * @description
- * Shows and hides a backdrop over the UI.  Appears behind popups, loading,
+ * Shows and hides a backdrop over the UI.  Appears behind popups, isLoading,
  * and other overlays.
  *
  * Often, multiple UI components require a backdrop, but only one backdrop is
@@ -2083,8 +2083,8 @@ IonicModule
 
 
 var LOADING_TPL =
-  '<div class="loading-container">' +
-    '<div class="loading">' +
+  '<div class="isLoading-container">' +
+    '<div class="isLoading">' +
     '</div>' +
   '</div>';
 
@@ -2164,14 +2164,14 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
     /**
      * @ngdoc method
      * @name $ionicLoading#show
-     * @description Shows a loading indicator. If the indicator is already shown,
+     * @description Shows a isLoading indicator. If the indicator is already shown,
      * it will set the options given and keep the indicator shown.
-     * @param {object} opts The options for the loading indicator. Available properties:
+     * @param {object} opts The options for the isLoading indicator. Available properties:
      *  - `{string=}` `template` The html content of the indicator.
      *  - `{string=}` `templateUrl` The url of an html template to load as the content of the indicator.
      *  - `{object=}` `scope` The scope to be a child of. Default: creates a child of $rootScope.
      *  - `{boolean=}` `noBackdrop` Whether to hide the backdrop. By default it will be shown.
-     *  - `{boolean=}` `hideOnStateChange` Whether to hide the loading spinner when navigating
+     *  - `{boolean=}` `hideOnStateChange` Whether to hide the isLoading spinner when navigating
      *    to a new state. Default false.
      *  - `{number=}` `delay` How many milliseconds to delay showing the indicator. By default there is no delay.
      *  - `{number=}` `duration` How many milliseconds to wait until automatically
@@ -2181,7 +2181,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
     /**
      * @ngdoc method
      * @name $ionicLoading#hide
-     * @description Hides the loading indicator, if shown.
+     * @description Hides the isLoading indicator, if shown.
      */
     hide: hideLoader,
     /**
@@ -2210,7 +2210,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
             self.hasBackdrop = !options.noBackdrop && options.showBackdrop !== false;
             if (self.hasBackdrop) {
               $ionicBackdrop.retain();
-              $ionicBackdrop.getElement().addClass('backdrop-loading');
+              $ionicBackdrop.getElement().addClass('backdrop-isLoading');
             }
           }
 
@@ -2223,10 +2223,10 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
           }
 
           deregisterBackAction();
-          //Disable hardware back button while loading
+          //Disable hardware back button while isLoading
           deregisterBackAction = $ionicPlatform.registerBackButtonAction(
             noop,
-            IONIC_BACK_PRIORITY.loading
+            IONIC_BACK_PRIORITY.isLoading
           );
 
           templatePromise.then(function(html) {
@@ -2242,7 +2242,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
               ionic.requestAnimationFrame(function() {
                 if (self.isShown) {
                   self.element.addClass('active');
-                  $ionicBody.addClass('loading-active');
+                  $ionicBody.addClass('isLoading-active');
                 }
               });
             }
@@ -2256,10 +2256,10 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
           if (self.isShown) {
             if (self.hasBackdrop) {
               $ionicBackdrop.release();
-              $ionicBackdrop.getElement().removeClass('backdrop-loading');
+              $ionicBackdrop.getElement().removeClass('backdrop-isLoading');
             }
             self.element.removeClass('active');
-            $ionicBody.removeClass('loading-active');
+            $ionicBody.removeClass('isLoading-active');
             setTimeout(function() {
               !self.isShown && self.element.removeClass('visible');
             }, 200);
@@ -2285,7 +2285,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
       deregisterStateListener2 = $rootScope.$on('$stateChangeError', hideLoader);
     }
 
-    //If loading.show() was called previously, cancel it and show with our new options
+    //If isLoading.show() was called previously, cancel it and show with our new options
     $timeout.cancel(loadingShowDelay);
     loadingShowDelay = $timeout(noop, delay);
     loadingShowDelay.then(getLoader).then(function(loader) {
@@ -2806,7 +2806,7 @@ IonicModule
          *   Dismiss modal = 200
          *   Close action sheet = 300
          *   Dismiss popup = 400
-         *   Dismiss loading overlay = 500
+         *   Dismiss isLoading overlay = 500
          *
          * Your back button action will override each of the above actions
          * whose priority is less than the priority you provide. For example,
@@ -10061,16 +10061,16 @@ function headerFooterBarDirective(isHeader) {
  *
  * The expression you pass in for `on-infinite` is called when the user scrolls
  * greater than `distance` away from the bottom of the content.  Once `on-infinite`
- * is done loading new data, it should broadcast the `scroll.infiniteScrollComplete`
+ * is done isLoading new data, it should broadcast the `scroll.infiniteScrollComplete`
  * event from your controller (see below example).
  *
  * @param {expression} on-infinite What to call when the scroller reaches the
  * bottom.
  * @param {string=} distance The distance from the bottom that the scroll must
  * reach to trigger the on-infinite expression. Default: 1%.
- * @param {string=} spinner The {@link ionic.directive:ionSpinner} to show while loading. The SVG
+ * @param {string=} spinner The {@link ionic.directive:ionSpinner} to show while isLoading. The SVG
  * {@link ionic.directive:ionSpinner} is now the default, replacing rotating font icons.
- * @param {string=} icon The icon to show while loading. Default: 'ion-load-d'.  This is depreicated
+ * @param {string=} icon The icon to show while isLoading. Default: 'ion-load-d'.  This is depreicated
  * in favor of the SVG {@link ionic.directive:ionSpinner}.
  * @param {boolean=} immediate-check Whether to check the infinite scroll bounds immediately on load.
  *
@@ -10110,7 +10110,7 @@ function headerFooterBarDirective(isHeader) {
  * ```html
  * <ion-infinite-scroll
  *   ng-if="moreDataCanBeLoaded()"
- *   icon="ion-loading-c"
+ *   icon="ion-isLoading-c"
  *   on-infinite="loadMoreData()">
  * </ion-infinite-scroll>
  * ```
@@ -11390,7 +11390,7 @@ IonicModule
  * </script>
  * ```
  *
- * This is good to do because the template will be cached for very fast loading, instead of
+ * This is good to do because the template will be cached for very fast isLoading, instead of
  * having to fetch them from the network.
  *
  * ## Caching
@@ -11407,7 +11407,7 @@ IonicModule
  *
  * Note that because we are caching these views, *we aren’t destroying scopes*. Instead, scopes
  * are being disconnected from the watch cycle. Because scopes are not being destroyed and
- * recreated, controllers are not loading again on a subsequent viewing. If the app/controller
+ * recreated, controllers are not isLoading again on a subsequent viewing. If the app/controller
  * needs to know when a view has entered or has left, then view events emitted from the
  * {@link ionic.directive:ionView} scope, such as `$ionicView.enter`, may be useful.
  *
@@ -13091,7 +13091,7 @@ function($ionicTabsDelegate, $ionicConfig) {
           // variable to inform child tabs that they're all being blown away
           // used so that while destorying an individual tab, each one
           // doesn't select the next tab as the active one, which causes unnecessary
-          // loading of tab views when each will eventually all go away anyway
+          // isLoading of tab views when each will eventually all go away anyway
           $scope.$tabsDestroy = true;
           deregisterInstance();
           tabsCtrl.$tabsElement = tabsCtrl.$element = tabsCtrl.$scope = innerElement = null;

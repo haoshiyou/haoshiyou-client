@@ -3,7 +3,7 @@
 # Update fastlane automatically if a new version is available:
 update_fastlane
 
-fastlane_version "1.106.2"
+fastlane_version "2.28.8"
 
 ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
 android_release_path = "releases/haoshiyou-android-release.apk"

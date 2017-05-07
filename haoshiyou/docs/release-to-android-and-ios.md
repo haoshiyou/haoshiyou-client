@@ -61,3 +61,64 @@ icon    | 512x512 24bit PNG
 |----------:| -------:
 icon        |  1024x1024 JPG or PNG 72DPI+ RGB 
 Screenshot  |  5.5inch(iphone 6/6s Plus), 4.7inch(iphone 6) 4.0 inch, 3.5inch, iPad, iPad Pro
+
+### Troubleshooting
+
+#### Android Version Too Low
+Sometimes you see error like this 
+```bash
+[19:29:39]: Preparing apk at path 'releases/haoshiyou-android-release.apk' for upload...
+[19:29:43]: Updating track 'alpha'...
+[19:29:43]: Uploading all changes to Google Play...
++---------------+----------------+
+|          Lane Context          |
++---------------+----------------+
+| PLATFORM_NAME | android        |
+| LANE_NAME     | android deploy |
++---------------+----------------+
+[19:29:44]: Google Api Error: multiApkShadowedActiveApk: Version 30823 of this app can not be downloaded by any devices as they will all receive APKs with higher version codes.
+
++------+---------------------------------------------------------------+-------------+
+|                                  fastlane summary                                  |
++------+---------------------------------------------------------------+-------------+
+| Step | Action                                                        | Time (in s) |
++------+---------------------------------------------------------------+-------------+
+| 1    | update_fastlane                                               | 2           |
+| 2    | Verifying required fastlane version                           | 0           |
+| 3    | Switch to prepare lane                                        | 0           |
+| 4    | cd .. && ./travis/setup-env.sh                                | 0           |
+| 5    | Switch to android prepare lane                                | 0           |
+| 6    | cd .. && ./travis/setup-env.sh                                | 0           |
+| 7    | Switch to android android_publish lane                        | 0           |
+| 8    | Switch to android ionic_android_build lane                    | 0           |
+| 9    | ionic build android --release                                 | 40          |
+| 10   | Switch to android android_deploy lane                         | 0           |
+| 11   | cd .. && jarsigner -verbose -storepass 3c9KMeBA5vKE -sigalg S | 1           |
+| 12   | cd .. && ${HOME}/Library/Android/sdk/build-tools/23.0.3/zipal | 0           |
+| 13   | Switch to android android_upload lane                         | 0           |
+| 💥   | supply                                                        | 6           |
++------+---------------------------------------------------------------+-------------+
+
+[19:29:44]: fastlane finished with errors
+
+[!] Google Api Error: multiApkShadowedActiveApk: Version 30823 of this app can not be downloaded by any devices as they will all receive APKs with higher version codes.
+
+```
+
+This is because the previous android version generation script append a "10" or "08" after
+`30823` making it `3082310`. Now when you are updating the `30823` it says the version 
+is lower than the existing one.
+
+To resolve it, we need to tweak the script for this generating part, modify the file of this path
+`haoshiyou-dev/haoshiyou/platforms/android/cordova/lib/prepare.js`
+
+
+```javascript
+
+```
+
+```
+[!] xcodebuild -list timed-out after 30 seconds. You might need to recreate the user schemes. 
+You can override the timeout value with the environment variable 
+FASTLANE_XCODE_LIST_TIMEOUT
+```

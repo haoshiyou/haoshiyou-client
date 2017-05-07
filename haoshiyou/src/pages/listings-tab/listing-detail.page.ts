@@ -46,7 +46,7 @@ export class ListingDetailPage implements AfterViewInit {
       this.initListeners();
       this.loading = false;
 
-      console.log("XXX Finish loading");
+      console.log("XXX Finish isLoading");
     }
   }
 

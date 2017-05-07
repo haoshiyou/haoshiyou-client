@@ -2144,7 +2144,7 @@ function setupModuleLoader(window) {
            * @param {Function} configFn Execute this function on module load. Useful for service
            *    configuration.
            * @description
-           * Use this method to register work which needs to be performed on module loading.
+           * Use this method to register work which needs to be performed on module isLoading.
            * For more about how to configure services, see
            * {@link providers#provider-recipe Provider Recipe}.
            */
@@ -2158,7 +2158,7 @@ function setupModuleLoader(window) {
            *    Useful for application initialization.
            * @description
            * Use this method to register work which should be performed when the injector is done
-           * loading all modules.
+           * isLoading all modules.
            */
           run: function(block) {
             runBlocks.push(block);
@@ -2994,7 +2994,7 @@ var JQLitePrototype = JQLite.prototype = {
       setTimeout(trigger);
     } else {
       this.on('DOMContentLoaded', trigger); // works for modern browsers and IE9
-      // we can not use jqLite since we are not done loading and jQuery could be loaded later.
+      // we can not use jqLite since we are not done isLoading and jQuery could be loaded later.
       // jshint -W064
       JQLite(window).on('load', trigger); // fallback to window.onload for others
       // jshint +W064
@@ -16389,7 +16389,7 @@ function adjustMatchers(matchers) {
  * The default instance of `$sceDelegate` should work out of the box with little pain.  While you
  * can override it completely to change the behavior of `$sce`, the common case would
  * involve configuring the {@link ng.$sceDelegateProvider $sceDelegateProvider} instead by setting
- * your own whitelists and blacklists for trusting URLs used for loading AngularJS resources such as
+ * your own whitelists and blacklists for trusting URLs used for isLoading AngularJS resources such as
  * templates.  Refer {@link ng.$sceDelegateProvider#resourceUrlWhitelist
  * $sceDelegateProvider.resourceUrlWhitelist} and {@link
  * ng.$sceDelegateProvider#resourceUrlBlacklist $sceDelegateProvider.resourceUrlBlacklist}
@@ -16423,7 +16423,7 @@ function adjustMatchers(matchers) {
  *    $sceDelegateProvider.resourceUrlWhitelist([
  *      // Allow same origin resource loads.
  *      'self',
- *      // Allow loading from our assets domain.  Notice the difference between * and **.
+ *      // Allow isLoading from our assets domain.  Notice the difference between * and **.
  *      'http://srv*.assets.example.com/**'
  *    ]);
  *
@@ -16668,7 +16668,7 @@ function $SceDelegateProvider() {
           return maybeTrusted;
         } else {
           throw $sceMinErr('insecurl',
-              'Blocked loading resource from url not allowed by $sceDelegate policy.  URL: {0}',
+              'Blocked isLoading resource from url not allowed by $sceDelegate policy.  URL: {0}',
               maybeTrusted.toString());
         }
       } else if (type === SCE_CONTEXTS.HTML) {
