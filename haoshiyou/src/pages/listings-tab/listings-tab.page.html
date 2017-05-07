@@ -1,10 +1,5 @@
 <ion-header>
     <ion-toolbar no-border-bottom>
-        <ion-buttons start>
-            <button ion-button icon-only (click)="mapToggleOn=!mapToggleOn">
-                <ion-icon name="ios-map-outline"></ion-icon>地图
-            </button>
-        </ion-buttons>
         <ion-title>
             好室友
         </ion-title>
@@ -15,25 +10,29 @@
         </ion-buttons>
     </ion-toolbar>
     <ion-toolbar no-border-top>
-        <ion-segment [(ngModel)]="segmentModel">
-            <ion-segment-button value="ROOM_WANTED">
-                求租
-            </ion-segment-button>
-            <ion-segment-button value="ROOMMATE_WANTED">
-                招租
-            </ion-segment-button>
+        <ion-segment [ngModel]="segmentModel" (ngModelChange)="onSegmentModelChange($event)">
+            <ion-segment-button value="ROOMMATE_WANTED">招租</ion-segment-button>
+            <ion-segment-button value="ROOM_WANTED">求租</ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+    <ion-toolbar no-border-top>
+        <ion-segment [ngModel]="areaModel" (ngModelChange)="onAreaModelChange($event)">
+            <ion-segment-button value="All">全部</ion-segment-button>
+            <ion-segment-button value="SanFrancisco">三番</ion-segment-button>
+            <ion-segment-button value="MidPeninsula">中半岛</ion-segment-button>
+            <ion-segment-button value="SouthBayWest">南湾西</ion-segment-button>
+            <ion-segment-button value="SouthBayEast">南湾东</ion-segment-button>
+            <ion-segment-button value="EastBay">东湾</ion-segment-button>
+            <ion-segment-button value="Seattle">西雅图</ion-segment-button>
         </ion-segment>
     </ion-toolbar>
 </ion-header>
-<ion-content class="listing-tab" [ngSwitch]="segmentModel">
-    <ion-list *ngSwitchCase="'ROOM_WANTED'">
-        <map-view [listings]="listingsRoomWanted" *ngIf="mapToggleOn"></map-view>
-        <listing-item  *ngFor="let listing of listingsRoomWanted; let i = index"
-                       [listing]=listing></listing-item>
+<ion-content class="listing-tab">
+    <ion-list *ngIf="isLoading">
+        <ion-item>loading...</ion-item>
     </ion-list>
-    <ion-list *ngSwitchCase="'ROOMMATE_WANTED'">
-        <map-view [listings]="listingsRoommateWanted" *ngIf="mapToggleOn"></map-view>
-        <listing-item *ngFor="let listing of listingsRoommateWanted; let i = index"
-                      [listing]=listing></listing-item>
+    <ion-list *ngIf="!isLoading">
+        <listing-item  *ngFor="let listing of loadedListings; let i = index"
+                       [listing]=listing></listing-item>
     </ion-list>
 </ion-content>

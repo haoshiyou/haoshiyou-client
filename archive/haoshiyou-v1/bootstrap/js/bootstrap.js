@@ -183,7 +183,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
   Button.VERSION  = '3.2.0'
 
   Button.DEFAULTS = {
-    loadingText: 'loading...'
+    loadingText: 'isLoading...'
   }
 
   Button.prototype.setState = function (state) {
