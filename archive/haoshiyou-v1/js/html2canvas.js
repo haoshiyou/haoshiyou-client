@@ -1958,7 +1958,7 @@ _html2canvas.Parse = function (images, options) {
       if (image) {
         renderBackgroundRepeating(element, bounds, ctx, image, imageIndex);
       } else {
-        Util.log("html2canvas: Error loading background:", backgroundImage);
+        Util.log("html2canvas: Error isLoading background:", backgroundImage);
       }
     }
   }
@@ -2092,7 +2092,7 @@ _html2canvas.Parse = function (images, options) {
         if ((image = loadImage(element.getAttribute('src')))) {
           renderImage(ctx, element, image, bounds, borders);
         } else {
-          Util.log("html2canvas: Error loading <img>:" + element.getAttribute('src'));
+          Util.log("html2canvas: Error isLoading <img>:" + element.getAttribute('src'));
         }
         break;
       case "INPUT":
@@ -2209,7 +2209,7 @@ _html2canvas.Preload = function( options ) {
   function start(){
     Util.log("html2canvas: start: images: " + images.numLoaded + " / " + images.numTotal + " (failed: " + images.numFailed + ")");
     if (!images.firstRun && images.numLoaded >= images.numTotal){
-      Util.log("Finished loading images: # " + images.numTotal + " (failed: " + images.numFailed + ")");
+      Util.log("Finished isLoading images: # " + images.numTotal + " (failed: " + images.numFailed + ")");
 
       if (typeof options.complete === "function"){
         options.complete(images);

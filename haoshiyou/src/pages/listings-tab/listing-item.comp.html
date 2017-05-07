@@ -1,9 +1,13 @@
 <button ion-item *ngIf="listing" (click)="gotoDetail()">
     <h2>{{ listing.title }}</h2>
     <p>{{ listing.content }}</p>
-    <p>{{ listing.lastUpdated | timeFromNow }}
-        <!--<ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}">-->
-            <!--{{listing.type|enumMsgPipe}}-->
-        <!--</ion-badge>-->
+    <p>{{ listing.lastUpdated | timeFromNow }} </p>
+    <p>
+        <ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}">
+            {{listing.type|enumMsgPipe}}
+        </ion-badge>
+        <ion-badge color="light" *ngIf="listing.hsyGroupEnum">
+            {{listing.hsyGroupEnum}}
+        </ion-badge>
     </p>
 </button>

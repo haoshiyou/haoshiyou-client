@@ -14,8 +14,6 @@ export class ListingItem {
   }
 
   gotoDetail() {
-    console.log("XXX Before going to details");
     this.nav.push(ListingDetailPage, {listing: this.listing});
-    console.log("XXX After going to details");
   }
 }

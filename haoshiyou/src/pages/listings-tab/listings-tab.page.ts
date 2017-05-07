@@ -1,9 +1,8 @@
 import {Platform, NavController, AlertController} from "ionic-angular";
 import {OnInit, OnDestroy, Component} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
-import {Observable} from "rxjs/Observable";
 import {AuthService} from "../../services/auth.service";
-import 'rxjs/Rx';
+import "rxjs/Rx";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 /**
@@ -14,38 +13,64 @@ import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
   templateUrl: 'listings-tab.page.html',
 })
 export class ListingsTabPage implements OnInit, OnDestroy {
-  ngOnDestroy():any {
+  ngOnDestroy(): any {
     for (let marker of this.markers) {
       marker.setMap(null);
     }
   }
-  public segmentModel:string = 'ROOMMATE_WANTED'; // by default for rent
-  private map:any; // Actually google.maps.Map;
-  private markers:any[]; // Actually google.maps.Marker[];
-  listingsRoomWanted:HsyListing[] = [];
-  listingsRoommateWanted:HsyListing[] = [];
-  private mapReady:boolean = false;
-  public mapToggleOn:boolean = false;
-  constructor(private platform:Platform,
-              private nav:NavController,
+
+  public segmentModel: string = 'ROOMMATE_WANTED'; // by default for rent
+  public areaModel: string = 'SouthBayWest'; // by default for 南湾西
+  public isLoading: boolean = true;
+  private map: any; // Actually google.maps.Map;
+  private markers: any[]; // Actually google.maps.Marker[];
+  loadedListings: HsyListing[] = [];
+  private mapReady: boolean = false;
+  public mapToggleOn: boolean = false;
+
+  constructor(private platform: Platform,
+              private nav: NavController,
               private alertCtrl: AlertController,
-              private auth:AuthService,
-              private api:HsyListingApi) {
+              private auth: AuthService,
+              private api: HsyListingApi) {
   }
 
   async ngOnInit() {
-    let initMap:Promise<any> = this.platform.ready().then(() => {
-    }).then(()=>{
-      this.mapReady = true;
-      this.updateMarkers();
-    });
-    let l = await this.api
-        .find<HsyListing>({ order: 'lastUpdated DESC' })
+    await this.listReload();
+  }
+
+  //noinspection JSUnusedGlobalSymbols
+  onSegmentModelChange(newValue):void {
+    this.segmentModel = newValue;
+    this.listReload(); // no wait
+  }
+
+  //noinspection JSUnusedGlobalSymbols
+  onAreaModelChange(newValue):void {
+    this.areaModel = newValue;
+    this.listReload(); // no wait
+  }
+
+  async listReload() {
+    this.isLoading = true;
+    let whereClause = {
+      'type': this.segmentModel == 'ROOM_WANTED' ? 1 : 0,
+    };
+
+    if (this.areaModel !== 'All') {
+      whereClause['hsyGroupEnum'] = this.areaModel;
+    }
+
+    this.loadedListings = await this.api
+        .find<HsyListing>({
+          // TODO(zzn): use ListTypeEnum when migrated
+          where: whereClause,
+          order: 'lastUpdated DESC',
+          limit: 50
+        })
         .take(1)
         .toPromise();
-
-    this.listingsRoommateWanted = l;
-    this.listingsRoomWanted = l;
+    this.isLoading = false;
   }
 
   private updateMarkers() {

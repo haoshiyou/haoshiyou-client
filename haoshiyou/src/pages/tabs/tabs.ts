@@ -6,7 +6,6 @@ import {SettingsTabPage} from "../settings-tab/settings-tab.page";
 import {Network} from "ionic-native";
 import {DisconnectModal} from "./disconnect.modal";
 import {Subscription} from "rxjs";
-import {ListingDetailPage} from "../listings-tab/listing-detail.page";
 import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
 
 @Component({
@@ -36,8 +35,6 @@ export class TabsPage implements OnInit, OnDestroy {
     this.platform.ready().then(()=> {
 
       this.shouldShowQrCode = !this.platform.is('cordova');
-      console.log(`XXX this.platform.is('cordova') = ${this.platform.is('cordova')}`);
-      console.log(`XXX this.shouldShowQrCode = ${this.shouldShowQrCode}`);
       if (this.platform.is("ios") || this.platform.is("android")) {
         this.disconnectModal = this.modalCtrl.create(DisconnectModal);
 
@@ -59,9 +56,7 @@ export class TabsPage implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    console.log("XXXX trying to set route 1");
     this.platform.ready().then(() => {
-      console.log("XXXX trying to set route 2");
 
       // Deeplinks.route({
       //   'listing/:id': ListingDetailPage
@@ -77,8 +72,6 @@ export class TabsPage implements OnInit, OnDestroy {
       //   // nomatch.$link - the full link data
       //   console.error('Got a deeplink that didn\'t match', JSON.stringify(nomatch));
       // });
-
-      console.log("XXXX trying to set route 3");
     });
   }
 }
