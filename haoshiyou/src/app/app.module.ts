@@ -35,6 +35,7 @@ import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {Env} from "./env";
 import {QrCodeTabPage} from "../pages/qrcode-tab/qrcode-tab-page";
 import {SDKBrowserModule} from "../loopbacksdk/index";
+import {HsyGroupEnumMsgPipe} from "../pipes/hsy-group-enum-msg.pipe";
 
 let storage: Storage = new Storage();
 export function getAuthHttp(http) {
@@ -68,6 +69,7 @@ export function getAuthHttp(http) {
 
     // All Pipes
     EnumMsgPipe,
+    HsyGroupEnumMsgPipe,
     ImageIdsToUrlPipe,
     ImageIdToUrlPipe,
     TimeFromNowPipe,
