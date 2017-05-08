@@ -16,6 +16,8 @@ export class HsyGroupEnumMsgPipe implements PipeTransform {
         return '中半岛';
       case 'Seattle':
         return '西雅图';
+      case 'ShortTerm':
+        return '短租';
       default:
         return value;
     }
