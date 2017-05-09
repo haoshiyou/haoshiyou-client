@@ -3,7 +3,8 @@
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "ionic:serve": "ionic-app-scripts serve",
+    "codepush": "code-push release-cordova haoshiyou-Android android -d Production && code-push release-cordova haoshiyou-iOS ios -d Production"
   },
   "config": {},
   "dependencies": {
