@@ -6,11 +6,10 @@ import {AuthService} from "../services/auth.service";
 import {IMessageService} from "../services/chats/message.service";
 import {IThreadService} from "../services/chats/thread.service";
 import {IUserService} from "../services/chats/user.service";
-import {AngularFire} from "angularfire2";
 import {User} from "../models/models";
 import {NotificationService} from "../services/notfication.service";
 import 'rxjs/Rx'; // used by Observable.take()
-import {Env} from "../app/env";
+import {Env} from "./env";
 import {LoopBackConfig} from "../loopbacksdk/lb.config";
 import {HsyListing} from "../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../loopbacksdk/services/custom/HsyListing";
@@ -23,7 +22,6 @@ export class HaoshiyouApp {
   rootPage:any = TabsPage;
   private hsyListing:HsyListing = new HsyListing();
   constructor(private platform:Platform,
-              private af:AngularFire,
               private userService:IUserService,
               private threadService:IThreadService,
               private messageService:IMessageService,

@@ -5,31 +5,33 @@ import {
 
 declare var Object: any;
 export interface HsyListingInterface {
-  content?: any;
-  hsyGroupEnum?: string;
-  imageIds?: Array<string>;
-  lastUpdated?: Date;
-  location?: GeoPoint;
-  ownerId: string;
-  price?: number;
-  title?: string;
-  type?: number;
-  uid: string;
-  wechatId?: string;
+  "content"?: any;
+  "hsyGroupEnum"?: string;
+  "imageIds"?: Array<any>;
+  "lastUpdated"?: Date;
+  "location"?: GeoPoint;
+  "ownerId": string;
+  "price"?: number;
+  "title"?: string;
+  "type"?: number;
+  "uid": string;
+  "wechatId"?: string;
+  "listingTypeEnum"?: string;
 }
 
 export class HsyListing implements HsyListingInterface {
-  content: any = <any>null;
-  hsyGroupEnum: string = '';
-  imageIds: Array<string> = <any>[];
-  lastUpdated: Date = new Date(0);
-  location: GeoPoint = <any>null;
-  ownerId: string = '';
-  price: number = 0;
-  title: string = '';
-  type: number = 0;
-  uid: string = '';
-  wechatId: string = '';
+  "content": any = <any>null;
+  "hsyGroupEnum": string = '';
+  "imageIds": Array<any> = <any>[];
+  "lastUpdated": Date = new Date(0);
+  "location": GeoPoint = <any>null;
+  "ownerId": string = '';
+  "price": number = 0;
+  "title": string = '';
+  "type": number = 0;
+  "uid": string = '';
+  "wechatId": string = '';
+  "listingTypeEnum": string = '';
   constructor(data?: HsyListingInterface) {
     Object.assign(this, data);
   }
@@ -48,7 +50,7 @@ export class HsyListing implements HsyListingInterface {
   **/
   public static factory(data: HsyListingInterface): HsyListing{
     return new HsyListing(data);
-  }  
+  }
   /**
   * @method getModelDefinition
   * @author Julien Ledun
@@ -61,48 +63,52 @@ export class HsyListing implements HsyListingInterface {
       name: 'HsyListing',
       plural: 'HsyListings',
       properties: {
-        content: {
+        "content": {
           name: 'content',
           type: 'any'
         },
-        hsyGroupEnum: {
+        "hsyGroupEnum": {
           name: 'hsyGroupEnum',
           type: 'string'
         },
-        imageIds: {
+        "imageIds": {
           name: 'imageIds',
-          type: 'Array&lt;string&gt;'
+          type: 'Array&lt;any&gt;'
         },
-        lastUpdated: {
+        "lastUpdated": {
           name: 'lastUpdated',
           type: 'Date'
         },
-        location: {
+        "location": {
           name: 'location',
           type: 'GeoPoint'
         },
-        ownerId: {
+        "ownerId": {
           name: 'ownerId',
           type: 'string'
         },
-        price: {
+        "price": {
           name: 'price',
           type: 'number'
         },
-        title: {
+        "title": {
           name: 'title',
           type: 'string'
         },
-        type: {
+        "type": {
           name: 'type',
           type: 'number'
         },
-        uid: {
+        "uid": {
           name: 'uid',
           type: 'string'
         },
-        wechatId: {
+        "wechatId": {
           name: 'wechatId',
+          type: 'string'
+        },
+        "listingTypeEnum": {
+          name: 'listingTypeEnum',
           type: 'string'
         },
       },

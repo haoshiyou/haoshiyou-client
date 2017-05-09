@@ -1,8 +1,8 @@
 import {Injectable, Inject} from "@angular/core";
 import {User} from "../../models/models";
 import {Observable} from "rxjs";
-import {AngularFire} from "angularfire2/angularfire2";
 import {Subject} from "rxjs/Subject";
+import {AngularFireDatabase} from "angularfire2/database";
 
 @Injectable()
 export class IUserService { // use as interface, angular2 does not support injecting interface yet.
@@ -36,7 +36,7 @@ export class IUserService { // use as interface, angular2 does not support injec
 export class FirebaseUserService implements IUserService { // use "class" IUserService as "interface"
   private meId:string = null; // explicitly default to null
   private meIdSubject:Subject<string> = new Subject<string>();
-  constructor(private af:AngularFire) {
+  constructor(private afDb:AngularFireDatabase) {
   }
 
   setMeId(id:string):void {
@@ -53,13 +53,13 @@ export class FirebaseUserService implements IUserService { // use "class" IUserS
   }
 
   observableUserById(id:string):Observable<User> {
-    return this.af.database.object("/users/" + id);
+    return this.afDb.object("/users/" + id);
   }
 
   createOrUpdateUser(user:User):Promise<void> {
     // TODO(xinbenlv): handle when user.id does not exist;
     if (user && user.id) {
-      return this.af.database.object("/users/" + user.id).update(user) as Promise<void>;
+      return this.afDb.object("/users/" + user.id).update(user) as Promise<void>;
     } else {
       return;
     }

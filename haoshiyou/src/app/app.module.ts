@@ -1,4 +1,3 @@
-import { BrowserModule } from '@angular/platform-browser';
 import {HaoshiyouApp} from "./app.component";
 import {IonicApp, IonicModule} from "ionic-angular";
 import {NgModule} from "@angular/core";
@@ -29,19 +28,25 @@ import {EnumMsgPipe} from "../pipes/enum-msg.pipe";
 import {ImageIdsToUrlPipe, ImageIdToUrlPipe} from "../pipes/image-id-to-url.pipe";
 import {TimeFromNowPipe} from "../pipes/time-from-now.pipe";
 import { AngularFireModule } from 'angularfire2';
-import { Storage } from '@ionic/storage';
+import { NativeStorage } from '@ionic-native/native-storage';
 import {MapService} from "../services/map.service";
 import {CityNZipPipe} from "../pipes/city-n-zip.pipe";
 import {Env} from "./env";
 import {QrCodeTabPage} from "../pages/qrcode-tab/qrcode-tab-page";
 import {SDKBrowserModule} from "../loopbacksdk/index";
 import {HsyGroupEnumMsgPipe} from "../pipes/hsy-group-enum-msg.pipe";
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+import {AngularFireDatabaseModule} from "angularfire2/database/database.module";
+import {AngularFireAuthModule} from "angularfire2/auth/auth.module";
+import {Transfer} from "@ionic-native/transfer";
+import {Network} from "@ionic-native/network";
+import {Push} from "@ionic-native/push";
 
-let storage: Storage = new Storage();
-export function getAuthHttp(http) {
+export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
     globalHeaders: [{'Accept': 'application/json'}],
-    tokenGetter: (() => storage.get('id_token'))
+    tokenGetter: (() => nativeStorage.getItem('id_token'))
   }), http);
 }
 
@@ -86,7 +91,10 @@ export function getAuthHttp(http) {
       ]
     }),
     BrowserModule,
+    HttpModule,
     AngularFireModule.initializeApp(Env.configFirebase),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
     SDKBrowserModule.forRoot(),
   ],
   bootstrap: [IonicApp],
@@ -120,9 +128,12 @@ export function getAuthHttp(http) {
     {
       provide: AuthHttp,
       useFactory: getAuthHttp,
-      deps: [Http]
+      deps: [Http, NativeStorage]
     },
-    Storage,
+    NativeStorage,
+    Transfer,
+    Network,
+    Push
   ]
 })
 export class AppModule {

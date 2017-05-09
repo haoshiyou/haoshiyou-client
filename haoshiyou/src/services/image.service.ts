@@ -1,5 +1,5 @@
 import {Injectable, Inject} from "@angular/core";
-import {Transfer} from "ionic-native";
+import {TransferObject, Transfer} from "@ionic-native/transfer";
 import {Env} from "../app/env";
 declare let JSON;
 
@@ -28,7 +28,7 @@ export class IImageService {
 export class CloudinaryImageService implements IImageService {
   private config:CloudinaryConfig;
 
-  constructor() {
+  constructor(private transfer: Transfer) {
     // TODO(xinbenlv): update the credentials of CloudinaryImageService.
     this.config = <CloudinaryConfig>{
       cloud_name: Env.configCloudinary.cloudName,
@@ -41,8 +41,8 @@ export class CloudinaryImageService implements IImageService {
    * override
    */
   uploadImagesAndGetIds(localUris:string[]):Promise<any[]> {
-    let fileTransfer = new Transfer();
-    var uploadUrl:string = "https://api.cloudinary.com/v1_1/" + this.config.cloud_name + "/image/upload";
+    let fileTransfer: TransferObject = this.transfer.create();
+    let uploadUrl:string = "https://api.cloudinary.com/v1_1/" + this.config.cloud_name + "/image/upload";
     return Promise.all(
         localUris.map((uri:string) => {
           return fileTransfer.upload(uri, uploadUrl, {
