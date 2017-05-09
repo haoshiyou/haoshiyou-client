@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="org.haoshiyou.app" version="5.1.0" xmlns="http://www.w3.org/ns/widgets">
+<widget id="org.haoshiyou.app" version="5.2.0" xmlns="http://www.w3.org/ns/widgets">
   <name>haoshiyou</name>
   <description>帮助旧金山湾区小伙伴们找室友。</description>
   <author email="zzn@zzn.im" href="http://zzn.im/">Zainan Victor Zhou</author>
@@ -18,6 +18,7 @@
   <allow-navigation href="http://192.168.0.21:8100"/>
   <allow-navigation href="http://10.10.120.188:8100"/>
   <allow-navigation href="http://172.19.45.94:8100"/>
+  <allow-navigation href="http://100.98.231.3:8100"/>
   <platform name="android">
     <allow-intent href="market:*"/>
     <preference name="android-targetSdkVersion" value="23"/>
