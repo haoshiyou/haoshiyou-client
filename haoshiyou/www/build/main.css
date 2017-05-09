@@ -27857,6 +27857,11 @@ body {
   -moz-user-select: text;
 }
 
+.listing-item .content {
+  font-size: 13px;
+  color: #888;
+}
+
 creation-page .creation textarea.text-input {
   height: 150px;
 }
