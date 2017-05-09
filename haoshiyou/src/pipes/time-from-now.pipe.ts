@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from "@angular/core";
 import moment from "moment";
-
+moment.lang('zh-cn');
 @Pipe({
   name: 'timeFromNow'
 })

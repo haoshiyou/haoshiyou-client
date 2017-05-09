@@ -1,13 +1,19 @@
-<button ion-item *ngIf="listing" (click)="gotoDetail()">
-    <h2>{{ listing.content ? listing.title : '详情见图片' }}</h2>
-    <p>{{ listing.content }}</p>
-    <p>{{ listing.lastUpdated | timeFromNow }} </p>
-    <p>
-        <ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}">
-            {{listing.type|enumMsgPipe}}
-        </ion-badge>
-        <ion-badge color="light" *ngIf="listing.hsyGroupEnum">
-            {{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}
-        </ion-badge>
-    </p>
+<button ion-item *ngIf="listing" (click)="gotoDetail()" class="listing-item">
+    <div>
+        <h2 class="listing-item-header">{{ listing.content ? listing.title : '详情见图片' }}</h2>
+        <div class="content">{{ listing.content }}</div>
+        <div class="content">{{ listing.lastUpdated | timeFromNow }} </div>
+        <div class="content">
+            <ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}">
+                {{listing.type|enumMsgPipe}}
+            </ion-badge>
+            <ion-badge color="light" *ngIf="listing.hsyGroupEnum">
+                {{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}
+            </ion-badge>
+            <span *ngIf="listing.imageIds && listing.imageIds.length > 0">
+                <ion-icon  name="images"></ion-icon>
+                {{ listing.imageIds.length }}图
+            </span>
+        </div>
+    </div>
 </button>

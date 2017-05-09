@@ -19,3 +19,9 @@ body {
   -webkit-user-select: text;
   -moz-user-select: text;
 }
+
+// TODO(zzn): move to listing-item
+.listing-item .content {
+  font-size: 13px;
+  color: #888;
+}
