@@ -42,6 +42,7 @@ import {AngularFireAuthModule} from "angularfire2/auth/auth.module";
 import {Transfer} from "@ionic-native/transfer";
 import {Network} from "@ionic-native/network";
 import {Push} from "@ionic-native/push";
+import {CodePush} from "@ionic-native/code-push";
 
 export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
@@ -133,7 +134,8 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     NativeStorage,
     Transfer,
     Network,
-    Push
+    Push,
+    CodePush
   ]
 })
 export class AppModule {

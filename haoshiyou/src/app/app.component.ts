@@ -13,6 +13,7 @@ import {Env} from "./env";
 import {LoopBackConfig} from "../loopbacksdk/lb.config";
 import {HsyListing} from "../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../loopbacksdk/services/custom/HsyListing";
+import { CodePush } from '@ionic-native/code-push';
 declare let ga:any;
 
 @Component({
@@ -28,15 +29,17 @@ export class HaoshiyouApp {
               private authService:AuthService,
               private notificationService:NotificationService,
               private http:Http,
-              private hsyListingApi:HsyListingApi
+              private hsyListingApi:HsyListingApi,
+              private codePush: CodePush
               ) {
-    console.log('XXX before connecting!');
     LoopBackConfig.setBaseURL('http://haoshiyou-server-dev.herokuapp.com');
     LoopBackConfig.setApiVersion('api');
-    console.log('XXX start creating hys api!');
-
-    console.log('XXX finihed!');
     this.platform.ready().then(()=> {
+      if (this.platform.is(`cordova`)){
+        this.codePush.sync().subscribe((syncStatus) => console.log(syncStatus));
+        let downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
+        this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
+      }
       ga('create', Env.configGoogleAnalytics.propertyId, 'none');
       ga('send', 'pageview');
 
