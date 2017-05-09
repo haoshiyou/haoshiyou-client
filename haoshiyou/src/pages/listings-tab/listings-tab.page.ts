@@ -59,6 +59,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
 
     if (this.areaModel !== 'All') {
       whereClause['hsyGroupEnum'] = this.areaModel;
+    } else {
+      whereClause['hsyGroupEnum'] = {'nin': ['BigTeam', 'TestGroup', 'None']};
     }
 
     this.loadedListings = await this.api

@@ -1,13 +1,13 @@
 // app/services/auth/auth.ts
 
-import {Storage} from "@ionic/storage";
+import {NativeStorage} from "@ionic-native/native-storage";
 import {tokenNotExpired, JwtHelper} from "angular2-jwt";
 import {Injectable, NgZone} from "@angular/core";
 import {User} from "../models/models";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 import {Env} from "../app/env";
-import {ToastController} from "ionic-angular/index";
+import {ToastController} from "ionic-angular";
 
 // Avoid name not found warnings
 declare let Auth0Lock:any;
@@ -130,7 +130,7 @@ export class AuthService {
   private refreshSubscription: any;
 
   constructor(zone:NgZone,
-              private local:Storage,
+              private local:NativeStorage,
               private toastCtrl: ToastController) {
     this.auth0 = new Auth0({
       clientID: Env.configAuth0.clientId,
@@ -160,7 +160,7 @@ export class AuthService {
     });
     this.lock.on('authenticated', authResult => {
       console.log("XXX Successfully logged in");
-      this.local.set('id_token', authResult.idToken);
+      this.local.setItem('id_token', authResult.idToken);
       this.idToken = authResult.idToken;
 
       // Fetch profile information
@@ -171,9 +171,9 @@ export class AuthService {
           // If authentication is successful, save the items
           // in local storage
           console.log(`XXX profile=${profile}`);
-          this.local.set('profile', JSON.stringify(profile));
-          this.local.set('id_token', this.idToken);
-          this.local.set('refresh_token', authResult.refreshToken);
+          this.local.setItem('profile', JSON.stringify(profile));
+          this.local.setItem('id_token', this.idToken);
+          this.local.setItem('refresh_token', authResult.refreshToken);
           this.zoneImpl.run(() => this.user = profile);
           // Schedule a token refresh
           this.scheduleRefresh();
@@ -187,7 +187,7 @@ export class AuthService {
     this.zoneImpl = zone;
     this.userSubject = new Subject<User>();
     // If there is a profile saved in local storage
-    this.local.get('profile').then(profile => {
+    this.local.getItem('profile').then(profile => {
       this.user = JSON.parse(profile);
       this.userSubject.next(AuthService.createHsyUser(this.user));
     }).catch(error => {
@@ -270,12 +270,12 @@ export class AuthService {
   public getNewJwt() {
     // Get a new JWT from Auth0 using the refresh token saved
     // in local storage
-    this.local.get('refresh_token').then(token => {
+    this.local.getItem('refresh_token').then(token => {
       this.auth0.refreshToken(token, (err, delegationRequest) => {
         if (err) {
           alert(err);
         }
-        this.local.set('id_token', delegationRequest.id_token);
+        this.local.setItem('id_token', delegationRequest.id_token);
         this.idToken = delegationRequest.id_token;
       });
     }).catch(error => {

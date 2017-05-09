@@ -15,7 +15,7 @@
             {{ owner.name }}
         </ion-item>
         <ion-item>
-            <h2>{{listing.title}}</h2>
+            <h2>{{ listing.content ? listing.title : '详情见图片' }}</h2>
             <p>{{listing.lastUpdated|timeFromNow}}</p>
         </ion-item>
         <ion-card-content>

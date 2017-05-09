@@ -6,14 +6,14 @@ import {AuthService} from "../services/auth.service";
 import {IMessageService} from "../services/chats/message.service";
 import {IThreadService} from "../services/chats/thread.service";
 import {IUserService} from "../services/chats/user.service";
-import {AngularFire} from "angularfire2";
 import {User} from "../models/models";
 import {NotificationService} from "../services/notfication.service";
 import 'rxjs/Rx'; // used by Observable.take()
-import {Env} from "../app/env";
+import {Env} from "./env";
 import {LoopBackConfig} from "../loopbacksdk/lb.config";
 import {HsyListing} from "../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../loopbacksdk/services/custom/HsyListing";
+import { CodePush } from '@ionic-native/code-push';
 declare let ga:any;
 
 @Component({
@@ -23,24 +23,25 @@ export class HaoshiyouApp {
   rootPage:any = TabsPage;
   private hsyListing:HsyListing = new HsyListing();
   constructor(private platform:Platform,
-              private af:AngularFire,
               private userService:IUserService,
               private threadService:IThreadService,
               private messageService:IMessageService,
               private authService:AuthService,
               private notificationService:NotificationService,
               private http:Http,
-              private hsyListingApi:HsyListingApi
+              private hsyListingApi:HsyListingApi,
+              private codePush: CodePush
               ) {
-    console.log('XXX before connecting!');
     LoopBackConfig.setBaseURL('http://haoshiyou-server-dev.herokuapp.com');
     LoopBackConfig.setApiVersion('api');
-    console.log('XXX start creating hys api!');
-
-    console.log('XXX finihed!');
     this.platform.ready().then(()=> {
+      if (this.platform.is(`cordova`)){
+        this.codePush.sync().subscribe((syncStatus) => console.log(syncStatus));
+        let downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
+        this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
+      }
       ga('create', Env.configGoogleAnalytics.propertyId, 'none');
-      ga('send', 'pageview');
+      ga('send', 'app-load');
 
       if (authService.getUser()) {
         userService.setMeId(AuthService.createHsyUser(authService.getUser()).id);
