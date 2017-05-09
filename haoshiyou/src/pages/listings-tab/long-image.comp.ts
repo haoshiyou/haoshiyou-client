@@ -1,8 +1,7 @@
 import {Component, Input} from "@angular/core";
-import {File,Transfer} from "ionic-native";
 import {Platform} from 'ionic-angular';
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
-
+import { Transfer, FileUploadOptions, TransferObject } from '@ionic-native/transfer';
 declare let google, document;
 declare let QRCode:any;
 declare var cordova: any;
@@ -15,10 +14,11 @@ export class LongImageComponent {
   @Input() listing:HsyListing;
   canvasWidth:number;
   canvasHeight:number;
-
-  constructor(private platform:Platform) {
+  private fileTransfer:TransferObject;
+  constructor(private platform:Platform, private transfer: Transfer) {
     this.canvasWidth = 600;
     console.log(this.platform.versions());
+    this.fileTransfer = this.transfer.create();
   }
 
   public generateLongImage() {
@@ -184,10 +184,9 @@ export class LongImageComponent {
       }
       else { // in cell-phone app
         var imgDataUrl = c.toDataURL();
-        let fileTransfer = new Transfer();
         var targetPath = cordova.file.dataDirectory + "/haoshiyou/" + fileName;
         var options = {};
-        fileTransfer.download(imgDataUrl, targetPath, true)
+        this.fileTransfer.download(imgDataUrl, targetPath, true)
           .then(function(result) {
             // Success!
             console.log("Download");

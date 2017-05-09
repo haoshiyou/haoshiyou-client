@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { URLSearchParams } from '@angular/http';
 /**
-* @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@johncasarrubias>
+* @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
 * @module JSONSearchParams
 * @license MIT
 * @description
@@ -31,14 +31,10 @@ export class JSONSearchParams {
     }
 
     private _parseParam(key: string, value: any, parent: string) {
-        if (typeof value !== 'object' && typeof value !== 'array') {
-            return parent ? parent + '[' + key + ']=' + value
-                          : key + '=' + value;
-        } else if (typeof value === 'object' ||  typeof value === 'array') {
-            return parent ? this._JSON2URL(value, parent + '[' + key + ']')
-                          : this._JSON2URL(value, key);
-        } else {
-            throw new Error('Unexpected Type');
+        let processedKey = parent ? parent + '[' + key + ']' : key;
+        if (value && (<string>(typeof value) === 'object' || Array.isArray(value))) {
+            return this._JSON2URL(value, processedKey);
         }
+        return processedKey + '=' + value;
     }
 }

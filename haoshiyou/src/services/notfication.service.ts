@@ -3,7 +3,7 @@
 import {Platform} from "ionic-angular";
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
-import {Push} from "ionic-native";
+import {Push, PushObject} from "@ionic-native/push";
 import {Env} from "../app/env";
 declare let console;
 declare let JSON;
@@ -12,10 +12,11 @@ declare let JSON;
 export class NotificationService {
   public static TOPIC_LISTING:string = "listing";
   private registrationId:string;
-  private push:any/* PushNotification, no typed definition yet. */;
-
+  private pushObject: PushObject;
   constructor(private platform:Platform,
-              private http:Http) {
+              private http:Http,
+              private push:Push) {
+
   }
 
   register(meId:string):Promise<string> {
@@ -48,14 +49,14 @@ export class NotificationService {
               "ios": coreOpt
             }
           }
-          this.push = Push.init(opt);
-          this.push.on('registration', (data) => {
-            this.registrationId = data.registrationId;
-            resolve(data.registrationId);
+          this.pushObject= this.push.init(opt);
+          this.pushObject.on('registration').subscribe((data) => {
+            this.registrationId = data['registrationId'];
+            resolve(data['registrationId']);
           });
-          this.push.on('notification', (data) => {
+          this.pushObject.on('notification').subscribe((data) => {
           });
-          this.push.on('error', (e) => {
+          this.pushObject.on('error').subscribe((e) => {
             reject(e);
           });
 
@@ -70,11 +71,9 @@ export class NotificationService {
     if (typeof Push === "undefined") {
       return Promise.resolve();
     } else {
-      return new Promise((resolve, reject) => {
-        if(this.push) this.push.unregister(resolve, reject);
-      }).then(() => {
-      });
+      if(this.pushObject) return this.pushObject.unregister();
     }
+
   }
 
   sendPushMessage(regIds:string[], msg:string, userName:string):Promise<any> {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="org.haoshiyou.app" version="4.1.1" xmlns="http://www.w3.org/ns/widgets">
+<widget id="org.haoshiyou.app" version="5.0.0" xmlns="http://www.w3.org/ns/widgets">
   <name>haoshiyou</name>
   <description>帮助旧金山湾区小伙伴们找室友。</description>
   <author email="zzn@zzn.im" href="http://zzn.im/">Zainan Victor Zhou</author>
@@ -72,6 +72,12 @@
     <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640"/>
     <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320"/>
   </platform>
+  <platform name="android">
+    <preference name="CodePushDeploymentKey" value="KkfPBHVYr16pR3Tv33jYxv4_nd_tN1x5BW5km"/>
+  </platform>
+  <platform name="ios">
+    <preference name="CodePushDeploymentKey" value="Vyz2K7MHOjwJNwN7nMwlmBrZntJTN1x5BW5km"/>
+  </platform>
   <preference name="loadUrlTimeoutValue" value="700000"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
@@ -93,7 +99,6 @@
   <plugin name="cordova-plugin-splashscreen" spec="~3.2.2"/>
   <plugin name="cordova-plugin-statusbar" spec="~2.1.3"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.0"/>
-  <plugin name="cordova-plugin-file-transfer" spec="~1.5.1"/>
   <plugin name="phonegap-plugin-push" spec="~1.8.3">
     <variable name="SENDER_ID" value="59094925347"/>
   </plugin>
@@ -102,5 +107,10 @@
     <variable name="DEEPLINK_SCHEME" value="http"/>
     <variable name="DEEPLINK_HOST" value="haoshiyou.org"/>
   </plugin>
+  <plugin name="cordova-plugin-network-information" spec="~1.2.1"/>
+  <plugin name="cordova-plugin-file" spec="~4.2.0"/>
+  <plugin name="cordova-plugin-file-transfer" spec="~1.5.1"/>
+  <plugin name="cordova-plugin-nativestorage" spec="~2.2.2"/>
+  <plugin name="cordova-plugin-code-push" spec="~1.9.3-beta"/>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
 </widget>

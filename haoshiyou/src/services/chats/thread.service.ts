@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Thread} from "../../models/models";
 import {Observable} from "rxjs";
-import {AngularFire} from "angularfire2/angularfire2";
+import {AngularFireDatabase} from "angularfire2/database";
 
 @Injectable()
 export class IThreadService {
@@ -18,12 +18,12 @@ export class IThreadService {
 @Injectable()
 export class FirebaseThreadService implements IThreadService {
 
-  constructor(private af:AngularFire) {
+  constructor(private afdb:AngularFireDatabase) {
 
   }
 
   obserbableThreadsByUserId(userId:string):Observable<Thread[]> {
-    return this.af.database.list("/threads").map((threads:Thread[]) => {
+    return this.afdb.list("/threads").map((threads:Thread[]) => {
       return threads.filter((thread:Thread) => {
         return thread.userIds.indexOf(userId) >= 0;
       });
@@ -35,7 +35,7 @@ export class FirebaseThreadService implements IThreadService {
   createThread(thread:Thread):Promise<void> {
     if (thread.id) {
       if (thread["$key"]) delete thread["$key"];
-      return this.af.database.object("/threads/" + thread.id).update(thread) as Promise<void>;
+      return this.afdb.object("/threads/" + thread.id).update(thread) as Promise<void>;
     } else {
       // TODO(xinbenlv): handle when message.id is not set
       // currently do nothing
