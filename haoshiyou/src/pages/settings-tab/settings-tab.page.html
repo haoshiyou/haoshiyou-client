@@ -22,7 +22,21 @@
             <ion-label>请登录</ion-label>
             <button ion-button item-right (click)="auth.login()">登录</button>
         </ion-item>
-        <ion-item>关于 {{ version }} 版本</ion-item>
+        <ion-item>
+            <ion-label>
+                API 版本: {{ versionApp }}
+            </ion-label>
+            <button ion-button item-right (click)="startSync()">刷新</button>
+        </ion-item>
+        <ion-item>
+            现在的版本: {{ versionDownloaded }}
+        </ion-item>
+        <ion-item>
+            Pending: {{ versionPending }}
+        </ion-item>
+        <ion-item>
+            Remote: {{ versionRemote }}
+        </ion-item>
     </ion-list>
 
 
