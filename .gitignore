@@ -34,3 +34,4 @@ tramp
 
 # cask packages
 .cask/
+*.zip
