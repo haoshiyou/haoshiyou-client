@@ -3,6 +3,7 @@ import {Component, OnInit} from "@angular/core";
 import {Env} from "../../app/env";
 import {CodePush} from "@ionic-native/code-push";
 import {Platform} from "ionic-angular";
+import {AppVersion} from "@ionic-native/app-version";
 declare let window:any;
 
 @Component({
@@ -10,15 +11,17 @@ declare let window:any;
 })
 export class SettingsTabPage implements OnInit {
 
-  public versionApp:string = Env.version;
+  public versionEnv:string = Env.version;
   public versionDownloaded:string = null;
   public versionPending:string = null;
   public versionRemote:string = null;
-
+  public versionApp:string = null;
   constructor(
       public auth:AuthService,
       private codePush:CodePush,
-      private platform:Platform) {
+      private platform:Platform,
+      public appVersion:AppVersion
+  ) {
   }
 
   public async startSync() {
@@ -28,7 +31,9 @@ export class SettingsTabPage implements OnInit {
     await this.updateVersions();
   }
   public async updateVersions() {
+
     if (this.platform.is('cordova')) {
+      this.versionApp =  (await this.appVersion.getPackageName()) + `(${await this.appVersion.getVersionCode()})`;
       await this.platform.ready();
       let currentPackageInfo = await this.codePush.getCurrentPackage();
       this.versionDownloaded = currentPackageInfo ? currentPackageInfo.appVersion :  `未知`;
@@ -37,6 +42,7 @@ export class SettingsTabPage implements OnInit {
       let remotePackageInfo = await this.codePush.checkForUpdate();
       this.versionRemote = remotePackageInfo ? remotePackageInfo.appVersion + remotePackageInfo.downloadUrl :  `未知`;
     }
+    else this.versionApp = '位置';
   }
   async ngOnInit() {
     await this.updateVersions();

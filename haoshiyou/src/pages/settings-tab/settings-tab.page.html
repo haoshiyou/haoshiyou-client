@@ -24,18 +24,21 @@
         </ion-item>
         <ion-item>
             <ion-label>
-                API 版本: {{ versionApp }}
+                环境版本: {{ versionEnv }} - 5.6.2
             </ion-label>
             <button ion-button item-right (click)="startSync()">刷新</button>
         </ion-item>
         <ion-item>
-            现在的版本: {{ versionDownloaded }}
+            应用版本: {{ versionApp }}
         </ion-item>
         <ion-item>
-            Pending: {{ versionPending }}
+            已下载版本: {{ versionDownloaded }}
         </ion-item>
         <ion-item>
-            Remote: {{ versionRemote }}
+            等待版本: {{ versionPending }}
+        </ion-item>
+        <ion-item>
+            远程版本: {{ versionRemote }}
         </ion-item>
     </ion-list>
 

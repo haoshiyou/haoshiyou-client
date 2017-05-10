@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "4.0.2",
     "@angular/platform-server": "4.0.2",
     "@angular/router": "4.0.2",
+    "@ionic-native/app-version": "^3.7.0",
     "@ionic-native/code-push": "^3.6.1",
     "@ionic-native/core": "^3.6.1",
     "@ionic-native/file": "^3.6.1",
