@@ -1,7 +1,7 @@
 # A fastlane file, see https://fastlane.tools/ for reference
 
 # Update fastlane automatically if a new version is available:
-update_fastlane
+# update_fastlane
 
 fastlane_version "2.28.8"
 
