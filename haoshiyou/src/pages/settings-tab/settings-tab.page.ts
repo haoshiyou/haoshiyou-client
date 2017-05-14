@@ -2,7 +2,7 @@ import {AuthService} from "../../services/auth.service";
 import {Component, OnInit} from "@angular/core";
 import {Env} from "../../app/env";
 import {CodePush} from "@ionic-native/code-push";
-import {Platform} from "ionic-angular";
+import {Platform, ToastController} from "ionic-angular";
 import {AppVersion} from "@ionic-native/app-version";
 declare let window:any;
 
@@ -16,12 +16,28 @@ export class SettingsTabPage implements OnInit {
   public versionPending:string = null;
   public versionRemote:string = null;
   public versionApp:string = null;
+  public debugCounter:number = 0;
   constructor(
       public auth:AuthService,
       private codePush:CodePush,
       private platform:Platform,
-      public appVersion:AppVersion
-  ) {
+      public appVersion:AppVersion,
+      private toastCtr:ToastController,
+  ) {}
+
+  public async debugIncrementer() {
+    this.debugCounter++;
+    if (this.debugCounter > 3 && this.debugCounter < 9) {
+      let toast = this.toastCtr.create({
+        message: `${9 - this.debugCounter} more clicks before debug...`,
+        duration: 2000,
+        position: 'bottom'
+      });
+      await toast.present();
+    }
+  }
+  public isDebug() {
+    return this.debugCounter > 8;
   }
 
   public async startSync() {
@@ -42,7 +58,7 @@ export class SettingsTabPage implements OnInit {
       let remotePackageInfo = await this.codePush.checkForUpdate();
       this.versionRemote = remotePackageInfo ? remotePackageInfo.appVersion + remotePackageInfo.downloadUrl :  `未知`;
     }
-    else this.versionApp = '位置';
+    else this.versionApp = '未知';
   }
   async ngOnInit() {
     await this.updateVersions();
