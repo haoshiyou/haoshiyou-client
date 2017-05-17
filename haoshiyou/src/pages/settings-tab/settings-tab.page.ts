@@ -26,8 +26,10 @@ export class SettingsTabPage implements OnInit {
   ) {}
 
   ionViewWillEnter() {
+    console.log(`XXX SettingsTabPage start ga page view`);
     ga('set', 'page', '/settings-tab.page.html');
     ga('send', 'pageview');
+    console.log(`XXX SettingsTabPage finish ga page view`);
   }
 
   public async debugIncrementer() {

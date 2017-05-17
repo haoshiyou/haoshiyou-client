@@ -41,7 +41,15 @@ export class HaoshiyouApp {
         this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
       }
       ga('create', Env.configGoogleAnalytics.propertyId, 'none');
-      // ga('send', 'pageview');
+      ga('set', 'checkProtocolTask', null
+          // function(a) {
+          //   console.log(`Skipping checkProtocolTask, parameters= ${JSON.stringify(a, null, '\t')}`);
+          // }
+      );
+      ga('send', 'event', {
+        eventCategory: 'app-live-cycle',
+        eventAction: 'start-app',
+      });
 
       if (authService.getUser()) {
         userService.setMeId(AuthService.createHsyUser(authService.getUser()).id);

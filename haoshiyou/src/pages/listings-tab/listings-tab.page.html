@@ -1,14 +1,4 @@
 <ion-header>
-    <ion-toolbar no-border-bottom>
-        <ion-title>
-            好室友
-        </ion-title>
-        <ion-buttons end>
-            <button ion-button icon-only (click)="gotoCreationPage()">
-                <ion-icon name="add"></ion-icon>发帖
-            </button>
-        </ion-buttons>
-    </ion-toolbar>
     <ion-toolbar no-border-top>
         <ion-segment [ngModel]="segmentModel" (ngModelChange)="onSegmentModelChange($event)">
             <ion-segment-button value="ROOMMATE_WANTED">招租</ion-segment-button>
@@ -36,4 +26,10 @@
         <listing-item  *ngFor="let listing of loadedListings; let i = index"
                        [listing]=listing></listing-item>
     </ion-list>
+
+    <ion-fab bottom right>
+        <button ion-fab color="danger" (click)="fakeGoToCreationPage()">
+            <ion-icon name="add">
+            </ion-icon></button>
+    </ion-fab>
 </ion-content>

@@ -15,7 +15,10 @@ export class ListingItem {
   }
 
   gotoDetail() {
-    ga('send', 'view-listing-detail');
+    ga('send', 'event', {
+      eventCategory: 'go-to',
+      eventAction: 'listing-detail',
+    });
     this.nav.push(ListingDetailPage, {listing: this.listing});
   }
 }

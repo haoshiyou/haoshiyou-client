@@ -88,6 +88,21 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     // TODO(xinbenlv): update markers
   }
 
+  async fakeGoToCreationPage() {
+    ga('send', 'event', {
+      eventCategory: 'go-to',
+      eventAction: 'listing-creation',
+    });
+    let alert = this.alertCtrl.create({
+      title: '新版app中发帖功能正在建设中',
+      buttons: [
+        {
+          text: 'OK',
+        },
+      ]
+    });
+    await alert.present();
+  }
   gotoCreationPage() {
     if (this.auth.authenticated()) {
       //push another page onto the history stack
