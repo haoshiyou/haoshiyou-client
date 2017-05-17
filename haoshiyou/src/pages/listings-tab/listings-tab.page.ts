@@ -46,12 +46,16 @@ export class ListingsTabPage implements OnInit, OnDestroy {
 
   //noinspection JSUnusedGlobalSymbols
   onSegmentModelChange(newValue):void {
+    ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
+    ga('send', 'pageview');
     this.segmentModel = newValue;
     this.listReload(); // no wait
   }
 
   //noinspection JSUnusedGlobalSymbols
   onAreaModelChange(newValue):void {
+    ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
+    ga('send', 'pageview');
     this.areaModel = newValue;
     this.listReload(); // no wait
   }

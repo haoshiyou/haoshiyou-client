@@ -31,7 +31,7 @@ export class ListingDetailPage implements AfterViewInit {
   }
 
   ionViewWillEnter() {
-    ga('set', 'page', '/listing-detail.page.html');
+    ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
     ga('send', 'pageview');
   }
   async ngOnInit():Promise<void> {
