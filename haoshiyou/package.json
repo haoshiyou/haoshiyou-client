@@ -3,7 +3,8 @@
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "ionic:serve": "ionic-app-scripts serve",
+    "codepush": "echo \"~$CORDOVA_VERSION\" && code-push release-cordova haoshiyou-Android android -d Production -m --targetBinaryVersion \"~$CORDOVA_VERSION\" && code-push release-cordova haoshiyou-iOS ios -d Production -m --targetBinaryVersion \"~$CORDOVA_VERSION\" "
   },
   "config": {},
   "dependencies": {
@@ -18,6 +19,7 @@
     "@angular/platform-browser-dynamic": "4.0.2",
     "@angular/platform-server": "4.0.2",
     "@angular/router": "4.0.2",
+    "@ionic-native/app-version": "^3.7.0",
     "@ionic-native/code-push": "^3.6.1",
     "@ionic-native/core": "^3.6.1",
     "@ionic-native/file": "^3.6.1",

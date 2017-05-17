@@ -34,3 +34,9 @@ tramp
 
 # cask packages
 .cask/
+*.zip
+TDCVDBXA6X.cer
+TDCVDBXA6X.certSigningRequest
+TDCVDBXA6X.p12
+fastlane/metadata/
+fastlane/screenshots/
