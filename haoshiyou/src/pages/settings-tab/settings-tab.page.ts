@@ -47,7 +47,6 @@ export class SettingsTabPage implements OnInit {
     await this.updateVersions();
   }
   public async updateVersions() {
-
     if (this.platform.is('cordova')) {
       this.versionApp =  (await this.appVersion.getPackageName()) + `(${await this.appVersion.getVersionCode()})`;
       await this.platform.ready();

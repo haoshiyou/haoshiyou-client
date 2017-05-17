@@ -28,7 +28,7 @@
         <ion-list *ngIf="isDebug()" >
             <ion-item>
                 <ion-label>
-                    环境版本: {{ versionEnv }} - 5.6.2
+                    环境版本: {{ versionEnv }} - 5.6.4.{{debugCounter}}
                 </ion-label>
                 <button ion-button item-right (click)="startSync()">刷新</button>
             </ion-item>
