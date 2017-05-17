@@ -41,7 +41,7 @@ export class HaoshiyouApp {
         this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
       }
       ga('create', Env.configGoogleAnalytics.propertyId, 'none');
-      ga('send', 'app-load');
+      // ga('send', 'pageview');
 
       if (authService.getUser()) {
         userService.setMeId(AuthService.createHsyUser(authService.getUser()).id);
