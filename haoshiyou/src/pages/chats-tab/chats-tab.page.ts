@@ -3,6 +3,7 @@ import {IMessageService, IThreadService, IUserService} from "../../services/serv
 import {Thread, User} from "../../models/models";
 import {Subscription} from "rxjs/Subscription";
 import {AuthService} from "../../services/auth.service";
+declare let ga:any;
 
 /**
  * TODO(xinbenlv): optimize the messages update process and ChangeDetection for optimal user experience.
@@ -25,7 +26,10 @@ export class ChatsTabPage implements OnInit, OnDestroy {
       this.retrieveMe(meId);
     });
   }
-
+  ionViewWillEnter() {
+    ga('set', 'page', '/chats-tab.page.html');
+    ga('send', 'pageview');
+  }
   ngOnInit() {
     this.userService.promiseMe().then((me:User)=> {
       this.retrieveMe(me ? me.id : null);

@@ -5,6 +5,7 @@ import {AuthService} from "../../services/auth.service";
 import "rxjs/Rx";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
+declare let ga:any;
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -34,9 +35,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private auth: AuthService,
               private api: HsyListingApi) {
   }
-
   async ngOnInit() {
     await this.listReload();
+  }
+
+  ionViewWillEnter() {
+    ga('set', 'page', '/listings-tab.page.html');
+    ga('send', 'pageview');
   }
 
   //noinspection JSUnusedGlobalSymbols

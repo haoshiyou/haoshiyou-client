@@ -12,6 +12,7 @@ import {HsyUserApi} from "../../loopbacksdk/services/custom/HsyUser";
 import {HsyUser} from "../../loopbacksdk/models/HsyUser";
 declare let window:any;
 declare let QRCode:any;
+declare let ga:any;
 
 @Component({
   selector: 'listing-detail',
@@ -23,11 +24,15 @@ export class ListingDetailPage implements AfterViewInit {
   meId:string;
   public loading:boolean = true;
   ngAfterViewInit():void {
-
     console.log("XXX ngAfterViewInit");
   // TODO(xinbenlv): add back later
   //   console.log("XXX generateQrCode code");
   //   this.generateQrCode();
+  }
+
+  ionViewWillEnter() {
+    ga('set', 'page', '/listing-detail.page.html');
+    ga('send', 'pageview');
   }
   async ngOnInit():Promise<void> {
     console.log("XXX ListingDetailPage load 2");

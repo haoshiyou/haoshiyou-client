@@ -5,7 +5,7 @@ import {CodePush} from "@ionic-native/code-push";
 import {Platform, ToastController} from "ionic-angular";
 import {AppVersion} from "@ionic-native/app-version";
 declare let window:any;
-
+declare let ga:any;
 @Component({
   templateUrl: 'settings-tab.page.html'
 })
@@ -24,6 +24,11 @@ export class SettingsTabPage implements OnInit {
       public appVersion:AppVersion,
       private toastCtr:ToastController,
   ) {}
+
+  ionViewWillEnter() {
+    ga('set', 'page', '/settings-tab.page.html');
+    ga('send', 'pageview');
+  }
 
   public async debugIncrementer() {
     this.debugCounter++;

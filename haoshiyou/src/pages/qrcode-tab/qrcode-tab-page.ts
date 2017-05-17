@@ -1,4 +1,5 @@
 import {Component} from "@angular/core";
+declare let ga:any;
 
 @Component({
   selector: 'qrcode-tab',
@@ -6,4 +7,9 @@ import {Component} from "@angular/core";
 })
 export class QrCodeTabPage {
   public shouldShow:boolean = false;
+
+  ionViewWillEnter() {
+    ga('set', 'page', '/qrcode-tab.page.html');
+    ga('send', 'pageview');
+  }
 }
