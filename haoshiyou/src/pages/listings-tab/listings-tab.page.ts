@@ -48,12 +48,16 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   onSegmentModelChange(newValue):void {
     this.segmentModel = newValue;
     this.listReload(); // no wait
+    ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
+    ga('send', 'pageview');
   }
 
   //noinspection JSUnusedGlobalSymbols
   onAreaModelChange(newValue):void {
     this.areaModel = newValue;
     this.listReload(); // no wait
+    ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
+    ga('send', 'pageview');
   }
 
   async listReload() {
@@ -84,6 +88,21 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     // TODO(xinbenlv): update markers
   }
 
+  async fakeGoToCreationPage() {
+    ga('send', 'event', {
+      eventCategory: 'go-to',
+      eventAction: 'listing-creation',
+    });
+    let alert = this.alertCtrl.create({
+      title: '新版app中发帖功能正在建设中',
+      buttons: [
+        {
+          text: 'OK',
+        },
+      ]
+    });
+    await alert.present();
+  }
   gotoCreationPage() {
     if (this.auth.authenticated()) {
       //push another page onto the history stack

@@ -15,33 +15,59 @@ import {HsyListing} from "../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../loopbacksdk/services/custom/HsyListing";
 import { CodePush } from '@ionic-native/code-push';
 declare let ga:any;
-
 @Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>'
 })
+
+
+
 export class HaoshiyouApp {
   rootPage:any = TabsPage;
   private hsyListing:HsyListing = new HsyListing();
+  private static getParameterByName = function(name) {
+    let url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  };
   constructor(private platform:Platform,
-              private userService:IUserService,
-              private threadService:IThreadService,
+              private userService:IUserService, private threadService:IThreadService,
               private messageService:IMessageService,
               private authService:AuthService,
               private notificationService:NotificationService,
               private http:Http,
               private hsyListingApi:HsyListingApi,
-              private codePush: CodePush
-              ) {
+              private codePush: CodePush) {
     LoopBackConfig.setBaseURL('http://haoshiyou-server-dev.herokuapp.com');
     LoopBackConfig.setApiVersion('api');
     this.platform.ready().then(()=> {
       if (this.platform.is(`cordova`)){
         this.codePush.sync().subscribe((syncStatus) => console.log(syncStatus));
-        let downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
+        let downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); };
         this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
       }
-      ga('create', Env.configGoogleAnalytics.propertyId, 'none');
-      // ga('send', 'pageview');
+      ga('create', Env.configGoogleAnalytics.propertyId, {'alwaysSendReferrer': true});
+      let referrer = HaoshiyouApp.getParameterByName('referrer');
+      console.log(`XXX campaignName = ${referrer}`);
+      if(referrer) {
+        ga('set', 'campaignName', referrer);
+        ga('set', 'referrer', referrer);
+      } else {
+        ga('set', 'campaignName', '(direct)');
+        ga('set', 'referrer', referrer);
+      }
+      ga('set', 'checkProtocolTask', null
+          // function(a) {
+          //   console.log(`Skipping checkProtocolTask, parameters= ${JSON.stringify(a, null, '\t')}`);
+          // }
+      );
+      ga('send', 'event', {
+        eventCategory: 'app-live-cycle',
+        eventAction: 'start-app',
+      });
 
       if (authService.getUser()) {
         userService.setMeId(AuthService.createHsyUser(authService.getUser()).id);
