@@ -64,12 +64,13 @@ export class CloudinaryImageService implements IImageService {
     let param;
     if (width == 0 && height == 0) {
       param = 'w_1242'; // 1242 is the width of iphone 6plus.
+      // param = 'w_300,h_150,c_fill,g_auto';
     } else if (width == 0) {
       param = `h_${height}`;
     } else if (height == 0 ){
       param = `w_${width}`;
     } else {
-      param = `w_${width},h_${height},c_fill`;
+      param = `w_${width},h_${height},c_fill,g_auto`;
     }
     return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/${param}/${id}.jpg`;
   }
