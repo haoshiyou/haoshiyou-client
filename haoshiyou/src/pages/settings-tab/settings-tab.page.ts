@@ -26,10 +26,8 @@ export class SettingsTabPage implements OnInit {
   ) {}
 
   ionViewWillEnter() {
-    console.log(`XXX SettingsTabPage start ga page view`);
     ga('set', 'page', '/settings-tab.page.html');
     ga('send', 'pageview');
-    console.log(`XXX SettingsTabPage finish ga page view`);
   }
 
   public async debugIncrementer() {
@@ -58,13 +56,13 @@ export class SettingsTabPage implements OnInit {
       this.versionApp =  (await this.appVersion.getPackageName()) + `(${await this.appVersion.getVersionCode()})`;
       await this.platform.ready();
       let currentPackageInfo = await this.codePush.getCurrentPackage();
-      this.versionDownloaded = currentPackageInfo ? currentPackageInfo.appVersion :  `未知`;
+      this.versionDownloaded = currentPackageInfo ? currentPackageInfo.appVersion :  `无`;
       let pendingPackageInfo = await this.codePush.getPendingPackage();
-      this.versionPending = pendingPackageInfo ? pendingPackageInfo.appVersion :  `未知`;
+      this.versionPending = pendingPackageInfo ? pendingPackageInfo.appVersion :  `无`;
       let remotePackageInfo = await this.codePush.checkForUpdate();
-      this.versionRemote = remotePackageInfo ? remotePackageInfo.appVersion + remotePackageInfo.downloadUrl :  `未知`;
+      this.versionRemote = remotePackageInfo ? remotePackageInfo.downloadUrl :  `无`;
     }
-    else this.versionApp = '未知';
+    else this.versionApp = '无';
   }
   async ngOnInit() {
     await this.updateVersions();
