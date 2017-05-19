@@ -1,6 +1,5 @@
 {
   "name": "haoshiyou",
   "app_id": "1f51c25b",
-  "v2": true,
-  "typescript": true
+  "type": "ionic-angular"
 }

@@ -34,7 +34,8 @@ export class HaoshiyouApp {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   };
   constructor(private platform:Platform,
-              private userService:IUserService, private threadService:IThreadService,
+              private userService:IUserService,
+              private threadService:IThreadService,
               private messageService:IMessageService,
               private authService:AuthService,
               private notificationService:NotificationService,
