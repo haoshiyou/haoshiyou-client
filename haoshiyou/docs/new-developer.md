@@ -1,7 +1,7 @@
 
-# Start Guide for New Developer for Only Local Web
+## Start Guide for New Developer for Only Local Web
 
-## Prerequisite
+### Prerequisite
 You need to install the following in your computer:
 
 1. Install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
@@ -14,12 +14,13 @@ You need to install the following in your computer:
 **Note:** if you only want to develop on a local web, you can stop here. The following is 
 only for developer who wants to develop and debug on iOS and Android mobile platforms.
 
-## Quick Start
+### Quick Start
 
 1. Git clone the repo (contact xinbenlv@ for access.), and then 
 switch to branch "dev"
 
 ```bash
+# TODO(zzn): add github 
 git clone git@github.com:xinbenlv/rent.zzn.im.git haoshiyou-dev
 cd haoshiyou-dev
 git checkout -b dev origin/dev # checkout branch "dev"
@@ -28,15 +29,16 @@ git checkout -b dev origin/dev # checkout branch "dev"
 2. Check out Environment File
 
 ```sh
-export IONIC_ENV=dev # or change to prod
+export IONIC_ENV=prod # or change to prod
 # assuming you are in the root of the git repo of haoshiyou-dev
-./fastlane/setup-env.sh
+export GITHUB_TOKEN=<github_token> # ask xinbenlv@ for the actual token
+./travis/setup-env.sh
 ```
 
 3. Install packages and setup ionic 
 
 ```bash
-cd lab/haoshiyou/
+cd haoshiyou
 npm install --dev
 ```
 
