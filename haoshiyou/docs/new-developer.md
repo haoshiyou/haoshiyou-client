@@ -27,54 +27,49 @@ git checkout -b dev origin/dev # checkout branch "dev"
 
 2. Check out Environment File
 
-TODO(zzn): add more
+```sh
+export IONIC_ENV=dev # or change to prod
+# assuming you are in the root of the git repo of haoshiyou-dev
+./fastlane/setup-env.sh
+```
 
-2. Install packages and setup ionic 
+3. Install packages and setup ionic 
 
 ```bash
 cd lab/haoshiyou/
 npm install --dev
 ```
 
-3. Run the Web
+4. Run the Web
 
 ```bash
 ionic serve -l
 ```
 
-4. Set up Prod/Dev Environment
-
-```sh
-export IONIC_ENV=prod # or change to dev
-# assuming you are in the root of the git repo of haoshiyou-dev
-./fastlane/setup-env.sh
-```
-
-
 ## Additional Start Guide for Android and iOS Development
 
 ### Prerequisite for Mobile (Continued)
 
-6. [Xcode](https://developer.apple.com/download/)
-7. [Iphone Emulator](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/GettingStartedwithiOSSimulator/GettingStartedwithiOSSimulator.html)
+1. [Xcode](https://developer.apple.com/download/)
+2. [Iphone Emulator](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/GettingStartedwithiOSSimulator/GettingStartedwithiOSSimulator.html)
 (if developing features related iOS)
-8. [Android Studio / SDK](https://developer.android.com/studio/index.html) 
+3. [Android Studio / SDK](https://developer.android.com/studio/index.html) 
 (if developing features related to Android)
 
 ### ## Quick Start (Continued)
-4. Restore cordova state
+1. Restore cordova state
 ```bash
 ionic state restore
 ```
 
-4. Run the ios emulator and android emulator
+2. Run the ios emulator and android emulator
 
 ```bash
 ionic emulate ios
 ionic emulate android
 ```
 
-5. Run the ios device (need to connect your mac to an physical iPhone/iPad)
+3. Run the ios device (need to connect your mac to an physical iPhone/iPad)
 ```shell
 ionic run ios --device # needs --device to work
 ```
