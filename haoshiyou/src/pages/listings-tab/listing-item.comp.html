@@ -1,19 +1,37 @@
-<button ion-item *ngIf="listing" (click)="gotoDetail()" class="listing-item">
-    <div>
-        <h2 class="listing-item-header">{{ listing.content ? listing.title : '详情见图片' }}</h2>
-        <div class="content">{{ listing.content }}</div>
-        <div class="content">{{ listing.lastUpdated | timeFromNow }} </div>
-        <div class="content">
-            <ion-badge color="{{ listing.type == 0 ? 'secondary' : 'primary'}}">
+<ion-card *ngIf="listing">
+    <img *ngIf="listing.imageIds.length > 0"
+         src="{{ listing.imageIds[0] | imageIdToUrlPipe }}"
+         alt="img-{{imageId}}"
+         (click)="gotoDetail()"/>
+    <ion-card-header class="listing-item-header" (click)="gotoDetail()">
+        <div style="font-size:10px;color:#777;margin-bottom:5px">
+            <span>
+                <ion-icon name="home"></ion-icon>
                 {{listing.type|enumMsgPipe}}
-            </ion-badge>
-            <ion-badge color="light" *ngIf="listing.hsyGroupEnum">
-                {{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}
-            </ion-badge>
-            <span *ngIf="listing.imageIds && listing.imageIds.length > 0">
-                <ion-icon  name="images"></ion-icon>
-                {{ listing.imageIds.length }}图
             </span>
+            <span>，全文{{listing.content?.length}}字</span>
+            <span *ngIf="listing.imageIds.length > 0">，<ion-icon name="images"></ion-icon>{{listing.imageIds.length }}图</span>
+            <span>，<ion-icon name="clock"></ion-icon>
+            {{ listing.lastUpdated | timeFromNow }}更新 </span>
         </div>
-    </div>
-</button>
+        <span style="font-size:15px;color:#777">{{ listing.content ? listing.title.slice(0, 30) +'...' : '详情见图片' }}</span>
+    </ion-card-header>
+    <ion-card-content (click)="gotoDetail()">
+        <span style="font-size:12px;color:#777">{{ listing.content?.length > 150 ? listing.content.slice(0, 140) +'...' : listing.content }}</span>
+    </ion-card-content>
+    <ion-row>
+        <ion-col>
+            <div ion-button clear small (click)="gotoDetail()">
+                <ion-icon name="play"></ion-icon>
+                <div>继续阅读</div>
+            </div>
+        </ion-col>
+        <ion-col></ion-col>
+        <ion-col>
+            <div ion-button icon-left clear small (click)="bump()">
+                <ion-icon name="thumbs-up"></ion-icon>
+                <div>顶一下!</div>
+            </div>
+        </ion-col>
+    </ion-row>
+</ion-card>

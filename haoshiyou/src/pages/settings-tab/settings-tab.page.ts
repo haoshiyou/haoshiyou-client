@@ -5,7 +5,7 @@ import {CodePush} from "@ionic-native/code-push";
 import {Platform, ToastController} from "ionic-angular";
 import {AppVersion} from "@ionic-native/app-version";
 declare let window:any;
-
+declare let ga:any;
 @Component({
   templateUrl: 'settings-tab.page.html'
 })
@@ -24,6 +24,11 @@ export class SettingsTabPage implements OnInit {
       public appVersion:AppVersion,
       private toastCtr:ToastController,
   ) {}
+
+  ionViewWillEnter() {
+    ga('set', 'page', '/settings-tab.page.html');
+    ga('send', 'pageview');
+  }
 
   public async debugIncrementer() {
     this.debugCounter++;
@@ -47,18 +52,17 @@ export class SettingsTabPage implements OnInit {
     await this.updateVersions();
   }
   public async updateVersions() {
-
     if (this.platform.is('cordova')) {
       this.versionApp =  (await this.appVersion.getPackageName()) + `(${await this.appVersion.getVersionCode()})`;
       await this.platform.ready();
       let currentPackageInfo = await this.codePush.getCurrentPackage();
-      this.versionDownloaded = currentPackageInfo ? currentPackageInfo.appVersion :  `未知`;
+      this.versionDownloaded = currentPackageInfo ? currentPackageInfo.appVersion :  `无`;
       let pendingPackageInfo = await this.codePush.getPendingPackage();
-      this.versionPending = pendingPackageInfo ? pendingPackageInfo.appVersion :  `未知`;
+      this.versionPending = pendingPackageInfo ? pendingPackageInfo.appVersion :  `无`;
       let remotePackageInfo = await this.codePush.checkForUpdate();
-      this.versionRemote = remotePackageInfo ? remotePackageInfo.appVersion + remotePackageInfo.downloadUrl :  `未知`;
+      this.versionRemote = remotePackageInfo ? remotePackageInfo.downloadUrl :  `无`;
     }
-    else this.versionApp = '未知';
+    else this.versionApp = '无';
   }
   async ngOnInit() {
     await this.updateVersions();
