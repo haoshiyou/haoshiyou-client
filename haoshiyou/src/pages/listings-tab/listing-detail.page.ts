@@ -23,6 +23,7 @@ export class ListingDetailPage implements AfterViewInit {
   listing:HsyListing;
   owner:User;
   meId:string;
+  title:string;
   public loading:boolean = true;
   ngAfterViewInit():void {
   // TODO(xinbenlv): add back later
@@ -45,18 +46,16 @@ export class ListingDetailPage implements AfterViewInit {
   async loadListing() {
     if (this.params.data['listing'] != null) {
       this.listing = this.params.data.listing;
-      this.params.data.id = this.listing.uid;
-      await this.initListeners();
-      this.loading = false;
     } else {
       let id = this.params.data.id;
-      let listing = await this.api.findById(id)
+      this.listing = await this.api.findById(id)
           .take(1)
           .toPromise() as HsyListing;
-      this.listing = listing;
-      await this.initListeners();
-      this.loading = false;
     }
+    this.params.data.id = this.listing.uid;
+    this.title = `好室友™帖子：` + this.listing.title;
+    await this.initListeners();
+    this.loading = false;
   }
 
   async ngOnInit():Promise<void> {

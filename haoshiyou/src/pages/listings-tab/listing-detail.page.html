@@ -5,7 +5,7 @@
                 全部
             </button>
         </ion-buttons>
-        <ion-title>帖子</ion-title>
+        <ion-title>{{ title ? title : '好室友™帖子'}}</ion-title>
         <ion-buttons end *ngIf="owner && meId && owner.id == meId" click="edit()">
             <button ion-button (click)="edit()">编辑</button>
         </ion-buttons>
