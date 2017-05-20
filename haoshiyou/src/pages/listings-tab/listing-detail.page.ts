@@ -10,6 +10,7 @@ import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import {HsyUserApi} from "../../loopbacksdk/services/custom/HsyUser";
 import {HsyUser} from "../../loopbacksdk/models/HsyUser";
+import {ListingsTabPage} from "./listings-tab.page";
 declare let window:any;
 declare let QRCode:any;
 declare let ga:any;
@@ -24,23 +25,22 @@ export class ListingDetailPage implements AfterViewInit {
   meId:string;
   public loading:boolean = true;
   ngAfterViewInit():void {
-    console.log("XXX ngAfterViewInit");
   // TODO(xinbenlv): add back later
   //   console.log("XXX generateQrCode code");
   //   this.generateQrCode();
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    if (this.listing == null) await this.loadListing();
+    console.log(`XXX ionViewWillEnter navLength = ${this.nav.length()}`);
     ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
     ga('send', 'pageview');
   }
-  async ngOnInit():Promise<void> {
-    console.log("XXX ListingDetailPage load 2");
+  async loadListing() {
     if (this.params.data['listing'] != null) {
-      console.log(`XXXX param = ${JSON.stringify(this.params)}`);
       this.listing = this.params.data.listing;
       this.params.data.id = this.listing.uid;
-      this.initListeners();
+      await this.initListeners();
       this.loading = false;
     } else {
       let id = this.params.data.id;
@@ -48,11 +48,13 @@ export class ListingDetailPage implements AfterViewInit {
           .take(1)
           .toPromise() as HsyListing;
       this.listing = listing;
-      this.initListeners();
+      await this.initListeners();
       this.loading = false;
-
-      console.log("XXX Finish isLoading");
     }
+  }
+
+  async ngOnInit():Promise<void> {
+    await this.loadListing();
   }
 
   constructor(private threadService:IThreadService,
@@ -61,24 +63,23 @@ export class ListingDetailPage implements AfterViewInit {
               private params:NavParams,
               private imageService:IImageService,
               private api:HsyListingApi,private hsyUserApi:HsyUserApi) {}
-
-  edit() {
-    this.nav.push(CreationPage, {listing: this.listing});
+  async backToMain() {
+    await this.nav.push(ListingsTabPage);
+  }
+  async edit() {
+    await this.nav.push(CreationPage, {listing: this.listing});
   }
 
   private async initListeners() {
-    console.log(`XXX DEBUG start init listeners`);
-    let ownernHsyUser:HsyUser = await this.hsyUserApi
+    let ownerHsyUser:HsyUser = await this.hsyUserApi
         .findById<HsyUser>(this.listing.ownerId).take(1).toPromise();
-    console.log(`XXX DEBUG ownernHsyUser = ${JSON.stringify(ownernHsyUser)}`);
-
     this.owner = {
-      id: ownernHsyUser.id,
-      name: ownernHsyUser.name,
-      avatarSrc: ownernHsyUser.avatarId, // TODO(xinbenlv): update the URL using cloudinary
+      id: ownerHsyUser.id,
+      name: ownerHsyUser.name,
+      avatarSrc: ownerHsyUser.avatarId, // TODO(xinbenlv): update the URL using cloudinary
       regIds: []
     };
-    console.log(`loaded user ${JSON.stringify(ownernHsyUser)}`);
+    console.log(`loaded user ${JSON.stringify(ownerHsyUser)}`);
 
     this.userService.promiseMe().then((me:User)=> {
       if (me) {

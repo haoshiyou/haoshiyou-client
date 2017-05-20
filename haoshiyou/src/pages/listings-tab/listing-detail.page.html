@@ -1,5 +1,8 @@
 <ion-header>
     <ion-navbar>
+        <ion-buttons start>
+            <button ion-button *ngIf="nav.length() < 2" (click)="backToMain()">更多</button>
+        </ion-buttons>
         <ion-title>帖子</ion-title>
         <ion-buttons end *ngIf="owner && meId && owner.id == meId" click="edit()">
             <button ion-button (click)="edit()">编辑</button>
