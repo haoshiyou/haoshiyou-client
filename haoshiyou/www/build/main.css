@@ -27862,6 +27862,10 @@ body {
   color: #888;
 }
 
+.listing-tab {
+  background: #EEE;
+}
+
 creation-page .creation textarea.text-input {
   height: 150px;
 }
