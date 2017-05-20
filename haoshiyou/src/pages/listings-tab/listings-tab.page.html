@@ -22,10 +22,13 @@
     <ion-list *ngIf="isLoading">
         <ion-item>loading...</ion-item>
     </ion-list>
-    <ion-list *ngIf="!isLoading">
-        <listing-item  *ngFor="let listing of loadedListings; let i = index"
-                       [listing]=listing></listing-item>
-    </ion-list>
+    <ion-grid *ngIf="!isLoading">
+        <ion-row align-items-start>
+            <ion-col col-lg-3 col-md-4 col-sm-6 col-xs-12 *ngFor="let listing of loadedListings; let i = index">
+                <listing-item [listing]=listing></listing-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
     <ion-fab bottom right>
         <button ion-fab color="danger" (click)="fakeGoToCreationPage()">
