@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="org.haoshiyou.app" version="5.6.15" xmlns="http://www.w3.org/ns/widgets">
+<widget id="org.haoshiyou.app" version="5.6.19" xmlns="http://www.w3.org/ns/widgets">
   <name>haoshiyou</name>
   <description>帮助旧金山湾区小伙伴们找室友。</description>
   <author email="zzn@zzn.im" href="http://zzn.im/">Zainan Victor Zhou</author>
@@ -94,25 +94,39 @@
     <param name="ios-package" value="CDVInAppBrowser"/>
     <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser"/>
   </feature>
-  <plugin name="cordova-plugin-device" spec="~1.1.2"/>
+  <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+  <engine name="ios" spec="^4.4.0"/>
+  <plugin name="cordova-plugin-app-version" spec="~0.1.9"/>
+  <plugin name="cordova-plugin-code-push" spec="^1.9.3-beta"/>
   <plugin name="cordova-plugin-console" spec="~1.0.3"/>
-  <plugin name="cordova-plugin-whitelist" spec="~1.2.2"/>
+  <plugin name="cordova-plugin-device" spec="~1.1.2"/>
+  <plugin name="cordova-plugin-file" spec="~4.2.0"/>
+  <plugin name="cordova-plugin-file-transfer" spec="~1.5.1"/>
+  <plugin name="cordova-plugin-nativestorage" spec="~2.2.2"/>
+  <plugin name="cordova-plugin-network-information" spec="~1.2.1"/>
   <plugin name="cordova-plugin-splashscreen" spec="~3.2.2"/>
   <plugin name="cordova-plugin-statusbar" spec="~2.1.3"/>
+  <plugin name="cordova-plugin-whitelist" spec="~1.2.2"/>
+  <plugin name="ionic-plugin-deeplinks" spec="^1.0.15">
+    <variable name="URL_SCHEME" value="haoshiyou"/>
+    <variable name="DEEPLINK_SCHEME" value="http"/>
+    <variable name="DEEPLINK_HOST" value="haoshiyou.org"/>
+    <variable name="ANDROID_PATH_PREFIX" value="/"/>
+    <variable name="ANDROID_2_PATH_PREFIX" value="/"/>
+    <variable name="ANDROID_3_PATH_PREFIX" value="/"/>
+    <variable name="ANDROID_4_PATH_PREFIX" value="/"/>
+    <variable name="ANDROID_5_PATH_PREFIX" value="/"/>
+    <variable name="DEEPLINK_2_SCHEME" value=" "/>
+    <variable name="DEEPLINK_2_HOST" value=" "/>
+    <variable name="DEEPLINK_3_SCHEME" value=" "/>
+    <variable name="DEEPLINK_3_HOST" value=" "/>
+    <variable name="DEEPLINK_4_SCHEME" value=" "/>
+    <variable name="DEEPLINK_4_HOST" value=" "/>
+    <variable name="DEEPLINK_5_SCHEME" value=" "/>
+    <variable name="DEEPLINK_5_HOST" value=" "/>
+  </plugin>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.0"/>
   <plugin name="phonegap-plugin-push" spec="~1.8.3">
     <variable name="SENDER_ID" value="59094925347"/>
   </plugin>
-  <plugin name="ionic-plugin-deeplinks" spec="~1.0.8">
-    <variable name="URL_SCHEME" value="haoshiyou"/>
-    <variable name="DEEPLINK_SCHEME" value="http"/>
-    <variable name="DEEPLINK_HOST" value="haoshiyou.org"/>
-  </plugin>
-  <plugin name="cordova-plugin-network-information" spec="~1.2.1"/>
-  <plugin name="cordova-plugin-file" spec="~4.2.0"/>
-  <plugin name="cordova-plugin-file-transfer" spec="~1.5.1"/>
-  <plugin name="cordova-plugin-nativestorage" spec="~2.2.2"/>
-  <plugin name="cordova-plugin-code-push" spec="~1.9.3-beta"/>
-  <plugin name="cordova-plugin-app-version" spec="~0.1.9"/>
-  <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
 </widget>
