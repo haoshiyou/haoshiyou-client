@@ -26,7 +26,7 @@
             
         </map-view>
         <ion-item *ngFor="let imageId of listing.imageIds">
-            <img src="{{ imageId | imageIdToUrlPipe }}" alt="img-{{imageId}}"
+            <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
                  (click)="showImage(imageId)">
         </ion-item>
         <ion-item *ngIf="!listing.imageIds">
