@@ -32,9 +32,15 @@ export class ListingDetailPage implements AfterViewInit {
 
   async ionViewWillEnter() {
     if (this.listing == null) await this.loadListing();
-    console.log(`XXX ionViewWillEnter navLength = ${this.nav.length()}`);
     ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
     ga('send', 'pageview');
+    if (this.nav.length() == 1) {
+      ga('send', 'event', {
+        eventCategory: 'go-to',
+        eventAction: 'listing-detail',
+        eventLabel: 'direct-url'
+      });
+    }
   }
   async loadListing() {
     if (this.params.data['listing'] != null) {
