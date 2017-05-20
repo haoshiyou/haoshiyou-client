@@ -81,7 +81,7 @@ export class NotificationService {
     let body = JSON.stringify({
       "registration_ids":regIds,
       "notification":{
-        "title": `好室友(haoshiyou)`,
+        "title": `好室友™(haoshiyou)`,
         "body":`${userName}: ${msg}`
       }
     });
@@ -100,7 +100,7 @@ export class NotificationService {
     let body = JSON.stringify({
       "to": `/topics/${topic}`,
       "notification": {
-        "title": `好室友(haoshiyou)`,
+        "title": `好室友™(haoshiyou)`,
         "body": msg
       }
     });

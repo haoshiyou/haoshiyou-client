@@ -111,7 +111,7 @@ let zhDict = {
   usernameFormatErrorHint: "请使用%d-%d个字母, 数字或 \"_\"的组合",
   usernameInputPlaceholder: "您的用户名",
   usernameOrEmailInputPlaceholder: "用户名/邮箱",
-  title: "好室友",
+  title: "好室友™",
   welcome: "欢迎 %s!",
   windowsAuthInstructions: "您已连接到组织网络&hellip;",
   windowsAuthLabel: "Windows认证"

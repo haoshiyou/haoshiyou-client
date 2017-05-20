@@ -69,6 +69,11 @@ export class ListingDetailPage implements AfterViewInit {
               private imageService:IImageService,
               private api:HsyListingApi,private hsyUserApi:HsyUserApi) {}
   async backToMain() {
+    ga('send', 'event', {
+      eventCategory: 'go-to',
+      eventAction: 'listings-tab',
+      eventLabel: 'direct-url'
+    });
     await this.nav.push(ListingsTabPage);
   }
   async edit() {
