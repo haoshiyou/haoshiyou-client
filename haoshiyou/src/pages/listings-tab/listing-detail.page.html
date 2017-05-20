@@ -5,7 +5,7 @@
                 全部
             </button>
         </ion-buttons>
-        <ion-title>{{ title ? title : '好室友™™帖子'}}</ion-title>
+        <ion-title>{{ title ? title : '好室友™帖子'}}</ion-title>
         <ion-buttons end *ngIf="owner && meId && owner.id == meId" click="edit()">
             <button ion-button (click)="edit()">编辑</button>
         </ion-buttons>
@@ -34,12 +34,11 @@
             无照片
         </ion-item>
         <ion-item>
-            <long-image [listing]="listing"></long-image>
-            <button ion-button color="primary" clear item-right (click)="generateQrCode()">
-                二维码 <ion-icon name="ios-qr-scanner"></ion-icon>
+            <button ion-button color="primary" clear item-right (click)="fakeClaimAndEdit()">
+                认领并编辑 <ion-icon name="flag"></ion-icon>
             </button>
-            <button ion-button color="primary" clear item-right (click)="startChat()">
-                私聊<ion-icon name="chatbubbles"></ion-icon>
+            <button ion-button color="primary" clear item-right (click)="fakeStartChat()">
+                私聊 <ion-icon name="chatbubbles"></ion-icon>
             </button>
         </ion-item>
     </ion-card>
