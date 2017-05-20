@@ -88,7 +88,7 @@ lane :web_upload do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-prod")
     sh("git merge dev")
-    sh("ionic cordova build ios --release")
+    sh("cd .. && ionic cordova build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
@@ -103,7 +103,7 @@ lane :web_upload do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-dev")
     sh("git merge dev")
-    sh("ionic cordova build ios --release")
+    sh("cd .. && ionic cordova build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
