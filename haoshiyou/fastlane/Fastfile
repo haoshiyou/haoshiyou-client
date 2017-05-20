@@ -76,7 +76,7 @@ end
 
 desc "Do a new Web build using ionic."
 private_lane :ionic_web_build do
-  sh("ionic cordova build --release")
+  sh("ionic cordova build ios --release")
 end
 
 desc "Do a new upload to haoshiyou.org Web."
