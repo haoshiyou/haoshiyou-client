@@ -28,7 +28,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   loadedListings: HsyListing[] = [];
   private mapReady: boolean = false;
   public mapToggleOn: boolean = false;
-
+  public useGrid:boolean = !(navigator.platform == 'iPhone');
   constructor(private platform: Platform,
               private nav: NavController,
               private alertCtrl: AlertController,
