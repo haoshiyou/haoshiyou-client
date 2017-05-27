@@ -19,7 +19,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="grey-background">
-    <ion-row align-items-center justify-content-center>
+    <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
         <ion-spinner></ion-spinner>
     </ion-row>
 

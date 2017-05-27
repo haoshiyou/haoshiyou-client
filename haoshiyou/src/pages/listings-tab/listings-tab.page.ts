@@ -38,7 +38,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private api: HsyListingApi) {
   }
   async ngOnInit() {
-    await this.listLoadMore();
+    await this.loadMoreListings();
   }
 
   ionViewWillEnter() {
@@ -51,7 +51,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     this.segmentModel = newValue;
     this.loadedListings = [];
     this.isInitLoading = true;
-    await this.listLoadMore(); // no wait
+    await this.loadMoreListings(); // no wait
     this.isInitLoading = false;
     ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
     ga('send', 'pageview');
@@ -62,13 +62,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     this.areaModel = newValue;
     this.loadedListings = [];
     this.isInitLoading = true;
-    await this.listLoadMore(); // no wait
+    await this.loadMoreListings(); // no wait
     this.isInitLoading = false;
     ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
     ga('send', 'pageview');
   }
 
-  async listLoadMore() {
+  async loadMoreListings() {
     let whereClause = {
       'type': this.segmentModel == 'ROOM_WANTED' ? 1 : 0,
     };
@@ -78,6 +78,12 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     } else {
       whereClause['hsyGroupEnum'] = {'nin': ['BigTeam', 'TestGroup', 'None']};
     }
+    ga('send', 'event', {
+      eventCategory: 'load',
+      eventAction: 'load-more-listings',
+      eventLabel: `load-more-index-${this.loadedListings.length}`
+    });
+    let start:number = Date.now();
     let newItems =  await this.api
         .find<HsyListing>({
           // TODO(zzn): use ListTypeEnum when migrated
@@ -88,6 +94,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         })
         .take(1)
         .toPromise();
+    let end:number = Date.now();
+    ga('send', {
+      hitType: 'timing',
+      timingCategory: 'API Call',
+      timingVar: 'load-more-listings',
+      timingValue: end-start
+    });
     for (let item of newItems) {
       this.loadedListings.push(item);
     }
@@ -139,7 +152,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   async doInfinite(infiniteScroll) {
-    await this.listLoadMore();
+    await this.loadMoreListings();
     infiniteScroll.complete();
   }
 }
