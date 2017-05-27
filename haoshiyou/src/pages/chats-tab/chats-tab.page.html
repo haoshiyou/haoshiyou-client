@@ -5,7 +5,7 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content class="grey-background">
     <ion-list *ngIf="auth.authenticated()">
         <chat-thread
                 *ngFor="let thread of threads; let i = index"

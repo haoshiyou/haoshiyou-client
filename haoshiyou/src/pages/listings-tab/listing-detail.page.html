@@ -11,7 +11,7 @@
         </ion-buttons>
     </ion-navbar>
 </ion-header>
-<ion-content id="page-container">
+<ion-content id="page-container" class="grey-background">
     <ion-card *ngIf="!loading">
         <ion-item *ngIf="owner" >
             <ion-avatar *ngIf="owner.avatarSrc && owner.avatarSrc.length > 0" item-left>
@@ -42,8 +42,11 @@
             </button>
         </ion-item>
     </ion-card>
-
-    <ion-card *ngIf="loading">
-        loading
-    </ion-card>
+    <ion-list *ngIf="loading">
+        <ion-item>
+            <ion-row align-items-center justify-content-center>
+                <ion-spinner></ion-spinner>
+            </ion-row>
+        </ion-item>
+    </ion-list>
 </ion-content>

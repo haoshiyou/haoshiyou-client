@@ -19,7 +19,7 @@ export class IImageService {
    * Get a url string from image id.
    * @param id
    */
-  getUrlFromId(id:string, width:number = 300, height:number = 300):string {
+  getUrlFromId(id:string, width:number = 200, height:number = 100):string {
     throw "Not implemented";
   }
 }
@@ -60,7 +60,7 @@ export class CloudinaryImageService implements IImageService {
   /**
    * override
    */
-  getUrlFromId(id:string, width:number = 300, height:number = 300):string {
+  getUrlFromId(id:string, width:number = 200, height:number = 100):string {
     let param;
     if (width == 0 && height == 0) { // full
       param = 'w_413'; // 1242 is the width of iphone 6plus.
@@ -70,7 +70,7 @@ export class CloudinaryImageService implements IImageService {
     } else if (height == 0 ){
       param = `w_${width}`;
     } else {
-      param = `w_${width},h_${height},c_fill,g_auto`;
+      param = `w_${width},h_${height},c_fill`;
     }
     return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/${param}/${id}.jpg`;
   }

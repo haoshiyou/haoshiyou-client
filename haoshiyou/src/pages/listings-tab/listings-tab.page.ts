@@ -22,13 +22,15 @@ export class ListingsTabPage implements OnInit, OnDestroy {
 
   public segmentModel: string = 'ROOMMATE_WANTED'; // by default for rent
   public areaModel: string = 'SouthBayWest'; // by default for 南湾西
-  public isLoading: boolean = true;
-  private map: any; // Actually google.maps.Map;
-  private markers: any[]; // Actually google.maps.Marker[];
-  loadedListings: HsyListing[] = [];
-  private mapReady: boolean = false;
   public mapToggleOn: boolean = false;
   public useGrid:boolean = !(navigator.platform == 'iPhone');
+  public loadedListings: HsyListing[] = [];
+  public isInitLoading = false;
+  private map: any; // Actually google.maps.Map;
+  private markers: any[]; // Actually google.maps.Marker[];
+  private mapReady: boolean = false;
+  private currentIndex:number = 0;
+
   constructor(private platform: Platform,
               private nav: NavController,
               private alertCtrl: AlertController,
@@ -36,7 +38,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private api: HsyListingApi) {
   }
   async ngOnInit() {
-    await this.listReload();
+    await this.listLoadMore();
   }
 
   ionViewWillEnter() {
@@ -45,23 +47,28 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   //noinspection JSUnusedGlobalSymbols
-  onSegmentModelChange(newValue):void {
+  async onSegmentModelChange(newValue) {
     this.segmentModel = newValue;
-    this.listReload(); // no wait
+    this.loadedListings = [];
+    this.isInitLoading = true;
+    await this.listLoadMore(); // no wait
+    this.isInitLoading = false;
     ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
     ga('send', 'pageview');
   }
 
   //noinspection JSUnusedGlobalSymbols
-  onAreaModelChange(newValue):void {
+  async onAreaModelChange(newValue) {
     this.areaModel = newValue;
-    this.listReload(); // no wait
+    this.loadedListings = [];
+    this.isInitLoading = true;
+    await this.listLoadMore(); // no wait
+    this.isInitLoading = false;
     ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
     ga('send', 'pageview');
   }
 
-  async listReload() {
-    this.isLoading = true;
+  async listLoadMore() {
     let whereClause = {
       'type': this.segmentModel == 'ROOM_WANTED' ? 1 : 0,
     };
@@ -71,18 +78,22 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     } else {
       whereClause['hsyGroupEnum'] = {'nin': ['BigTeam', 'TestGroup', 'None']};
     }
-
-    this.loadedListings = await this.api
+    let newItems =  await this.api
         .find<HsyListing>({
           // TODO(zzn): use ListTypeEnum when migrated
           where: whereClause,
           order: 'lastUpdated DESC',
-          limit: 50
+          limit: 12,
+          offset: this.loadedListings.length,
         })
         .take(1)
         .toPromise();
-    this.isLoading = false;
+    for (let item of newItems) {
+      this.loadedListings.push(item);
+    }
   }
+
+
 
   private updateMarkers() {
     // TODO(xinbenlv): update markers
@@ -125,5 +136,10 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       });
       alert.present();
     }
+  }
+
+  async doInfinite(infiniteScroll) {
+    await this.listLoadMore();
+    infiniteScroll.complete();
   }
 }
