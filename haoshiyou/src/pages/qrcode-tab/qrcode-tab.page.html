@@ -5,7 +5,7 @@
         </ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content class="grey-background">
     <ion-list *ngIf="!shouldShow"  padding center style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
         <button center style="text-align: center;" id="show_qrcode_btn" ion-button (click)="shouldShow = true">
             <ion-icon name="qr-scanner"></ion-icon> <span>点此加小助手自动拉入微信群</span>

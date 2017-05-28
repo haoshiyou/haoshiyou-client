@@ -25,6 +25,7 @@ export class ListingDetailPage {
   meId: string;
   title: string;
   public loading: boolean = true;
+  public useGrid:boolean = !(navigator.platform == 'iPhone');
 
   async ionViewWillEnter() {
     if (this.listing == null) await this.loadListing();

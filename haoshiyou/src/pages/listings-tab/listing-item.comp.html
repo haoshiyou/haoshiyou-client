@@ -7,6 +7,7 @@
         <div style="font-size:10px;color:#777;margin-bottom:5px">
             <span>
                 <ion-icon name="home"></ion-icon>
+                {{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}
                 {{listing.type|enumMsgPipe}}
             </span>
             <span>，全文{{listing.content?.length}}字</span>
