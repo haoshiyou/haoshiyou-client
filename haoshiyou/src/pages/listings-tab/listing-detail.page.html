@@ -19,14 +19,14 @@
             </h2>
         </ion-card-header>
         <ion-list>
-
             <ion-item>
                 <ion-label col-3 item-left>
                     <ion-icon name="clock"></ion-icon>
                     更新
                 </ion-label>
                 <div item-right text-wrap>
-                    {{ listing.lastUpdated | timeFromNow }}
+                    {{ listing.lastUpdated | dateFormatterPipe }}
+                    <p text-right>{{ listing.lastUpdated | timeFromNow }}</p>
                 </div>
             </ion-item>
             <ion-item>
@@ -58,40 +58,46 @@
                     <ion-icon name="paper"></ion-icon>
                     详情
                 </ion-label>
-
             </ion-item>
             <ion-item>
                 <div text-wrap>
-                    {{ listing.content }}
+                    <p>
+                        {{ listing.content }}
+                    </p>
                 </div>
             </ion-item>
-        </ion-list>
 
-        <!--
-            We duplicate the grid and original ion-item because responsive
-            grid doesn't work well with iOS yet.
-            TODO(xinbenlv): remove this ion-list when works on iOS.
-            See https://forum.ionicframework.com/t/ion-row-wrap-attribute-doesnt-work-on-ios-devices/50603/5
-        -->
-        <template *ngIf="!useGrid">
-            <ion-item *ngFor="let imageId of listing.imageIds">
-                <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
-                     (click)="showImage(imageId)">
+            <ion-item>
+                <ion-label col-3 item-left>
+                    <ion-icon name="images"></ion-icon>
+                    图片
+                </ion-label>
+                <div item-right *ngIf="!listing.imageIds || listing.imageIds.length == 0">
+                    <p>无图片</p>
+                </div>
             </ion-item>
-        </template>
-
-        <ion-grid *ngIf="useGrid">
-            <ion-row>
-                <ion-col col-12 col-lg-3 col-md-4 col-sm-12 col-xs-12
-                         *ngFor="let imageId of listing.imageIds">
+            <!--
+                We duplicate the grid and original ion-item because responsive
+                grid doesn't work well with iOS yet.
+                TODO(xinbenlv): remove this ion-list when works on iOS.
+                See https://forum.ionicframework.com/t/ion-row-wrap-attribute-doesnt-work-on-ios-devices/50603/5
+            -->
+            <ng-template [ngIf]="!useGrid">
+                <ion-item *ngFor="let imageId of listing.imageIds">
                     <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
                          (click)="showImage(imageId)">
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-        <ion-item *ngIf="!listing.imageIds">
-            无照片
-        </ion-item>
+                </ion-item>
+            </ng-template>
+            <ion-grid *ngIf="useGrid">
+                <ion-row>
+                    <ion-col col-12 col-lg-4 col-md-4 col-sm-6 col-xs-12
+                             *ngFor="let imageId of listing.imageIds">
+                        <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
+                             (click)="showImage(imageId)">
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-list>
         <ion-item>
             <button ion-button outline item-left large (click)="fakeClaimAndEdit()">
                 <ion-label>

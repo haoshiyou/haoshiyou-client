@@ -2,10 +2,11 @@ import {Pipe, PipeTransform} from "@angular/core";
 import moment from "moment";
 moment.locale('zh-cn');
 @Pipe({
-  name: 'timeFromNow'
+  name: 'dateFormatterPipe'
 })
-export class TimeFromNowPipe implements PipeTransform {
+export class DateFormatterPipe implements PipeTransform {
   transform(value:number/*time in UTC ms */):string {
-    return moment(new Date(value)).fromNow();
+    let date = new Date(value);
+    return moment(date).format('YYYY-MM-DD HH:MM');
   }
 }
