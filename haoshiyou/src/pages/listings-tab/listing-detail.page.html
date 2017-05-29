@@ -82,13 +82,12 @@
                 TODO(xinbenlv): remove this ion-list when works on iOS.
                 See https://forum.ionicframework.com/t/ion-row-wrap-attribute-doesnt-work-on-ios-devices/50603/5
             -->
-            <template *ngIf="!useGrid">
+            <ng-template [ngIf]="!useGrid">
                 <ion-item *ngFor="let imageId of listing.imageIds">
                     <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
                          (click)="showImage(imageId)">
                 </ion-item>
-            </template>
-
+            </ng-template>
             <ion-grid *ngIf="useGrid">
                 <ion-row>
                     <ion-col col-12 col-lg-4 col-md-4 col-sm-6 col-xs-12
