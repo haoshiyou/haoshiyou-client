@@ -1,6 +1,5 @@
 // app/services/auth/auth.ts
 
-import {NativeStorage} from "@ionic-native/native-storage";
 import {tokenNotExpired, JwtHelper} from "angular2-jwt";
 import {Injectable, NgZone} from "@angular/core";
 import {User} from "../models/models";
@@ -125,12 +124,12 @@ export class AuthService {
   private zoneImpl:NgZone;
   private userSubject:Subject<User>;
   private idToken:string;
+  private local = window.localStorage;
   //noinspection JSUnusedLocalSymbols
   private jwtHelper: JwtHelper = new JwtHelper(); // do nothing
   private refreshSubscription: any;
 
   constructor(zone:NgZone,
-              private local:NativeStorage,
               private toastCtrl: ToastController) {
     this.auth0 = new Auth0({
       clientID: Env.configAuth0.clientId,
@@ -155,11 +154,9 @@ export class AuthService {
     );
 
     this.lock.on('authenticated_error', (err) => {
-      console.log("XXXX After login!!!");
       this.showLoginErrorToast(err);
     });
     this.lock.on('authenticated', authResult => {
-      console.log("XXX Successfully logged in");
       this.local.setItem('id_token', authResult.idToken);
       this.idToken = authResult.idToken;
 
@@ -170,7 +167,6 @@ export class AuthService {
         } else {
           // If authentication is successful, save the items
           // in local storage
-          console.log(`XXX profile=${profile}`);
           this.local.setItem('profile', JSON.stringify(profile));
           this.local.setItem('id_token', this.idToken);
           this.local.setItem('refresh_token', authResult.refreshToken);
@@ -187,12 +183,13 @@ export class AuthService {
     this.zoneImpl = zone;
     this.userSubject = new Subject<User>();
     // If there is a profile saved in local storage
-    this.local.getItem('profile').then(profile => {
+    let profile = this.local.getItem('profile');
+    if (profile != null && profile.length > 0) {
       this.user = JSON.parse(profile);
       this.userSubject.next(AuthService.createHsyUser(this.user));
-    }).catch(error => {
-      console.log(error);
-    });
+    }
+
+    this.idToken = this.local.getItem('id_token');
   }
 
   public authenticated() {
@@ -210,10 +207,10 @@ export class AuthService {
   }
 
   public logout() {
-    this.local.remove('profile');
-    this.local.remove('id_token');
+    this.local.removeItem('profile');
+    this.local.removeItem('id_token');
+    this.local.removeItem('refresh_token');
     this.idToken = null;
-    this.local.remove('refresh_token');
     this.zoneImpl.run(() => this.user = null);
     this.userSubject.next(null); // logout
     // Unschedule the token refresh
@@ -270,47 +267,14 @@ export class AuthService {
   public getNewJwt() {
     // Get a new JWT from Auth0 using the refresh token saved
     // in local storage
-    this.local.getItem('refresh_token').then(token => {
-      this.auth0.refreshToken(token, (err, delegationRequest) => {
-        if (err) {
-          alert(err);
-        }
-        this.local.setItem('id_token', delegationRequest.id_token);
-        this.idToken = delegationRequest.id_token;
-      });
-    }).catch(error => {
-      console.log(error);
+    let token = this.local.getItem('refresh_token');
+    this.auth0.refreshToken(token, (err, delegationRequest) => {
+      if (err) {
+        alert(err);
+      }
+      this.local.setItem('id_token', delegationRequest.id_token);
+      this.idToken = delegationRequest.id_token;
     });
-
-  }
-
-  startupTokenRefresh() {
-    // If the user is authenticated, use the token stream
-    // provided by angular2-jwt and flatMap the token
-    if (this.authenticated()) {
-      let source = Observable.of(this.idToken).flatMap(
-          token => {
-            // Get the expiry time to generate
-            // a delay in milliseconds
-            let now: number = new Date().valueOf();
-            let jwtExp: number = this.jwtHelper.decodeToken(token).exp;
-            let exp: Date = new Date(0);
-            exp.setUTCSeconds(jwtExp);
-            let delay: number = exp.valueOf() - now;
-
-            // Use the delay in a timer to
-            // run the refresh at the proper time
-            return Observable.timer(delay);
-          });
-
-      // Once the delay time from above is
-      // reached, get a new JWT and schedule
-      // additional refreshes
-      source.subscribe(() => {
-        this.getNewJwt();
-        this.scheduleRefresh();
-      });
-    }
   }
 
   private showLoginSuccessToast() {

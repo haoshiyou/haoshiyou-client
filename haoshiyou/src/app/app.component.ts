@@ -91,9 +91,6 @@ export class HaoshiyouApp {
           });
         }
       });
-      // Schedule a token refresh on app start up
-      authService.startupTokenRefresh();
-
       // Setup notification
       authService.userObservable().subscribe((user:User)=> {
         if (user == null) {
