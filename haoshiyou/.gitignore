@@ -48,6 +48,7 @@ fastlane/report.xml
 src/app/env.prod.ts
 src/app/env.dev.ts
 src/app/env.ts
+src/**/*.js
 
 TDCVDBXA6X.cer
 TDCVDBXA6X.certSigningRequest
