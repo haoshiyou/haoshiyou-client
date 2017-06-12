@@ -14,25 +14,16 @@ import {LoopBackConfig} from "../loopbacksdk/lb.config";
 import {HsyListing} from "../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../loopbacksdk/services/custom/HsyListing";
 import { CodePush } from '@ionic-native/code-push';
+import UrlUtil from "../util/url_util";
 declare let ga:any;
 @Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>'
 })
 
-
-
 export class HaoshiyouApp {
   rootPage:any = TabsPage;
   private hsyListing:HsyListing = new HsyListing();
-  private static getParameterByName = function(name) {
-    let url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  };
+
   constructor(private platform:Platform,
               private userService:IUserService,
               private threadService:IThreadService,
@@ -51,7 +42,7 @@ export class HaoshiyouApp {
         this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
       }
       ga('create', Env.configGoogleAnalytics.propertyId, {'alwaysSendReferrer': true});
-      let referrer = HaoshiyouApp.getParameterByName('referrer');
+      let referrer = UrlUtil.getParameterByName('referrer');
       console.log(`XXX campaignName = ${referrer}`);
       if(referrer) {
         ga('set', 'campaignName', referrer);

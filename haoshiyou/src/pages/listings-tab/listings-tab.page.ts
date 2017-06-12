@@ -5,7 +5,10 @@ import {AuthService} from "../../services/auth.service";
 import "rxjs/Rx";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
+import UrlUtil from "../../util/url_util";
 declare let ga:any;
+const SEGMENT_KEY: string = 'segment';
+const AREA_KEY: string = 'area';
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -21,7 +24,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public segmentModel: string = 'ROOMMATE_WANTED'; // by default for rent
-  public areaModel: string = 'SouthBayWest'; // by default for 南湾西
+  public areaModel: string = 'All'; // by default for 南湾西
   public mapToggleOn: boolean = false;
   public useGrid:boolean = !(navigator.platform == 'iPhone');
   public loadedListings: HsyListing[] = [];
@@ -39,6 +42,15 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
   async ngOnInit() {
     await this.loadMoreListings();
+    let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
+    if (segmentFromUrl) {
+      this.segmentModel = segmentFromUrl;
+    }
+    let areaFromUrl = UrlUtil.getParameterByName(AREA_KEY);
+    if (areaFromUrl) {
+      this.areaModel = areaFromUrl;
+    }
+    console.log(`ListingsTabPage init with area=${this.areaModel}, segment=${this.segmentModel}`);
   }
 
   ionViewWillEnter() {
