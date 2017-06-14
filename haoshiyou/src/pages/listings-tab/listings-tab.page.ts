@@ -41,7 +41,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private api: HsyListingApi) {
   }
   async ngOnInit() {
-    await this.loadMoreListings();
     let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
     if (segmentFromUrl) {
       this.segmentModel = segmentFromUrl;
@@ -50,6 +49,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     if (areaFromUrl) {
       this.areaModel = areaFromUrl;
     }
+    await this.loadMoreListings();
     console.log(`ListingsTabPage init with area=${this.areaModel}, segment=${this.segmentModel}`);
   }
 
