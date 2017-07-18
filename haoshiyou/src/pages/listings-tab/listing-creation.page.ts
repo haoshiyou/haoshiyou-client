@@ -1,18 +1,63 @@
 import {Platform, NavParams, NavController, AlertController} from "ionic-angular";
 import {OnInit, Component} from "@angular/core";
 import {uuid} from "../../util/uuid";
-import {IUserService} from "../../services/chats/user.service";
-import {User} from "../../models/models";
 import {NotificationService} from "../../services/notfication.service";
 import {ILocality, MapService} from "../../services/map.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
-
+import {boundaryList} from "./boundaries";
+import {AuthService} from "../../services/auth.service";
+import { ChangeDetectorRef } from '@angular/core';
 declare let google:any;
 
 const DEFAULT_LAT:number = 37.41666;
 const DEFAULT_LNG:number = -122.09106;
+
+const cityToHsyGroupEnum = {
+  'Mountain View': 'SouthBayWest',
+  'Sunnyvale': 'SouthBayWest',
+  'Palo Alto': 'SouthBayWest',
+  'East Palo Alto': 'SouthBayWest',
+  'Stanford': 'SouthBayWest',
+  'Menlo Park': 'SouthBayWest',
+  'Cuptertino': 'SouthBayWest',
+  'Los Gatos': 'SouthBayWest',
+  'Los Altos': 'SouthBayWest',
+  'Los Altos Hills': 'SouthBayWest',
+  'Milpitas': 'SouthBayEast',
+  'San Jose': 'SouthBayEast',
+  'Saratoga': 'SouthBayEast',
+  'Santa Clara': 'SouthBayEast',
+};
+
+const hsyGroupEnumToName = {
+    SanFrancisco: "三番",
+    SouthBayWest: "南湾西",
+    SouthBayEast: "南湾东",
+    EastBay: "东湾",
+    MidPeninsula:'中半岛',
+}; // TODO(zzn): merge with bot code
+
+const countyToHsyGroupEnum = {
+  'San Francisco County': 'SanFrancisco',
+  'San Mateo County': 'MidPeninsula',
+  'Alameda County': 'EastBay',
+};
+
+const getHsyGroupEnumFromLocality = function(city, county) {
+  try {
+    if (county == 'Santa Clara County') {
+      return cityToHsyGroupEnum[city];
+    } else {
+      return countyToHsyGroupEnum[county];
+    }
+  } catch (e) {
+    return 'None';
+  }
+};
+
+
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -23,9 +68,10 @@ const DEFAULT_LNG:number = -122.09106;
 export class CreationPage implements OnInit {
   //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
   // TODO(xinbenlv) uncomment this
-  // typeOptions:ListingType[] = [ListingType.ROOMMATE_WANTED, ListingType.ROOM_WANTED];
+
+  typeOptions:number[] = [0/*招租*/, 1/*求租*/];
   listing:HsyListing;
-  localityText:string;
+  public localityText:string;
   private map:any; /*google.maps.Map*/
   private marker:any; /*google.maps.Marker*/
   //noinspection JSMismatchedCollectionQueryUpdate used in HTML
@@ -33,10 +79,11 @@ export class CreationPage implements OnInit {
   constructor(private platform:Platform, private params:NavParams,
               private nav:NavController,
               private alertCtrl:AlertController,
-              private userService:IUserService,
+              private authService:AuthService,
               private notificationService:NotificationService,
               private mapService:MapService,
-              private api:HsyListingApi) {
+              private api:HsyListingApi,
+              private ref:ChangeDetectorRef) {
     if (params.data.listing) {
       this.listing = params.data.listing;
     } else {
@@ -53,7 +100,7 @@ export class CreationPage implements OnInit {
 
   ngOnInit():any {
     this.platform.ready().then(() => {
-      var minZoomLevel = 9;
+      let minZoomLevel = 9;
 
       // Load Google Maps
       /* TODO(xinbenlv): follow example here
@@ -68,6 +115,7 @@ export class CreationPage implements OnInit {
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
       this.marker.setMap(this.map);
+      this.renderBoundary();
     });
 
     this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/{
@@ -75,33 +123,63 @@ export class CreationPage implements OnInit {
       animation: google.maps.Animation.DROP,
       draggable: true,
     });
-    google.maps.event.addListener(this.marker, 'dragend', () => {
-      let loc:GeoPoint = {
+    google.maps.event.addListener(this.marker, 'dragend', async () => {
+      let location:GeoPoint = {
         lat:  this.marker.getPosition().lat(),
         lng: this.marker.getPosition().lng()
       };
-      this.listing.location = loc;
-      this.mapService.getLocality(new google.maps.LatLng(
-          this.listing.location.lat, this.listing.location.lng))
-          .then((locality:ILocality)=> {
-            this.localityText = locality.city + ", " + locality.zip;
-          });
+      this.listing.location = location;
+      let locality = await this.mapService.getLocality(new google.maps.LatLng(
+          this.listing.location.lat, this.listing.location.lng));
+      let hsyGroupEnum = getHsyGroupEnumFromLocality(locality.city, locality.county)
+      this.localityText = `${locality.city}, ${locality.zip} (${hsyGroupEnumToName[hsyGroupEnum]})`;
+      this.listing.hsyGroupEnum = hsyGroupEnum;
+      this.ref.detectChanges();
     });
-  }
 
-  save() {
+  }
+  renderBoundary() {
+    let hsyGroupEnumList = {
+      'SanFrancisco': '#CD5C5C',
+      'SouthBayWest': '#86FF33',
+      'SouthBayEast': '#FF5733',
+      'EastBay': '#A6B1F7',
+      'MidPeninsula': '#FFC300',
+    };
+    for (let hsyGroupEnum in hsyGroupEnumList) {
+      let color = hsyGroupEnumList[hsyGroupEnum];
+      for (let city of boundaryList[hsyGroupEnum]) {
+
+        let triangleCoords = [];
+        for (let pair of city) {
+          triangleCoords.push({lng: pair[0], lat: pair[1]});
+        }
+        // Construct the polygon.
+        let triangle = new google.maps.Polygon({
+          paths: triangleCoords,
+          strokeColor: color,
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: color,
+          fillOpacity: 0.35
+        });
+        triangle.setMap(this.map);
+      }
+    }
+
+
+  };
+
+  async save() {
     if (this.validate()) {
       this.listing.lastUpdated = new Date();
-      this.userService.promiseMe().then((me:User)=> {
-        this.listing.ownerId = me.id;
-      }).then(()=> {
-        return this.api.create<HsyListing>(this.listing);
-      }).then(()=> {
-        // succeed.
-        return this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
-      }).then(()=> {
-        return this.nav.pop();
-      });
+      let meUser = await this.authService.getUser();
+      let meHsyUser = AuthService.createHsyUser(meUser);
+      this.listing.ownerId = meHsyUser.id;
+      console.log(`XXX this.listing before commit == ${JSON.stringify(this.listing)}`);
+      await this.api.create<HsyListing>(this.listing).toPromise();
+      await this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
+      await this.nav.pop();
     } else {
       this.dirty['title'] = true;
       this.dirty['content'] = true;
@@ -117,7 +195,7 @@ export class CreationPage implements OnInit {
     this.listing.imageIds = imageIds;
   }
 
-  deleteListing(): void {
+  async deleteListing(){
     let prompt = this.alertCtrl.create({
       title: '确认删除?',
       buttons: [
@@ -139,6 +217,6 @@ export class CreationPage implements OnInit {
         }
       ]
     });
-    prompt.present();
+    await prompt.present();
   }
 }

@@ -139,7 +139,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     });
     await alert.present();
   }
-  gotoCreationPage() {
+
+  async goToCreationPage() {
     if (this.auth.authenticated()) {
       //push another page onto the history stack
       //causing the nav controller to animate the new page in
@@ -159,7 +160,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
           }
         ]
       });
-      alert.present();
+      await alert.present();
     }
   }
 
