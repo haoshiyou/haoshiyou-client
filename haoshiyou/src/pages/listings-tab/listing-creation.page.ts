@@ -21,7 +21,7 @@ const cityToHsyGroupEnum = {
   'East Palo Alto': 'SouthBayWest',
   'Stanford': 'SouthBayWest',
   'Menlo Park': 'SouthBayWest',
-  'Cuptertino': 'SouthBayWest',
+  'Cupertino': 'SouthBayWest',
   'Los Gatos': 'SouthBayWest',
   'Los Altos': 'SouthBayWest',
   'Los Altos Hills': 'SouthBayWest',
@@ -37,6 +37,7 @@ const hsyGroupEnumToName = {
     SouthBayEast: "南湾东",
     EastBay: "东湾",
     MidPeninsula:'中半岛',
+    None: "暂未覆盖"
 }; // TODO(zzn): merge with bot code
 
 const countyToHsyGroupEnum = {
@@ -46,15 +47,10 @@ const countyToHsyGroupEnum = {
 };
 
 const getHsyGroupEnumFromLocality = function(city, county) {
-  try {
-    if (county == 'Santa Clara County') {
-      return cityToHsyGroupEnum[city];
-    } else {
-      return countyToHsyGroupEnum[county];
-    }
-  } catch (e) {
-    return 'None';
-  }
+  let ret = (county == 'Santa Clara County' ?
+      cityToHsyGroupEnum[city] : countyToHsyGroupEnum[county]);
+  let retFixed = (typeof ret === 'undefined') ? 'None' : ret;
+  return retFixed;
 };
 
 
@@ -176,7 +172,6 @@ export class CreationPage implements OnInit {
       let meUser = await this.authService.getUser();
       let meHsyUser = AuthService.createHsyUser(meUser);
       this.listing.ownerId = meHsyUser.id;
-      console.log(`XXX this.listing before commit == ${JSON.stringify(this.listing)}`);
       await this.api.create<HsyListing>(this.listing).toPromise();
       await this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
       await this.nav.pop();
