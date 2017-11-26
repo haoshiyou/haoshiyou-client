@@ -12,4 +12,12 @@ export class QrCodeTabPage {
     ga('set', 'page', '/qrcode-tab.page.html');
     ga('send', 'pageview');
   }
+
+  public showQrCode() {
+    ga('send', 'event', {
+      eventCategory: 'show-qrcode',
+      eventAction: 'qrcode-tab',
+    });
+    this.shouldShow = true;
+  }
 }
