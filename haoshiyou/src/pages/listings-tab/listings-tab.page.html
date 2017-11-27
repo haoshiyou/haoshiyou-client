@@ -6,15 +6,12 @@
         </ion-segment>
     </ion-toolbar>
     <ion-toolbar no-border-top>
-        <ion-segment [ngModel]="areaModel" (ngModelChange)="onAreaModelChange($event)">
-            <ion-segment-button value="All">全部</ion-segment-button>
-            <ion-segment-button value="SanFrancisco">三番</ion-segment-button>
-            <ion-segment-button value="MidPeninsula">中半岛</ion-segment-button>
-            <ion-segment-button value="SouthBayWest">南湾西</ion-segment-button>
-            <ion-segment-button value="SouthBayEast">南湾东</ion-segment-button>
-            <ion-segment-button value="EastBay">东湾</ion-segment-button>
-            <ion-segment-button value="ShortTerm">短租</ion-segment-button>
-            <ion-segment-button value="Seattle">西雅图</ion-segment-button>
+        <ion-segment>
+            <ng-container *ngFor="let option of options; let i=index;" >
+                <ion-segment-button *ngIf="isDebug() || option != 'TestGroup'" [value]="i" (tap)="setOption(i, $event)">
+                    {{optionsMap[option]}}
+                </ion-segment-button>
+            </ng-container>
         </ion-segment>
     </ion-toolbar>
 </ion-header>
@@ -44,7 +41,7 @@
         <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
     <ion-fab bottom right>
-        <button ion-fab color="danger" (click)="fakeGoToCreationPage()">
+        <button ion-fab color="danger" (click)="goToCreationPage()">
             <ion-icon name="add">
             </ion-icon>
         </button>

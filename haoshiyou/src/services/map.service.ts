@@ -18,13 +18,17 @@ export class MapService {
           if (results[1]) {
             let zip:string = "";
             let city:string = "";
+            let county:string = "";
             //find country name
             for (var i = 0; i < results[0].address_components.length; i++) {
 
               var componeaddress_components = results[0].address_components[i];
-              for (var b = 0; b < componeaddress_components.types.length; b++) {
 
+              for (var b = 0; b < componeaddress_components.types.length; b++) {
+                console.log(`XXX componeaddress_components = ${JSON.stringify(componeaddress_components)}`);
                 //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+
+                console.log(`XXX componeaddress_components.types[b] = ${JSON.stringify(componeaddress_components.types[b])}`);
                 if (componeaddress_components.types[b] == "locality") {
                   //this is the object you are looking for
                   city = componeaddress_components.short_name;
@@ -33,10 +37,14 @@ export class MapService {
                   //this is the object you are looking for
                   zip = componeaddress_components.short_name;
                 }
+                if (componeaddress_components.types[b] == "administrative_area_level_2") {
+                  county = componeaddress_components.short_name;
+                }
               }
             }
             return resolve(<ILocality>{
-              city: city, zip: zip
+              city: city, zip: zip,
+              county: county
             });
           }
         }
@@ -49,4 +57,5 @@ export class MapService {
 export interface ILocality {
   city:string;
   zip:string;
+  county:string;
 }
