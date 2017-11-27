@@ -1,9 +1,11 @@
+# Change the syntax highlighting to Ruby
+
 # A fastlane file, see https://fastlane.tools/ for reference
 
 # Update fastlane automatically if a new version is available:
-# update_fastlane
+update_fastlane
 
-fastlane_version "2.28.8"
+fastlane_version "2.66.2"
 
 ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
 android_release_path = "releases/haoshiyou-android-release.apk"
@@ -38,7 +40,10 @@ end
 
 desc "Do a new iOS upload to iTunes Connect using deliver."
 private_lane :ios_upload do
-  deliver(force: true)
+  deliver(
+    copyright: "#{Time.now.year} Zainan Zhou",
+    force: true
+  )
   slack(message: "Successfully deployed to iTunes Connect at Version " +
       "#{get_version_number(xcodeproj:ios_project_path)}.")
 end
@@ -171,7 +176,7 @@ lane :publish_all do |options|
 end
 
 # TODO(zzn):
-# - 1. add deployment for web
-# - 2. merge web flow into deploy_all
-# - 3. add other workflows: test, pilot, prod
-# - 4. add support "dev" scheme
+# - add other workflows: test, dev, pilot, beta, prod with schemes...
+# - support auto-submit to review and auto-release
+# - support changelog generation, release notes etc.
+# But none of these are the most important ones.
