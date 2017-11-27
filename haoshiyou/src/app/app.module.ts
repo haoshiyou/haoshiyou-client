@@ -44,6 +44,8 @@ import {Network} from "@ionic-native/network";
 import {Push} from "@ionic-native/push";
 import {CodePush} from "@ionic-native/code-push";
 import {AppVersion} from "@ionic-native/app-version";
+import {DateFormatterPipe} from "../pipes/date-formatter.pipe";
+import {FlagService} from "../services/flag.service";
 
 export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
@@ -80,7 +82,8 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     ImageIdsToUrlPipe,
     ImageIdToUrlPipe,
     TimeFromNowPipe,
-    CityNZipPipe
+    CityNZipPipe,
+    DateFormatterPipe,
   ],
   imports: [
     IonicModule.forRoot(HaoshiyouApp, {
@@ -138,7 +141,8 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     Network,
     Push,
     CodePush,
-    AppVersion
+    AppVersion,
+    FlagService
   ]
 })
 export class AppModule {

@@ -2,49 +2,120 @@
     <ion-navbar>
         <ion-buttons start>
             <button ion-button *ngIf="nav.length() < 2" (click)="backToMain()">
-                全部
+                <ion-icon name="arrow-back"></ion-icon>全部
             </button>
         </ion-buttons>
-        <ion-title>帖子</ion-title>
+        <ion-title>{{ title ? title : '好室友™帖子'}}</ion-title>
         <ion-buttons end *ngIf="owner && meId && owner.id == meId" click="edit()">
             <button ion-button (click)="edit()">编辑</button>
         </ion-buttons>
     </ion-navbar>
 </ion-header>
-<ion-content id="page-container">
-    <ion-card *ngIf="!loading">
-        <ion-item *ngIf="owner" >
-            <ion-avatar *ngIf="owner.avatarSrc && owner.avatarSrc.length > 0" item-left>
-                <img src="{{owner.avatarSrc}}" alt=""/>
-            </ion-avatar>
-            {{ owner.name }}
-        </ion-item>
-        <ion-item>
-            <h2>{{ listing.content ? listing.title : '详情见图片' }}</h2>
-            <p>{{listing.lastUpdated|timeFromNow}}</p>
-        </ion-item>
-        <ion-card-content>
-            <p style="white-space: pre-line">{{listing.content}}</p>
-        </ion-card-content>
-        <ion-item *ngFor="let imageId of listing.imageIds">
-            <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
-                 (click)="showImage(imageId)">
-        </ion-item>
-        <ion-item *ngIf="!listing.imageIds">
-            无照片
-        </ion-item>
-        <ion-item>
-            <long-image [listing]="listing"></long-image>
-            <button ion-button color="primary" clear item-right (click)="generateQrCode()">
-                二维码 <ion-icon name="ios-qr-scanner"></ion-icon>
-            </button>
-            <button ion-button color="primary" clear item-right (click)="startChat()">
-                私聊<ion-icon name="chatbubbles"></ion-icon>
-            </button>
-        </ion-item>
-    </ion-card>
+<ion-content id="page-container" class="grey-background">
+    <ion-card *ngIf="!loading" offset-lg-3 col-lg-6 offset-md-2 col-md-8>
+        <ion-card-header>
+            <h2>
+                {{ listing.content ? listing.title.slice(0, 30) +'...' : '详情见图片' }}
+            </h2>
+        </ion-card-header>
+        <ion-list>
+            <ion-item>
+                <ion-label col-3 item-left>
+                    <ion-icon name="clock"></ion-icon>
+                    更新
+                </ion-label>
+                <div item-right text-wrap>
+                    {{ listing.lastUpdated | dateFormatterPipe }}
+                    <p text-right>{{ listing.lastUpdated | timeFromNow }}</p>
+                </div>
+            </ion-item>
+            <ion-item>
+                <ion-label col-3 item-left>
+                    <ion-icon name="map"></ion-icon>
+                    区域
+                </ion-label>
+                <div item-right text-wrap>
+                    {{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}
+                </div>
+            </ion-item>
+            <ion-item *ngIf="owner" >
+                <ion-label col-3 item-left>
+                    <ion-avatar *ngIf="owner.avatarSrc && owner.avatarSrc.length > 0">
+                        <img src="{{owner.avatarSrc}}" alt=""/>
+                    </ion-avatar>
+                    <ion-icon name="contact"
+                              *ngIf="!(owner.avatarSrc && owner.avatarSrc.length > 0)">
+                    </ion-icon>
+                    联系
+                </ion-label>
+                <div item-right text-wrap >
+                    <p text-right>请在【好室友】{{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}群内搜索</p>
+                    <div text-right>{{ owner.name }}</div>
+                </div>
+            </ion-item>
+            <ion-item>
+                <ion-label col-3 item-left>
+                    <ion-icon name="paper"></ion-icon>
+                    详情
+                </ion-label>
+            </ion-item>
+            <ion-item>
+                <div text-wrap>
+                    <p>
+                        {{ listing.content }}
+                    </p>
+                </div>
+            </ion-item>
 
-    <ion-card *ngIf="loading">
-        loading
+            <ion-item>
+                <ion-label col-3 item-left>
+                    <ion-icon name="images"></ion-icon>
+                    图片
+                </ion-label>
+                <div item-right *ngIf="!listing.imageIds || listing.imageIds.length == 0">
+                    <p>无图片</p>
+                </div>
+            </ion-item>
+            <!--
+                We duplicate the grid and original ion-item because responsive
+                grid doesn't work well with iOS yet.
+                TODO(xinbenlv): remove this ion-list when works on iOS.
+                See https://forum.ionicframework.com/t/ion-row-wrap-attribute-doesnt-work-on-ios-devices/50603/5
+            -->
+            <ng-template [ngIf]="!useGrid">
+                <ion-item *ngFor="let imageId of listing.imageIds">
+                    <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
+                         (click)="showImage(imageId)">
+                </ion-item>
+            </ng-template>
+            <ion-grid *ngIf="useGrid">
+                <ion-row>
+                    <ion-col col-12 col-lg-4 col-md-4 col-sm-6 col-xs-12
+                             *ngFor="let imageId of listing.imageIds">
+                        <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
+                             (click)="showImage(imageId)">
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-list>
+        <ion-item>
+            <button ion-button outline item-left large (click)="fakeClaimAndEdit()">
+                <ion-label>
+                    <ion-icon name="create"></ion-icon> 认领并编辑
+                </ion-label>
+            </button>
+            <button ion-button outline item-right large (click)="fakeStartChat()">
+                <ion-label>
+                    <ion-icon name="chatbubbles"></ion-icon> 私聊
+                </ion-label>
+            </button>
+        </ion-item>
     </ion-card>
+    <ion-list *ngIf="loading">
+        <ion-item>
+            <ion-row align-items-center justify-content-center>
+                <ion-spinner></ion-spinner>
+            </ion-row>
+        </ion-item>
+    </ion-list>
 </ion-content>

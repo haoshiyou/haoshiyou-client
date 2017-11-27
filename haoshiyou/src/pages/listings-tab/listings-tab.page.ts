@@ -5,7 +5,11 @@ import {AuthService} from "../../services/auth.service";
 import "rxjs/Rx";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
+import UrlUtil from "../../util/url_util";
+import {FlagService} from "../../services/flag.service";
 declare let ga:any;
+const SEGMENT_KEY: string = 'segment';
+const AREA_KEY: string = 'area';
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -21,22 +25,34 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public segmentModel: string = 'ROOMMATE_WANTED'; // by default for rent
-  public areaModel: string = 'SouthBayWest'; // by default for 南湾西
-  public isLoading: boolean = true;
+  public areaModel: string = 'All'; // by default for All
+  public mapToggleOn: boolean = false;
+  public useGrid:boolean = !(navigator.platform == 'iPhone');
+  public loadedListings: HsyListing[] = [];
+  public isInitLoading = false;
   private map: any; // Actually google.maps.Map;
   private markers: any[]; // Actually google.maps.Marker[];
-  loadedListings: HsyListing[] = [];
   private mapReady: boolean = false;
-  public mapToggleOn: boolean = false;
+  private currentIndex:number = 0;
 
   constructor(private platform: Platform,
               private nav: NavController,
               private alertCtrl: AlertController,
               private auth: AuthService,
-              private api: HsyListingApi) {
+              private api: HsyListingApi,
+              private flagService: FlagService) {
   }
   async ngOnInit() {
-    await this.listReload();
+    let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
+    if (segmentFromUrl) {
+      this.segmentModel = segmentFromUrl;
+    }
+    let areaFromUrl = UrlUtil.getParameterByName(AREA_KEY);
+    if (areaFromUrl) {
+      this.areaModel = areaFromUrl;
+    }
+    await this.loadMoreListings();
+    console.log(`ListingsTabPage init with area=${this.areaModel}, segment=${this.segmentModel}`);
   }
 
   ionViewWillEnter() {
@@ -45,23 +61,28 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   //noinspection JSUnusedGlobalSymbols
-  onSegmentModelChange(newValue):void {
+  async onSegmentModelChange(newValue) {
     this.segmentModel = newValue;
-    this.listReload(); // no wait
+    this.loadedListings = [];
+    this.isInitLoading = true;
+    await this.loadMoreListings(); // no wait
+    this.isInitLoading = false;
     ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
     ga('send', 'pageview');
   }
 
   //noinspection JSUnusedGlobalSymbols
-  onAreaModelChange(newValue):void {
+  async onAreaModelChange(newValue) {
     this.areaModel = newValue;
-    this.listReload(); // no wait
+    this.loadedListings = [];
+    this.isInitLoading = true;
+    await this.loadMoreListings(); // no wait
+    this.isInitLoading = false;
     ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
     ga('send', 'pageview');
   }
 
-  async listReload() {
-    this.isLoading = true;
+  async loadMoreListings() {
     let whereClause = {
       'type': this.segmentModel == 'ROOM_WANTED' ? 1 : 0,
     };
@@ -71,18 +92,35 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     } else {
       whereClause['hsyGroupEnum'] = {'nin': ['BigTeam', 'TestGroup', 'None']};
     }
-
-    this.loadedListings = await this.api
+    ga('send', 'event', {
+      eventCategory: 'load',
+      eventAction: 'load-more-listings',
+      eventLabel: `load-more-index-${this.loadedListings.length}`
+    });
+    let start:number = Date.now();
+    let newItems =  await this.api
         .find<HsyListing>({
           // TODO(zzn): use ListTypeEnum when migrated
           where: whereClause,
           order: 'lastUpdated DESC',
-          limit: 50
+          limit: 12,
+          offset: this.loadedListings.length,
         })
         .take(1)
         .toPromise();
-    this.isLoading = false;
+    let end:number = Date.now();
+    ga('send', {
+      hitType: 'timing',
+      timingCategory: 'API Call',
+      timingVar: 'load-more-listings',
+      timingValue: end-start
+    });
+    for (let item of newItems) {
+      this.loadedListings.push(item);
+    }
   }
+
+
 
   private updateMarkers() {
     // TODO(xinbenlv): update markers
@@ -103,7 +141,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     });
     await alert.present();
   }
-  gotoCreationPage() {
+
+  async goToCreationPage() {
     if (this.auth.authenticated()) {
       //push another page onto the history stack
       //causing the nav controller to animate the new page in
@@ -123,7 +162,54 @@ export class ListingsTabPage implements OnInit, OnDestroy {
           }
         ]
       });
-      alert.present();
+      await alert.present();
+    }
+  }
+
+  async doInfinite(infiniteScroll) {
+    await this.loadMoreListings();
+    infiniteScroll.complete();
+  }
+
+  public isDebug():boolean {
+    return this.flagService.getFlag('debug');
+  }
+  public options = [
+        'All',
+        'SanFrancisco',
+        'MidPeninsula',
+        'SouthBayWest',
+        'SouthBayEast',
+        'EastBay',
+        'ShortTerm',
+        'Seattle',
+        'TestGroup',
+      ];
+  public optionsMap =
+      {
+        'All': '全部',
+        'SanFrancisco': '三番',
+        'MidPeninsula': '中半岛',
+        'SouthBayWest': '南湾西',
+        'SouthBayEast': '南湾东',
+        'EastBay': '东湾',
+        'ShortTerm': '短租',
+        'Seattle': '西雅图',
+        'TestGroup': '测试',
+      };
+
+  // Hack introduced due to this issue: https://github.com/ionic-team/ionic/issues/6923
+  public async setOption(index, event) {
+    if (this.options[index] != null) {
+      this.areaModel = this.options[index];
+      await this.onAreaModelChange(this.areaModel);
+      //note you have to use "tap" or "click" - if you bind to "ionSelected" you don't get the "target" property
+      let segments = event.target.parentNode.children;
+      let len = segments.length;
+      for (let i = 0; i < len; i++) {
+        segments[i].classList.remove('segment-activated');
+      }
+      event.target.classList.add('segment-activated');
     }
   }
 }

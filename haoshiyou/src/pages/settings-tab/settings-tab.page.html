@@ -6,7 +6,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="grey-background">
     <ion-card *ngIf="auth.authenticated()">
         <ion-item *ngIf="auth.user != null">
             <ion-avatar item-left>
@@ -23,12 +23,17 @@
             <button ion-button item-right (click)="auth.login()">登录</button>
         </ion-item>
         <ion-item (click)="debugIncrementer()">
-            <ion-label>关于</ion-label><ion-label *ngIf="debugCounter > 1">({{debugCounter}})</ion-label>
+            <ion-label>关于
+                <span *ngIf="debugCounter > 1">({{debugCounter}})</span>
+            </ion-label>
         </ion-item>
         <ion-list *ngIf="isDebug()" >
+            <ion-item-divider>
+                版本
+            </ion-item-divider>
             <ion-item>
                 <ion-label>
-                    环境版本: {{ versionEnv }} - 5.6.16.{{debugCounter}}
+                    环境版本: {{ versionEnv }} - 5.7.6.{{debugCounter}}
                 </ion-label>
                 <button ion-button item-right (click)="startSync()">刷新</button>
             </ion-item>
@@ -44,7 +49,18 @@
             <ion-item>
                 远程版本: {{ versionRemote }}
             </ion-item>
+            <ion-item-divider>
+                Flags
+            </ion-item-divider>
+            <ion-item *ngFor="let flagName of flagNames">
+                <ion-label item-start>
+                    {{ flagName }}
+                </ion-label>
+                <ion-toggle
+                        color="secondary"
+                        [ngModel]="flagService.getFlag(flagName)" (ngModelChange)="flagService.setFlag(flagName, $event)"
+                ></ion-toggle>
+            </ion-item>
         </ion-list>
-
     </ion-list>
 </ion-content>

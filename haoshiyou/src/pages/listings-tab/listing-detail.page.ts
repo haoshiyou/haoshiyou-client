@@ -1,4 +1,4 @@
-import {NavParams, NavController} from "ionic-angular";
+import {NavParams, NavController, AlertController} from "ionic-angular";
 import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
 import {IUserService} from "../../services/chats/user.service";
@@ -19,16 +19,13 @@ declare let ga:any;
   selector: 'listing-detail',
   templateUrl: 'listing-detail.page.html'
 })
-export class ListingDetailPage implements AfterViewInit {
-  listing:HsyListing;
-  owner:User;
-  meId:string;
-  public loading:boolean = true;
-  ngAfterViewInit():void {
-  // TODO(xinbenlv): add back later
-  //   console.log("XXX generateQrCode code");
-  //   this.generateQrCode();
-  }
+export class ListingDetailPage {
+  listing: HsyListing;
+  owner: User;
+  meId: string;
+  title: string;
+  public loading: boolean = true;
+  public useGrid:boolean = !(navigator.platform == 'iPhone');
 
   async ionViewWillEnter() {
     if (this.listing == null) await this.loadListing();
@@ -45,18 +42,16 @@ export class ListingDetailPage implements AfterViewInit {
   async loadListing() {
     if (this.params.data['listing'] != null) {
       this.listing = this.params.data.listing;
-      this.params.data.id = this.listing.uid;
-      await this.initListeners();
-      this.loading = false;
     } else {
       let id = this.params.data.id;
-      let listing = await this.api.findById(id)
+      this.listing = await this.api.findById(id)
           .take(1)
           .toPromise() as HsyListing;
-      this.listing = listing;
-      await this.initListeners();
-      this.loading = false;
     }
+    this.params.data.id = this.listing.uid;
+    this.title = `好室友™帖子：` + this.listing.title;
+    await this.initListeners();
+    this.loading = false;
   }
 
   async ngOnInit():Promise<void> {
@@ -68,8 +63,14 @@ export class ListingDetailPage implements AfterViewInit {
               private nav:NavController,
               private params:NavParams,
               private imageService:IImageService,
-              private api:HsyListingApi,private hsyUserApi:HsyUserApi) {}
+              private api:HsyListingApi,private hsyUserApi:HsyUserApi,
+              private alertCtrl: AlertController) {}
   async backToMain() {
+    ga('send', 'event', {
+      eventCategory: 'go-to',
+      eventAction: 'listings-tab',
+      eventLabel: 'direct-url'
+    });
     await this.nav.push(ListingsTabPage);
   }
   async edit() {
@@ -96,6 +97,39 @@ export class ListingDetailPage implements AfterViewInit {
       this.meId = meId;
     });
   }
+
+  async fakeClaimAndEdit() {
+    ga('send', 'event', {
+      eventCategory: 'go-to',
+      eventAction: 'fake-claim-and-edit',
+    });
+    let alert = this.alertCtrl.create({
+      title: '新版"认领并编辑"功能正在建设中',
+      buttons: [
+        {
+          text: 'OK',
+        },
+      ]
+    });
+    await alert.present();
+  }
+
+  async fakeStartChat() {
+    ga('send', 'event', {
+      eventCategory: 'go-to',
+      eventAction: 'fake-start-chat',
+    });
+    let alert = this.alertCtrl.create({
+      title: '新版"私聊"功能正在建设中',
+      buttons: [
+        {
+          text: 'OK',
+        },
+      ]
+    });
+    await alert.present();
+  }
+
   startChat() {
     // TODO(xinbenlv): handle when not yet logged in.
     let thread:Thread = <Thread>{};

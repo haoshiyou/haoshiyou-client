@@ -4,6 +4,7 @@ import {Env} from "../../app/env";
 import {CodePush} from "@ionic-native/code-push";
 import {Platform, ToastController} from "ionic-angular";
 import {AppVersion} from "@ionic-native/app-version";
+import {FlagService} from "../../services/flag.service";
 declare let window:any;
 declare let ga:any;
 @Component({
@@ -17,13 +18,18 @@ export class SettingsTabPage implements OnInit {
   public versionRemote:string = null;
   public versionApp:string = null;
   public debugCounter:number = 0;
+  public flagNames = null;
   constructor(
       public auth:AuthService,
       private codePush:CodePush,
       private platform:Platform,
       public appVersion:AppVersion,
       private toastCtr:ToastController,
-  ) {}
+      private flagService:FlagService
+  ) {
+    let flags = flagService.getAllFlags();
+    this.flagNames = Object.keys(flags);
+  }
 
   ionViewWillEnter() {
     ga('set', 'page', '/settings-tab.page.html');

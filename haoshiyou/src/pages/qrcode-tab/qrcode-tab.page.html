@@ -5,17 +5,17 @@
         </ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content class="grey-background">
     <ion-list *ngIf="!shouldShow"  padding center style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-        <button center style="text-align: center;" id="show_qrcode_btn" ion-button (click)="shouldShow = true">
+        <button center style="text-align: center;" id="show_qrcode_btn" ion-button (click)="showQrCode()">
             <ion-icon name="qr-scanner"></ion-icon> <span>点此加小助手自动拉入微信群</span>
         </button>
     </ion-list>
     <ion-list *ngIf="shouldShow">
         <ion-item style="text-align: center; width:100%">
-            <img src="https://dl.dropboxusercontent.com/u/4198082/Haoshiyou/intro.jpg"
+            <img src="../../assets/res/haoshiyou-bot.jpeg"
                  style="max-width: 350px"
-                 alt="好室友微信群介绍">
+                 alt="好室友™微信群介绍">
         </ion-item>
     </ion-list>
 
