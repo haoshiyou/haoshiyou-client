@@ -39,7 +39,10 @@
                 必填
             </p>
         </ion-item>
-
+        <ion-item *ngIf="isDebug()">
+            <ion-label fixed>测试</ion-label>
+            <ion-checkbox fixed color="dark" checked="true" [(ngModel)]="inTestGroup"></ion-checkbox>
+        </ion-item>
         <ion-item>
             <ion-label fixed>图片</ion-label>
             <ion-input fixed disabled></ion-input>
