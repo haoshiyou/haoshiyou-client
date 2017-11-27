@@ -2,13 +2,14 @@ import {Platform, NavParams, NavController, AlertController} from "ionic-angular
 import {OnInit, Component} from "@angular/core";
 import {uuid} from "../../util/uuid";
 import {NotificationService} from "../../services/notfication.service";
-import {ILocality, MapService} from "../../services/map.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import {boundaryList} from "./boundaries";
 import {AuthService} from "../../services/auth.service";
 import { ChangeDetectorRef } from '@angular/core';
+import {MapService} from "../../services/map.service";
+import {FlagService} from "../../services/flag.service";
 declare let google:any;
 
 const DEFAULT_LAT:number = 37.41666;
@@ -70,6 +71,7 @@ export class CreationPage implements OnInit {
   public localityText:string;
   private map:any; /*google.maps.Map*/
   private marker:any; /*google.maps.Marker*/
+  private inTestGroup:boolean;
   //noinspection JSMismatchedCollectionQueryUpdate used in HTML
   dirty:{[field:string]: boolean} = {};
   constructor(private platform:Platform, private params:NavParams,
@@ -78,6 +80,7 @@ export class CreationPage implements OnInit {
               private authService:AuthService,
               private notificationService:NotificationService,
               private mapService:MapService,
+              private flagService:FlagService,
               private api:HsyListingApi,
               private ref:ChangeDetectorRef) {
     if (params.data.listing) {
@@ -162,8 +165,6 @@ export class CreationPage implements OnInit {
         triangle.setMap(this.map);
       }
     }
-
-
   };
 
   async save() {
@@ -172,6 +173,10 @@ export class CreationPage implements OnInit {
       let meUser = await this.authService.getUser();
       let meHsyUser = AuthService.createHsyUser(meUser);
       this.listing.ownerId = meHsyUser.id;
+      if (this.inTestGroup) {
+        this.listing.hsyGroupEnum = 'TestGroup';
+        console.log(`XXXX Override the group to be TestGroup`);
+      }
       await this.api.create<HsyListing>(this.listing).toPromise();
       await this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
       await this.nav.pop();
@@ -213,5 +218,9 @@ export class CreationPage implements OnInit {
       ]
     });
     await prompt.present();
+  }
+
+  public isDebug():boolean {
+    return this.flagService.getFlag('debug');
   }
 }
