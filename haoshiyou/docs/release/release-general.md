@@ -6,6 +6,11 @@ for instructions.
 This is the command to generate CHANGELOG in our repo.
 
 ```shell
+gem install github_changelog_generator # install github_changelog_generator
+```
+
+Usage
+```shell
 github_changelog_generator -u xinbenlv -p rent.zzn.im
 ```
 

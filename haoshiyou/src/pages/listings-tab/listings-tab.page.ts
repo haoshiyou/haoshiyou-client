@@ -6,6 +6,7 @@ import "rxjs/Rx";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import UrlUtil from "../../util/url_util";
+import {FlagService} from "../../services/flag.service";
 declare let ga:any;
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
@@ -24,7 +25,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public segmentModel: string = 'ROOMMATE_WANTED'; // by default for rent
-  public areaModel: string = 'All'; // by default for 南湾西
+  public areaModel: string = 'All'; // by default for All
   public mapToggleOn: boolean = false;
   public useGrid:boolean = !(navigator.platform == 'iPhone');
   public loadedListings: HsyListing[] = [];
@@ -38,7 +39,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
               private nav: NavController,
               private alertCtrl: AlertController,
               private auth: AuthService,
-              private api: HsyListingApi) {
+              private api: HsyListingApi,
+              private flagService: FlagService) {
   }
   async ngOnInit() {
     let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
@@ -167,5 +169,47 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   async doInfinite(infiniteScroll) {
     await this.loadMoreListings();
     infiniteScroll.complete();
+  }
+
+  public isDebug():boolean {
+    return this.flagService.getFlag('debug');
+  }
+  public options = [
+        'All',
+        'SanFrancisco',
+        'MidPeninsula',
+        'SouthBayWest',
+        'SouthBayEast',
+        'EastBay',
+        'ShortTerm',
+        'Seattle',
+        'TestGroup',
+      ];
+  public optionsMap =
+      {
+        'All': '全部',
+        'SanFrancisco': '三番',
+        'MidPeninsula': '中半岛',
+        'SouthBayWest': '南湾西',
+        'SouthBayEast': '南湾东',
+        'EastBay': '东湾',
+        'ShortTerm': '短租',
+        'Seattle': '西雅图',
+        'TestGroup': '测试',
+      };
+
+  // Hack introduced due to this issue: https://github.com/ionic-team/ionic/issues/6923
+  public async setOption(index, event) {
+    if (this.options[index] != null) {
+      this.areaModel = this.options[index];
+      await this.onAreaModelChange(this.areaModel);
+      //note you have to use "tap" or "click" - if you bind to "ionSelected" you don't get the "target" property
+      let segments = event.target.parentNode.children;
+      let len = segments.length;
+      for (let i = 0; i < len; i++) {
+        segments[i].classList.remove('segment-activated');
+      }
+      event.target.classList.add('segment-activated');
+    }
   }
 }
