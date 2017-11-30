@@ -1,9 +1,11 @@
+# Change the syntax highlighting to Ruby
+
 # A fastlane file, see https://fastlane.tools/ for reference
 
 # Update fastlane automatically if a new version is available:
-# update_fastlane
+update_fastlane
 
-fastlane_version "2.28.8"
+fastlane_version "2.66.2"
 
 ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
 android_release_path = "releases/haoshiyou-android-release.apk"
@@ -24,7 +26,7 @@ end
 # ===== iOS Private Lanes =====
 desc "Do a new iOS build using ionic."
 private_lane :ionic_ios_build do
-  sh("cd .. &&  ionic cordova build ios --release")
+  sh("cd .. &&  ionic build ios --release")
 end
 
 desc "Do a new iOS deploy using sigh and gym"
@@ -38,14 +40,17 @@ end
 
 desc "Do a new iOS upload to iTunes Connect using deliver."
 private_lane :ios_upload do
-  deliver(force: true)
+  deliver(
+    copyright: "#{Time.now.year} Zainan Zhou",
+    force: true
+  )
   slack(message: "Successfully deployed to iTunes Connect at Version " +
       "#{get_version_number(xcodeproj:ios_project_path)}.")
 end
 
 desc "Do a new Android build"
 private_lane :ionic_android_build do
-  sh("cd .. && ionic cordova build android --release")
+  sh("cd .. && ionic build android --release")
 end
 
 # ===== Android Private Lanes =====
@@ -76,7 +81,7 @@ end
 
 desc "Do a new Web build using ionic."
 private_lane :ionic_web_build do
-  # sh("ionic cordova build ios --release")
+  # sh("ionic build ios --release")
 end
 
 desc "Do a new upload to haoshiyou.org Web."
@@ -88,7 +93,7 @@ lane :web_upload do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-prod")
     sh("git merge dev")
-    sh("cd .. && ionic cordova build ios --release")
+    sh("cd .. && ionic build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
@@ -103,7 +108,7 @@ lane :web_upload do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-dev")
     sh("git merge dev")
-    sh("cd .. && ionic cordova build ios --release")
+    sh("cd .. && ionic build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
@@ -171,7 +176,7 @@ lane :publish_all do |options|
 end
 
 # TODO(zzn):
-# - 1. add deployment for web
-# - 2. merge web flow into deploy_all
-# - 3. add other workflows: test, pilot, prod
-# - 4. add support "dev" scheme
+# - add other workflows: test, dev, pilot, beta, prod with schemes...
+# - support auto-submit to review and auto-release
+# - support changelog generation, release notes etc.
+# But none of these are the most important ones.
