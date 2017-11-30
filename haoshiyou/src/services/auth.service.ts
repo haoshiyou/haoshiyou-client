@@ -171,9 +171,13 @@ export class AuthService {
         if (err) {
           alert(err); // TODO(xinbenlv): handle error
         } else {
+
           this.user = await this.findHsyUser(profile.user_id);
           if (this.user === null) {
+            console.log(`Creating a new user`);
             this.user = await this.createHsyUserInDB(profile);
+          } else {
+            console.log(`User already existed, skip creating: ${JSON.stringify(this.user)} a`);
           }
           // If authentication is successful, save the items
           // in local storage
@@ -249,18 +253,24 @@ export class AuthService {
     };
   }
 
-  public findHsyUser(user_id:string):Promise<HsyUser> {
+  public async findHsyUser(user_id:string):Promise<HsyUser> {
     console.log(" --- user_id in findHsyUser: " + user_id);
-    return this.api.findById<HsyUser>(user_id).toPromise();
+    return await this.api.findById<HsyUser>(user_id).toPromise()
+        .catch(e => {
+          console.info(e);
+          return null;
+        });
   }
 
-  public createHsyUserInDB(profile:Object):Promise<HsyUser> {
+  public async createHsyUserInDB(profile:Object):Promise<HsyUser> {
     console.log(" --- create new HsyUser --- ");
     let _user = <HsyUser>{};
     _user.id = profile['user_id'];
     _user.name = profile['name'];
     _user.avatarId = profile['picture'];
-    return this.api.create<HsyUser>(_user).toPromise();
+    let savedUser = await this.api.upsert<HsyUser>(_user).toPromise();
+    console.log(`XXX Saved User = ${JSON.stringify(savedUser)}`);
+    return savedUser;
   }
 
   public scheduleRefresh() {
