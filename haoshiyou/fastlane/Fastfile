@@ -3,34 +3,46 @@
 # A fastlane file, see https://fastlane.tools/ for reference
 
 # Update fastlane automatically if a new version is available:
-update_fastlane
+# update_fastlane
 
 fastlane_version "2.66.2"
 
 ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
 android_release_path = "releases/haoshiyou-android-release.apk"
-
+done_incremented = false
+prepared_env = false
 before_all do
   ENV["SLACK_URL"] =
       "https://hooks.slack.com/services/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"
 end
 
-private_lane :prepare do
-  if ENV["IONIC_ENV"] == "prod"
-    sh("echo 'Incrementing Version for PROD release.'")
-    sh("node scripts/increment_build_number.js")
+lane :increment_version do
+  if done_incremented == true
+    return
+  end
+  # if ENV["IONIC_ENV"] == "prod"
+  sh("echo 'Incrementing Version for PROD release.'")
+  sh("node scripts/increment_build_number.js")
+  # end
+  done_incremented = true
+end
+
+lane :prepare_env do
+  if prepared_env == true
+    return
   end
   sh("cd .. && ./travis/setup-env.sh")
+  prepared_env = true
 end
 
 # ===== iOS Private Lanes =====
 desc "Do a new iOS build using ionic."
-private_lane :ionic_ios_build do
+private_lane :build_ios do
   sh("cd .. &&  ionic build ios --release")
 end
 
 desc "Do a new iOS deploy using sigh and gym"
-private_lane :ios_deploy do
+private_lane :deploy_ios do
   cert
   sigh
   gym(
@@ -39,7 +51,7 @@ private_lane :ios_deploy do
 end
 
 desc "Do a new iOS upload to iTunes Connect using deliver."
-private_lane :ios_upload do
+private_lane :upload_ios do
   deliver(
     copyright: "#{Time.now.year} Zainan Zhou",
     force: true
@@ -49,13 +61,13 @@ private_lane :ios_upload do
 end
 
 desc "Do a new Android build"
-private_lane :ionic_android_build do
+private_lane :build_android do
   sh("cd .. && ionic build android --release")
 end
 
 # ===== Android Private Lanes =====
 desc "Do a new Android deploy using jarsigner and zipaliagn."
-private_lane :android_deploy do |options|
+private_lane :deploy_android do |options|
   # require storepass to be specified
   sh("cd .. && jarsigner -verbose " +
          "-storepass #{options[:storepass]} " +
@@ -69,7 +81,7 @@ private_lane :android_deploy do |options|
 end
 
 desc "Do a new Android upload to Google Play Console using supply."
-private_lane :android_upload do
+private_lane :upload_android do
   supply(
       track: "alpha",
       apk: android_release_path,
@@ -80,12 +92,12 @@ private_lane :android_upload do
 end
 
 desc "Do a new Web build using ionic."
-private_lane :ionic_web_build do
+private_lane :build_web do
   # sh("ionic build ios --release")
 end
 
 desc "Do a new upload to haoshiyou.org Web."
-lane :web_upload do
+lane :upload_web do
   # First time should do this
 
   if ENV["IONIC_ENV"] == "prod"
@@ -119,60 +131,43 @@ lane :web_upload do
 end
 
 desc "Deploy a new version to the App Store/"
-private_lane :ios_publish do
-  ionic_ios_build
-  ios_deploy
-  ios_upload
+lane :publish_ios do
+  increment_version
+  prepare_env
+  build_ios
+  deploy_ios
+  upload_ios
 end
 
 desc "Deploy a new version to the Google Play Store."
-private_lane :android_publish do |options|
+lane :publish_android do |options|
   if options[:storepass].nil? || options[:storepass].empty?
     sh("echo 'please specify storepass:<android keystore password>'")
     exit
   else
-    ionic_android_build
-    android_deploy(options)
-    android_upload
+    increment_version
+    prepare_env
+    build_android
+    deploy_android(options)
+    upload_android
   end
 end
-
-platform :ios do
-  desc "Deploy a new version to the App Store/"
-  lane :publish do
-    prepare
-    ios_publish
-  end
-end
-
-platform :android do
-  prepare
-  desc "Deploy a new version to the Google Play Store."
-  lane :deploy do |options|
-    prepare
-    android_publish(options)
-  end
-end
-
-desc "Deploy a new version to the web"
-lane :web_deploy do
-  prepare
-  web_publish
-end
-
 
 desc "Publish a new version to the web"
-lane :web_publish do
-  ionic_web_build
-  web_upload
+lane :publish_web do
+  increment_version
+  prepare_env
+  build_web
+  upload_web
 end
 
 desc "Deploy to all platforms."
 lane :publish_all do |options|
-  prepare
-  android_publish(options)
-  ios_publish
-  web_publish
+  increment_version
+  prepare_env
+  publish_android(options)
+  publish_ios
+  publish_web
 end
 
 # TODO(zzn):
