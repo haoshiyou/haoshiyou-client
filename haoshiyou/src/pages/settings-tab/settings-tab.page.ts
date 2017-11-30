@@ -48,7 +48,7 @@ export class SettingsTabPage implements OnInit {
     }
   }
   public isDebug() {
-    return this.debugCounter > 8;
+    return this.debugCounter > 8 || this.flagService.getFlag(`debug`);
   }
 
   public async startSync() {

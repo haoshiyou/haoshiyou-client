@@ -7,6 +7,8 @@ import {Network} from "@ionic-native/network";
 import {DisconnectModal} from "./disconnect.modal";
 import {Subscription} from "rxjs";
 import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
+import {MineTabPage} from "../mine-tab/mine-tab.page";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   templateUrl: 'tabs.html',
@@ -25,13 +27,16 @@ export class TabsPage implements OnInit, OnDestroy {
   tab3Root:any = SettingsTabPage;
   //noinspection JSUnusedGlobalSymbols
   tab4Root:any = QrCodeTabPage;
+  //noinspection JSUnusedGlobalSymbols
+  tab5Root:any = MineTabPage;
   unreadMessagesCount:number;
   public shouldShowQrCode:boolean = true;
   constructor(private nav:NavController,
               private modalCtrl: ModalController,
               private platform:Platform,
               private navController: NavController,
-              private network: Network) {
+              private network: Network,
+              private auth:AuthService) {
   }
 
   ngOnInit():void {

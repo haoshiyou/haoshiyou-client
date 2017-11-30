@@ -1,0 +1,26 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            我的
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="grey-background">
+    <ion-list *ngIf="!auth.authenticated()">
+        <ion-item >
+            <ion-label>请登录</ion-label>
+            <button ion-button item-right (click)="auth.login()">登录</button>
+        </ion-item>
+    </ion-list>
+    <ion-list>
+        <ion-grid *ngIf="auth.authenticated()">
+            <ion-row>
+                <ion-col col-12 col-lg-3 col-md-4 col-sm-12 col-xs-12
+                         *ngFor="let listing of listings; let i = index">
+                    <listing-item [listing]=listing></listing-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-list>
+</ion-content>

@@ -88,6 +88,8 @@ export class CreationPage implements OnInit {
     } else {
       this.listing = <HsyListing>{};
       this.listing.uid = uuid();
+    }
+    if (!this.listing.location) {
       let loc:GeoPoint = {
         lat: DEFAULT_LAT,
         lng: DEFAULT_LNG
@@ -170,14 +172,15 @@ export class CreationPage implements OnInit {
   async save() {
     if (this.validate()) {
       this.listing.lastUpdated = new Date();
-      let meUser = await this.authService.getUser();
-      let meHsyUser = AuthService.createHsyUser(meUser);
-      this.listing.ownerId = meHsyUser.id;
+      if (!this.listing.ownerId) {
+        let local = window.localStorage;
+        let meId = local['user_id']; // TODO(xinbenlv): use UserService
+        this.listing.ownerId = meId;
+      }
       if (this.inTestGroup) {
         this.listing.hsyGroupEnum = 'TestGroup';
-        console.log(`XXXX Override the group to be TestGroup`);
       }
-      await this.api.create<HsyListing>(this.listing).toPromise();
+      await this.api.upsert<HsyListing>(this.listing).toPromise();
       await this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
       await this.nav.pop();
     } else {
