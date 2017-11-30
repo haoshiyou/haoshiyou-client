@@ -17,7 +17,6 @@ end
 
 def increment_version(old_version)
   version_splitted = old_version.split(".")
-  puts(version_splitted)
   assert(version_splitted.length == 3, 'The version needs to be in NUM.NUM.NUM format')
   version_splitted[0] = version_splitted[0].to_i
   version_splitted[1] = version_splitted[1].to_i
