@@ -46,6 +46,7 @@ import {CodePush} from "@ionic-native/code-push";
 import {AppVersion} from "@ionic-native/app-version";
 import {DateFormatterPipe} from "../pipes/date-formatter.pipe";
 import {FlagService} from "../services/flag.service";
+import {MineTabPage} from "../pages/mine-tab/mine-tab.page";
 
 export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
@@ -75,6 +76,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     SettingsTabPage,
     DisconnectModal,
     QrCodeTabPage,
+    MineTabPage,
 
     // All Pipes
     EnumMsgPipe,
@@ -121,7 +123,8 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     RemoveModal,
     SettingsTabPage,
     DisconnectModal,
-    QrCodeTabPage
+    QrCodeTabPage,
+    MineTabPage
   ],
   providers: [
     {provide: IUserService, useClass: FirebaseUserService},
