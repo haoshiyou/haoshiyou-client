@@ -11,6 +11,7 @@ import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import {HsyUserApi} from "../../loopbacksdk/services/custom/HsyUser";
 import {HsyUser} from "../../loopbacksdk/models/HsyUser";
 import {ListingsTabPage} from "./listings-tab.page";
+import {AuthService} from "../../services/auth.service";
 declare let window:any;
 declare let QRCode:any;
 declare let ga:any;
@@ -63,7 +64,9 @@ export class ListingDetailPage {
               private nav:NavController,
               private params:NavParams,
               private imageService:IImageService,
-              private api:HsyListingApi,private hsyUserApi:HsyUserApi,
+              private api:HsyListingApi,
+              private hsyUserApi:HsyUserApi,
+              private auth: AuthService,
               private alertCtrl: AlertController) {}
   async backToMain() {
     ga('send', 'event', {
@@ -96,6 +99,61 @@ export class ListingDetailPage {
     this.userService.observableMeId().subscribe((meId:string)=> {
       this.meId = meId;
     });
+  }
+
+  async claimAndEdit() {
+    ga('send', 'event', {
+      eventCategory: 'go-to',
+      eventAction: 'claim-and-edit',
+    });
+    if (!this.auth.authenticated()) {
+      let alert = this.alertCtrl.create({
+        title: '请登录后认领',
+        buttons: [
+          {
+            text: '取消',
+          },
+          {
+            text: '登陆',
+            handler: () => {
+              this.auth.login();
+            }
+          }
+        ]
+      });
+      await alert.present();
+    } else {
+      // Start claiming!
+      await this.claim();
+    }
+  }
+
+  async claim():Promise<boolean> {
+    let alert = this.alertCtrl.create({
+      title: `请确认认领本帖`,
+      subTitle: `标题：${this.listing.title}`,
+      buttons: [
+        {
+          text: '取消',
+        },
+        {
+          text: '确认',
+          handler: () => {
+            let local = window.localStorage;
+            let meId = local['user_id']; // TODO(xinbenlv): use UserService
+            this.listing.ownerId = meId;
+            this.api.upsert<HsyListing>(this.listing).toPromise()
+                .then(l => {this.listing = l})
+                .catch(e => {
+                  console.warn(`Error in claiming post = 
+                  ${JSON.stringify(e, null, ' ')}`)});
+            return true;
+          }
+        }
+      ]
+    });
+    let ret = await alert.present();
+    return ret;
   }
 
   async fakeClaimAndEdit() {
@@ -175,7 +233,7 @@ export class ListingDetailPage {
   private isMine(): boolean {
     let local = window.localStorage;
     let meId = local['user_id']; // TODO(xinbenlv): use UserService
-    console.log(`this.listing.ownerId = ${this.listing.ownerId}, meId = ${meId}`);
+    console.log(`XXX this.listing.ownerId = ${this.listing.ownerId}, meId = ${meId}`);
     return meId === this.listing.ownerId ;
   }
 }
