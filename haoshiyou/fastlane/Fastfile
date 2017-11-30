@@ -4,6 +4,7 @@
 
 # Update fastlane automatically if a new version is available:
 # update_fastlane
+require_relative 'update_version'
 
 fastlane_version "2.66.2"
 
@@ -11,20 +12,21 @@ ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
 android_release_path = "releases/haoshiyou-android-release.apk"
 done_incremented = false
 prepared_env = false
+new_version = nil
 before_all do
   ENV["SLACK_URL"] =
       "https://hooks.slack.com/services/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"
 end
 
-lane :increment_version do
-  if done_incremented == true
-    return
+lane :bump_version do
+  unless done_incremented == true
+    old_version = read_current_version
+    puts "Before Version Increment: " + old_version
+    new_version = increment_version(old_version)
+    write_new_version(new_version)
+    puts "After Version Increment: " + new_version
+    done_incremented = true
   end
-  # if ENV["IONIC_ENV"] == "prod"
-  sh("echo 'Incrementing Version for PROD release.'")
-  sh("node scripts/increment_build_number.js")
-  # end
-  done_incremented = true
 end
 
 lane :prepare_env do
@@ -56,7 +58,7 @@ private_lane :upload_ios do
     copyright: "#{Time.now.year} Zainan Zhou",
     force: true
   )
-  slack(message: "Successfully deployed to iTunes Connect at Version " +
+  slack(message: "Successfully deployed to iTunes Connect at Version" +
       "#{get_version_number(xcodeproj:ios_project_path)}.")
 end
 
@@ -88,7 +90,7 @@ private_lane :upload_android do
       json_key: "fastlane/release-cred/haoshiyou-play-release-manager-credentials.json",
       package_name: "org.haoshiyou.app"
   )
-  slack(message: "Successfully deployed to Google Play.") # TODO(xinbenlv): add version
+  slack(message: "Successfully deployed to Google Play at version #{new_version}.")
 end
 
 desc "Do a new Web build using ionic."
@@ -111,7 +113,7 @@ lane :upload_web do
 
     sh("cd .. && cd .. && git push publish-prod `git subtree split --prefix haoshiyou/www/ release-web-prod`:gh-pages --force")
     sh("git checkout dev")
-    slack(message: "Successfully deployed to www.haoshiyou.org Web.") # TODO(xinbenlv): add version
+    slack(message: "Successfully deployed to www.haoshiyou.org Web at version #{new_version}.")
   else
 
     # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
@@ -132,7 +134,7 @@ end
 
 desc "Deploy a new version to the App Store/"
 lane :publish_ios do
-  increment_version
+  bump_version
   prepare_env
   build_ios
   deploy_ios
@@ -145,7 +147,7 @@ lane :publish_android do |options|
     sh("echo 'please specify storepass:<android keystore password>'")
     exit
   else
-    increment_version
+    bump_version
     prepare_env
     build_android
     deploy_android(options)
@@ -155,7 +157,7 @@ end
 
 desc "Publish a new version to the web"
 lane :publish_web do
-  increment_version
+  bump_version
   prepare_env
   build_web
   upload_web
@@ -163,7 +165,7 @@ end
 
 desc "Deploy to all platforms."
 lane :publish_all do |options|
-  increment_version
+  bump_version
   prepare_env
   publish_android(options)
   publish_ios

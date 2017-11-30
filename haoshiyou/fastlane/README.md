@@ -29,9 +29,9 @@ xcode-select --install
 </table>
 
 # Available Actions
-### increment_version
+### bump_version
 ```
-fastlane increment_version
+fastlane bump_version
 ```
 
 ### prepare_env
@@ -59,11 +59,6 @@ Deploy a new version to the Google Play Store.
 fastlane publish_web
 ```
 Publish a new version to the web
-### publish_codepush
-```
-fastlane publish_codepush
-```
-Publish a new version to the code-push
 ### publish_all
 ```
 fastlane publish_all
