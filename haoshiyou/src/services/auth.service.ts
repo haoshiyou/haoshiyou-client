@@ -180,6 +180,7 @@ export class AuthService {
           this.local.setItem('profile', JSON.stringify(profile));
           this.local.setItem('id_token', this.idToken);
           this.local.setItem('user_id', this.userId);
+          // TODO(xinbenlv): put into UserService
           this.local.setItem('refresh_token', authResult.refreshToken);
           this.zoneImpl.run(() => this.user = profile);
           // Schedule a token refresh

@@ -167,4 +167,15 @@ export class ListingDetailPage {
         });
     viewer.show();
   }
+
+  private isClaimed():boolean {
+    return !/^group-collected-/.test(this.listing.ownerId);
+  }
+
+  private isMine(): boolean {
+    let local = window.localStorage;
+    let meId = local['user_id']; // TODO(xinbenlv): use UserService
+    console.log(`this.listing.ownerId = ${this.listing.ownerId}, meId = ${meId}`);
+    return meId === this.listing.ownerId ;
+  }
 }

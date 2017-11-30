@@ -19,6 +19,30 @@
             </h2>
         </ion-card-header>
         <ion-list>
+            <ion-item *ngIf="isClaimed() && isMine()">
+                <ion-label col-3 item-left>
+                    <ion-icon color="secondary" name="checkmark-circle"></ion-icon>
+                </ion-label>
+                <div item-right text-wrap>
+                    <p>我已认领</p>
+                </div>
+            </ion-item>
+            <ion-item *ngIf="isClaimed() && !isMine()">
+                <ion-label col-3 item-left>
+                    <ion-icon color="primary" name="checkmark-circle"></ion-icon>
+                </ion-label>
+                <div item-right text-wrap>
+                    <p>房东已认领</p>
+                </div>
+            </ion-item>
+            <ion-item *ngIf="!isClaimed()">
+                <ion-label col-3 item-left>
+                    <ion-icon color="primary" name="checkmark-circle-outline"></ion-icon>
+                </ion-label>
+                <div item-right text-wrap>
+                    <p>暂无认领</p>
+                </div>
+            </ion-item>
             <ion-item>
                 <ion-label col-3 item-left>
                     <ion-icon name="clock"></ion-icon>
@@ -99,12 +123,17 @@
             </ion-grid>
         </ion-list>
         <ion-item>
-            <button ion-button outline item-left large (click)="fakeClaimAndEdit()">
-                <ion-label>
+            <button *ngIf="!isClaimed()" ion-button outline item-left large (click)="fakeClaimAndEdit()">
+                <ion-label >
                     <ion-icon name="create"></ion-icon> 认领并编辑
                 </ion-label>
             </button>
-            <button ion-button outline item-right large (click)="fakeStartChat()">
+            <button *ngIf="isClaimed() && isMine()" ion-button outline item-left large (click)="edit()">
+                <ion-label>
+                    <ion-icon name="create"></ion-icon> 编辑
+                </ion-label>
+            </button>
+            <button *ngIf="!isMine() && isClaimed()" ion-button outline item-right large (click)="fakeStartChat()">
                 <ion-label>
                     <ion-icon name="chatbubbles"></ion-icon> 私聊
                 </ion-label>

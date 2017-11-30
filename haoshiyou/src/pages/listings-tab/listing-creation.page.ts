@@ -177,7 +177,7 @@ export class CreationPage implements OnInit {
         this.listing.hsyGroupEnum = 'TestGroup';
         console.log(`XXXX Override the group to be TestGroup`);
       }
-      await this.api.create<HsyListing>(this.listing).toPromise();
+      await this.api.upsert<HsyListing>(this.listing).toPromise();
       await this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
       await this.nav.pop();
     } else {
