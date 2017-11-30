@@ -30,11 +30,10 @@ lane :bump_version do
 end
 
 lane :prepare_env do
-  if prepared_env == true
-    return
+  unless prepared_env == true
+    sh("cd .. && ./travis/setup-env.sh")
+    prepared_env = true
   end
-  sh("cd .. && ./travis/setup-env.sh")
-  prepared_env = true
 end
 
 # ===== iOS Private Lanes =====
