@@ -82,7 +82,12 @@ export class ListingDetailPage {
 
   private async initListeners() {
     let ownerHsyUser:HsyUser = await this.hsyUserApi
-        .findById<HsyUser>(this.listing.ownerId).take(1).toPromise();
+        .findById<HsyUser>(this.listing.ownerId).take(1).toPromise()
+        .catch(e => {
+          console.warn("Listing ownerId not found: " + this.listing.ownerId);
+          return this.hsyUserApi
+            .findById<HsyUser>('admin|UNKOWN').take(1).toPromise()
+        });
     this.owner = {
       id: ownerHsyUser.id,
       name: ownerHsyUser.name,
