@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {NavController, AlertController} from "ionic-angular";
 import {ListingDetailPage} from "./listing-detail.page";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
@@ -13,12 +13,15 @@ declare let ga:any;
   templateUrl: 'listing-item.comp.html',
 })
 export class ListingItem {
+  @Output() onBump = new EventEmitter<HsyListing>();
+
   @Input() listing:HsyListing;
   constructor(private nav:NavController,
               private alertCtrl: AlertController,
               private hsyInteractionApi:HsyInteractionApi,
               private hsyListingApi:HsyListingApi) {
   }
+
 
   gotoDetail() {
     ga('send', 'event', {
@@ -44,8 +47,8 @@ export class ListingItem {
       interactionTime: now
     };
     this.listing.interactions.push(hsyInteraction);
-    await Promise.all(
-        [this.hsyInteractionApi.create(hsyInteraction).toPromise(),
-    this.hsyListingApi.updateAttributes(this.listing.uid, {latestUpdatedOrBump: now}).toPromise()]);
+    this.onBump.emit(this.listing);
+    await this.hsyInteractionApi.create(hsyInteraction).toPromise();
+    await this.hsyListingApi.updateAttributes(this.listing.uid, {latestUpdatedOrBump: now}).toPromise();
   }
 }
