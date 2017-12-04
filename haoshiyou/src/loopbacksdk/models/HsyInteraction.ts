@@ -2,17 +2,19 @@
 
 declare var Object: any;
 export interface HsyInteractionInterface {
+  "uid": string;
   "listingId"?: string;
   "type"?: string;
-  "uid": string;
   "userId"?: string;
+  "interaction_time": Date;
 }
 
 export class HsyInteraction implements HsyInteractionInterface {
+  "uid": string = '';
   "listingId": string = '';
   "type": string = '';
-  "uid": string = '';
   "userId": string = '';
+  "interaction_time": Date = new Date(0);
   constructor(data?: HsyInteractionInterface) {
     Object.assign(this, data);
   }
@@ -46,6 +48,10 @@ export class HsyInteraction implements HsyInteractionInterface {
       path: 'HsyInteractions',
       idName: 'uid',
       properties: {
+        "uid": {
+          name: 'uid',
+          type: 'string'
+        },
         "listingId": {
           name: 'listingId',
           type: 'string'
@@ -54,13 +60,13 @@ export class HsyInteraction implements HsyInteractionInterface {
           name: 'type',
           type: 'string'
         },
-        "uid": {
-          name: 'uid',
-          type: 'string'
-        },
         "userId": {
           name: 'userId',
           type: 'string'
+        },
+        "interaction_time": {
+          name: 'interaction_time',
+          type: 'Date'
         },
       },
       relations: {

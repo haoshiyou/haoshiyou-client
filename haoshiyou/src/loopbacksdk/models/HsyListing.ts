@@ -1,5 +1,6 @@
 /* tslint:disable */
 import {
+  HsyInteraction,
   GeoPoint
 } from '../index';
 
@@ -8,7 +9,7 @@ export interface HsyListingInterface {
   "addressCityAndState"?: string;
   "addressLine"?: string;
   "amenities"?: any;
-  "content"?: any;
+  "content"?: string;
   "hsyGroupEnum"?: string;
   "hsyGroupNick"?: string;
   "imageIds"?: Array<any>;
@@ -19,6 +20,7 @@ export interface HsyListingInterface {
   "numBathRoom"?: number;
   "numBedRoom"?: number;
   "otherCosts"?: any;
+  "ownerId": string;
   "price"?: number;
   "rentalEndDate"?: Date;
   "rentalStartDate"?: Date;
@@ -29,14 +31,14 @@ export interface HsyListingInterface {
   "type"?: number;
   "uid": string;
   "wechatId"?: string;
-  "ownerId": string;
+  interactions?: HsyInteraction[];
 }
 
 export class HsyListing implements HsyListingInterface {
   "addressCityAndState": string = '';
   "addressLine": string = '';
   "amenities": any = <any>null;
-  "content": any = <any>null;
+  "content": string = '';
   "hsyGroupEnum": string = '';
   "hsyGroupNick": string = '';
   "imageIds": Array<any> = <any>[];
@@ -47,6 +49,7 @@ export class HsyListing implements HsyListingInterface {
   "numBathRoom": number = 0;
   "numBedRoom": number = 0;
   "otherCosts": any = <any>null;
+  "ownerId": string = '';
   "price": number = 0;
   "rentalEndDate": Date = new Date(0);
   "rentalStartDate": Date = new Date(0);
@@ -57,7 +60,7 @@ export class HsyListing implements HsyListingInterface {
   "type": number = 0;
   "uid": string = '';
   "wechatId": string = '';
-  "ownerId": string = '';
+  interactions: HsyInteraction[] = null;
   constructor(data?: HsyListingInterface) {
     Object.assign(this, data);
   }
@@ -105,7 +108,7 @@ export class HsyListing implements HsyListingInterface {
         },
         "content": {
           name: 'content',
-          type: 'any'
+          type: 'string'
         },
         "hsyGroupEnum": {
           name: 'hsyGroupEnum',
@@ -147,6 +150,10 @@ export class HsyListing implements HsyListingInterface {
           name: 'otherCosts',
           type: 'any'
         },
+        "ownerId": {
+          name: 'ownerId',
+          type: 'string'
+        },
         "price": {
           name: 'price',
           type: 'number'
@@ -187,12 +194,16 @@ export class HsyListing implements HsyListingInterface {
           name: 'wechatId',
           type: 'string'
         },
-        "ownerId": {
-          name: 'ownerId',
-          type: 'string'
-        },
       },
       relations: {
+        interactions: {
+          name: 'interactions',
+          type: 'HsyInteraction[]',
+          model: 'HsyInteraction',
+          relationType: 'hasMany',
+                  keyFrom: 'uid',
+          keyTo: 'listingId'
+        },
       }
     }
   }

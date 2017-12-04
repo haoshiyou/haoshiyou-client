@@ -2,6 +2,9 @@ import {Component, Input} from "@angular/core";
 import {NavController, AlertController} from "ionic-angular";
 import {ListingDetailPage} from "./listing-detail.page";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
+import {HsyInteractionApi} from "../../loopbacksdk/services/custom/HsyInteraction";
+import {HsyInteraction} from "../../loopbacksdk/models/HsyInteraction";
+import {uuid} from "../../util/uuid";
 declare let ga:any;
 
 @Component({
@@ -10,9 +13,9 @@ declare let ga:any;
 })
 export class ListingItem {
   @Input() listing:HsyListing;
-
   constructor(private nav:NavController,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private hsyInteractionApi:HsyInteractionApi) {
   }
 
   gotoDetail() {
@@ -28,14 +31,15 @@ export class ListingItem {
       eventCategory: 'interaction',
       eventAction: 'bump',
     });
-    let alert = this.alertCtrl.create({
-      title: '顶起功能还在建设',
-      buttons: [
-        {
-          text: 'OK',
-        },
-      ]
-    });
-    await alert.present();
+    let local = window.localStorage;
+    let meId = local['user_id']; // TODO(xinbenlv): use UserService
+
+    let hsyInteraction = <HsyInteraction>{
+      uid: uuid(),
+      userId: meId,
+      type: "BUMP",
+      listingId: this.listing.uid
+    };
+    await this.hsyInteractionApi.create(hsyInteraction).toPromise();
   }
 }
