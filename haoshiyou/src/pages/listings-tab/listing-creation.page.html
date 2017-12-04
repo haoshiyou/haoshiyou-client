@@ -25,7 +25,7 @@
             </p>
         </ion-item>
         <ion-item>
-            <ion-label fixed>标题</ion-label>
+            <ion-label>标题</ion-label>
             <ion-input required [(ngModel)]="listing.title" (change)="dirty['content']=true"></ion-input>
             <p style="color: red;" item-right *ngIf="dirty['title'] && !listing.title">
                 必填
