@@ -89,7 +89,9 @@
             <ion-item>
                 <div text-wrap>
                     <p>
-                        {{ listing.content }}
+                    <ng-container *ngFor="let textPiece of listing.content.split('\n')">
+                        {{ textPiece }} <br/>
+                    </ng-container>
                     </p>
                 </div>
             </ion-item>
