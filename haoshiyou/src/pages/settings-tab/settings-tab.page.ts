@@ -13,6 +13,7 @@ declare let ga:any;
 export class SettingsTabPage implements OnInit {
 
   public versionEnv:string = Env.version;
+  public serverUrl:string = Env.configHaoshiyouServer.serverUrl;
   public versionDownloaded:string = null;
   public versionPending:string = null;
   public versionRemote:string = null;
