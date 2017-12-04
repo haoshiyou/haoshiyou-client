@@ -34,7 +34,7 @@ export class HaoshiyouApp {
               private http:Http,
               private hsyListingApi:HsyListingApi,
               private codePush: CodePush) {
-    LoopBackConfig.setBaseURL('http://haoshiyou-server-dev.herokuapp.com');
+    LoopBackConfig.setBaseURL(Env.configHaoshiyouServer.serverUrl);
     LoopBackConfig.setApiVersion('api');
     this.platform.ready().then(()=> {
       if (this.platform.is(`cordova`)){
