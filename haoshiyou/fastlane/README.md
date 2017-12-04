@@ -12,9 +12,9 @@ xcode-select --install
 
 <table width="100%" >
 <tr>
-<th width="33%"><a href="http://brew.sh">Homebrew</a></td>
-<th width="33%">Installer Script</td>
-<th width="33%">Rubygems</td>
+<th width="33%"><a href="http://brew.sh">Homebrew</a></th>
+<th width="33%">Installer Script</th>
+<th width="33%">RubyGems</th>
 </tr>
 <tr>
 <td width="33%" align="center">macOS</td>
@@ -29,19 +29,34 @@ xcode-select --install
 </table>
 
 # Available Actions
-### web_upload
+### bump_version
 ```
-fastlane web_upload
+fastlane bump_version
+```
+
+### prepare_env
+```
+fastlane prepare_env
+```
+
+### upload_web
+```
+fastlane upload_web
 ```
 Do a new upload to haoshiyou.org Web.
-### web_deploy
+### publish_ios
 ```
-fastlane web_deploy
+fastlane publish_ios
 ```
-Deploy a new version to the web
-### web_publish
+Deploy a new version to the App Store/
+### publish_android
 ```
-fastlane web_publish
+fastlane publish_android
+```
+Deploy a new version to the Google Play Store.
+### publish_web
+```
+fastlane publish_web
 ```
 Publish a new version to the web
 ### publish_all
@@ -49,24 +64,6 @@ Publish a new version to the web
 fastlane publish_all
 ```
 Deploy to all platforms.
-
-----
-
-## iOS
-### ios publish
-```
-fastlane ios publish
-```
-Deploy a new version to the App Store/
-
-----
-
-## Android
-### android deploy
-```
-fastlane android deploy
-```
-Deploy a new version to the Google Play Store.
 
 ----
 

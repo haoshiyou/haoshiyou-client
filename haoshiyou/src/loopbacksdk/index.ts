@@ -1,3 +1,4 @@
+/* tslint:disable */
 /**
 * @module SDKModule
 * @author Jonathan Casarrubias <t:@johncasarrubias> <gh:jonathan-casarrubias>
@@ -46,6 +47,7 @@ import { CookieBrowser } from './storage/cookie.browser';
 import { StorageBrowser } from './storage/storage.browser';
 import { HsyListingApi } from './services/custom/HsyListing';
 import { HsyUserApi } from './services/custom/HsyUser';
+import { HsyInteractionApi } from './services/custom/HsyInteraction';
 /**
 * @module SDKBrowserModule
 * @description
@@ -77,6 +79,7 @@ export class SDKBrowserModule {
         SDKModels,
         HsyListingApi,
         HsyUserApi,
+        HsyInteractionApi,
         internalStorageProvider,
         { provide: SDKStorage, useClass: StorageBrowser }
       ]
@@ -93,3 +96,4 @@ export * from './lb.config';
 export * from './storage/storage.swaps';
 export { CookieBrowser } from './storage/cookie.browser';
 export { StorageBrowser } from './storage/storage.browser';
+

@@ -13,6 +13,7 @@ declare let ga:any;
 export class SettingsTabPage implements OnInit {
 
   public versionEnv:string = Env.version;
+  public serverUrl:string = Env.configHaoshiyouServer.serverUrl;
   public versionDownloaded:string = null;
   public versionPending:string = null;
   public versionRemote:string = null;
@@ -48,7 +49,7 @@ export class SettingsTabPage implements OnInit {
     }
   }
   public isDebug() {
-    return this.debugCounter > 8;
+    return this.debugCounter > 8 || this.flagService.getFlag(`debug`);
   }
 
   public async startSync() {

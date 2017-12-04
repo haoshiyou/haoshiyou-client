@@ -3,6 +3,8 @@
 import {tokenNotExpired, JwtHelper} from "angular2-jwt";
 import {Injectable, NgZone} from "@angular/core";
 import {User} from "../models/models";
+import {HsyUser} from "../loopbacksdk/models/HsyUser";
+import {HsyUserApi} from "../loopbacksdk/services/custom/HsyUser";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 import {Env} from "../app/env";
@@ -118,18 +120,20 @@ let zhDict = {
 @Injectable()
 export class AuthService {
 
-  public user:Object;
+  public user:HsyUser;
   private auth0/*:Auth0*/;
   private lock/*:Auth0Lock*/;
   private zoneImpl:NgZone;
-  private userSubject:Subject<User>;
+  private userSubject:Subject<HsyUser>;
+  private userId:string;
   private idToken:string;
   private local = window.localStorage;
   //noinspection JSUnusedLocalSymbols
   private jwtHelper: JwtHelper = new JwtHelper(); // do nothing
   private refreshSubscription: any;
 
-  constructor(zone:NgZone,
+  constructor(zone: NgZone,
+              private api: HsyUserApi,
               private toastCtrl: ToastController) {
     this.auth0 = new Auth0({
       clientID: Env.configAuth0.clientId,
@@ -157,18 +161,30 @@ export class AuthService {
       this.showLoginErrorToast(err);
     });
     this.lock.on('authenticated', authResult => {
-      this.local.setItem('id_token', authResult.idToken);
       this.idToken = authResult.idToken;
+      this.userId = authResult.idTokenPayload.sub;
+      this.local.setItem('id_token', this.idToken);
+      this.local.setItem('user_id', this.userId);
 
       // Fetch profile information
-      this.lock.getProfile(authResult.idToken, (err, profile) => {
+      this.lock.getProfile(authResult.idToken, async (err, profile) => {
         if (err) {
           alert(err); // TODO(xinbenlv): handle error
         } else {
+
+          this.user = await this.findHsyUser(profile.user_id);
+          if (this.user === null) {
+            console.log(`Creating a new user`);
+            this.user = await this.createHsyUserInDB(profile);
+          } else {
+            console.log(`User already existed, skip creating: ${JSON.stringify(this.user)} a`);
+          }
           // If authentication is successful, save the items
           // in local storage
           this.local.setItem('profile', JSON.stringify(profile));
           this.local.setItem('id_token', this.idToken);
+          this.local.setItem('user_id', this.userId);
+          // TODO(xinbenlv): put into UserService
           this.local.setItem('refresh_token', authResult.refreshToken);
           this.zoneImpl.run(() => this.user = profile);
           // Schedule a token refresh
@@ -181,7 +197,7 @@ export class AuthService {
       this.showLoginSuccessToast();
     });
     this.zoneImpl = zone;
-    this.userSubject = new Subject<User>();
+    this.userSubject = new Subject<HsyUser>();
     // If there is a profile saved in local storage
     let profile = this.local.getItem('profile');
     if (profile != null && profile.length > 0) {
@@ -190,11 +206,12 @@ export class AuthService {
     }
 
     this.idToken = this.local.getItem('id_token');
+    this.userId  = this.local.getItem('user_id');
   }
 
   public authenticated() {
     // Check if there's an unexpired JWT
-    return tokenNotExpired('id_token', this.idToken);
+    return tokenNotExpired('id_token', this.idToken) && (this.local.getItem('user_id') != null);
   }
 
   public getUser() {
@@ -209,8 +226,10 @@ export class AuthService {
   public logout() {
     this.local.removeItem('profile');
     this.local.removeItem('id_token');
+    this.local.removeItem('user_id');
     this.local.removeItem('refresh_token');
     this.idToken = null;
+    this.userId = null;
     this.zoneImpl.run(() => this.user = null);
     this.userSubject.next(null); // logout
     // Unschedule the token refresh
@@ -219,18 +238,42 @@ export class AuthService {
 
   /**
    * Expose as an observable.
-   * @returns {Subject<User>}
+   * @returns {Subject<HsyUser>}
    */
-  public userObservable():Observable<User> {
+  public userObservable():Observable<HsyUser> {
     return this.userSubject;
   }
 
-  public static createHsyUser(user:Object):User {
-    return <User> {
-      id: btoa(user['email'])/* using BASE64 email as unique userId*/,
-      name: user['name'],
-      avatarSrc: user['picture']
+  public static createHsyUser(user:Object):HsyUser {
+    return <HsyUser> {
+      id: user['user_id']/* using BASE64 email as unique userId*/,
+      avatarId: user['picture'],
+      name: user['name']
+      /*avatarSrc: user['picture']*/
     };
+  }
+
+  public async findHsyUser(user_id:string):Promise<HsyUser> {
+    console.log(" --- user_id in findHsyUser: " + user_id);
+    return await this.api.findById<HsyUser>(user_id).toPromise()
+        .catch(e => {
+          console.info(e);
+          return null;
+        });
+  }
+
+  public async createHsyUserInDB(profile:Object):Promise<HsyUser> {
+    console.log(" --- create new HsyUser --- ");
+    let _user = <HsyUser>{};
+    let _currentTime = new Date();
+    _user.id = profile['user_id'];
+    _user.name = profile['name'];
+    _user.avatarId = profile['picture'];
+    _user.created = _currentTime;
+    _user.lastUpdated = _currentTime;
+    let savedUser = await this.api.upsert<HsyUser>(_user).toPromise();
+    console.log(`XXX Saved User = ${JSON.stringify(savedUser)}`);
+    return savedUser;
   }
 
   public scheduleRefresh() {

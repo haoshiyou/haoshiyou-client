@@ -7,6 +7,7 @@ import {IMessageService} from "../services/chats/message.service";
 import {IThreadService} from "../services/chats/thread.service";
 import {IUserService} from "../services/chats/user.service";
 import {User} from "../models/models";
+import {HsyUser} from "../loopbacksdk/models/HsyUser";
 import {NotificationService} from "../services/notfication.service";
 import 'rxjs/Rx'; // used by Observable.take()
 import {Env} from "./env";
@@ -33,7 +34,7 @@ export class HaoshiyouApp {
               private http:Http,
               private hsyListingApi:HsyListingApi,
               private codePush: CodePush) {
-    LoopBackConfig.setBaseURL('http://haoshiyou-server-dev.herokuapp.com');
+    LoopBackConfig.setBaseURL(Env.configHaoshiyouServer.serverUrl);
     LoopBackConfig.setApiVersion('api');
     this.platform.ready().then(()=> {
       if (this.platform.is(`cordova`)){
@@ -65,7 +66,8 @@ export class HaoshiyouApp {
         userService.setMeId(AuthService.createHsyUser(authService.getUser()).id);
       }
       // Setup UserService
-      authService.userObservable().subscribe((authUser:User) => {
+      /*
+      authService.userObservable().subscribe((authUser:HsyUser) => {
         // TODO(xinbenlv): on condition create user.
         if (!authUser) {
           userService.setMeId(null);
@@ -82,8 +84,9 @@ export class HaoshiyouApp {
           });
         }
       });
+      */
       // Setup notification
-      authService.userObservable().subscribe((user:User)=> {
+      authService.userObservable().subscribe((user:HsyUser)=> {
         if (user == null) {
           this.notificationService.unregister();
         } else {
