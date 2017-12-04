@@ -6,7 +6,7 @@ export interface HsyInteractionInterface {
   "listingId"?: string;
   "type"?: string;
   "userId"?: string;
-  "interaction_time": Date;
+  "interactionTime": Date;
 }
 
 export class HsyInteraction implements HsyInteractionInterface {
@@ -14,7 +14,7 @@ export class HsyInteraction implements HsyInteractionInterface {
   "listingId": string = '';
   "type": string = '';
   "userId": string = '';
-  "interaction_time": Date = new Date(0);
+  "interactionTime": Date = new Date(0);
   constructor(data?: HsyInteractionInterface) {
     Object.assign(this, data);
   }
@@ -64,8 +64,8 @@ export class HsyInteraction implements HsyInteractionInterface {
           name: 'userId',
           type: 'string'
         },
-        "interaction_time": {
-          name: 'interaction_time',
+        "interactionTime": {
+          name: 'interactionTime',
           type: 'Date'
         },
       },

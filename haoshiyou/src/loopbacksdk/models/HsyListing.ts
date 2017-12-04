@@ -31,6 +31,7 @@ export interface HsyListingInterface {
   "type"?: number;
   "uid": string;
   "wechatId"?: string;
+  "latestUpdatedOrBump"?: Date;
   interactions?: HsyInteraction[];
 }
 
@@ -60,6 +61,7 @@ export class HsyListing implements HsyListingInterface {
   "type": number = 0;
   "uid": string = '';
   "wechatId": string = '';
+  "latestUpdatedOrBump": Date = new Date(0);
   interactions: HsyInteraction[] = null;
   constructor(data?: HsyListingInterface) {
     Object.assign(this, data);
@@ -193,6 +195,10 @@ export class HsyListing implements HsyListingInterface {
         "wechatId": {
           name: 'wechatId',
           type: 'string'
+        },
+        "latestUpdatedOrBump": {
+          name: 'latestUpdatedOrBump',
+          type: 'Date'
         },
       },
       relations: {

@@ -171,7 +171,8 @@ export class CreationPage implements OnInit {
 
   async save() {
     if (this.validate()) {
-      this.listing.lastUpdated = new Date();
+      this.listing.lastUpdated = new Date()
+      this.listing.latestUpdatedOrBump = this.listing.lastUpdated;
       if (!this.listing.ownerId) {
         let local = window.localStorage;
         let meId = local['user_id']; // TODO(xinbenlv): use UserService

@@ -5,6 +5,7 @@ import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyInteractionApi} from "../../loopbacksdk/services/custom/HsyInteraction";
 import {HsyInteraction} from "../../loopbacksdk/models/HsyInteraction";
 import {uuid} from "../../util/uuid";
+import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 declare let ga:any;
 
 @Component({
@@ -15,7 +16,8 @@ export class ListingItem {
   @Input() listing:HsyListing;
   constructor(private nav:NavController,
               private alertCtrl: AlertController,
-              private hsyInteractionApi:HsyInteractionApi) {
+              private hsyInteractionApi:HsyInteractionApi,
+              private hsyListingApi:HsyListingApi) {
   }
 
   gotoDetail() {
@@ -33,13 +35,17 @@ export class ListingItem {
     });
     let local = window.localStorage;
     let meId = local['user_id']; // TODO(xinbenlv): use UserService
-
+    let now = new Date();
     let hsyInteraction = <HsyInteraction>{
       uid: uuid(),
       userId: meId,
       type: "BUMP",
-      listingId: this.listing.uid
+      listingId: this.listing.uid,
+      interactionTime: now
     };
-    await this.hsyInteractionApi.create(hsyInteraction).toPromise();
+    this.listing.interactions.push(hsyInteraction);
+    await Promise.all(
+        [this.hsyInteractionApi.create(hsyInteraction).toPromise(),
+    this.hsyListingApi.updateAttributes(this.listing.uid, {latestUpdatedOrBump: now}).toPromise()]);
   }
 }

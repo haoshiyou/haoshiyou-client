@@ -102,9 +102,10 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         .find<HsyListing>({
           // TODO(zzn): use ListTypeEnum when migrated
           where: whereClause,
-          order: 'lastUpdated DESC',
+          order: 'latestUpdatedOrBump DESC',
           limit: 12,
           offset: this.loadedListings.length,
+          include: 'interactions',
         })
         .take(1)
         .toPromise();
