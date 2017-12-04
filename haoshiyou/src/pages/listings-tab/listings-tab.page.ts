@@ -1,5 +1,5 @@
-import {Platform, NavController, AlertController} from "ionic-angular";
-import {OnInit, OnDestroy, Component} from "@angular/core";
+import {Platform, NavController, AlertController, Content} from "ionic-angular";
+import {OnInit, OnDestroy, Component, ViewChild} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {AuthService} from "../../services/auth.service";
 import "rxjs/Rx";
@@ -23,7 +23,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       marker.setMap(null);
     }
   }
-
+  @ViewChild(Content) content: Content;
   public segmentModel: string = 'ROOMMATE_WANTED'; // by default for rent
   public areaModel: string = 'All'; // by default for All
   public mapToggleOn: boolean = false;
@@ -211,6 +211,18 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         segments[i].classList.remove('segment-activated');
       }
       event.target.classList.add('segment-activated');
+    }
+  }
+
+  public async bumpUpdateOrder(hsyListing:HsyListing) {
+    for (let i = 0; i < this.loadedListings.length; i++) {
+      let bumpedListing = hsyListing;
+      if (this.loadedListings[i] == bumpedListing) {
+        await this.content.scrollToTop();
+        this.loadedListings.splice(i, 1);
+        this.loadedListings.unshift(bumpedListing);
+        break;
+      }
     }
   }
 }
