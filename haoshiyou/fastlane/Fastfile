@@ -112,9 +112,8 @@ lane :upload_web do
 
     sh("cd .. && cd .. && git push publish-prod `git subtree split --prefix haoshiyou/www/ release-web-prod`:gh-pages --force")
     sh("git checkout dev")
-    slack(message: "Successfully deployed to www.haoshiyou.org Web at version #{new_version}.")
+    slack(message: "Successfully deployed to www.haoshiyou.org Web at Version #{new_version}.")
   else
-
     # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
     # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
     sh("echo 'Assumming you are checking out from dev branch'")
@@ -127,7 +126,7 @@ lane :upload_web do
 
     sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
     sh("git checkout dev")
-    slack(message: "Successfully deployed to dev.haoshiyou.org Web.") # TODO(xinbenlv): add version
+    slack(message: "Successfully deployed to dev.haoshiyou.org Web at Version #{new_version}.")
   end
 end
 
