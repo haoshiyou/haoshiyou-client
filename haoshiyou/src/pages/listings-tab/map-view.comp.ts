@@ -1,4 +1,4 @@
-import {Component, OnChanges, Input, SimpleChange} from "@angular/core";
+import {Component, OnChanges, Input, SimpleChange, OnInit} from "@angular/core";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 
 declare let google, document;
@@ -17,20 +17,30 @@ export class MapViewComponent implements OnChanges {
   }
 
   private render() {
-    let minZoomLevel = 9;
+    let minZoomLevel = 11;
+    let latAve:number = 	37.386051, lngAve:number = -122.083855;
     this.map = new google.maps.Map(document.getElementById('map_view_canvas'), {
       zoom: minZoomLevel,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
-    let latAve:number = 0, lngAve:number = 0, n = this.listings.length;
-    this.listings.map((listing:HsyListing) => {
-      latAve += listing.location.lat/n;
-      lngAve += listing.location.lng/n;
-      let marker = new google.maps.Marker({
-        position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
+
+    if (this.listings) {
+
+      let listingsHasLocation = this.listings.filter(l => l.location);
+      let n = listingsHasLocation.length;
+      listingsHasLocation.map((listing:HsyListing) => {
+        if (listing.location) {
+          latAve += listing.location.lat/n;
+          lngAve += listing.location.lng/n;
+          let marker = new google.maps.Marker({
+            position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
+          });
+          marker.setMap(this.map);
+        }
+
       });
-      marker.setMap(this.map);
-    });
-    this.map.setCenter(new google.maps.LatLng(latAve, lngAve));
+      this.map.setCenter(new google.maps.LatLng(latAve, lngAve));
+    }
+
   }
 }

@@ -14,6 +14,7 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+
 body {
   user-select: text; // TODO(xinbenlv): AB-testing whether we wanna enable user-select
   -webkit-user-select: text;
@@ -28,4 +29,48 @@ body {
 
 .grey-background {
   background: #EEE;
+}
+
+@font-face {
+  font-family: "Hosted Noto Sans Regular";
+  src: url("../assets/res/fonts/NotoSans-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Hosted Noto Sans Black";
+  src: url("../assets/res/fonts/NotoSans-Black.ttf");
+}
+
+@font-face {
+  font-family: "Hosted Source Han Sans Normal";
+  src: url("../assets/res/fonts/SourceHanSans-Normal.ttc");
+}
+
+@font-face {
+  font-family: "Hosted Source Han Sans Regular";
+  src: url("../assets/res/fonts/SourceHanSans-Regular.ttc");
+}
+
+@font-face {
+  font-family: "Hosted Source Han Sans SC Regular";
+  src: url("../assets/res/fonts/SourceHanSansSC-Regular.otf");
+}
+
+.item {
+  min-height: 3rem; /* <- this can be whatever you need */
+}
+
+.hsy-listing-item-header {
+  font-family: "Hosted Noto Sans Regular";
+  font-size: 20px;
+}
+
+.hsy-listing-item-price {
+  font-family: "Hosted Noto Sans Regular";
+  font-size: 22px;
+}
+
+.hsy-listing-item-last-updated {
+  font-family: "Hosted Noto Sans Regular";
+  font-size: 14px;
 }
