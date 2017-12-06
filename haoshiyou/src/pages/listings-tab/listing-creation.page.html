@@ -9,53 +9,98 @@
     </ion-navbar>
 </ion-header>
 <ion-content class="creation" id="page-container">
-    <ion-list>
-        <ion-item>
-            <ion-label>位置</ion-label>
-            <ion-note item-right>{{localityText}}</ion-note>
-        </ion-item>
-        <div style="width:100%;height:250px" id="map_drag_canvas"></div>
-        <ion-item>
-            <ion-label>类型</ion-label>
-            <ion-select required [(ngModel)]="listing.type" (ionChange)="dirty['type']=true">
-                <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
-            </ion-select>
-            <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
-                必填
-            </p>
-        </ion-item>
-        <ion-item>
-            <ion-label>标题</ion-label>
-            <ion-input required [(ngModel)]="listing.title" (change)="dirty['content']=true"></ion-input>
-            <p style="color: red;" item-right *ngIf="dirty['title'] && !listing.title">
-                必填
-            </p>
-        </ion-item>
+        <ion-list >
+            <ion-item>
+                <ion-label>地址</ion-label>
+                <ion-input item-right required [(ngModel)]="listing.addressLine"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>城市与州</ion-label>
+                <ion-input item-right required [(ngModel)]="listing.addressCityAndState"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>价格</ion-label>
+                <ion-input item-right required [(ngModel)]="listing.price"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>类型</ion-label>
+                <ion-select required [(ngModel)]="listing.type" (ionChange)="dirty['type']=true">
+                    <ion-option *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
+                </ion-select>
+                <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
+                    必填
+                </p>
+            </ion-item>
+            <ion-item>
+                <ion-label>标题</ion-label>
+                <ion-input required [(ngModel)]="listing.title" (change)="dirty['content']=true"></ion-input>
+                <p style="color: red;" item-right *ngIf="dirty['title'] && !listing.title">
+                    必填
+                </p>
+            </ion-item>
 
-        <ion-item>
-            <ion-label>详情</ion-label>
-            <ion-textarea required [(ngModel)]="listing.content" (change)="dirty['content']=true"></ion-textarea>
-            <p style="color: red;" item-right *ngIf="dirty['content'] && !listing.content">
-                必填
-            </p>
-        </ion-item>
-        <ion-item *ngIf="isDebug()">
-            <ion-label fixed>测试</ion-label>
-            <ion-checkbox fixed color="dark" checked="true" [(ngModel)]="inTestGroup"></ion-checkbox>
-        </ion-item>
-        <ion-item>
-            <ion-label fixed>图片</ion-label>
-            <ion-input fixed disabled></ion-input>
-        </ion-item>
+            <ion-item>
+                <ion-label>详情</ion-label>
+                <ion-textarea required [(ngModel)]="listing.content" (change)="dirty['content']=true"></ion-textarea>
+                <p style="color: red;" item-right *ngIf="dirty['content'] && !listing.content">
+                    必填
+                </p>
+            </ion-item>
+            <ion-item *ngIf="isDebug()">
+                <ion-label fixed>测试</ion-label>
+                <ion-checkbox fixed color="dark" checked="true" [(ngModel)]="inTestGroup"></ion-checkbox>
+            </ion-item>
 
-        <ion-item>
-            <image-grid
-                    [imageIds]="listing.imageIds"
-                    (updateImageIds)="updateImageIds($event)"
-                    [isEdit]="true"
-            ></image-grid>
-        </ion-item>
-        <button ion-button block color="danger" (click)="deleteListing()">删除</button>
-    </ion-list>
-
+            <ion-item>
+                <ion-label fixed>图片</ion-label>
+                <ion-input fixed disabled></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label fixed>所在好室友微信群</ion-label>
+                <ion-input required [(ngModel)]="listing.hsyGroupNick" (change)="dirty['content']=true"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label fixed>群昵称</ion-label>
+                <ion-input required [(ngModel)]="listing.hsyGroupEnum" (change)="dirty['content']=true"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label fixed>整租</ion-label>
+                <ion-toggle [(ngModel)]="listing.isRentingEntireHouse"></ion-toggle>
+            </ion-item>
+            <ion-item>
+                <ion-label fixed>卧室数量</ion-label>
+                <ion-toggle [(ngModel)]="listing.numBedRoom"></ion-toggle>
+            </ion-item>
+            <ion-item>
+                <ion-label fixed>卫生间数量</ion-label>
+                <ion-toggle [(ngModel)]="listing.numBathRoom"></ion-toggle>
+            </ion-item>
+            <ion-item>
+                <ion-label fixed>设施/须知</ion-label>
+                <ion-label><ion-badge color="secondary">屋内卫生间</ion-badge></ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>起租时间</ion-label>
+                <ion-datetime displayFormat="h:mm A"
+                              pickerFormat="h mm A" [(ngModel)]="listing.rentalStartDate"></ion-datetime>
+            </ion-item>
+            <ion-item>
+                <ion-label>终止时间</ion-label>
+                <ion-datetime displayFormat="h:mm A"
+                              pickerFormat="h mm A" [(ngModel)]="listing.rentalEndDate"></ion-datetime>
+            </ion-item>
+            <ion-item>
+                <ion-label>要求LinkedIn登陆查看联系方式</ion-label>
+                <ion-toggle></ion-toggle>
+                <!--TODO(xinbenlv): wire it-->
+            </ion-item>
+            <ion-item>
+                <image-grid
+                        [imageIds]="listing.imageIds"
+                        (updateImageIds)="updateImageIds($event)"
+                        [isEdit]="true"
+                ></image-grid>
+            </ion-item>
+            <button ion-button block color="danger" (click)="deleteListing()">删除</button>
+        </ion-list>
 </ion-content>
