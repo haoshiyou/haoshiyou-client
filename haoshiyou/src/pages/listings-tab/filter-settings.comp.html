@@ -1,0 +1,20 @@
+<ion-list>
+    <ion-list-header>类型</ion-list-header>
+    <ion-item>
+        <ion-label>招租</ion-label>
+        <ion-checkbox value="ROOMMATE_WANTED"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+        <ion-label>求租</ion-label>
+        <ion-checkbox value="ROOM_WANTED"></ion-checkbox>
+    </ion-item>
+
+    <ion-list-header>区域</ion-list-header>
+    <ng-container *ngFor="let option of options; let i=index;" >
+        <ion-item *ngIf="flagService.getFlag('debug') || option != 'TestGroup'">
+            <ion-label>{{optionsMap[option]}}</ion-label>
+            <ion-checkbox >
+            </ion-checkbox>
+        </ion-item>
+    </ng-container>
+</ion-list>

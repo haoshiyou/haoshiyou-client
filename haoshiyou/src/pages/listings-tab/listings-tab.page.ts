@@ -1,4 +1,4 @@
-import {Platform, NavController, AlertController, Content} from "ionic-angular";
+import {Platform, NavController, AlertController, Content, PopoverController} from "ionic-angular";
 import {OnInit, OnDestroy, Component, ViewChild} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {AuthService} from "../../services/auth.service";
@@ -7,6 +7,7 @@ import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import UrlUtil from "../../util/url_util";
 import {FlagService} from "../../services/flag.service";
+import {FilterSettingsComponent} from "./filter-settings.comp";
 declare let ga:any;
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
@@ -34,13 +35,14 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private markers: any[]; // Actually google.maps.Marker[];
   private mapReady: boolean = false;
   private currentIndex:number = 0;
-
+  private filterSettings = {};
   constructor(private platform: Platform,
               private nav: NavController,
               private alertCtrl: AlertController,
               private auth: AuthService,
               private api: HsyListingApi,
-              private flagService: FlagService) {
+              private flagService: FlagService,
+              public popoverCtrl: PopoverController) {
   }
   async ngOnInit() {
     let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
@@ -224,5 +226,12 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         break;
       }
     }
+  }
+
+  public popoverFilter(myEvent){
+    let popover = this.popoverCtrl.create(FilterSettingsComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 }
