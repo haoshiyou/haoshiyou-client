@@ -1,4 +1,7 @@
 /* tslint:disable */
+import {
+  HsyListing
+} from '../index';
 
 declare var Object: any;
 export interface HsyUserInterface {
@@ -11,6 +14,7 @@ export interface HsyUserInterface {
   "name"?: string;
   "pushNotificationRegIds"?: Array<any>;
   "weixin"?: string;
+  listings?: HsyListing[];
 }
 
 export class HsyUser implements HsyUserInterface {
@@ -23,6 +27,7 @@ export class HsyUser implements HsyUserInterface {
   "name": string = '';
   "pushNotificationRegIds": Array<any> = <any>[];
   "weixin": string = '';
+  listings: HsyListing[] = null;
   constructor(data?: HsyUserInterface) {
     Object.assign(this, data);
   }
@@ -94,6 +99,14 @@ export class HsyUser implements HsyUserInterface {
         },
       },
       relations: {
+        listings: {
+          name: 'listings',
+          type: 'HsyListing[]',
+          model: 'HsyListing',
+          relationType: 'hasMany',
+                  keyFrom: 'id',
+          keyTo: 'ownerId'
+        },
       }
     }
   }

@@ -1,5 +1,6 @@
 /* tslint:disable */
 import {
+  HsyUser,
   HsyInteraction,
   GeoPoint
 } from '../index';
@@ -24,7 +25,6 @@ export interface HsyListingInterface {
   "price"?: number;
   "rentalEndDate"?: Date;
   "rentalStartDate"?: Date;
-  "requireToContact"?: string;
   "singleRoomBathRoomType"?: string;
   "state"?: string;
   "title"?: string;
@@ -32,6 +32,8 @@ export interface HsyListingInterface {
   "uid": string;
   "wechatId"?: string;
   "latestUpdatedOrBump"?: Date;
+  "requireToContact"?: Array<any>;
+  owner?: HsyUser;
   interactions?: HsyInteraction[];
 }
 
@@ -54,7 +56,6 @@ export class HsyListing implements HsyListingInterface {
   "price": number = 0;
   "rentalEndDate": Date = new Date(0);
   "rentalStartDate": Date = new Date(0);
-  "requireToContact": string = '';
   "singleRoomBathRoomType": string = '';
   "state": string = '';
   "title": string = '';
@@ -62,6 +63,8 @@ export class HsyListing implements HsyListingInterface {
   "uid": string = '';
   "wechatId": string = '';
   "latestUpdatedOrBump": Date = new Date(0);
+  "requireToContact": Array<any> = <any>[];
+  owner: HsyUser = null;
   interactions: HsyInteraction[] = null;
   constructor(data?: HsyListingInterface) {
     Object.assign(this, data);
@@ -168,10 +171,6 @@ export class HsyListing implements HsyListingInterface {
           name: 'rentalStartDate',
           type: 'Date'
         },
-        "requireToContact": {
-          name: 'requireToContact',
-          type: 'string'
-        },
         "singleRoomBathRoomType": {
           name: 'singleRoomBathRoomType',
           type: 'string'
@@ -200,8 +199,20 @@ export class HsyListing implements HsyListingInterface {
           name: 'latestUpdatedOrBump',
           type: 'Date'
         },
+        "requireToContact": {
+          name: 'requireToContact',
+          type: 'Array&lt;any&gt;'
+        },
       },
       relations: {
+        owner: {
+          name: 'owner',
+          type: 'HsyUser',
+          model: 'HsyUser',
+          relationType: 'belongsTo',
+                  keyFrom: 'ownerId',
+          keyTo: 'id'
+        },
         interactions: {
           name: 'interactions',
           type: 'HsyInteraction[]',

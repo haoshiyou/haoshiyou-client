@@ -54,11 +54,13 @@
 
             <ion-item>
                 <ion-label fixed>所在群</ion-label>
-                <ion-input text-right required [(ngModel)]="listing.hsyGroupEnum" (change)="dirty['content']=true"></ion-input>
+                <ion-input text-right required [(ngModel)]="listing.hsyGroupEnum"
+                           (change)="dirty['content']=true"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label fixed>群昵称</ion-label>
-                <ion-input text-right required [(ngModel)]="listing.hsyGroupNick" (change)="dirty['content']=true"></ion-input>
+                <ion-input text-right required [(ngModel)]="listing.hsyGroupNick"
+                           (change)="dirty['content']=true"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label>整租单租</ion-label>
@@ -69,11 +71,15 @@
             </ion-item>
             <ion-item>
                 <ion-label fixed>卧室数量</ion-label>
-                <ion-toggle text-right [(ngModel)]="listing.numBedRoom"></ion-toggle>
+                <ion-input text-right
+                           type="number"
+                           [(ngModel)]="listing.numBedRoom"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label fixed>卫生间数量</ion-label>
-                <ion-toggle text-right [(ngModel)]="listing.numBathRoom"></ion-toggle>
+                <ion-input text-right
+                           type="number"
+                           [(ngModel)]="listing.numBathRoom"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label fixed>设施/须知</ion-label>
@@ -86,13 +92,13 @@
             </ion-item>
             <ion-item>
                 <ion-label>起租时间</ion-label>
-                <ion-datetime text-right displayFormat="h:mm A"
-                              pickerFormat="h mm A" [(ngModel)]="listing.rentalStartDate"></ion-datetime>
+                <ion-datetime text-right displayFormat="YYYY-MM-DD"
+                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalStartDate"></ion-datetime>
             </ion-item>
             <ion-item>
                 <ion-label>终止时间</ion-label>
-                <ion-datetime text-right displayFormat="h:mm A"
-                              pickerFormat="h mm A" [(ngModel)]="listing.rentalEndDate"></ion-datetime>
+                <ion-datetime text-right displayFormat="YYYY-MM-DD"
+                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"></ion-datetime>
             </ion-item>
             <ion-item>
                 <ion-label>登LinkedIn才可联系我</ion-label>

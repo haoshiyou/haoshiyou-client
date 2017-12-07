@@ -107,7 +107,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
           order: 'latestUpdatedOrBump DESC',
           limit: 12,
           offset: this.loadedListings.length,
-          include: 'interactions',
+          include: ['interactions', 'owner'],
         })
         .take(1)
         .toPromise();
