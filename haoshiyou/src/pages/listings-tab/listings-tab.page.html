@@ -1,48 +1,63 @@
 <ion-header>
-    <ion-toolbar no-border-top>
-        <ion-segment [ngModel]="segmentModel" (ngModelChange)="onSegmentModelChange($event)">
-            <ion-segment-button value="ROOMMATE_WANTED">招租</ion-segment-button>
-            <ion-segment-button value="ROOM_WANTED">求租</ion-segment-button>
-        </ion-segment>
-    </ion-toolbar>
-    <ion-toolbar no-border-top>
-        <ion-segment>
-            <ng-container *ngFor="let option of options; let i=index;" >
-                <ion-segment-button *ngIf="isDebug() || option != 'TestGroup'" [value]="i" (tap)="setOption(i, $event)">
-                    {{optionsMap[option]}}
-                </ion-segment-button>
-            </ng-container>
-        </ion-segment>
-    </ion-toolbar>
-</ion-header>
-<ion-content class="grey-background">
-    <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
-        <ion-spinner></ion-spinner>
-    </ion-row>
+    <ion-navbar>
+        <ion-searchbar>
 
-    <!--
-        We duplicate the grid and original ion-item because responsive
-        grid doesn't work well with iOS yet.
-        TODO(xinbenlv): remove this ion-list when works on iOS.
-    -->
-    <ion-list *ngIf="!useGrid">
-        <listing-item *ngFor="let listing of loadedListings; let i = index"
-                      [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-item>
-    </ion-list>
-    <ion-grid *ngIf="useGrid">
-        <ion-row>
-            <ion-col col-12 col-lg-3 col-md-4 col-sm-12 col-xs-12
-                     *ngFor="let listing of loadedListings; let i = index">
-                <listing-item [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-item>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-    <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">
-        <ion-infinite-scroll-content></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
-    <ion-fab bottom right>
-        <button ion-fab color="danger" (click)="goToCreationPage()">
-            发帖
-        </button>
-    </ion-fab>
+        </ion-searchbar>
+        <ion-buttons end >
+            <button ion-button (click)="popoverFilter($event)">
+                <ion-icon name="funnel"></ion-icon></button>
+        </ion-buttons>
+    </ion-navbar>
+
+    <ion-navbar>
+        <ion-segment [(ngModel)]="mapOrList">
+            <ion-segment-button value="ONLY_LIST">只看列表</ion-segment-button>
+            <ion-segment-button value="BOTH">同时</ion-segment-button>
+            <ion-segment-button value="ONLY_MAP">只看地图</ion-segment-button>
+        </ion-segment>
+
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-split-pane>
+        <ion-content fullscreen class="grey-background" >
+            <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
+                <ion-spinner></ion-spinner>
+            </ion-row>
+
+            <!--
+                We duplicate the grid and original ion-item because responsive
+                grid doesn't work well with iOS yet.
+                TODO(xinbenlv): remove this ion-list when works on iOS.
+            -->
+            <ion-list *ngIf="!useGrid">
+                <listing-item *ngFor="let listing of loadedListings; let i = index"
+                              [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-item>
+            </ion-list>
+            <ion-grid *ngIf="useGrid">
+                <ion-row>
+                    <ion-col
+                             col-xl-6
+                             col-lg-6
+                             col-md-12
+                             col-sm-12
+                             col-xs-12
+                             *ngFor="let listing of loadedListings; let i = index">
+                        <listing-item [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-item>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">
+                <ion-infinite-scroll-content></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ion-content>
+
+    <!-- the main content -->
+    <div style="width:100%;height: 100%;" main no-padding no-margin>
+        <map-view [listings]="loadedListings"></map-view>
+    </div>
+
+</ion-split-pane>
+
 </ion-content>

@@ -3,6 +3,7 @@ import {IonicApp, IonicModule} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
+import {FilterSettingsComponent} from "../pages/listings-tab/filter-settings.comp";
 import {ChatMessageComp} from "../pages/chats-tab/chat-message.comp";
 import {ChatThreadComp} from "../pages/chats-tab/chat-thread.comp";
 import {ChatWindowPage} from "../pages/chats-tab/chat-window.page";
@@ -60,6 +61,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
   declarations: [
     // All Components
     HaoshiyouApp,
+    FilterSettingsComponent,
     TabsPage,
     ChatMessageComp,
     ChatThreadComp,
@@ -77,6 +79,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     DisconnectModal,
     QrCodeTabPage,
     MineTabPage,
+
 
     // All Pipes
     EnumMsgPipe,
@@ -108,6 +111,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
   bootstrap: [IonicApp],
   entryComponents: [
     HaoshiyouApp,
+    FilterSettingsComponent,
     TabsPage,
     ChatMessageComp,
     ChatThreadComp,
