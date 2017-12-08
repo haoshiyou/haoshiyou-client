@@ -1,5 +1,5 @@
 import {Platform, NavParams, NavController, AlertController} from "ionic-angular";
-import {OnInit, Component} from "@angular/core";
+import {OnInit, Component, ViewChild} from "@angular/core";
 import {uuid} from "../../util/uuid";
 import {NotificationService} from "../../services/notfication.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
@@ -10,6 +10,7 @@ import {AuthService} from "../../services/auth.service";
 import { ChangeDetectorRef } from '@angular/core';
 import {MapService} from "../../services/map.service";
 import {FlagService} from "../../services/flag.service";
+import {NgForm} from "@angular/forms";
 declare let google:any;
 
 const DEFAULT_LAT:number = 37.41666;
@@ -68,10 +69,37 @@ export class CreationPage implements OnInit {
 
   typeOptions:number[] = [0/*招租*/, 1/*求租*/];
   listing:HsyListing;
+
+  public hsyGroupEnumOptions = [
+    'SanFrancisco',
+    'MidPeninsula',
+    'SouthBayWest',
+    'SouthBayEast',
+    'EastBay',
+    'ShortTerm',
+    'Seattle',
+    'TestGroup',
+  ];
+  public hsyGroupEnumOptionsMap =
+      {
+        'SanFrancisco': '三番',
+        'MidPeninsula': '中半岛',
+        'SouthBayWest': '南湾西',
+        'SouthBayEast': '南湾东',
+        'EastBay': '东湾',
+        'ShortTerm': '短租',
+        'Seattle': '西雅图',
+        'TestGroup': '测试',
+      };
+
+  public amenityOptions = [
+      '洗衣机', '停车位', '可养宠物'
+  ];
   public localityText:string;
   private map:any; /*google.maps.Map*/
   private marker:any; /*google.maps.Marker*/
   private inTestGroup:boolean;
+  @ViewChild('hsyListingForm') public hsyListingForm: NgForm;
   //noinspection JSMismatchedCollectionQueryUpdate used in HTML
   dirty:{[field:string]: boolean} = {};
   constructor(private platform:Platform, private params:NavParams,
@@ -95,6 +123,9 @@ export class CreationPage implements OnInit {
         lng: DEFAULT_LNG
       };
       this.listing.location = loc;
+    }
+    if (!this.listing.amenities) {
+      this.listing.amenities = {};
     }
     if (!this.listing.imageIds) this.listing.imageIds = [];
   }
@@ -169,9 +200,15 @@ export class CreationPage implements OnInit {
     }
   };
 
+  private markAllControlsAsDirty() {
+    Object.keys(this.hsyListingForm.controls).filter(k => {
+      this.hsyListingForm.controls[k].markAsDirty();
+    });
+  }
   async save() {
+    this.markAllControlsAsDirty();
     if (this.validate()) {
-      this.listing.lastUpdated = new Date()
+      this.listing.lastUpdated = new Date();
       this.listing.latestUpdatedOrBump = this.listing.lastUpdated;
       if (!this.listing.ownerId) {
         let local = window.localStorage;

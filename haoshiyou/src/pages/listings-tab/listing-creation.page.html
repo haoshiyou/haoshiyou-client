@@ -9,105 +9,127 @@
     </ion-navbar>
 </ion-header>
 <ion-content class="creation grey-background" id="page-container">
-        <ion-card offset-lg-3 col-lg-6 offset-md-2 col-md-8>
+        <ion-card offset-lg-3 col-lg-6 offset-md-2 col-md-8 >
+            <form #hsyListingForm="ngForm">
             <ion-item>
                 <ion-label>类型</ion-label>
-                <ion-select interface="popover" text-right required [(ngModel)]="listing.type" (ionChange)="dirty['type']=true">
-                    <ion-option text-right *ngFor="let v of typeOptions " [value]="v"> {{ v | enumMsgPipe }}</ion-option>
+                <ion-select interface="popover"
+                            text-right required [(ngModel)]="listing.type"
+                            name="type" placeholder="必选">
+                    <ion-option  *ngFor="let v of typeOptions " value={{v}}> {{ v | enumMsgPipe }}
+                    </ion-option>
                 </ion-select>
-                <p style="color: red;" item-right *ngIf="dirty['type'] && (listing.type==null)">
-                    必填
-                </p>
+            </ion-item>
+            <ion-item *ngIf="listing.type == 0"> <!-- 只有招租需要填写 -->
+                <ion-label>地址</ion-label>
+                <ion-input item-right class="address" text-right [(ngModel)]="listing.addressLine" name="addressLine"
+                ></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label item-left>地址</ion-label>
-                <ion-input text-right required [(ngModel)]="listing.addressLine"></ion-input>
+                <ion-label>城市</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.addressCityAndState"
+                           name="addressCityAndState"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label>城市与州</ion-label>
-                <ion-input text-right required [(ngModel)]="listing.addressCityAndState"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>价格</ion-label>
-                <ion-input text-right required [(ngModel)]="listing.price"></ion-input>
+                <ion-label>预期价格</ion-label>
+                <ion-input item-right text-right
+                           type="number" min="0"
+                           [(ngModel)]="listing.price" name="price"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label>标题</ion-label>
-                <ion-input text-right required [(ngModel)]="listing.title" (change)="dirty['content']=true"></ion-input>
-                <p style="color: red;" item-right *ngIf="dirty['title'] && !listing.title">
-                    必填
-                </p>
+                <ion-input
+                        item-right text-right required [(ngModel)]="listing.title"
+                        name="title" placeholder="必填"></ion-input>
             </ion-item>
 
             <ion-item>
                 <ion-label>详情</ion-label>
-                <ion-textarea required [(ngModel)]="listing.content" (change)="dirty['content']=true"></ion-textarea>
-                <p style="color: red;" item-right *ngIf="dirty['content'] && !listing.content">
-                    必填
-                </p>
+                <ion-textarea item-right text-right required [(ngModel)]="listing.content"
+                              name="content"
+                              placeholder="必填"></ion-textarea>
+
             </ion-item>
             <ion-item *ngIf="isDebug()">
-                <ion-label fixed>测试</ion-label>
-                <ion-checkbox text-right fixed color="dark" checked="true" [(ngModel)]="inTestGroup"></ion-checkbox>
+                <ion-label>测试</ion-label>
+                <ion-checkbox item-right text-right fixed color="dark" checked="true"
+                              [(ngModel)]="inTestGroup"
+                              name="inTestGroup"
+                ></ion-checkbox>
+
             </ion-item>
 
 
             <ion-item>
-                <ion-label fixed>所在群</ion-label>
-                <ion-input text-right required [(ngModel)]="listing.hsyGroupEnum"
-                           (change)="dirty['content']=true"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label fixed>群昵称</ion-label>
-                <ion-input text-right required [(ngModel)]="listing.hsyGroupNick"
-                           (change)="dirty['content']=true"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>整租单租</ion-label>
-                <ion-select interface="popover" text-right [(ngModel)]="listing.isRentingEntireHouse">
-                    <ion-option text-right [value]="true">整房出租</ion-option>
-                    <ion-option text-right [value]="false">单间出租</ion-option>
+                <ion-label>所在好室友群</ion-label>
+                <ion-select interface="popover"
+                            text-right [(ngModel)]="listing.hsyGroupEnum"
+                            name="type">
+                    <ion-option  *ngFor="let enum of hsyGroupEnumOptions "
+                                 value={{enum}}> {{ hsyGroupEnumOptionsMap[enum] }}
+                    </ion-option>
                 </ion-select>
             </ion-item>
             <ion-item>
-                <ion-label fixed>卧室数量</ion-label>
-                <ion-input text-right
-                           type="number"
-                           [(ngModel)]="listing.numBedRoom"></ion-input>
+                <ion-label>群中昵称</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"
+                           name="hsyGroupNick"></ion-input>
             </ion-item>
-            <ion-item>
-                <ion-label fixed>卫生间数量</ion-label>
-                <ion-input text-right
-                           type="number"
-                           [(ngModel)]="listing.numBathRoom"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label fixed>设施/须知</ion-label>
-                <ion-label text-right>
-                    <button ion-button small outline round color="primary">空调</button>
-                    <button ion-button small round color="primary">暖气</button>
-                    <button ion-button small round color="primary">停车位</button>
-                    <button ion-button small outline round color="primary">健身房</button>
-                </ion-label>
-            </ion-item>
+            <ng-container *ngIf="listing.type == 0"><!-- 只有招租需要填写这段 -->
+                <ion-item>
+                    <ion-label>整租单租</ion-label>
+                    <ion-select item-right interface="popover" text-right
+                                [(ngModel)]="listing.isRentingEntireHouse"
+                                name="isRentingEntireHouse">
+                        <ion-option text-right [value]="true">整房出租</ion-option>
+                        <ion-option text-right [value]="false">单间出租</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item >
+                    <ion-label>卧室数量</ion-label>
+                    <ion-input item-right text-right
+                               type="number"
+                               [(ngModel)]="listing.numBedRoom"
+                    name="numBedRoom"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>卫生间数量</ion-label>
+                    <ion-input item-right text-right
+                               type="number"
+                               [(ngModel)]="listing.numBathRoom"
+                    name="numBathRoom"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>设施/须知</ion-label>
+                    <div item-right text-right text-wrap>
+                        <button ion-button small round color="primary"
+                                *ngFor="let o of amenityOptions"
+                                (click)="listing.amenities[o] = !listing.amenities[o]"
+                                [outline] = "!listing.amenities[o]">{{o}}</button>
+                    </div>
+                </ion-item>
+            </ng-container>
             <ion-item>
                 <ion-label>起租时间</ion-label>
-                <ion-datetime text-right displayFormat="YYYY-MM-DD"
-                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalStartDate"></ion-datetime>
+                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"
+                              pickerFormat="YYYY MM DD"
+                              [(ngModel)]="listing.rentalStartDate"
+                name="rentalStartDate"></ion-datetime>
             </ion-item>
             <ion-item>
                 <ion-label>终止时间</ion-label>
-                <ion-datetime text-right displayFormat="YYYY-MM-DD"
-                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"></ion-datetime>
+                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"
+                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"
+                name="rentalEndDate"></ion-datetime>
             </ion-item>
             <ion-item *ngIf="flagService.getFlag('requireToContact')">
                 <ion-label>登LinkedIn才可联系我</ion-label>
-                <ion-toggle text-right></ion-toggle>
+                <ion-toggle item-right text-right name="requireToContact"></ion-toggle>
                 <!--TODO(xinbenlv): wire it-->
             </ion-item>
             <ion-item>
-                <ion-label fixed>图片</ion-label>
-                <ion-input fixed disabled></ion-input>
+                <ion-label>图片</ion-label>
+                <ion-input item-right disabled name="imageBlock"></ion-input>
             </ion-item>
             <ion-item>
                 <image-grid
@@ -120,6 +142,6 @@
                 <button col-6 ion-button block color="secondary" (click)="save()">保存</button>
                 <button col-6 ion-button outline block color="danger" (click)="deleteListing()">删除</button>
             </ion-row>
-
+            </form>
         </ion-card>
 </ion-content>

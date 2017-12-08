@@ -84,6 +84,10 @@ export class ListingDetailPage {
     });
     await this.nav.push(ListingsTabPage);
   }
+  ionViewDidEnter() {
+    console.log(`Entering lising detail page`);
+    this.ref.markForCheck();
+  }
   async edit() {
     await this.nav.push(CreationPage, {listing: this.listing});
   }
@@ -215,7 +219,9 @@ export class ListingDetailPage {
   }
 
   public getAmenities():string[] {
-    return Object.keys(this.listing.amenities);
+    return Object.keys(this.listing.amenities).filter(k => {
+      return this.listing.amenities[k];
+    });
   }
   private eligibleToViewContact() {
     return false;

@@ -94,6 +94,13 @@ body {
 .card .item.item-block:not(:last-child) .item-inner {
   border-bottom: 1px solid #dedede;
 }
+
+.creation {
+  ion-input.ng-dirty.ng-invalid,
+  ion-select.ng-dirty.ng-invalid {
+      border-right: $text-input-highlight-color-invalid solid;
+  }
+}
 //
 //.card .item.item-block:not(.item-input):not(.item-select):not(.item-radio):not(.item-checkbox) .item-inner {
 //  border: 0;
