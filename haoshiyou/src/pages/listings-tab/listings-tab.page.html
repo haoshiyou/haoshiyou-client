@@ -11,19 +11,17 @@
     </ion-navbar>
 
     <ion-navbar>
-        <ion-segment [(ngModel)]="mapOrList">
-            <ion-segment-button value="ONLY_LIST">只看列表</ion-segment-button>
+        <ion-segment [(ngModel)]="mapOrList" (ngModelChange)="updateMapOrList($event)">
+            <ion-segment-button value="ONLY_LIST">列表</ion-segment-button>
             <ion-segment-button value="BOTH" >同时</ion-segment-button>
-            <ion-segment-button value="ONLY_MAP">只看地图</ion-segment-button>
+            <ion-segment-button value="ONLY_MAP">地图</ion-segment-button>
         </ion-segment>
     </ion-navbar>
 </ion-header>
 
 <ion-content>
     <ion-row style="height: 100%;">
-        <ion-col class="grey-background"
-                 [ngClass]="mapOrList == 'BOTH' ? 'half-width' : 'full-width'"
-                 *ngIf="mapOrList == 'BOTH' || mapOrList == 'ONLY_LIST'"
+        <ion-col #listContainerCol class="grey-background"
                  style="height: 100%;" id="left" no-padding>
             <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
                 <ion-spinner></ion-spinner>
@@ -55,10 +53,8 @@
             </ion-infinite-scroll>
         </ion-col>
         <!-- the main content -->
-        <ion-col [ngClass]="mapOrList == 'BOTH' ? 'half-width' : 'full-width'"
-                *ngIf="mapOrList == 'BOTH' || mapOrList == 'ONLY_MAP'"
-                 style="height: 100%;" id="right" no-padding>
-            <map-view [listings]="loadedListings"></map-view>
+        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>
+            <map-view #mapView [listings]="loadedListings"></map-view>
         </ion-col>
     </ion-row>
 </ion-content>

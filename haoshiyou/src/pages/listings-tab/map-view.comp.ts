@@ -25,11 +25,16 @@ export class MapViewComponent implements OnChanges {
     ga('send', 'event', {
       eventCategory: 'go-to',
       eventAction: 'listing-detail',
-      eventLabel: 'from-listing-item'
+      eventLabel: 'from-map-view'
     });
     this.nav.push(ListingDetailPage, {listing: listing});
   }
-  private render() {
+
+  public resize() {
+    console.log(`XXX mapview Triggered resize!`);
+    google.maps.event.trigger(this.map, 'resize');
+  }
+  public render() {
     console.log(`XXX Render!`);
     let minZoomLevel = 11;
     let latAve:number = 0, lngAve:number = 0;
@@ -64,6 +69,7 @@ export class MapViewComponent implements OnChanges {
       console.log(`XXX empty locations, set lat = ${latAve}, lng = ${lngAve}`);
     }
     this.map.setCenter(new google.maps.LatLng(latAve, lngAve));
+    this.resize();
   }
 
 }
