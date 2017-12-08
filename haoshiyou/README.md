@@ -27,4 +27,4 @@ Security related bugs are filed under
 TODO
  - Change ListingTypeEnum from 0 / 1 to word
  - Change Amenities from object{} to array[string]
- - Refresh when return
+ - Refresh when return - DONE 

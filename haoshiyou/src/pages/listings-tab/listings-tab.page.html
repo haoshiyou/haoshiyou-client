@@ -3,29 +3,31 @@
         <ion-searchbar>
 
         </ion-searchbar>
-        <ion-buttons end >
+        <ion-buttons end>
             <button ion-button (click)="popoverFilter($event)">
-                <ion-icon name="funnel"></ion-icon></button>
+                <ion-icon name="funnel"></ion-icon>
+            </button>
         </ion-buttons>
     </ion-navbar>
 
     <ion-navbar>
         <ion-segment [(ngModel)]="mapOrList">
             <ion-segment-button value="ONLY_LIST">只看列表</ion-segment-button>
-            <ion-segment-button value="BOTH">同时</ion-segment-button>
+            <ion-segment-button value="BOTH" >同时</ion-segment-button>
             <ion-segment-button value="ONLY_MAP">只看地图</ion-segment-button>
         </ion-segment>
-
     </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <ion-split-pane>
-        <ion-content fullscreen class="grey-background" >
+    <ion-row style="height: 100%;">
+        <ion-col class="grey-background"
+                 [ngClass]="mapOrList == 'BOTH' ? 'half-width' : 'full-width'"
+                 *ngIf="mapOrList == 'BOTH' || mapOrList == 'ONLY_LIST'"
+                 style="height: 100%;" id="left" no-padding>
             <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
                 <ion-spinner></ion-spinner>
             </ion-row>
-
             <!--
                 We duplicate the grid and original ion-item because responsive
                 grid doesn't work well with iOS yet.
@@ -38,12 +40,12 @@
             <ion-grid *ngIf="useGrid">
                 <ion-row>
                     <ion-col
-                             col-xl-6
-                             col-lg-6
-                             col-md-12
-                             col-sm-12
-                             col-xs-12
-                             *ngFor="let listing of loadedListings; let i = index">
+                            col-xl-4
+                            col-lg-4
+                            col-md-6
+                            col-sm-12
+                            col-xs-12
+                            *ngFor="let listing of loadedListings; let i = index">
                         <listing-item [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-item>
                     </ion-col>
                 </ion-row>
@@ -51,17 +53,12 @@
             <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">
                 <ion-infinite-scroll-content></ion-infinite-scroll-content>
             </ion-infinite-scroll>
-        </ion-content>
-
-    <!-- the main content -->
-    <div style="width:100%;height: 100%;" main no-padding no-margin>
-        <map-view [listings]="loadedListings"></map-view>
-    </div>
-
-</ion-split-pane>
-<ion-fab bottom right>
-    <button ion-fab color="danger" (click)="goToCreationPage()">
-        发帖
-    </button>
-</ion-fab>
+        </ion-col>
+        <!-- the main content -->
+        <ion-col [ngClass]="mapOrList == 'BOTH' ? 'half-width' : 'full-width'"
+                *ngIf="mapOrList == 'BOTH' || mapOrList == 'ONLY_MAP'"
+                 style="height: 100%;" id="right" no-padding>
+            <map-view [listings]="loadedListings"></map-view>
+        </ion-col>
+    </ion-row>
 </ion-content>

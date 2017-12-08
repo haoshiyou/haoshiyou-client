@@ -17,7 +17,6 @@ const AREA_KEY: string = 'area';
 @Component({
   selector: 'listing-tab',
   templateUrl: 'listings-tab.page.html',
-  changeDetection: ChangeDetectionStrategy.OnPush ,
 })
 export class ListingsTabPage implements OnInit, OnDestroy {
   ngOnDestroy(): any {
@@ -36,6 +35,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private mapReady: boolean = false;
   private currentIndex:number = 0;
   private filterSettings = {};
+  private mapOrList = 'ONLY_LIST';
   constructor(private platform: Platform,
               private nav: NavController,
               private alertCtrl: AlertController,
@@ -56,6 +56,9 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     }
     await this.loadMoreListings();
     console.log(`ListingsTabPage init with area=${this.areaModel}, segment=${this.segmentModel}`);
+    if (this.largeEnough()) {
+      this.mapOrList = 'BOTH';
+    } else this.mapOrList = 'ONLY_LIST';
   }
 
   ionViewDidEnter() {
@@ -125,8 +128,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     }
     this.ref.markForCheck();
   }
-
-
 
   private updateMarkers() {
     // TODO(xinbenlv): update markers
@@ -236,5 +237,9 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     popover.present({
       ev: myEvent
     });
+  }
+
+  public largeEnough():boolean { // XXX this is a hack, use Bootstrap of Ionic's Grid System to make it work
+    return window.innerWidth > 600;
   }
 }

@@ -77,12 +77,12 @@ body {
 
 .hsy-listing-item-header {
   font-family: "Hosted Noto Sans Regular";
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .hsy-listing-item-price {
   font-family: "Hosted Noto Sans Regular";
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .hsy-listing-item-last-updated {
@@ -100,6 +100,25 @@ body {
   ion-select.ng-dirty.ng-invalid {
       border-right: $text-input-highlight-color-invalid solid;
   }
+}
+
+// Tab Page
+#left {
+  float: left;
+  overflow-y: scroll;
+}
+
+#right {
+  float: left;
+  overflow-y: scroll;
+}
+
+.half-width {
+  width:50%;
+}
+
+.full-width {
+  width:100%;
 }
 //
 //.card .item.item-block:not(.item-input):not(.item-select):not(.item-radio):not(.item-checkbox) .item-inner {
