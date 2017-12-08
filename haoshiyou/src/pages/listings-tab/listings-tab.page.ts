@@ -228,10 +228,57 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     }
   }
 
-  public popoverFilter(myEvent){
-    let popover = this.popoverCtrl.create(FilterSettingsComponent);
-    popover.present({
+  public async popoverFilter(myEvent) {
+    let popover = this.popoverCtrl.create(FilterSettingsComponent,{data: 'data'}, {});
+    await popover.onDidDismiss((data) => {
+      console.log(`--- received ` + JSON.stringify(data));
+      if (data) {
+        this.filterSettings = data["filterSettings"];
+        this.submitNewFiltering(this.filterSettings);
+      }
+    });
+    await popover.present({
       ev: myEvent
     });
+  }
+
+  async submitNewFiltering(filterSettings_: {}) {
+    let type = this.getType(filterSettings_['listingType_zhao'],
+                            filterSettings_['listingType_qiu']);
+    let whereClause = {};
+    if (type !== -1) {
+      whereClause['type'] = type;
+    }
+
+    let filterResult = await this.api.find<HsyListing>(
+        {
+          where: whereClause,
+          order: 'latestUpdatedOrBump DESC',
+          limit: 12,
+          offset: 0,
+          include: ['interactions', 'owner'],
+        })
+        .take(12)
+        .toPromise();
+    this.loadedListings = [];
+    for (let item of filterResult) {
+      this.loadedListings.push(item);
+    }
+  }
+
+  private getType(zhaozu: boolean, qiuzu: boolean) {
+    if ( ! zhaozu) {
+      zhaozu = false;
+    }
+    if ( ! qiuzu) {
+      qiuzu = false;
+    }
+    if (zhaozu && !qiuzu) {
+      return 0;
+    }
+    if (!zhaozu && qiuzu) {
+      return 1;
+    }
+    return -1;
   }
 }
