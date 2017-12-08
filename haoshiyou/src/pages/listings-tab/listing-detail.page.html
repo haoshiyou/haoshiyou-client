@@ -98,7 +98,8 @@
             <ion-item-divider color="light">
                 联系方式
             </ion-item-divider>
-            <ion-item *ngIf="listing.requireToContact.length > 0 && !eligibleToViewContact()">
+            <ion-item *ngIf="flagService.getFlag('requireToContact') &&
+                             listing.requireToContact.length > 0 && !eligibleToViewContact()">
                 <ion-label col-3 item-left>
                     <ion-icon name="paper"></ion-icon>
                     查看条件
@@ -107,7 +108,7 @@
                     <button color="primary" ion-button outline *ngFor="let req of listing.requireToContact">登陆{{req}}</button>
                 </div>
             </ion-item>
-            <ng-container *ngIf="listing.requireToContact == 0 || eligibleToViewContact()">
+            <ng-template *ngIf="listing.requireToContact.length == 0 || eligibleToViewContact()">
                 <ion-item *ngIf="listing.owner.contactPhone">
                     <ion-label col-3 item-left>
                         <ion-icon name="contact"></ion-icon>电话
@@ -141,7 +142,7 @@
                         <div text-right>{{ listing.owner.weixin }}</div>
                     </div>
                 </ion-item>
-            </ng-container>
+            </ng-template>
         </ion-item-group>
         <ion-item-group *ngIf="listing.imageIds && listing.imageIds.length > 0">
             <ion-item-divider>

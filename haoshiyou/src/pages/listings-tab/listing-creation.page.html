@@ -100,7 +100,7 @@
                 <ion-datetime text-right displayFormat="YYYY-MM-DD"
                               pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"></ion-datetime>
             </ion-item>
-            <ion-item>
+            <ion-item *ngIf="flagService.getFlag('requireToContact')">
                 <ion-label>登LinkedIn才可联系我</ion-label>
                 <ion-toggle text-right></ion-toggle>
                 <!--TODO(xinbenlv): wire it-->
