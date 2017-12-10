@@ -13,6 +13,7 @@ import {HsyUser} from "../../loopbacksdk/models/HsyUser";
 import {ListingsTabPage} from "./listings-tab.page";
 import {AuthService} from "../../services/auth.service";
 import { ChangeDetectorRef } from '@angular/core';
+import {FlagService} from "../../services/flag.service";
 declare let window:any;
 declare let QRCode:any;
 declare let ga:any;
@@ -72,7 +73,8 @@ export class ListingDetailPage {
               private hsyUserApi:HsyUserApi,
               private auth: AuthService,
               private alertCtrl: AlertController,
-              private ref: ChangeDetectorRef
+              private ref: ChangeDetectorRef,
+              private flagService: FlagService
               ) {}
   async backToMain() {
     ga('send', 'event', {
@@ -81,6 +83,10 @@ export class ListingDetailPage {
       eventLabel: 'direct-url'
     });
     await this.nav.push(ListingsTabPage);
+  }
+  ionViewDidEnter() {
+    console.log(`Entering lising detail page`);
+    this.ref.markForCheck();
   }
   async edit() {
     await this.nav.push(CreationPage, {listing: this.listing});
@@ -213,7 +219,9 @@ export class ListingDetailPage {
   }
 
   public getAmenities():string[] {
-    return Object.keys(this.listing.amenities);
+    return Object.keys(this.listing.amenities).filter(k => {
+      return this.listing.amenities[k];
+    });
   }
   private eligibleToViewContact() {
     return false;

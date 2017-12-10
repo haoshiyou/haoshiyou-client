@@ -27,6 +27,7 @@ export class ListingItem {
     ga('send', 'event', {
       eventCategory: 'go-to',
       eventAction: 'listing-detail',
+      eventLabel: 'from-listing-item'
     });
     this.nav.push(ListingDetailPage, {listing: this.listing});
   }
