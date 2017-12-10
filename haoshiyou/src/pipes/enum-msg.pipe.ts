@@ -4,8 +4,10 @@ import {Pipe, PipeTransform} from "@angular/core";
 export class EnumMsgPipe implements PipeTransform {
   transform(value):string {
     // TODO(xinbenlv): fix it
-    if (value == 1) {
+    if (value == 'NeedRoom') {
       return '求租';
+    } else if (value == 'NeedRoommate') {
+      return '招租'
     }
     else return '招租';
   }

@@ -51,13 +51,13 @@
                 </div>
 
             </ion-item>
-            <ion-item *ngIf="listing.addressLine && listing.addressCityAndState">
+            <ion-item *ngIf="listing.addressLine && listing.addressCity">
                 <ion-label col-3 item-left>
                     <ion-icon name="map"></ion-icon>
                     地址
                 </ion-label>
                 <div item-right text-wrap>
-                    {{listing.addressLine}}, {{listing.addressCityAndState}}
+                    {{listing.addressLine}}, {{listing.addressCity}}
                 </div>
             </ion-item>
             <ion-item *ngIf="listing.numBedRoom && listing.numBathRoom">

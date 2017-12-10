@@ -67,7 +67,7 @@ export class CreationPage implements OnInit {
   //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
   // TODO(xinbenlv) uncomment this
 
-  typeOptions:number[] = [0/*招租*/, 1/*求租*/];
+  listingTypeEnums:string[] = ['NeedRoommate'/*招租*/, 'NeedRoom'/*求租*/];
   listing:HsyListing;
 
   public hsyGroupEnumOptions = [
@@ -131,24 +131,6 @@ export class CreationPage implements OnInit {
   }
 
   ngOnInit():any {
-    this.platform.ready().then(() => {
-      let minZoomLevel = 9;
-
-      // Load Google Maps
-      /* TODO(xinbenlv): follow example here
-       * https://codingwithspike.wordpress.com/2014/08/13/loading-google-maps-in-cordova-the-right-way/
-       * To load the Google Maps JS API based on device connection.
-       *
-       * Or use Google Maps TS Definition Files.
-       */
-      this.map = new google.maps.Map(document.getElementById('map_drag_canvas'), {
-        zoom: minZoomLevel,
-        center: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng), // Google
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
-      this.marker.setMap(this.map);
-      this.renderBoundary();
-    });
 
     this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/{
       position: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng),
@@ -170,35 +152,6 @@ export class CreationPage implements OnInit {
     });
 
   }
-  renderBoundary() {
-    let hsyGroupEnumList = {
-      'SanFrancisco': '#CD5C5C',
-      'SouthBayWest': '#86FF33',
-      'SouthBayEast': '#FF5733',
-      'EastBay': '#A6B1F7',
-      'MidPeninsula': '#FFC300',
-    };
-    for (let hsyGroupEnum in hsyGroupEnumList) {
-      let color = hsyGroupEnumList[hsyGroupEnum];
-      for (let city of boundaryList[hsyGroupEnum]) {
-
-        let triangleCoords = [];
-        for (let pair of city) {
-          triangleCoords.push({lng: pair[0], lat: pair[1]});
-        }
-        // Construct the polygon.
-        let triangle = new google.maps.Polygon({
-          paths: triangleCoords,
-          strokeColor: color,
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: color,
-          fillOpacity: 0.35
-        });
-        triangle.setMap(this.map);
-      }
-    }
-  };
 
   private markAllControlsAsDirty() {
     Object.keys(this.hsyListingForm.controls).filter(k => {
@@ -224,12 +177,12 @@ export class CreationPage implements OnInit {
     } else {
       this.dirty['title'] = true;
       this.dirty['content'] = true;
-      this.dirty['type'] = true;
+      this.dirty['listingTypeEnum'] = true;
     }
   }
 
   validate():boolean {
-    return (this.listing.title && this.listing.content && (this.listing.type!=null));
+    return (this.listing.title && this.listing.content && (this.listing.listingTypeEnum!=null));
   }
 
   updateImageIds(imageIds:string[]) {

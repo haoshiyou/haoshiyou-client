@@ -14,21 +14,21 @@
             <ion-item>
                 <ion-label>类型</ion-label>
                 <ion-select interface="popover"
-                            text-right required [(ngModel)]="listing.type"
-                            name="type" placeholder="必选">
-                    <ion-option  *ngFor="let v of typeOptions " value={{v}}> {{ v | enumMsgPipe }}
-                    </ion-option>
+                            text-right required [(ngModel)]="listing.listingTypeEnum"
+                            name="listingTypeEnum" placeholder="必选">
+                    <ion-option  *ngFor="let v of listingTypeEnums "
+                                 value={{v}}>{{ v | enumMsgPipe }}</ion-option>
                 </ion-select>
             </ion-item>
-            <ion-item *ngIf="listing.type == 0"> <!-- 只有招租需要填写 -->
+            <ion-item *ngIf="listing.listingTypeEnum == 'NeedRoommate'"> <!-- 只有招租需要填写 -->
                 <ion-label>地址</ion-label>
                 <ion-input item-right class="address" text-right [(ngModel)]="listing.addressLine" name="addressLine"
                 ></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label>城市</ion-label>
-                <ion-input item-right text-right [(ngModel)]="listing.addressCityAndState"
-                           name="addressCityAndState"></ion-input>
+                <ion-input item-right text-right [(ngModel)]="listing.addressCity"
+                           name="addressCity"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label>预期价格</ion-label>
@@ -75,7 +75,7 @@
                 <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"
                            name="hsyGroupNick"></ion-input>
             </ion-item>
-            <ng-container *ngIf="listing.type == 0"><!-- 只有招租需要填写这段 -->
+            <ng-container *ngIf="listing.listingTypeEnum == 'NeedRoommate'"><!-- 只有招租需要填写这段 -->
                 <ion-item>
                     <ion-label>整租单租</ion-label>
                     <ion-select item-right interface="popover" text-right

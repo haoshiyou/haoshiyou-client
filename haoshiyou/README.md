@@ -25,6 +25,5 @@ Security related bugs are filed under
 [security repo](https://github.com/xinbenlv/haoshiyou-security/issues)
 
 TODO
- - Change ListingTypeEnum from 0 / 1 to word
  - Change Amenities from object{} to array[string]
  - Refresh when return - DONE 
