@@ -22,3 +22,8 @@ export interface Message {
   authorId:string;
   threadId:string;
 }
+
+export interface FilterSettings {
+  listingType_zhao: boolean;
+  listingType_qiu: boolean;
+}
