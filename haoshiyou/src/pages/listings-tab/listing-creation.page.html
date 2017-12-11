@@ -104,8 +104,8 @@
                     <div item-right text-right text-wrap>
                         <button ion-button small round color="primary"
                                 *ngFor="let o of amenityOptions"
-                                (click)="listing.amenities[o] = !listing.amenities[o]"
-                                [outline] = "!listing.amenities[o]">{{o}}</button>
+                                (click)="toggleAmenity(o)"
+                                [outline] = "listing.amenityArray.indexOf(o) < 0">{{o}}</button>
                     </div>
                 </ion-item>
             </ng-container>

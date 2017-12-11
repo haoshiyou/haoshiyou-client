@@ -124,8 +124,8 @@ export class CreationPage implements OnInit {
       };
       this.listing.location = loc;
     }
-    if (!this.listing.amenities) {
-      this.listing.amenities = {};
+    if (!this.listing.amenityArray) {
+      this.listing.amenityArray = [];
     }
     if (!this.listing.imageIds) this.listing.imageIds = [];
   }
@@ -216,5 +216,15 @@ export class CreationPage implements OnInit {
 
   public isDebug():boolean {
     return this.flagService.getFlag('debug');
+  }
+
+  private toggleAmenity(amenity:string):void {
+    let array:string[] = this.listing.amenityArray;
+    if (array.indexOf(amenity) >= 0) {
+      this.listing.amenityArray = this.listing.amenityArray.filter(a => a != amenity);
+    } else {
+      this.listing.amenityArray.push(amenity);
+    }
+    console.log(`XXX this.listing.amenityArray after toggle = ${this.listing.amenityArray}`);
   }
 }

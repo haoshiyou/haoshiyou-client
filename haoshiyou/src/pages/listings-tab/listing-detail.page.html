@@ -69,13 +69,13 @@
                     {{listing.numBedRoom}} Beds, {{listing.numBathRoom}} Baths
                 </div>
             </ion-item>
-            <ion-item *ngIf="listing.amenities">
+            <ion-item *ngIf="listing.amenityArray && listing.amenityArray.length > 0">
                 <ion-label col-3 item-left>
                     <ion-icon name="map"></ion-icon>
                     设施
                 </ion-label>
                 <div item-right text-wrap>
-                    <ion-badge ion-badge *ngFor="let a of getAmenities()">
+                    <ion-badge ion-badge *ngFor="let a of listing.amenityArray">
                         {{ a }}
                     </ion-badge>
                 </div>

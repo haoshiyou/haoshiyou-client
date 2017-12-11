@@ -31,10 +31,12 @@ export interface HsyListingInterface {
   "singleRoomBathRoomType"?: string;
   "state"?: string;
   "type"?: number;
-  "addressCity"?: string;
   "addressLine"?: string;
   "addressZipcode"?: string;
   "addressState"?: string;
+  "addressCity"?: string;
+  "addressCityAndState"?: string;
+  "amenityArray"?: Array<any>;
   owner?: HsyUser;
   interactions?: HsyInteraction[];
 }
@@ -64,10 +66,12 @@ export class HsyListing implements HsyListingInterface {
   "singleRoomBathRoomType": string = '';
   "state": string = '';
   "type": number = 0;
-  "addressCity": string = '';
   "addressLine": string = '';
   "addressZipcode": string = '';
   "addressState": string = '';
+  "addressCity": string = '';
+  "addressCityAndState": string = '';
+  "amenityArray": Array<any> = <any>[];
   owner: HsyUser = null;
   interactions: HsyInteraction[] = null;
   constructor(data?: HsyListingInterface) {
@@ -199,10 +203,6 @@ export class HsyListing implements HsyListingInterface {
           name: 'type',
           type: 'number'
         },
-        "addressCity": {
-          name: 'addressCity',
-          type: 'string'
-        },
         "addressLine": {
           name: 'addressLine',
           type: 'string'
@@ -214,6 +214,18 @@ export class HsyListing implements HsyListingInterface {
         "addressState": {
           name: 'addressState',
           type: 'string'
+        },
+        "addressCity": {
+          name: 'addressCity',
+          type: 'string'
+        },
+        "addressCityAndState": {
+          name: 'addressCityAndState',
+          type: 'string'
+        },
+        "amenityArray": {
+          name: 'amenityArray',
+          type: 'Array&lt;any&gt;'
         },
       },
       relations: {
