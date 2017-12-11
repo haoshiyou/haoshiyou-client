@@ -217,12 +217,6 @@ export class ListingDetailPage {
     }
     return false;
   }
-
-  public getAmenities():string[] {
-    return Object.keys(this.listing.amenities).filter(k => {
-      return this.listing.amenities[k];
-    });
-  }
   private eligibleToViewContact() {
     return false;
   }
