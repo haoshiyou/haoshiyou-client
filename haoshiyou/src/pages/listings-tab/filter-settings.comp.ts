@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 import {NavParams, Button, Checkbox, ViewController} from "ionic-angular";
 import {FlagService} from "../../services/flag.service";
-import {FilterSettings} from "../../models/models";
 
 @Component({
   templateUrl: 'filter-settings.comp.html',
@@ -9,16 +8,15 @@ import {FilterSettings} from "../../models/models";
 })
 export class FilterSettingsComponent {
 
-  private filterSettings = {};
-  checkedZhaozu: boolean;
-  checkedQiuzu: boolean;
+  private filterSettings = {'types': {}, 'areas': {}};
 
   constructor(public viewCtrl: ViewController,
               private flagService: FlagService,
               private _navParams: NavParams) {
     if (this._navParams.data) {
-      console.log(" --- " + this._navParams.data);
+      console.log(" --- " + JSON.stringify(this._navParams.data));
       //TODO: get filterSettings and initial UI
+      this.filterSettings = this._navParams.data['filterSettings'];
     }
   }
 
@@ -47,9 +45,6 @@ export class FilterSettingsComponent {
   };
 
   private applyFilterSettings() {
-    this.filterSettings['listingType_zhao'] = this.checkedZhaozu ? true: false;
-    this.filterSettings['listingType_qiu']  = this.checkedQiuzu  ? true : false;
-
     this.close();
   }
 

@@ -41,7 +41,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private markers: any[]; // Actually google.maps.Marker[];
   private mapReady: boolean = false;
   private currentIndex:number = 0;
-  private filterSettings = {};
+  private filterSettings = {'types': {}, 'areas': {}};
+  private whereClause = {};
   private mapOrList = 'ONLY_LIST';
   constructor(private platform: Platform,
               private nav: NavController,
@@ -98,15 +99,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   async loadMoreListings() {
-    let whereClause = {
-      'type': this.segmentModel == 'ROOM_WANTED' ? 1 : 0,
-    };
-
-    if (this.areaModel !== 'All') {
-      whereClause['hsyGroupEnum'] = this.areaModel;
-    } else {
-      whereClause['hsyGroupEnum'] = {'nin': ['BigTeam', 'TestGroup', 'None']};
-    }
     ga('send', 'event', {
       eventCategory: 'load',
       eventAction: 'load-more-listings',
@@ -116,7 +108,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     let newItems =  await this.api
         .find<HsyListing>({
           // TODO(zzn): use ListTypeEnum when migrated
-          where: whereClause,
+          where: this.whereClause,
           order: 'latestUpdatedOrBump DESC',
           limit: 12,
           offset: this.loadedListings.length,
@@ -241,10 +233,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public async popoverFilter(myEvent) {
-    let popover = this.popoverCtrl.create(FilterSettingsComponent,{data: 'data'}, {});
+    let popover = this.popoverCtrl.create(
+        FilterSettingsComponent,
+        {'filterSettings': this.filterSettings},
+        {});
     await popover.onDidDismiss((data) => {
       console.log(`--- received ` + JSON.stringify(data));
-      if (data) {
+      if (data !== undefined && data !== null) {
         this.filterSettings = data["filterSettings"];
         this.submitNewFiltering(this.filterSettings);
       }
@@ -255,22 +250,44 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   async submitNewFiltering(filterSettings_: {}) {
-    let type = this.getType(filterSettings_['listingType_zhao'],
-                            filterSettings_['listingType_qiu']);
-    let whereClause = {};
-    if (type !== -1) {
-      whereClause['type'] = type;
+    /* START filtering type */
+    let type = this.getType(filterSettings_['types']['zhaozu'],
+                            filterSettings_['types']['qiuzu']);
+    let whereClause_ = {};
+    if (type == 0) {
+      whereClause_['listingTypeEnum'] = 'NeedRoommate';
+    } else if (type == 1) {
+      whereClause_['listingTypeEnum'] = 'NeedRoom';
     }
+    /* END filtering type */
 
+    /* START filtering area */
+    let allArea = filterSettings_['areas']["All"];
+    if (allArea !== undefined && allArea === true) {
+      whereClause_['hsyGroupEnum'] = {'nin': ['BigTeam', 'TestGroup', 'None']};
+    } else {
+      let areaClause = [];
+      for (let area in filterSettings_['areas']) {
+        let selected = filterSettings_['areas'][area];
+        if (selected !== undefined && selected) {
+          areaClause.push(area);
+        }
+      }
+      whereClause_['hsyGroupEnum'] = {'inq': areaClause};
+    }
+    /* END filtering area */
+
+    /* EXEC filtering */
+    console.log('whereClause_: ' + JSON.stringify(whereClause_));
+    this.whereClause = whereClause_;
     let filterResult = await this.api.find<HsyListing>(
         {
-          where: whereClause,
+          where: this.whereClause,
           order: 'latestUpdatedOrBump DESC',
           limit: 12,
           offset: 0,
           include: ['interactions', 'owner'],
         })
-        .take(12)
         .toPromise();
     this.loadedListings = [];
     for (let item of filterResult) {
@@ -279,10 +296,10 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   private getType(zhaozu: boolean, qiuzu: boolean) {
-    if (!zhaozu) {
+    if (zhaozu === undefined || !zhaozu) {
       zhaozu = false;
     }
-    if (!qiuzu) {
+    if (qiuzu === undefined || !qiuzu) {
       qiuzu = false;
     }
     if (zhaozu && !qiuzu) {
