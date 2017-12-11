@@ -12,10 +12,11 @@
         <ion-item no-padding no-margin>
             <ion-label item-left class="hsy-listing-item-last-updated" color="grey">{{ listing.lastUpdated | timeFromNow }}更新</ion-label>
             <ion-label item-right ion-button icon-left clear color="grey">
-                <ion-icon name="heart-outline"></ion-icon>194
+                <ion-icon name="thumbs-up-outline"></ion-icon>
+                <span *ngIf="listing.interactions.length > 0">{{listing.interactions.length}}</span>
             </ion-label>
             <ion-label item-right ion-button icon-left clear color="grey">
-                <ion-icon name="eye-outline"></ion-icon> {{15}}
+                <ion-icon name="eye-outline"></ion-icon>
             </ion-label>
         </ion-item>
     </ion-card-content>

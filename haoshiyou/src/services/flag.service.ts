@@ -12,7 +12,8 @@ export class FlagService {
   }
   private flags = {
     'debug': false,
-    'realCreate': false
+    'realCreate': false,
+    'requireToContact': false,
   };
 
   getAllFlags() {

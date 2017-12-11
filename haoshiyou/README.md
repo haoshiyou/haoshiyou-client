@@ -24,12 +24,5 @@ Future features are in the
 Security related bugs are filed under 
 [security repo](https://github.com/xinbenlv/haoshiyou-security/issues)
 
-## TODO
-### Listing Tab
-[ ] show a picture logo if has picture
-[ ] show poster
-
-### Clean Up Data
-[ ] clean up <b/> and replacing with appropriate linebreak
-[ ] clean up 求租
-
+TODO
+ - Refresh when return - DONE 

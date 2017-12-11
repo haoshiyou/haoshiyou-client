@@ -1,5 +1,8 @@
-import {Platform, NavController, AlertController, Content, PopoverController} from "ionic-angular";
-import {OnInit, OnDestroy, Component, ViewChild} from "@angular/core";
+import {Platform, NavController, AlertController, Content, PopoverController, Col} from "ionic-angular";
+import {
+  OnInit, OnDestroy, Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef,
+  ElementRef
+} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {AuthService} from "../../services/auth.service";
 import "rxjs/Rx";
@@ -8,6 +11,7 @@ import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import UrlUtil from "../../util/url_util";
 import {FlagService} from "../../services/flag.service";
 import {FilterSettingsComponent} from "./filter-settings.comp";
+import {MapViewComponent} from "./map-view.comp";
 declare let ga:any;
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
@@ -25,9 +29,11 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     }
   }
   @ViewChild(Content) content: Content;
+  @ViewChild(MapViewComponent) private mapView: MapViewComponent;
+  @ViewChild('mapContainerCol') private mapContainerCol: ElementRef;
+  @ViewChild('listContainerCol') private listContainerCol: ElementRef;
   public segmentModel: string = 'ROOMMATE_WANTED'; // by default for rent
   public areaModel: string = 'All'; // by default for All
-  public mapToggleOn: boolean = false;
   public useGrid:boolean = !(navigator.platform == 'iPhone');
   public loadedListings: HsyListing[] = [];
   public isInitLoading = false;
@@ -36,13 +42,15 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private mapReady: boolean = false;
   private currentIndex:number = 0;
   private filterSettings = {};
+  private mapOrList = 'ONLY_LIST';
   constructor(private platform: Platform,
               private nav: NavController,
               private alertCtrl: AlertController,
               private auth: AuthService,
               private api: HsyListingApi,
               private flagService: FlagService,
-              public popoverCtrl: PopoverController) {
+              public popoverCtrl: PopoverController,
+              private ref:ChangeDetectorRef) {
   }
   async ngOnInit() {
     let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
@@ -55,11 +63,16 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     }
     await this.loadMoreListings();
     console.log(`ListingsTabPage init with area=${this.areaModel}, segment=${this.segmentModel}`);
+    if (this.largeEnough()) {
+      this.mapOrList = 'BOTH';
+    } else this.mapOrList = 'ONLY_LIST';
+    this.updateMapOrList(this.mapOrList);
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     ga('set', 'page', '/listings-tab.page.html');
     ga('send', 'pageview');
+    this.ref.markForCheck();
   }
 
   //noinspection JSUnusedGlobalSymbols
@@ -121,9 +134,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     for (let item of newItems) {
       this.loadedListings.push(item);
     }
+    this.ref.markForCheck();
   }
-
-
 
   private updateMarkers() {
     // TODO(xinbenlv): update markers
@@ -233,5 +245,28 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     popover.present({
       ev: myEvent
     });
+  }
+
+  public largeEnough():boolean { // XXX this is a hack, use Bootstrap of Ionic's Grid System to make it work
+    return window.innerWidth > 600;
+  }
+
+  public updateMapOrList(value) {
+    console.log(`XXX updateMapOrList value = ${value}`);
+    if (value == "BOTH") {
+      this.listContainerCol.nativeElement.setAttribute('style', 'display:block;');
+      this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
+      this.listContainerCol.nativeElement.className = 'half-width';
+      this.mapContainerCol.nativeElement.className = 'half-width';
+    } else if (value == "ONLY_MAP") {
+      this.listContainerCol.nativeElement.setAttribute('style', 'display:none;');
+      this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
+      this.mapContainerCol.nativeElement.className = 'full-width';
+    } else if (value == "ONLY_LIST") {
+      this.listContainerCol.nativeElement.setAttribute('style', 'display:block;');
+      this.mapContainerCol.nativeElement.setAttribute('style', 'display:none;');
+      this.listContainerCol.nativeElement.className = 'full-width';
+    }
+    this.mapView.render();
   }
 }

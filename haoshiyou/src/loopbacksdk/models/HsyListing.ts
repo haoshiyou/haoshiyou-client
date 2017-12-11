@@ -7,63 +7,71 @@ import {
 
 declare var Object: any;
 export interface HsyListingInterface {
-  "addressCityAndState"?: string;
-  "addressLine"?: string;
   "amenities"?: any;
   "content"?: string;
   "hsyGroupEnum"?: string;
   "hsyGroupNick"?: string;
-  "imageIds"?: Array<any>;
-  "isRentingEntireHouse"?: boolean;
-  "lastUpdated"?: Date;
-  "listingTypeEnum"?: string;
-  "location"?: GeoPoint;
-  "numBathRoom"?: number;
-  "numBedRoom"?: number;
-  "otherCosts"?: any;
-  "ownerId": string;
-  "price"?: number;
   "rentalEndDate"?: Date;
   "rentalStartDate"?: Date;
-  "singleRoomBathRoomType"?: string;
-  "state"?: string;
   "title"?: string;
-  "type"?: number;
   "uid": string;
   "wechatId"?: string;
   "latestUpdatedOrBump"?: Date;
+  "numBathRoom"?: number;
+  "numBedRoom"?: number;
+  "isRentingEntireHouse"?: boolean;
+  "lastUpdated"?: Date;
+  "imageIds"?: Array<any>;
+  "location"?: GeoPoint;
+  "listingTypeEnum"?: string;
+  "otherCosts"?: any;
+  "ownerId": string;
+  "price"?: number;
   "requireToContact"?: Array<any>;
+  "singleRoomBathRoomType"?: string;
+  "state"?: string;
+  "type"?: number;
+  "addressLine"?: string;
+  "addressZipcode"?: string;
+  "addressState"?: string;
+  "addressCity"?: string;
+  "addressCityAndState"?: string;
+  "amenityArray"?: Array<any>;
   owner?: HsyUser;
   interactions?: HsyInteraction[];
 }
 
 export class HsyListing implements HsyListingInterface {
-  "addressCityAndState": string = '';
-  "addressLine": string = '';
   "amenities": any = <any>null;
   "content": string = '';
   "hsyGroupEnum": string = '';
   "hsyGroupNick": string = '';
-  "imageIds": Array<any> = <any>[];
-  "isRentingEntireHouse": boolean = false;
-  "lastUpdated": Date = new Date(0);
-  "listingTypeEnum": string = '';
-  "location": GeoPoint = <any>null;
-  "numBathRoom": number = 0;
-  "numBedRoom": number = 0;
-  "otherCosts": any = <any>null;
-  "ownerId": string = '';
-  "price": number = 0;
   "rentalEndDate": Date = new Date(0);
   "rentalStartDate": Date = new Date(0);
-  "singleRoomBathRoomType": string = '';
-  "state": string = '';
   "title": string = '';
-  "type": number = 0;
   "uid": string = '';
   "wechatId": string = '';
   "latestUpdatedOrBump": Date = new Date(0);
+  "numBathRoom": number = 0;
+  "numBedRoom": number = 0;
+  "isRentingEntireHouse": boolean = false;
+  "lastUpdated": Date = new Date(0);
+  "imageIds": Array<any> = <any>[];
+  "location": GeoPoint = <any>null;
+  "listingTypeEnum": string = '';
+  "otherCosts": any = <any>null;
+  "ownerId": string = '';
+  "price": number = 0;
   "requireToContact": Array<any> = <any>[];
+  "singleRoomBathRoomType": string = '';
+  "state": string = '';
+  "type": number = 0;
+  "addressLine": string = '';
+  "addressZipcode": string = '';
+  "addressState": string = '';
+  "addressCity": string = '';
+  "addressCityAndState": string = '';
+  "amenityArray": Array<any> = <any>[];
   owner: HsyUser = null;
   interactions: HsyInteraction[] = null;
   constructor(data?: HsyListingInterface) {
@@ -99,14 +107,6 @@ export class HsyListing implements HsyListingInterface {
       path: 'HsyListings',
       idName: 'uid',
       properties: {
-        "addressCityAndState": {
-          name: 'addressCityAndState',
-          type: 'string'
-        },
-        "addressLine": {
-          name: 'addressLine',
-          type: 'string'
-        },
         "amenities": {
           name: 'amenities',
           type: 'any'
@@ -123,46 +123,6 @@ export class HsyListing implements HsyListingInterface {
           name: 'hsyGroupNick',
           type: 'string'
         },
-        "imageIds": {
-          name: 'imageIds',
-          type: 'Array&lt;any&gt;'
-        },
-        "isRentingEntireHouse": {
-          name: 'isRentingEntireHouse',
-          type: 'boolean'
-        },
-        "lastUpdated": {
-          name: 'lastUpdated',
-          type: 'Date'
-        },
-        "listingTypeEnum": {
-          name: 'listingTypeEnum',
-          type: 'string'
-        },
-        "location": {
-          name: 'location',
-          type: 'GeoPoint'
-        },
-        "numBathRoom": {
-          name: 'numBathRoom',
-          type: 'number'
-        },
-        "numBedRoom": {
-          name: 'numBedRoom',
-          type: 'number'
-        },
-        "otherCosts": {
-          name: 'otherCosts',
-          type: 'any'
-        },
-        "ownerId": {
-          name: 'ownerId',
-          type: 'string'
-        },
-        "price": {
-          name: 'price',
-          type: 'number'
-        },
         "rentalEndDate": {
           name: 'rentalEndDate',
           type: 'Date'
@@ -171,21 +131,9 @@ export class HsyListing implements HsyListingInterface {
           name: 'rentalStartDate',
           type: 'Date'
         },
-        "singleRoomBathRoomType": {
-          name: 'singleRoomBathRoomType',
-          type: 'string'
-        },
-        "state": {
-          name: 'state',
-          type: 'string'
-        },
         "title": {
           name: 'title',
           type: 'string'
-        },
-        "type": {
-          name: 'type',
-          type: 'number'
         },
         "uid": {
           name: 'uid',
@@ -199,8 +147,84 @@ export class HsyListing implements HsyListingInterface {
           name: 'latestUpdatedOrBump',
           type: 'Date'
         },
+        "numBathRoom": {
+          name: 'numBathRoom',
+          type: 'number'
+        },
+        "numBedRoom": {
+          name: 'numBedRoom',
+          type: 'number'
+        },
+        "isRentingEntireHouse": {
+          name: 'isRentingEntireHouse',
+          type: 'boolean'
+        },
+        "lastUpdated": {
+          name: 'lastUpdated',
+          type: 'Date'
+        },
+        "imageIds": {
+          name: 'imageIds',
+          type: 'Array&lt;any&gt;'
+        },
+        "location": {
+          name: 'location',
+          type: 'GeoPoint'
+        },
+        "listingTypeEnum": {
+          name: 'listingTypeEnum',
+          type: 'string'
+        },
+        "otherCosts": {
+          name: 'otherCosts',
+          type: 'any'
+        },
+        "ownerId": {
+          name: 'ownerId',
+          type: 'string'
+        },
+        "price": {
+          name: 'price',
+          type: 'number'
+        },
         "requireToContact": {
           name: 'requireToContact',
+          type: 'Array&lt;any&gt;'
+        },
+        "singleRoomBathRoomType": {
+          name: 'singleRoomBathRoomType',
+          type: 'string'
+        },
+        "state": {
+          name: 'state',
+          type: 'string'
+        },
+        "type": {
+          name: 'type',
+          type: 'number'
+        },
+        "addressLine": {
+          name: 'addressLine',
+          type: 'string'
+        },
+        "addressZipcode": {
+          name: 'addressZipcode',
+          type: 'string'
+        },
+        "addressState": {
+          name: 'addressState',
+          type: 'string'
+        },
+        "addressCity": {
+          name: 'addressCity',
+          type: 'string'
+        },
+        "addressCityAndState": {
+          name: 'addressCityAndState',
+          type: 'string'
+        },
+        "amenityArray": {
+          name: 'amenityArray',
           type: 'Array&lt;any&gt;'
         },
       },
