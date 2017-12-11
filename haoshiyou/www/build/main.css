@@ -38553,12 +38553,12 @@ body {
 
 .hsy-listing-item-header {
   font-family: "Hosted Noto Sans Regular";
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .hsy-listing-item-price {
   font-family: "Hosted Noto Sans Regular";
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .hsy-listing-item-last-updated {
@@ -38568,6 +38568,29 @@ body {
 
 .card .item.item-block:not(:last-child) .item-inner {
   border-bottom: 1px solid #dedede;
+}
+
+.creation ion-input.ng-dirty.ng-invalid,
+.creation ion-select.ng-dirty.ng-invalid {
+  border-right: #f53d3d solid;
+}
+
+#left {
+  float: left;
+  overflow-y: scroll;
+}
+
+#right {
+  float: left;
+  overflow-y: scroll;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.full-width {
+  width: 100%;
 }
 
 creation-page .creation textarea.text-input {
