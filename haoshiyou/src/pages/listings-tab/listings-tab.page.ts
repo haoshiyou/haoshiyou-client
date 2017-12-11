@@ -118,7 +118,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
           // TODO(zzn): use ListTypeEnum when migrated
           where: whereClause,
           order: 'latestUpdatedOrBump DESC',
-          limit: 12,
+          limit: 120,
           offset: this.loadedListings.length,
           include: ['interactions', 'owner'],
         })

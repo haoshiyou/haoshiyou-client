@@ -94,7 +94,7 @@
                 </div>
             </ion-item>
         </ion-item-group>
-        <ion-item-group *ngIf="listing.owner.contactPhone && listing.owner.contactEmail && listing.owner.weixin && listing.hsyGroupNick && listing.hsyGroupEnum">
+        <ion-item-group *ngIf="listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin || listing.hsyGroupNick || listing.hsyGroupEnum">
             <ion-item-divider color="light">
                 联系方式
             </ion-item-divider>
@@ -108,8 +108,8 @@
                     <button color="primary" ion-button outline *ngFor="let req of listing.requireToContact">登陆{{req}}</button>
                 </div>
             </ion-item>
-            <ng-template *ngIf="listing.requireToContact.length == 0 || eligibleToViewContact()">
-                <ion-item *ngIf="listing.owner.contactPhone">
+            <ng-container *ngIf="listing.requireToContact == null || listing.requireToContact.length == 0 || eligibleToViewContact()">
+                <ion-item *ngIf="listing.owner && listing.owner.contactPhone">
                     <ion-label col-3 item-left>
                         <ion-icon name="contact"></ion-icon>电话
                     </ion-label>
@@ -117,7 +117,7 @@
                         <div text-right>{{ listing.owner.contactPhone }}</div>
                     </div>
                 </ion-item>
-                <ion-item *ngIf="listing.owner.contactEmail">
+                <ion-item *ngIf="listing.owner && listing.owner.contactEmail">
                     <ion-label col-3 item-left>
                         <ion-icon name="contact"></ion-icon>邮件
                     </ion-label>
@@ -142,7 +142,7 @@
                         <div text-right>{{ listing.owner.weixin }}</div>
                     </div>
                 </ion-item>
-            </ng-template>
+            </ng-container>
         </ion-item-group>
         <ion-item-group *ngIf="listing.imageIds && listing.imageIds.length > 0">
             <ion-item-divider>
