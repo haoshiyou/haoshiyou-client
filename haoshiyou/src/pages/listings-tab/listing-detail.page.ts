@@ -3,7 +3,7 @@ import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
 import {IUserService} from "../../services/chats/user.service";
 import {ChatWindowPage} from "../chats-tab/chat-window.page";
-import {Component, AfterViewInit} from "@angular/core";
+import {Component, AfterViewInit, ChangeDetectionStrategy} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
@@ -12,22 +12,22 @@ import {HsyUserApi} from "../../loopbacksdk/services/custom/HsyUser";
 import {HsyUser} from "../../loopbacksdk/models/HsyUser";
 import {ListingsTabPage} from "./listings-tab.page";
 import {AuthService} from "../../services/auth.service";
+import { ChangeDetectorRef } from '@angular/core';
+import {FlagService} from "../../services/flag.service";
 declare let window:any;
 declare let QRCode:any;
 declare let ga:any;
 
 @Component({
   selector: 'listing-detail',
-  templateUrl: 'listing-detail.page.html'
+  templateUrl: 'listing-detail.page.html',
+  changeDetection: ChangeDetectionStrategy.OnPush ,
 })
 export class ListingDetailPage {
   listing: HsyListing;
-  owner: User;
-  meId: string;
   title: string;
   public loading: boolean = true;
   public useGrid:boolean = !(navigator.platform == 'iPhone');
-
   async ionViewWillEnter() {
     if (this.listing == null) await this.loadListing();
     ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
@@ -42,17 +42,22 @@ export class ListingDetailPage {
   }
   async loadListing() {
     if (this.params.data['listing'] != null) {
-      this.listing = this.params.data.listing;
+      this.listing = await this.params.data.listing;
+      this.ref.markForCheck();
     } else {
       let id = this.params.data.id;
-      this.listing = await this.api.findById(id)
+      this.listing = await this.api.findById(id, {
+        include: ['interactions', 'owner'],
+      })
           .take(1)
           .toPromise() as HsyListing;
+      this.ref.markForCheck();
     }
+    console.log(`XXX listing = ${JSON.stringify(this.listing)}`);
     this.params.data.id = this.listing.uid;
     this.title = `好室友™帖子：` + this.listing.title;
-    await this.initListeners();
     this.loading = false;
+    return;
   }
 
   async ngOnInit():Promise<void> {
@@ -67,7 +72,10 @@ export class ListingDetailPage {
               private api:HsyListingApi,
               private hsyUserApi:HsyUserApi,
               private auth: AuthService,
-              private alertCtrl: AlertController) {}
+              private alertCtrl: AlertController,
+              private ref: ChangeDetectorRef,
+              private flagService: FlagService
+              ) {}
   async backToMain() {
     ga('send', 'event', {
       eventCategory: 'go-to',
@@ -76,36 +84,13 @@ export class ListingDetailPage {
     });
     await this.nav.push(ListingsTabPage);
   }
+  ionViewDidEnter() {
+    console.log(`Entering lising detail page`);
+    this.ref.markForCheck();
+  }
   async edit() {
     await this.nav.push(CreationPage, {listing: this.listing});
   }
-
-  private async initListeners() {
-    let ownerHsyUser:HsyUser = await this.hsyUserApi
-        .findById<HsyUser>(this.listing.ownerId).take(1).toPromise()
-        .catch(e => {
-          console.warn("Listing ownerId not found: " + this.listing.ownerId);
-          return this.hsyUserApi
-            .findById<HsyUser>('admin|UNKOWN').take(1).toPromise()
-        });
-    this.owner = {
-      id: ownerHsyUser.id,
-      name: ownerHsyUser.name,
-      avatarSrc: ownerHsyUser.avatarId, // TODO(xinbenlv): update the URL using cloudinary
-      regIds: []
-    };
-    console.log(`loaded user ${JSON.stringify(ownerHsyUser)}`);
-
-    this.userService.promiseMe().then((me:User)=> {
-      if (me) {
-        this.meId = me.id;
-      }
-    });
-    this.userService.observableMeId().subscribe((meId:string)=> {
-      this.meId = meId;
-    });
-  }
-
   async claimAndEdit() {
     ga('send', 'event', {
       eventCategory: 'go-to',
@@ -147,8 +132,11 @@ export class ListingDetailPage {
             let local = window.localStorage;
             let meId = local['user_id']; // TODO(xinbenlv): use UserService
             this.listing.ownerId = meId;
-            this.api.upsert<HsyListing>(this.listing).toPromise()
-                .then(l => {this.listing = l})
+            this.api.upsert<HsyListing>(this.listing).take(1).toPromise()
+                .then(l => {
+                  this.listing = l;
+                  this.ref.markForCheck();
+                })
                 .catch(e => {
                   console.warn(`Error in claiming post = 
                   ${JSON.stringify(e, null, ' ')}`)});
@@ -193,19 +181,6 @@ export class ListingDetailPage {
     await alert.present();
   }
 
-  startChat() {
-    // TODO(xinbenlv): handle when not yet logged in.
-    let thread:Thread = <Thread>{};
-    this.userService.promiseMe().then((me:User)=> {
-      let newThreadId:string = me.id + '|' + this.listing.uid;
-      thread.id = newThreadId;
-      thread.userIds = [me.id, this.listing.ownerId];
-      return this.threadService.createThread(thread);
-    }).then(() => {
-      this.nav.push(ChatWindowPage, {thread: thread});
-    });
-  }
-
   // TODO(xinbenlv): merge with the same piece of code in image-grid.
   //noinspection JSUnusedLocalSymbols, used in HTML
   private showImage(imageId) {
@@ -236,9 +211,13 @@ export class ListingDetailPage {
   }
 
   private isMine(): boolean {
-    let local = window.localStorage;
-    let meId = local['user_id']; // TODO(xinbenlv): use UserService
-    console.log(`XXX this.listing.ownerId = ${this.listing.ownerId}, meId = ${meId}`);
-    return meId === this.listing.ownerId ;
+    if (this.listing) {
+      console.log(`calls isMine`);
+      return window.localStorage['user_id'] === this.listing.ownerId ;
+    }
+    return false;
+  }
+  private eligibleToViewContact() {
+    return false;
   }
 }

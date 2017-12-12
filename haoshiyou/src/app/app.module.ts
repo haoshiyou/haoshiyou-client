@@ -3,6 +3,7 @@ import {IonicApp, IonicModule} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
+import {FilterSettingsComponent} from "../pages/listings-tab/filter-settings.comp";
 import {ChatMessageComp} from "../pages/chats-tab/chat-message.comp";
 import {ChatThreadComp} from "../pages/chats-tab/chat-thread.comp";
 import {ChatWindowPage} from "../pages/chats-tab/chat-window.page";
@@ -47,6 +48,7 @@ import {AppVersion} from "@ionic-native/app-version";
 import {DateFormatterPipe} from "../pipes/date-formatter.pipe";
 import {FlagService} from "../services/flag.service";
 import {MineTabPage} from "../pages/mine-tab/mine-tab.page";
+import { FormsModule }   from '@angular/forms';
 
 export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
@@ -60,6 +62,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
   declarations: [
     // All Components
     HaoshiyouApp,
+    FilterSettingsComponent,
     TabsPage,
     ChatMessageComp,
     ChatThreadComp,
@@ -77,6 +80,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     DisconnectModal,
     QrCodeTabPage,
     MineTabPage,
+
 
     // All Pipes
     EnumMsgPipe,
@@ -104,10 +108,12 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     SDKBrowserModule.forRoot(),
+    FormsModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     HaoshiyouApp,
+    FilterSettingsComponent,
     TabsPage,
     ChatMessageComp,
     ChatThreadComp,

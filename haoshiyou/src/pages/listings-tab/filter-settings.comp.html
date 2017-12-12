@@ -1,0 +1,21 @@
+<ion-list>
+    <button (click)="applyFilterSettings()" ion-button outline item-right>Apply</button>
+    <ion-list-header>类型</ion-list-header>
+    <ion-item>
+        <ion-label>招租</ion-label>
+        <ion-checkbox [(ngModel)]="filterSettings['types']['zhaozu']" value="ROOMMATE_WANTED"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+        <ion-label>求租</ion-label>
+        <ion-checkbox [(ngModel)]="filterSettings['types']['qiuzu']"></ion-checkbox>
+    </ion-item>
+
+    <ion-list-header>区域</ion-list-header>
+    <ng-container *ngFor="let option of options; let i=index;">
+        <ion-item *ngIf="flagService.getFlag('debug') || option != 'TestGroup'">
+            <ion-label>{{optionsMap[option]}}</ion-label>
+            <ion-checkbox [(ngModel)]="filterSettings['areas'][option]"  >
+            </ion-checkbox>
+        </ion-item>
+    </ng-container>
+</ion-list>
