@@ -36,7 +36,7 @@ export class MapViewComponent implements OnChanges {
   }
   public render() {
     console.log(`XXX Render!`);
-    let minZoomLevel = 11;
+    let minZoomLevel = 10;
     let latAve:number = 0, lngAve:number = 0;
     if (document.getElementById('map_view_canvas')) {
       this.map = new google.maps.Map(document.getElementById('map_view_canvas'), {
@@ -68,6 +68,9 @@ export class MapViewComponent implements OnChanges {
       lngAve = -122.083855;
       console.log(`XXX empty locations, set lat = ${latAve}, lng = ${lngAve}`);
     }
+
+    latAve = 	37.6042379;
+    lngAve = -122.1755228;
     this.map.setCenter(new google.maps.LatLng(latAve, lngAve));
     this.resize();
   }
