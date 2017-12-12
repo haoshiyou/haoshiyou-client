@@ -105,12 +105,16 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       eventLabel: `load-more-index-${this.loadedListings.length}`
     });
     let start:number = Date.now();
+
+    // southwest: 37.148070, -122.852249
+    // northeast: 38.072739, -121.473969
+
     let newItems =  await this.api
         .find<HsyListing>({
           // TODO(zzn): use ListTypeEnum when migrated
           where: this.whereClause,
           order: 'latestUpdatedOrBump DESC',
-          limit: 120,
+          limit: 24,
           offset: this.loadedListings.length,
           include: ['interactions', 'owner'],
         })
@@ -174,6 +178,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   async doInfinite(infiniteScroll) {
+    console.log(`Load more!`);
     await this.loadMoreListings();
     infiniteScroll.complete();
   }
