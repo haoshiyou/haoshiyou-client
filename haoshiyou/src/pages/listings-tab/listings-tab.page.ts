@@ -41,7 +41,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private markers: any[]; // Actually google.maps.Marker[];
   private mapReady: boolean = false;
   private currentIndex:number = 0;
-  private filterSettings = {'types': {}, 'areas': {}};
+  private filterSettings = {'types': {}, 'areas': {}, 'duration': {}};
   private whereClause = {};
   private mapOrList = 'ONLY_LIST';
   constructor(private platform: Platform,
@@ -247,17 +247,19 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       if (data !== undefined && data !== null) {
         this.filterSettings = data["filterSettings"];
       } else if (this.popoverCtrl['_app'].filterSettings) {
-        this.filterSettings = this.popoverCtrl['_app']/*hack to access private field*/.filterSettings;
+        this.filterSettings = this.popoverCtrl['_app']/*a hack to access private */.filterSettings;
       }
       console.log(`xxx this.filterSettings = ${JSON.stringify(this.filterSettings, null, " ")}`);
-      await this.submitNewFiltering(this.filterSettings);
+      this.updateWhereClause(this.filterSettings);
+      this.loadedListings = [];
+      await this.loadMoreListings();
     });
     await popover.present({
       ev: myEvent
     });
   }
 
-  async submitNewFiltering(filterSettings_: {}) {
+  private updateWhereClause(filterSettings_: {}) {
     /* START filtering type */
     let type = this.getType(filterSettings_['types']['zhaozu'],
                             filterSettings_['types']['qiuzu']);
@@ -267,6 +269,28 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     } else if (type == 1) {
       whereClause_['listingTypeEnum'] = 'NeedRoom';
     }
+    let ago = null;
+    switch (this.filterSettings['duration']) {
+      case '最近3天':
+        console.log(`XXX filter by 最近3天`);
+        ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
+        break;
+      case '最近7天':
+        console.log(`XXX filter by 最近7天`);
+        ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
+        break;
+      case '最近30天':
+        console.log(`XXX filter by 最近30天`);
+        ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
+        break;
+      case '最近90天':
+        console.log(`XXX filter by 最近90天`);
+        ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
+        break;
+      default:
+        console.log(`XXX date 不限`);
+    }
+    whereClause_['lastUpdated'] = { "gte": ago};
     /* END filtering type */
 
     /* START filtering area */
@@ -281,26 +305,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
           areaClause.push(area);
         }
       }
-      whereClause_['hsyGroupEnum'] = {'inq': areaClause};
+      if (areaClause.length > 0) whereClause_['hsyGroupEnum'] = {'inq': areaClause};
     }
     /* END filtering area */
 
     /* EXEC filtering */
-    console.log('whereClause_: ' + JSON.stringify(whereClause_));
+    console.log('entire whereClause_: ' + JSON.stringify(whereClause_));
     this.whereClause = whereClause_;
-    let filterResult = await this.api.find<HsyListing>(
-        {
-          where: this.whereClause,
-          order: 'latestUpdatedOrBump DESC',
-          limit: 12,
-          offset: 0,
-          include: ['interactions', 'owner'],
-        })
-        .toPromise();
-    this.loadedListings = [];
-    for (let item of filterResult) {
-      this.loadedListings.push(item);
-    }
   }
 
   private getType(zhaozu: boolean, qiuzu: boolean) {

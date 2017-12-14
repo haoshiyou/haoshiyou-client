@@ -2,13 +2,19 @@ import {Component} from "@angular/core";
 import {NavParams, Button, Checkbox, ViewController} from "ionic-angular";
 import {FlagService} from "../../services/flag.service";
 
+
 @Component({
   templateUrl: 'filter-settings.comp.html',
   selector: 'filter-settings',
 })
 export class FilterSettingsComponent {
 
-  public filterSettings = {'types': {}, 'areas': {}};
+  // TODO(xinbenlv): use interface
+  public filterSettings = {
+    'types': {},
+    'areas': {},
+    'duration': {}
+  };
 
   constructor(public viewCtrl: ViewController,
               private flagService: FlagService,
@@ -43,6 +49,14 @@ export class FilterSettingsComponent {
     'Seattle': '西雅图',
     'TestGroup': '测试',
   };
+
+  public durationList = [
+      '最近3天',
+      '最近7天',
+      '最近30天',
+      '最近90天'
+  ];
+
 
   private applyFilterSettings() {
     this.close();

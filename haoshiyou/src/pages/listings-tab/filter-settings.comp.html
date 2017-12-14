@@ -17,4 +17,14 @@
             </ion-checkbox>
         </ion-item>
     </ng-container>
+
+    <ion-list-header>日期</ion-list-header>
+
+    <ion-list radio-group [(ngModel)]="filterSettings['duration']">
+        <ion-item *ngFor="let option of durationList">
+            <ion-label>{{option}}</ion-label>
+            <ion-radio value="{{option}}"></ion-radio>
+        </ion-item>
+    </ion-list>
+
 </ion-list>
