@@ -1,4 +1,4 @@
-<ion-list>
+<ion-content>
     <ion-list-header>类型</ion-list-header>
     <ion-item>
         <ion-label>招租</ion-label>
@@ -19,12 +19,15 @@
     </ng-container>
 
     <ion-list-header>日期</ion-list-header>
-
     <ion-list radio-group [(ngModel)]="filterSettings['duration']">
         <ion-item *ngFor="let option of durationList">
             <ion-label>{{option}}</ion-label>
             <ion-radio value="{{option}}"></ion-radio>
         </ion-item>
     </ion-list>
-
-</ion-list>
+    <ion-list-header>价格上限: {{filterSettings['price']}}</ion-list-header>
+    <ion-item >
+        <ion-range min="0" max="10000" [(ngModel)]="filterSettings['price']">
+        </ion-range>
+    </ion-item>
+</ion-content>

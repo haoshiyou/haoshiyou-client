@@ -62,6 +62,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     if (areaFromUrl) {
       this.areaModel = areaFromUrl;
     }
+    this.updateWhereClause();
     await this.loadMoreListings();
     console.log(`ListingsTabPage init with area=${this.areaModel}, segment=${this.segmentModel}`);
     if (this.largeEnough()) {
@@ -250,7 +251,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         this.filterSettings = this.popoverCtrl['_app']/*a hack to access private */.filterSettings;
       }
       console.log(`xxx this.filterSettings = ${JSON.stringify(this.filterSettings, null, " ")}`);
-      this.updateWhereClause(this.filterSettings);
+      this.updateWhereClause();
       this.loadedListings = [];
       await this.loadMoreListings();
     });
@@ -259,16 +260,20 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     });
   }
 
-  private updateWhereClause(filterSettings_: {}) {
+  private updateWhereClause() {
     /* START filtering type */
-    let type = this.getType(filterSettings_['types']['zhaozu'],
-                            filterSettings_['types']['qiuzu']);
+    let type = this.getType(this.filterSettings['types']['zhaozu'],
+                            this.filterSettings['types']['qiuzu']);
     let whereClause_ = {};
     if (type == 0) {
       whereClause_['listingTypeEnum'] = 'NeedRoommate';
     } else if (type == 1) {
       whereClause_['listingTypeEnum'] = 'NeedRoom';
+    } else {
+      delete whereClause_['listingTypeEnum'];
     }
+    /* END filtering type */
+    /* START filtering duration */
     let ago = null;
     switch (this.filterSettings['duration']) {
       case '最近3天':
@@ -287,20 +292,28 @@ export class ListingsTabPage implements OnInit, OnDestroy {
         console.log(`XXX filter by 最近90天`);
         ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
         break;
+      case '不限': // fall though
       default:
         console.log(`XXX date 不限`);
     }
-    whereClause_['lastUpdated'] = { "gte": ago};
-    /* END filtering type */
+    if(ago) whereClause_['lastUpdated'] = { "gte": ago};
+    /* END filtering duration */
+    /* START filtering price */
+    if (this.filterSettings['price']) {
+      whereClause_['price'] = {lt: this.filterSettings['price']};
+    } else {
+      delete whereClause_['price'];
+    }
+    /* END filtering price */
 
     /* START filtering area */
-    let allArea = filterSettings_['areas']["All"];
+    let allArea = this.filterSettings['areas']["All"];
     if (allArea !== undefined && allArea === true) {
       whereClause_['hsyGroupEnum'] = {'nin': ['BigTeam', 'TestGroup', 'None']};
     } else {
       let areaClause = [];
-      for (let area in filterSettings_['areas']) {
-        let selected = filterSettings_['areas'][area];
+      for (let area in this.filterSettings['areas']) {
+        let selected = this.filterSettings['areas'][area];
         if (selected !== undefined && selected) {
           areaClause.push(area);
         }

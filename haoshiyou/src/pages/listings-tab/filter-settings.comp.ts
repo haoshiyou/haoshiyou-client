@@ -54,7 +54,8 @@ export class FilterSettingsComponent {
       '最近3天',
       '最近7天',
       '最近30天',
-      '最近90天'
+      '最近90天',
+      '不限'
   ];
 
 
