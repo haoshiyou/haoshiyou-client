@@ -1,4 +1,4 @@
-import {Platform, NavController, AlertController, Content, PopoverController, Col} from "ionic-angular";
+import {Platform, NavController, AlertController, Content, PopoverController, Col, Popover} from "ionic-angular";
 import {
   OnInit, OnDestroy, Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef,
   ElementRef
@@ -12,6 +12,7 @@ import UrlUtil from "../../util/url_util";
 import {FlagService} from "../../services/flag.service";
 import {FilterSettingsComponent} from "./filter-settings.comp";
 import {MapViewComponent} from "./map-view.comp";
+import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 declare let ga:any;
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
@@ -41,7 +42,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   private markers: any[]; // Actually google.maps.Marker[];
   private mapReady: boolean = false;
   private currentIndex:number = 0;
-  private filterSettings = {'types': {}, 'areas': {}};
+  private filterSettings = {'types': {}, 'areas': {}, 'duration': {}};
   private whereClause = {};
   private mapOrList = 'ONLY_LIST';
   constructor(private platform: Platform,
@@ -62,6 +63,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     if (areaFromUrl) {
       this.areaModel = areaFromUrl;
     }
+    this.updateWhereClause();
     await this.loadMoreListings();
     console.log(`ListingsTabPage init with area=${this.areaModel}, segment=${this.segmentModel}`);
     if (this.largeEnough()) {
@@ -130,6 +132,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     for (let item of newItems) {
       this.loadedListings.push(item);
     }
+    this.mapView.render();
     this.ref.markForCheck();
   }
 
@@ -238,66 +241,92 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public async popoverFilter(myEvent) {
-    let popover = this.popoverCtrl.create(
+    let popover:Popover = this.popoverCtrl.create(
         FilterSettingsComponent,
         {'filterSettings': this.filterSettings},
         {});
-    await popover.onDidDismiss((data) => {
+    await popover.onDidDismiss(async (data) => {
       console.log(`--- received ` + JSON.stringify(data));
       if (data !== undefined && data !== null) {
         this.filterSettings = data["filterSettings"];
-        this.submitNewFiltering(this.filterSettings);
+      } else if (this.popoverCtrl['_app'].filterSettings) {
+        this.filterSettings = this.popoverCtrl['_app']/*a hack to access private */.filterSettings;
       }
+      console.log(`xxx this.filterSettings = ${JSON.stringify(this.filterSettings, null, " ")}`);
+      this.updateWhereClause();
+      this.loadedListings = [];
+      await this.loadMoreListings();
     });
     await popover.present({
       ev: myEvent
     });
   }
 
-  async submitNewFiltering(filterSettings_: {}) {
+  private updateWhereClause() {
     /* START filtering type */
-    let type = this.getType(filterSettings_['types']['zhaozu'],
-                            filterSettings_['types']['qiuzu']);
+    let type = this.getType(this.filterSettings['types']['zhaozu'],
+                            this.filterSettings['types']['qiuzu']);
     let whereClause_ = {};
     if (type == 0) {
       whereClause_['listingTypeEnum'] = 'NeedRoommate';
     } else if (type == 1) {
       whereClause_['listingTypeEnum'] = 'NeedRoom';
+    } else {
+      delete whereClause_['listingTypeEnum'];
     }
     /* END filtering type */
+    /* START filtering duration */
+    let ago = null;
+    switch (this.filterSettings['duration']) {
+      case '最近3天':
+        console.log(`XXX filter by 最近3天`);
+        ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
+        break;
+      case '最近7天':
+        console.log(`XXX filter by 最近7天`);
+        ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
+        break;
+      case '最近30天':
+        console.log(`XXX filter by 最近30天`);
+        ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
+        break;
+      case '最近90天':
+        console.log(`XXX filter by 最近90天`);
+        ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
+        break;
+      case '不限': // fall though
+      default:
+        console.log(`XXX date 不限`);
+    }
+    if(ago) whereClause_['lastUpdated'] = { "gte": ago};
+    /* END filtering duration */
+    /* START filtering price */
+    if (this.filterSettings['price']) {
+      whereClause_['price'] = {lt: this.filterSettings['price']};
+    } else {
+      delete whereClause_['price'];
+    }
+    /* END filtering price */
 
     /* START filtering area */
-    let allArea = filterSettings_['areas']["All"];
+    let allArea = this.filterSettings['areas']["All"];
     if (allArea !== undefined && allArea === true) {
       whereClause_['hsyGroupEnum'] = {'nin': ['BigTeam', 'TestGroup', 'None']};
     } else {
       let areaClause = [];
-      for (let area in filterSettings_['areas']) {
-        let selected = filterSettings_['areas'][area];
+      for (let area in this.filterSettings['areas']) {
+        let selected = this.filterSettings['areas'][area];
         if (selected !== undefined && selected) {
           areaClause.push(area);
         }
       }
-      whereClause_['hsyGroupEnum'] = {'inq': areaClause};
+      if (areaClause.length > 0) whereClause_['hsyGroupEnum'] = {'inq': areaClause};
     }
     /* END filtering area */
 
     /* EXEC filtering */
-    console.log('whereClause_: ' + JSON.stringify(whereClause_));
+    console.log('entire whereClause_: ' + JSON.stringify(whereClause_));
     this.whereClause = whereClause_;
-    let filterResult = await this.api.find<HsyListing>(
-        {
-          where: this.whereClause,
-          order: 'latestUpdatedOrBump DESC',
-          limit: 12,
-          offset: 0,
-          include: ['interactions', 'owner'],
-        })
-        .toPromise();
-    this.loadedListings = [];
-    for (let item of filterResult) {
-      this.loadedListings.push(item);
-    }
   }
 
   private getType(zhaozu: boolean, qiuzu: boolean) {
@@ -337,5 +366,9 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       this.listContainerCol.nativeElement.className = 'full-width';
     }
     this.mapView.render();
+  }
+
+  public onBoundaryFilter(boundary:GeoPoint[]) {
+    // TODO(xinbenlv): update the bounary and filter the hsylisting.
   }
 }

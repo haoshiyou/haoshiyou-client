@@ -5,7 +5,7 @@
         </ion-searchbar>
         <ion-buttons end>
             <button ion-button (click)="popoverFilter($event)">
-                <ion-icon name="funnel"></ion-icon>
+                <ion-icon name="funnel">筛选</ion-icon>
             </button>
         </ion-buttons>
     </ion-navbar>
@@ -23,7 +23,7 @@
     <ion-row style="height: 100%;">
         <ion-col #listContainerCol class="grey-background"
                  style="height: 100%;" id="left" no-padding>
-            <ion-content>
+            <ion-content fullscreen>
                 <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
                     <ion-spinner></ion-spinner>
                 </ion-row>
@@ -56,7 +56,7 @@
         </ion-col>
         <!-- the main content -->
         <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>
-            <map-view #mapView [listings]="loadedListings"></map-view>
+            <map-view #mapView [listings]="loadedListings" (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>
         </ion-col>
     </ion-row>
 </ion-content>

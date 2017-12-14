@@ -125,13 +125,16 @@
                         <div text-right>{{ listing.owner.contactEmail }}</div>
                     </div>
                 </ion-item>
-                <ion-item *ngIf="listing.hsyGroupEnum && listing.hsyGroupNick">
+                <ion-item *ngIf="listing.hsyGroupEnum &&
+                (listing.hsyGroupNick || listing.ownerId.startsWith('group-collected-'))">
                     <ion-label col-3 item-left>
                         <ion-icon name="contact"></ion-icon>微信群
                     </ion-label>
                     <div item-right text-wrap >
                         <p text-right>请在【好室友】{{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}群内搜索</p>
-                        <div text-right>{{ listing.hsyGroupNick }}</div>
+                        <div text-right>
+                            {{ listing.hsyGroupNick ?
+                            listing.hsyGroupNick : listing.ownerId.replace('group-collected-', '') }}</div>
                     </div>
                 </ion-item>
                 <ion-item *ngIf="listing.owner && listing.owner.weixin">

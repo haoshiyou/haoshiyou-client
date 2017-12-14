@@ -1,7 +1,8 @@
-import {Component, OnChanges, Input, SimpleChange, OnInit} from "@angular/core";
+import {Component, OnChanges, Input, SimpleChange, OnInit, Output, EventEmitter} from "@angular/core";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {ListingDetailPage} from "./listing-detail.page";
 import {NavController} from "ionic-angular";
+import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 
 declare let google, document;
 declare let ga:any;
@@ -12,8 +13,10 @@ declare let ga:any;
 export class MapViewComponent implements OnChanges {
   @Input() listings:HsyListing[];
   listingsHasLocation:HsyListing[] = null;
+  @Output()
+  onBoundaryFilter = new EventEmitter<GeoPoint[]>();
   private map = google.maps.Maps;
-
+  private mapDirty = false;
   constructor(private nav:NavController,) {
   }
   ngOnChanges(changes:{[propertyName:string]:SimpleChange}) {
@@ -35,6 +38,7 @@ export class MapViewComponent implements OnChanges {
     google.maps.event.trigger(this.map, 'resize');
   }
   public render() {
+    this.mapDirty = false;
     console.log(`XXX Render!`);
     let minZoomLevel = 10;
     let latAve:number = 0, lngAve:number = 0;
@@ -72,6 +76,11 @@ export class MapViewComponent implements OnChanges {
     latAve = 	37.6042379;
     lngAve = -122.1755228;
     this.map.setCenter(new google.maps.LatLng(latAve, lngAve));
+    google.maps.event.addListener(this.map, 'bounds_changed', () => {
+      if (!this.mapDirty) console.log(`XXX New Bounds: ${this.map.getBounds()}`);
+      this.mapDirty = true;
+
+    });
     this.resize();
   }
 
