@@ -12,6 +12,7 @@ import UrlUtil from "../../util/url_util";
 import {FlagService} from "../../services/flag.service";
 import {FilterSettingsComponent} from "./filter-settings.comp";
 import {MapViewComponent} from "./map-view.comp";
+import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 declare let ga:any;
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
@@ -131,6 +132,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     for (let item of newItems) {
       this.loadedListings.push(item);
     }
+    this.mapView.render();
     this.ref.markForCheck();
   }
 
@@ -364,5 +366,9 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       this.listContainerCol.nativeElement.className = 'full-width';
     }
     this.mapView.render();
+  }
+
+  public onBoundaryFilter(boundary:GeoPoint[]) {
+    // TODO(xinbenlv): update the bounary and filter the hsylisting.
   }
 }
