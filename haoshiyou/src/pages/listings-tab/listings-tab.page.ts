@@ -1,4 +1,4 @@
-import {Platform, NavController, AlertController, Content, PopoverController, Col} from "ionic-angular";
+import {Platform, NavController, AlertController, Content, PopoverController, Col, Popover} from "ionic-angular";
 import {
   OnInit, OnDestroy, Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef,
   ElementRef
@@ -238,16 +238,19 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public async popoverFilter(myEvent) {
-    let popover = this.popoverCtrl.create(
+    let popover:Popover = this.popoverCtrl.create(
         FilterSettingsComponent,
         {'filterSettings': this.filterSettings},
         {});
-    await popover.onDidDismiss((data) => {
+    await popover.onDidDismiss(async (data) => {
       console.log(`--- received ` + JSON.stringify(data));
       if (data !== undefined && data !== null) {
         this.filterSettings = data["filterSettings"];
-        this.submitNewFiltering(this.filterSettings);
+      } else if (this.popoverCtrl['_app'].filterSettings) {
+        this.filterSettings = this.popoverCtrl['_app']/*hack to access private field*/.filterSettings;
       }
+      console.log(`xxx this.filterSettings = ${JSON.stringify(this.filterSettings, null, " ")}`);
+      await this.submitNewFiltering(this.filterSettings);
     });
     await popover.present({
       ev: myEvent

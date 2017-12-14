@@ -8,7 +8,7 @@ import {FlagService} from "../../services/flag.service";
 })
 export class FilterSettingsComponent {
 
-  private filterSettings = {'types': {}, 'areas': {}};
+  public filterSettings = {'types': {}, 'areas': {}};
 
   constructor(public viewCtrl: ViewController,
               private flagService: FlagService,
