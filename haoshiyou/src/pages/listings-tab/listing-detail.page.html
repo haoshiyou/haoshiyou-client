@@ -160,7 +160,7 @@
             <ng-template [ngIf]="!useGrid">
                 <ion-item *ngFor="let imageId of listing.imageIds">
                     <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
-                         (click)="showImage(imageId)">
+                         data-action="zoom">
                 </ion-item>
             </ng-template>
             <ion-grid *ngIf="useGrid">
@@ -168,7 +168,7 @@
                     <ion-col col-12 col-lg-4 col-md-4 col-sm-6 col-xs-12
                              *ngFor="let imageId of listing.imageIds">
                         <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
-                             (click)="showImage(imageId)">
+                             data-action="zoom">
                     </ion-col>
                 </ion-row>
             </ion-grid>
