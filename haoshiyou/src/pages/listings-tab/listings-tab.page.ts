@@ -368,7 +368,24 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     this.mapView.render();
   }
 
-  public onBoundaryFilter(boundary:GeoPoint[]) {
-    // TODO(xinbenlv): update the bounary and filter the hsylisting.
+  public async onBoundaryFilter(boundary) {
+    console.log(`XXX boundary = ${JSON.stringify(boundary, null, '  ')}`)
+
+    let latMax = boundary.getNorthEast().lat();
+    let latMin = boundary.getSouthWest().lat();
+    let lngMax = boundary.getNorthEast().lng();
+    let lngMin = boundary.getSouthWest().lng();
+
+    console.log(`XXX 111 3 Inside onBoundaryFilter 
+    whereClause = ${JSON.stringify(this.whereClause,null,'  ')}`);
+    this.whereClause['location_lat'] = { 'lt': latMax, 'gt': latMin };
+    this.whereClause['location_lng'] = { 'lt': lngMax, 'gt': lngMin };
+    console.log(`XXX 222 3 Inside onBoundaryFilter
+    whereClause = ${JSON.stringify(this.whereClause,null,'  ')}`);
+    this.loadedListings = [];
+    await this.loadMoreListings();
+    this.mapView.render();
+
+
   }
 }

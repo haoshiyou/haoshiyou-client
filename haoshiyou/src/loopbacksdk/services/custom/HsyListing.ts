@@ -271,6 +271,35 @@ export class HsyListingApi extends BaseLoopBackApi {
   }
 
   /**
+   * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+   *
+   * @param {string} filter 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * Data properties:
+   *
+   *  - `data` – `{object}` - 
+   */
+  public findWithinBoundary(filter: any = {}, customHeaders?: Function): Observable<HsyListing[]> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/HsyListings/findWithinBoundary";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result.map((instances: Array<HsyListing>) =>
+        instances.map((instance: HsyListing) => new HsyListing(instance))
+    );
+  }
+
+  /**
    * Creates a new instance in interactions of this model.
    *
    * @param {any} id HsyListing id
