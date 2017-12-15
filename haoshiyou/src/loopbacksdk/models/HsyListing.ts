@@ -37,6 +37,8 @@ export interface HsyListingInterface {
   "addressCity"?: string;
   "addressCityAndState"?: string;
   "amenityArray"?: Array<any>;
+  "location_lat"?: number;
+  "location_lng"?: number;
   owner?: HsyUser;
   interactions?: HsyInteraction[];
 }
@@ -72,6 +74,8 @@ export class HsyListing implements HsyListingInterface {
   "addressCity": string = '';
   "addressCityAndState": string = '';
   "amenityArray": Array<any> = <any>[];
+  "location_lat": number = 0;
+  "location_lng": number = 0;
   owner: HsyUser = null;
   interactions: HsyInteraction[] = null;
   constructor(data?: HsyListingInterface) {
@@ -226,6 +230,14 @@ export class HsyListing implements HsyListingInterface {
         "amenityArray": {
           name: 'amenityArray',
           type: 'Array&lt;any&gt;'
+        },
+        "location_lat": {
+          name: 'location_lat',
+          type: 'number'
+        },
+        "location_lng": {
+          name: 'location_lng',
+          type: 'number'
         },
       },
       relations: {
