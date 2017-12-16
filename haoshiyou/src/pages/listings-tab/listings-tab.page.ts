@@ -378,8 +378,12 @@ export class ListingsTabPage implements OnInit, OnDestroy {
 
     console.log(`XXX 111 3 Inside onBoundaryFilter 
     whereClause = ${JSON.stringify(this.whereClause,null,'  ')}`);
-    this.whereClause['location_lat'] = { 'lt': latMax, 'gt': latMin };
-    this.whereClause['location_lng'] = { 'lt': lngMax, 'gt': lngMin };
+    this.whereClause['and']  = [
+      {'location_lat': { 'lt': latMax }},
+      {'location_lat': { 'gt': latMin }},
+      {'location_lng': { 'lt': lngMax }},
+      {'location_lng': { 'gt': lngMin }},
+    ];
     console.log(`XXX 222 3 Inside onBoundaryFilter
     whereClause = ${JSON.stringify(this.whereClause,null,'  ')}`);
     this.loadedListings = [];

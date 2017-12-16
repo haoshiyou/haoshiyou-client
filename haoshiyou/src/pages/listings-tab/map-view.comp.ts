@@ -17,6 +17,7 @@ declare let ga:any;
 function SearchButtonInMap(controlDiv, map, eventEmitter) {
 
   // Set CSS for the control border.
+  // TODO(xinbenlv): from Google Map developer example, to be updated.
   var controlUI = document.createElement('div');
   controlUI.style.backgroundColor = '#fff';
   controlUI.style.border = '2px solid #fff';

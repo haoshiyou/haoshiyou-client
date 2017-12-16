@@ -53,7 +53,7 @@ export class ListingDetailPage {
           .toPromise() as HsyListing;
       this.ref.markForCheck();
     }
-    console.log(`XXX listing = ${JSON.stringify(this.listing)}`);
+    console.log(`XXX listing = ${JSON.stringify(this.listing, null, '  ')}`);
     this.params.data.id = this.listing.uid;
     this.title = `好室友™帖子：` + this.listing.title;
     this.loading = false;
