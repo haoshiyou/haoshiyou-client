@@ -56,7 +56,7 @@
         </ion-col>
         <!-- the main content -->
         <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>
-            <map-view #mapView [listings]="loadedListings" (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>
+            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>
         </ion-col>
     </ion-row>
 </ion-content>
