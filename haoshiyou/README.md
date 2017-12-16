@@ -29,12 +29,12 @@ TODO
 
   [O] Able to filter by Map View Boundary
       [O] update the schema to add lat and lng as separate field (loopback-connector-mysql)
-  [ ] Show Price on Map Marker directly
+  [O] Show Price on Map Marker directly
   [ ] Thumbs Up and Favorite
   [ ] display numbers of Views, numbers of Bumps
   [ ] Map inside of the details page
   [ ] Admin mark bad post
-  [ ] 地图闪动和重新调整中心和zoom的问题
+  [O] 地图闪动和重新调整中心和zoom的问题
   
 - Server
 
