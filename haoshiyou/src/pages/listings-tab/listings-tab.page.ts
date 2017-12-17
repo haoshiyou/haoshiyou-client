@@ -37,13 +37,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   public areaModel: string = 'All'; // by default for All
   public useGrid:boolean = !(navigator.platform == 'iPhone');
   public loadedListings: HsyListing[] = [];
-  public isInitLoading = false;
   private map: any; // Actually google.maps.Map;
   private markers: any[]; // Actually google.maps.Marker[];
   private mapReady: boolean = false;
   private currentIndex:number = 0;
   private filterSettings = {'types': {}, 'areas': {}, 'duration': {}};
   private whereClause = {};
+  private isLoading = false;
   private mapOrList = 'ONLY_LIST';
   constructor(private platform: Platform,
               private nav: NavController,
@@ -81,10 +81,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   //noinspection JSUnusedGlobalSymbols
   async onSegmentModelChange(newValue) {
     this.segmentModel = newValue;
-    this.loadedListings = [];
-    this.isInitLoading = true;
-    await this.loadMoreListings(); // no wait
-    this.isInitLoading = false;
+
+    await this.initLoad();
     ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
     ga('send', 'pageview');
   }
@@ -92,15 +90,13 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   //noinspection JSUnusedGlobalSymbols
   async onAreaModelChange(newValue) {
     this.areaModel = newValue;
-    this.loadedListings = [];
-    this.isInitLoading = true;
-    await this.loadMoreListings(); // no wait
-    this.isInitLoading = false;
+    await this.initLoad();
     ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
     ga('send', 'pageview');
   }
 
   async loadMoreListings() {
+    this.isLoading = true;
     ga('send', 'event', {
       eventCategory: 'load',
       eventAction: 'load-more-listings',
@@ -111,7 +107,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     // southwest: 37.148070, -122.852249
     // northeast: 38.072739, -121.473969
 
-    let newItems =  await this.api
+    let newItems:HsyListing[] =  await this.api
         .find<HsyListing>({
           // TODO(zzn): use ListTypeEnum when migrated
           where: this.whereClause,
@@ -132,8 +128,8 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     for (let item of newItems) {
       this.loadedListings.push(item);
     }
-    this.mapView.render();
-    this.ref.markForCheck();
+    this.mapView.addListings(newItems);
+    this.isLoading = false;
   }
 
   private updateMarkers() {
@@ -254,8 +250,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       }
       console.log(`xxx this.filterSettings = ${JSON.stringify(this.filterSettings, null, " ")}`);
       this.updateWhereClause();
-      this.loadedListings = [];
-      await this.loadMoreListings();
+      await this.initLoad();
     });
     await popover.present({
       ev: myEvent
@@ -378,14 +373,20 @@ export class ListingsTabPage implements OnInit, OnDestroy {
 
     console.log(`XXX 111 3 Inside onBoundaryFilter 
     whereClause = ${JSON.stringify(this.whereClause,null,'  ')}`);
-    this.whereClause['location_lat'] = { 'lt': latMax, 'gt': latMin };
-    this.whereClause['location_lng'] = { 'lt': lngMax, 'gt': lngMin };
+    this.whereClause['and']  = [
+      {'location_lat': { 'lt': latMax }},
+      {'location_lat': { 'gt': latMin }},
+      {'location_lng': { 'lt': lngMax }},
+      {'location_lng': { 'gt': lngMin }},
+    ];
     console.log(`XXX 222 3 Inside onBoundaryFilter
     whereClause = ${JSON.stringify(this.whereClause,null,'  ')}`);
+    this.initLoad();
+
+  }
+  private async initLoad() {
     this.loadedListings = [];
+    this.mapView.clearMarkers();
     await this.loadMoreListings();
-    this.mapView.render();
-
-
   }
 }

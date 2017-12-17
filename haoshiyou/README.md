@@ -26,19 +26,23 @@ Security related bugs are filed under
 
 TODO
 - Client
-  [ ] Able to filter by Map View Boundary
-     [ ] update the schema to add lat and lng as separate field (loopback-connector-mysql)
-  [ ] Show Price on Map Marker directly
+
+  [O] Able to filter by Map View Boundary
+      [O] update the schema to add lat and lng as separate field (loopback-connector-mysql)
+  [O] Show Price on Map Marker directly
   [ ] Thumbs Up and Favorite
   [ ] display numbers of Views, numbers of Bumps
   [ ] Map inside of the details page
   [ ] Admin mark bad post
+  [O] 地图闪动和重新调整中心和zoom的问题
   
 - Server
+
   [ ] Add location approximate radius into schema
   [ ] Deprecate a few fields
 
 - Bot
+
   [ ] Refactor to use Google Pub/Sub 
   [ ] Improving extraction logic to handle the price
   [ ] Support extracting location approximate radius
