@@ -30,8 +30,6 @@ export class MineTabPage implements OnInit {
   }
 
   async ionViewWillAppear() {
-
-    console.log(`XXX ngOnInit inside of MineTab`);
     ga('set', 'page', '/mine-tab.page.html');
     ga('send', 'pageview');
     console.log(`Appear!`);
@@ -41,10 +39,7 @@ export class MineTabPage implements OnInit {
     let local = window.localStorage;
     let meId = local['user_id']; // TODO(xinbenlv): use UserService
     if (!meId) {
-      console.log(`XXX No MeId!`);
       return; // not logged in ;
-    } else {
-      console.log(`XXX MeId = ${meId}!`);
     }
     let whereClause = {
       'ownerId': meId,
@@ -54,13 +49,11 @@ export class MineTabPage implements OnInit {
       eventAction: 'load-my-listings',
     });
     let start:number = Date.now();
-    console.log(`XXX start loading!: whereClause = ${whereClause}`);
     let newItems =  await this.api
         .find<HsyListing>({
           where: whereClause,
         })
         .toPromise();
-    console.log(`XXX newItems = ${JSON.stringify(newItems, null, " ")}`);
     let end:number = Date.now();
     ga('send', {
       hitType: 'timing',
@@ -71,7 +64,6 @@ export class MineTabPage implements OnInit {
     this.listings = newItems;
   };
   async ngOnInit(): Promise<void> {
-    console.log(`XXX ngOnInit inside of MineTab`);
     await this.loadMyListings();
   }
 

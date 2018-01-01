@@ -65,7 +65,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     }
     this.updateWhereClause();
     await this.loadMoreListings();
-    console.log(`ListingsTabPage init with area=${this.areaModel}, segment=${this.segmentModel}`);
     if (this.largeEnough()) {
       this.mapOrList = 'BOTH';
     } else this.mapOrList = 'ONLY_LIST';
@@ -177,7 +176,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   async doInfinite(infiniteScroll) {
-    console.log(`Load more!`);
     await this.loadMoreListings();
     infiniteScroll.complete();
   }
@@ -248,7 +246,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       } else if (this.popoverCtrl['_app'].filterSettings) {
         this.filterSettings = this.popoverCtrl['_app']/*a hack to access private */.filterSettings;
       }
-      console.log(`xxx this.filterSettings = ${JSON.stringify(this.filterSettings, null, " ")}`);
       this.updateWhereClause();
       await this.initLoad();
     });
@@ -274,24 +271,20 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     let ago = null;
     switch (this.filterSettings['duration']) {
       case '最近3天':
-        console.log(`XXX filter by 最近3天`);
         ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
         break;
       case '最近7天':
-        console.log(`XXX filter by 最近7天`);
         ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
         break;
       case '最近30天':
-        console.log(`XXX filter by 最近30天`);
         ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
         break;
       case '最近90天':
-        console.log(`XXX filter by 最近90天`);
         ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
         break;
       case '不限': // fall though
       default:
-        console.log(`XXX date 不限`);
+        // do nothing
     }
     if(ago) whereClause_['lastUpdated'] = { "gte": ago};
     /* END filtering duration */
@@ -320,7 +313,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
     /* END filtering area */
 
     /* EXEC filtering */
-    console.log('entire whereClause_: ' + JSON.stringify(whereClause_));
     this.whereClause = whereClause_;
   }
 
@@ -345,7 +337,6 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public updateMapOrList(value) {
-    console.log(`XXX updateMapOrList value = ${value}`);
     if (value == "BOTH") {
       this.listContainerCol.nativeElement.setAttribute('style', 'display:block;');
       this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
@@ -364,23 +355,16 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public async onBoundaryFilter(boundary) {
-    console.log(`XXX boundary = ${JSON.stringify(boundary, null, '  ')}`)
-
     let latMax = boundary.getNorthEast().lat();
     let latMin = boundary.getSouthWest().lat();
     let lngMax = boundary.getNorthEast().lng();
     let lngMin = boundary.getSouthWest().lng();
-
-    console.log(`XXX 111 3 Inside onBoundaryFilter 
-    whereClause = ${JSON.stringify(this.whereClause,null,'  ')}`);
     this.whereClause['and']  = [
       {'location_lat': { 'lt': latMax }},
       {'location_lat': { 'gt': latMin }},
       {'location_lng': { 'lt': lngMax }},
       {'location_lng': { 'gt': lngMin }},
     ];
-    console.log(`XXX 222 3 Inside onBoundaryFilter
-    whereClause = ${JSON.stringify(this.whereClause,null,'  ')}`);
     this.initLoad();
 
   }
