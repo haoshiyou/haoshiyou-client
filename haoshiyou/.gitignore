@@ -52,3 +52,4 @@ src/**/*.js
 
 TDCVDBXA6X.cer
 TDCVDBXA6X.certSigningRequest
+.sourcemaps
