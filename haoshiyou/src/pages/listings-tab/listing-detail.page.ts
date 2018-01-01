@@ -1,8 +1,5 @@
 import {NavParams, NavController, AlertController} from "ionic-angular";
-import {IThreadService} from "../../services/chats/thread.service";
 import {Thread, User} from "../../models/models";
-import {IUserService} from "../../services/chats/user.service";
-import {ChatWindowPage} from "../chats-tab/chat-window.page";
 import {Component, AfterViewInit, ChangeDetectionStrategy} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
@@ -53,7 +50,6 @@ export class ListingDetailPage {
           .toPromise() as HsyListing;
       this.ref.markForCheck();
     }
-    console.log(`XXX listing = ${JSON.stringify(this.listing, null, '  ')}`);
     this.params.data.id = this.listing.uid;
     this.title = `好室友™帖子：` + this.listing.title;
     this.loading = false;
@@ -64,8 +60,7 @@ export class ListingDetailPage {
     await this.loadListing();
   }
 
-  constructor(private threadService:IThreadService,
-              private userService:IUserService,
+  constructor(
               private nav:NavController,
               private params:NavParams,
               private imageService:IImageService,
@@ -212,7 +207,6 @@ export class ListingDetailPage {
 
   private isMine(): boolean {
     if (this.listing) {
-      console.log(`calls isMine`);
       return window.localStorage['user_id'] === this.listing.ownerId ;
     }
     return false;

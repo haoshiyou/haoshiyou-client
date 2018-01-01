@@ -1,7 +1,6 @@
 import {Platform, NavParams, NavController, AlertController} from "ionic-angular";
 import {OnInit, Component, ViewChild} from "@angular/core";
 import {uuid} from "../../util/uuid";
-import {NotificationService} from "../../services/notfication.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
@@ -106,7 +105,6 @@ export class CreationPage implements OnInit {
               private nav:NavController,
               private alertCtrl:AlertController,
               private authService:AuthService,
-              private notificationService:NotificationService,
               private mapService:MapService,
               private flagService:FlagService,
               private api:HsyListingApi,
@@ -172,7 +170,6 @@ export class CreationPage implements OnInit {
         this.listing.hsyGroupEnum = 'TestGroup';
       }
       await this.api.upsert<HsyListing>(this.listing).toPromise();
-      await this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
       await this.nav.pop();
     } else {
       this.dirty['title'] = true;
@@ -225,6 +222,5 @@ export class CreationPage implements OnInit {
     } else {
       this.listing.amenityArray.push(amenity);
     }
-    console.log(`XXX this.listing.amenityArray after toggle = ${this.listing.amenityArray}`);
   }
 }

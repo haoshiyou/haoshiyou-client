@@ -56,8 +56,6 @@ gulp.task('clean-e2e', () => {
 // run jasmine unit tests using karma with PhantomJS2 in single run mode
 gulp.task('karma', (done: Function) => {
   let karma: any = require('karma');
-  console.log(`XXX config.testDir=${config.testDir}`);
-  console.log(`XXX process.cwd()=${process.cwd()}`);
   let karmaOpts: {} = {
     configFile: join(process.cwd(), config.testDir, 'karma.config.js'),
     singleRun: true,

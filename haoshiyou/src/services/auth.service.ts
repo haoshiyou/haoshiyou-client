@@ -272,7 +272,6 @@ export class AuthService {
     _user.created = _currentTime;
     _user.lastUpdated = _currentTime;
     let savedUser = await this.api.upsert<HsyUser>(_user).toPromise();
-    console.log(`XXX Saved User = ${JSON.stringify(savedUser)}`);
     return savedUser;
   }
 

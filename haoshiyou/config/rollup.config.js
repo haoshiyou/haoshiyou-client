@@ -45,15 +45,11 @@ var rollupConfig = {
         commonjs({
             include: [
                 'node_modules/rxjs/**',
-                'node_modules/angularfire2/**',
                 'node_modules/angular2-jwt/**',
-                'node_modules/firebase/**',
                 'node_modules/localforage/**',
                 'node_modules/log4javascript/**'
             ],
             namedExports: {
-                'node_modules/firebase/firebase.js': ['initializeApp', 'auth', 'database'],
-                'node_modules/angularfire2/node_modules/firebase/firebase-browser.js': ['initializeApp', 'auth', 'database'],
                 'node_modules/log4javascript/log4javascript.js': ['Logger']
             }
         }),

@@ -95,7 +95,6 @@ export class MapViewComponent implements OnChanges {
     searchInMapButtonDiv.index = 1;
     this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchInMapButtonDiv);
     google.maps.event.addListener(this.map, 'bounds_changed', () => {
-      if (!this.mapDirty) console.log(`XXX New Bounds: ${this.map.getBounds()}`);
       google.maps.event.trigger(this.map, 'resize');
       this.mapDirty = true;
     });
@@ -106,8 +105,7 @@ export class MapViewComponent implements OnChanges {
   }
 
   public addListings(newListings:HsyListing[]) {
-    console.log(`XXX Add Listings! ${newListings.length}`);
-    let listingsHasLocation = newListings.filter(l => l.location);
+    let listingsHasLocation = newListings.filter((l) => l.location);
     listingsHasLocation.map((listing:HsyListing) => {
         let marker = new google.maps.Marker({
           position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
@@ -127,7 +125,6 @@ export class MapViewComponent implements OnChanges {
         marker.addListener('click', () => {
           this.gotoListingDetail(listing);
         });
-        console.log(`XXX this.map = ${this.map}`);
         this.markers.push(marker);
     });
 
