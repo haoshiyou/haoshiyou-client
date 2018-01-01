@@ -122,7 +122,7 @@
     ],
     "name": "haoshiyou",
     "description": "A project that helps SF Bay Area Chinese friends to find roommate.",
-    "license": "SEE LICENSE IN LICENCE",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/xinbenlv/rent.zzn.im.git"
