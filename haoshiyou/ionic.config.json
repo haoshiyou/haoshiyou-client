@@ -2,5 +2,7 @@
   "name": "haoshiyou",
   "app_id": "1f51c25b",
   "type": "ionic-angular",
-  "integrations": {}
+  "integrations": {
+    "cordova": {}
+  }
 }

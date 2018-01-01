@@ -39,7 +39,7 @@ end
 # ===== iOS Private Lanes =====
 desc "Do a new iOS build using ionic."
 private_lane :build_ios do
-  sh("cd .. &&  ionic build ios --release")
+  sh("cd .. &&  ionic cordova build ios --release")
 end
 
 desc "Do a new iOS deploy using sigh and gym"
@@ -63,7 +63,7 @@ end
 
 desc "Do a new Android build"
 private_lane :build_android do
-  sh("cd .. && ionic build android --release")
+  sh("cd .. && ionic cordova build android --release")
 end
 
 # ===== Android Private Lanes =====
@@ -106,7 +106,7 @@ lane :upload_web do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-prod")
     sh("git merge dev")
-    sh("cd .. && ionic build ios --release")
+    sh("cd .. && ionic cordova build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
@@ -120,7 +120,7 @@ lane :upload_web do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-dev")
     sh("git merge dev")
-    sh("cd .. && ionic build ios --release")
+    sh("cd .. && ionic cordova build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
