@@ -214,4 +214,12 @@ export class ListingDetailPage {
   private eligibleToViewContact() {
     return false;
   }
+  
+  private isDebug() {
+    return this.flagService.getFlag('debug');
+  }
+  
+  private debugStr() {
+    return JSON.stringify(this.listing,null, '  ');
+  }
 }
