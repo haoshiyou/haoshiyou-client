@@ -1,24 +1,33 @@
 /* tslint:disable */
+import {
+  HsyListing
+} from '../index';
 
 declare var Object: any;
 export interface HsyUserInterface {
   "avatarId"?: string;
+  "contactEmail"?: string;
+  "contactPhone"?: string;
+  "created"?: Date;
   "id": string;
+  "lastUpdated"?: Date;
   "name"?: string;
   "pushNotificationRegIds"?: Array<any>;
   "weixin"?: string;
-  "created"?: Date;
-  "lastUpdated"?: Date;
+  listings?: HsyListing[];
 }
 
 export class HsyUser implements HsyUserInterface {
   "avatarId": string = '';
+  "contactEmail": string = '';
+  "contactPhone": string = '';
+  "created": Date = new Date(0);
   "id": string = '';
+  "lastUpdated": Date = new Date(0);
   "name": string = '';
   "pushNotificationRegIds": Array<any> = <any>[];
   "weixin": string = '';
-  "created": Date = new Date(0);
-  "lastUpdated": Date = new Date(0);
+  listings: HsyListing[] = null;
   constructor(data?: HsyUserInterface) {
     Object.assign(this, data);
   }
@@ -49,14 +58,32 @@ export class HsyUser implements HsyUserInterface {
     return {
       name: 'HsyUser',
       plural: 'HsyUsers',
+      path: 'HsyUsers',
+      idName: 'id',
       properties: {
         "avatarId": {
           name: 'avatarId',
           type: 'string'
         },
+        "contactEmail": {
+          name: 'contactEmail',
+          type: 'string'
+        },
+        "contactPhone": {
+          name: 'contactPhone',
+          type: 'string'
+        },
+        "created": {
+          name: 'created',
+          type: 'Date'
+        },
         "id": {
           name: 'id',
           type: 'string'
+        },
+        "lastUpdated": {
+          name: 'lastUpdated',
+          type: 'Date'
         },
         "name": {
           name: 'name',
@@ -70,16 +97,16 @@ export class HsyUser implements HsyUserInterface {
           name: 'weixin',
           type: 'string'
         },
-        "created": {
-          name: 'created',
-          type: 'Date'
-        },
-        "lastUpdated": {
-          name: 'lastUpdated',
-          type: 'Date'
-        },
       },
       relations: {
+        listings: {
+          name: 'listings',
+          type: 'HsyListing[]',
+          model: 'HsyListing',
+          relationType: 'hasMany',
+                  keyFrom: 'id',
+          keyTo: 'ownerId'
+        },
       }
     }
   }

@@ -60,17 +60,18 @@ export class CloudinaryImageService implements IImageService {
   /**
    * override
    */
-  getUrlFromId(id:string, width:number = 200, height:number = 100):string {
-    let param;
+  getUrlFromId(id:string, width:number = 300, height:number = 200):string {
+    let param = "c_fill,g_north";
     if (width == 0 && height == 0) { // full
-      param = 'w_413'; // 1242 is the width of iphone 6plus.
+      let ion_card_width = 560; //TODO: get the card width
+      param += ',w_' + ion_card_width; // 1242 is the width of iphone 6plus.
       // param = 'w_300,h_150,c_fill,g_auto';
     } else if (width == 0) {
-      param = `h_${height}`;
+      param += `,h_${height}`;
     } else if (height == 0 ){
-      param = `w_${width}`;
+      param += `,w_${width}`;
     } else {
-      param = `w_${width},h_${height},c_fill`;
+      param += `,w_${width},h_${height}`;
     }
     return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/${param}/${id}.jpg`;
   }

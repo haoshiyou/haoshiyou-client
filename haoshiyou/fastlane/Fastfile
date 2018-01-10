@@ -3,34 +3,47 @@
 # A fastlane file, see https://fastlane.tools/ for reference
 
 # Update fastlane automatically if a new version is available:
-update_fastlane
+# update_fastlane
+require_relative 'update_version'
 
 fastlane_version "2.66.2"
 
 ios_project_path = "platforms/ios/haoshiyou.xcodeproj"
 android_release_path = "releases/haoshiyou-android-release.apk"
-
+done_incremented = false
+prepared_env = false
+new_version = nil
 before_all do
   ENV["SLACK_URL"] =
       "https://hooks.slack.com/services/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"
 end
 
-private_lane :prepare do
-  if ENV["IONIC_ENV"] == "prod"
-    sh("echo 'Incrementing Version for PROD release.'")
-    sh("node scripts/increment_build_number.js")
+lane :bump_version do
+  unless done_incremented == true
+    old_version = read_current_version
+    puts "Before Version Increment: " + old_version
+    new_version = increment_version(old_version)
+    write_new_version(new_version)
+    puts "After Version Increment: " + new_version
+    done_incremented = true
   end
-  sh("cd .. && ./travis/setup-env.sh")
+end
+
+lane :prepare_env do
+  unless prepared_env == true
+    sh("cd .. && ./travis/setup-env.sh")
+    prepared_env = true
+  end
 end
 
 # ===== iOS Private Lanes =====
 desc "Do a new iOS build using ionic."
-private_lane :ionic_ios_build do
-  sh("cd .. &&  ionic build ios --release")
+private_lane :build_ios do
+  sh("cd .. &&  ionic cordova build ios --release")
 end
 
 desc "Do a new iOS deploy using sigh and gym"
-private_lane :ios_deploy do
+private_lane :deploy_ios do
   cert
   sigh
   gym(
@@ -39,23 +52,23 @@ private_lane :ios_deploy do
 end
 
 desc "Do a new iOS upload to iTunes Connect using deliver."
-private_lane :ios_upload do
+private_lane :upload_ios do
   deliver(
     copyright: "#{Time.now.year} Zainan Zhou",
     force: true
   )
-  slack(message: "Successfully deployed to iTunes Connect at Version " +
+  slack(message: "Successfully deployed to iTunes Connect at Version" +
       "#{get_version_number(xcodeproj:ios_project_path)}.")
 end
 
 desc "Do a new Android build"
-private_lane :ionic_android_build do
-  sh("cd .. && ionic build android --release")
+private_lane :build_android do
+  sh("cd .. && ionic cordova build android --release")
 end
 
 # ===== Android Private Lanes =====
 desc "Do a new Android deploy using jarsigner and zipaliagn."
-private_lane :android_deploy do |options|
+private_lane :deploy_android do |options|
   # require storepass to be specified
   sh("cd .. && jarsigner -verbose " +
          "-storepass #{options[:storepass]} " +
@@ -69,23 +82,23 @@ private_lane :android_deploy do |options|
 end
 
 desc "Do a new Android upload to Google Play Console using supply."
-private_lane :android_upload do
+private_lane :upload_android do
   supply(
       track: "alpha",
       apk: android_release_path,
       json_key: "fastlane/release-cred/haoshiyou-play-release-manager-credentials.json",
       package_name: "org.haoshiyou.app"
   )
-  slack(message: "Successfully deployed to Google Play.") # TODO(xinbenlv): add version
+  slack(message: "Successfully deployed to Google Play at version #{new_version}.")
 end
 
 desc "Do a new Web build using ionic."
-private_lane :ionic_web_build do
+private_lane :build_web do
   # sh("ionic build ios --release")
 end
 
 desc "Do a new upload to haoshiyou.org Web."
-lane :web_upload do
+lane :upload_web do
   # First time should do this
 
   if ENV["IONIC_ENV"] == "prod"
@@ -93,86 +106,68 @@ lane :web_upload do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-prod")
     sh("git merge dev")
-    sh("cd .. && ionic build ios --release")
+    sh("cd .. && ionic cordova build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
     sh("cd .. && cd .. && git push publish-prod `git subtree split --prefix haoshiyou/www/ release-web-prod`:gh-pages --force")
     sh("git checkout dev")
-    slack(message: "Successfully deployed to www.haoshiyou.org Web.") # TODO(xinbenlv): add version
+    slack(message: "Successfully deployed to www.haoshiyou.org Web at Version #{new_version}.")
   else
-
     # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
     # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
     sh("echo 'Assumming you are checking out from dev branch'")
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-dev")
     sh("git merge dev")
-    sh("cd .. && ionic build ios --release")
+    sh("cd .. && ionic cordova build ios --release")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
     sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
     sh("git checkout dev")
-    slack(message: "Successfully deployed to dev.haoshiyou.org Web.") # TODO(xinbenlv): add version
+    slack(message: "Successfully deployed to dev.haoshiyou.org Web at Version #{new_version}.")
   end
 end
 
 desc "Deploy a new version to the App Store/"
-private_lane :ios_publish do
-  ionic_ios_build
-  ios_deploy
-  ios_upload
+lane :publish_ios do
+  bump_version
+  prepare_env
+  build_ios
+  deploy_ios
+  upload_ios
 end
 
 desc "Deploy a new version to the Google Play Store."
-private_lane :android_publish do |options|
+lane :publish_android do |options|
   if options[:storepass].nil? || options[:storepass].empty?
     sh("echo 'please specify storepass:<android keystore password>'")
     exit
   else
-    ionic_android_build
-    android_deploy(options)
-    android_upload
+    bump_version
+    prepare_env
+    build_android
+    deploy_android(options)
+    upload_android
   end
 end
-
-platform :ios do
-  desc "Deploy a new version to the App Store/"
-  lane :publish do
-    prepare
-    ios_publish
-  end
-end
-
-platform :android do
-  prepare
-  desc "Deploy a new version to the Google Play Store."
-  lane :deploy do |options|
-    prepare
-    android_publish(options)
-  end
-end
-
-desc "Deploy a new version to the web"
-lane :web_deploy do
-  prepare
-  web_publish
-end
-
 
 desc "Publish a new version to the web"
-lane :web_publish do
-  ionic_web_build
-  web_upload
+lane :publish_web do
+  bump_version
+  prepare_env
+  build_web
+  upload_web
 end
 
 desc "Deploy to all platforms."
 lane :publish_all do |options|
-  prepare
-  android_publish(options)
-  ios_publish
-  web_publish
+  bump_version
+  prepare_env
+  publish_android(options)
+  publish_ios
+  publish_web
 end
 
 # TODO(zzn):

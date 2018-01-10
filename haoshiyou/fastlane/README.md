@@ -10,38 +10,41 @@ xcode-select --install
 
 ## Choose your installation method:
 
-<table width="100%" >
-<tr>
-<th width="33%"><a href="http://brew.sh">Homebrew</a></th>
-<th width="33%">Installer Script</th>
-<th width="33%">RubyGems</th>
-</tr>
-<tr>
-<td width="33%" align="center">macOS</td>
-<td width="33%" align="center">macOS</td>
-<td width="33%" align="center">macOS or Linux with Ruby 2.0.0 or above</td>
-</tr>
-<tr>
-<td width="33%"><code>brew cask install fastlane</code></td>
-<td width="33%"><a href="https://download.fastlane.tools">Download the zip file</a>. Then double click on the <code>install</code> script (or run it in a terminal window).</td>
-<td width="33%"><code>sudo gem install fastlane -NV</code></td>
-</tr>
-</table>
+| Method                     | OS support                              | Description                                                                                                                           |
+|----------------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| [Homebrew](http://brew.sh) | macOS                                   | `brew cask install fastlane`                                                                                                          |
+| Installer Script           | macOS                                   | [Download the zip file](https://download.fastlane.tools). Then double click on the `install` script (or run it in a terminal window). |
+| RubyGems                   | macOS or Linux with Ruby 2.0.0 or above | `sudo gem install fastlane -NV`                                                                                                       |
 
 # Available Actions
-### web_upload
+### bump_version
 ```
-fastlane web_upload
+fastlane bump_version
+```
+
+### prepare_env
+```
+fastlane prepare_env
+```
+
+### upload_web
+```
+fastlane upload_web
 ```
 Do a new upload to haoshiyou.org Web.
-### web_deploy
+### publish_ios
 ```
-fastlane web_deploy
+fastlane publish_ios
 ```
-Deploy a new version to the web
-### web_publish
+Deploy a new version to the App Store/
+### publish_android
 ```
-fastlane web_publish
+fastlane publish_android
+```
+Deploy a new version to the Google Play Store.
+### publish_web
+```
+fastlane publish_web
 ```
 Publish a new version to the web
 ### publish_all
@@ -49,24 +52,6 @@ Publish a new version to the web
 fastlane publish_all
 ```
 Deploy to all platforms.
-
-----
-
-## iOS
-### ios publish
-```
-fastlane ios publish
-```
-Deploy a new version to the App Store/
-
-----
-
-## Android
-### android deploy
-```
-fastlane android deploy
-```
-Deploy a new version to the Google Play Store.
 
 ----
 

@@ -25,10 +25,6 @@ export class MapService {
               var componeaddress_components = results[0].address_components[i];
 
               for (var b = 0; b < componeaddress_components.types.length; b++) {
-                console.log(`XXX componeaddress_components = ${JSON.stringify(componeaddress_components)}`);
-                //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-
-                console.log(`XXX componeaddress_components.types[b] = ${JSON.stringify(componeaddress_components.types[b])}`);
                 if (componeaddress_components.types[b] == "locality") {
                   //this is the object you are looking for
                   city = componeaddress_components.short_name;

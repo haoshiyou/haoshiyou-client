@@ -3,36 +3,21 @@
          src="{{ listing.imageIds[0] | imageIdToUrlPipe }}"
          alt="img-{{imageId}}"
          (click)="gotoDetail()"/>
-    <ion-card-header class="listing-item-header" (click)="gotoDetail()">
-        <div style="font-size:10px;color:#777;margin-bottom:5px">
-            <span>
-                <ion-icon name="home"></ion-icon>
-                {{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}
-                {{listing.type|enumMsgPipe}}
-            </span>
-            <span>，全文{{listing.content?.length}}字</span>
-            <span *ngIf="listing.imageIds.length > 0">，<ion-icon name="images"></ion-icon>{{listing.imageIds.length }}图</span>
-            <span>，<ion-icon name="clock"></ion-icon>
-            {{ listing.lastUpdated | timeFromNow }}更新 </span>
-        </div>
-        <span style="font-size:15px;color:#777">{{ listing.content ? listing.title.slice(0, 30) +'...' : '详情见图片' }}</span>
+    <img *ngIf="listing.imageIds.length == 0" src="assets/res/no-photo-placeholder.png" alt="" (click)="gotoDetail()">
+    <ion-card-header class="listing-item-header" no-padding padding-top padding-left padding-right (click)="gotoDetail()">
+        <span class="hsy-listing-item-header">{{ listing.content ? listing.title.slice(0, 30) +'...' : '详情见图片' }}</span><br>
     </ion-card-header>
-    <ion-card-content (click)="gotoDetail()">
-        <span style="font-size:12px;color:#777">{{ listing.content?.length > 150 ? listing.content.slice(0, 140) +'...' : listing.content }}</span>
+    <ion-card-content no-padding no-margin padding-left>
+        <ion-label no-padding no-margin class="hsy-listing-item-price" color="primary">{{ listing.price ? '$' + listing.price.toString() : '价格待议' }}</ion-label>
+        <ion-item no-padding no-margin>
+            <ion-label item-left class="hsy-listing-item-last-updated" color="grey">{{ listing.lastUpdated | timeFromNow }}更新</ion-label>
+            <ion-label item-right ion-button icon-left clear color="grey">
+                <ion-icon name="thumbs-up-outline"></ion-icon>
+                <span *ngIf="listing.interactions.length > 0">{{listing.interactions.length}}</span>
+            </ion-label>
+            <ion-label item-right ion-button icon-left clear color="grey">
+                <ion-icon name="eye-outline"></ion-icon>
+            </ion-label>
+        </ion-item>
     </ion-card-content>
-    <ion-row>
-        <ion-col>
-            <div ion-button clear small (click)="gotoDetail()">
-                <ion-icon name="play"></ion-icon>
-                <div>继续阅读</div>
-            </div>
-        </ion-col>
-        <ion-col></ion-col>
-        <ion-col>
-            <div ion-button icon-left clear small (click)="bump()">
-                <ion-icon name="thumbs-up"></ion-icon>
-                <div>顶一下!</div>
-            </div>
-        </ion-col>
-    </ion-row>
 </ion-card>

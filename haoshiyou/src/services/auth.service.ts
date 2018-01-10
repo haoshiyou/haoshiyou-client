@@ -265,11 +265,13 @@ export class AuthService {
   public async createHsyUserInDB(profile:Object):Promise<HsyUser> {
     console.log(" --- create new HsyUser --- ");
     let _user = <HsyUser>{};
+    let _currentTime = new Date();
     _user.id = profile['user_id'];
     _user.name = profile['name'];
     _user.avatarId = profile['picture'];
+    _user.created = _currentTime;
+    _user.lastUpdated = _currentTime;
     let savedUser = await this.api.upsert<HsyUser>(_user).toPromise();
-    console.log(`XXX Saved User = ${JSON.stringify(savedUser)}`);
     return savedUser;
   }
 

@@ -33,9 +33,12 @@
             </ion-item-divider>
             <ion-item>
                 <ion-label>
-                    环境版本: {{ versionEnv }} - 5.7.6.{{debugCounter}}
+                    环境版本: {{ versionEnv }} - 6.0.0.{{debugCounter}}
                 </ion-label>
                 <button ion-button item-right (click)="startSync()">刷新</button>
+            </ion-item>
+            <ion-item>
+                服务器: {{ serverUrl }}
             </ion-item>
             <ion-item>
                 应用版本: {{ versionApp }}

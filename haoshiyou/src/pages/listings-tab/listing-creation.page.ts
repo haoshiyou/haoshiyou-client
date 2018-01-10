@@ -1,7 +1,6 @@
 import {Platform, NavParams, NavController, AlertController} from "ionic-angular";
-import {OnInit, Component} from "@angular/core";
+import {OnInit, Component, ViewChild} from "@angular/core";
 import {uuid} from "../../util/uuid";
-import {NotificationService} from "../../services/notfication.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
@@ -10,6 +9,7 @@ import {AuthService} from "../../services/auth.service";
 import { ChangeDetectorRef } from '@angular/core';
 import {MapService} from "../../services/map.service";
 import {FlagService} from "../../services/flag.service";
+import {NgForm} from "@angular/forms";
 declare let google:any;
 
 const DEFAULT_LAT:number = 37.41666;
@@ -66,19 +66,45 @@ export class CreationPage implements OnInit {
   //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
   // TODO(xinbenlv) uncomment this
 
-  typeOptions:number[] = [0/*招租*/, 1/*求租*/];
+  listingTypeEnums:string[] = ['NeedRoommate'/*招租*/, 'NeedRoom'/*求租*/];
   listing:HsyListing;
+
+  public hsyGroupEnumOptions = [
+    'SanFrancisco',
+    'MidPeninsula',
+    'SouthBayWest',
+    'SouthBayEast',
+    'EastBay',
+    'ShortTerm',
+    'Seattle',
+    'TestGroup',
+  ];
+  public hsyGroupEnumOptionsMap =
+      {
+        'SanFrancisco': '三番',
+        'MidPeninsula': '中半岛',
+        'SouthBayWest': '南湾西',
+        'SouthBayEast': '南湾东',
+        'EastBay': '东湾',
+        'ShortTerm': '短租',
+        'Seattle': '西雅图',
+        'TestGroup': '测试',
+      };
+
+  public amenityOptions = [
+      '洗衣机', '停车位', '可养宠物'
+  ];
   public localityText:string;
   private map:any; /*google.maps.Map*/
   private marker:any; /*google.maps.Marker*/
   private inTestGroup:boolean;
+  @ViewChild('hsyListingForm') public hsyListingForm: NgForm;
   //noinspection JSMismatchedCollectionQueryUpdate used in HTML
   dirty:{[field:string]: boolean} = {};
   constructor(private platform:Platform, private params:NavParams,
               private nav:NavController,
               private alertCtrl:AlertController,
               private authService:AuthService,
-              private notificationService:NotificationService,
               private mapService:MapService,
               private flagService:FlagService,
               private api:HsyListingApi,
@@ -96,28 +122,13 @@ export class CreationPage implements OnInit {
       };
       this.listing.location = loc;
     }
+    if (!this.listing.amenityArray) {
+      this.listing.amenityArray = [];
+    }
     if (!this.listing.imageIds) this.listing.imageIds = [];
   }
 
   ngOnInit():any {
-    this.platform.ready().then(() => {
-      let minZoomLevel = 9;
-
-      // Load Google Maps
-      /* TODO(xinbenlv): follow example here
-       * https://codingwithspike.wordpress.com/2014/08/13/loading-google-maps-in-cordova-the-right-way/
-       * To load the Google Maps JS API based on device connection.
-       *
-       * Or use Google Maps TS Definition Files.
-       */
-      this.map = new google.maps.Map(document.getElementById('map_drag_canvas'), {
-        zoom: minZoomLevel,
-        center: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng), // Google
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
-      this.marker.setMap(this.map);
-      this.renderBoundary();
-    });
 
     this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/{
       position: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng),
@@ -139,39 +150,17 @@ export class CreationPage implements OnInit {
     });
 
   }
-  renderBoundary() {
-    let hsyGroupEnumList = {
-      'SanFrancisco': '#CD5C5C',
-      'SouthBayWest': '#86FF33',
-      'SouthBayEast': '#FF5733',
-      'EastBay': '#A6B1F7',
-      'MidPeninsula': '#FFC300',
-    };
-    for (let hsyGroupEnum in hsyGroupEnumList) {
-      let color = hsyGroupEnumList[hsyGroupEnum];
-      for (let city of boundaryList[hsyGroupEnum]) {
 
-        let triangleCoords = [];
-        for (let pair of city) {
-          triangleCoords.push({lng: pair[0], lat: pair[1]});
-        }
-        // Construct the polygon.
-        let triangle = new google.maps.Polygon({
-          paths: triangleCoords,
-          strokeColor: color,
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: color,
-          fillOpacity: 0.35
-        });
-        triangle.setMap(this.map);
-      }
-    }
-  };
-
+  private markAllControlsAsDirty() {
+    Object.keys(this.hsyListingForm.controls).filter(k => {
+      this.hsyListingForm.controls[k].markAsDirty();
+    });
+  }
   async save() {
+    this.markAllControlsAsDirty();
     if (this.validate()) {
       this.listing.lastUpdated = new Date();
+      this.listing.latestUpdatedOrBump = this.listing.lastUpdated;
       if (!this.listing.ownerId) {
         let local = window.localStorage;
         let meId = local['user_id']; // TODO(xinbenlv): use UserService
@@ -181,17 +170,16 @@ export class CreationPage implements OnInit {
         this.listing.hsyGroupEnum = 'TestGroup';
       }
       await this.api.upsert<HsyListing>(this.listing).toPromise();
-      await this.notificationService.sendTopicMessage(NotificationService.TOPIC_LISTING, this.listing.title);
       await this.nav.pop();
     } else {
       this.dirty['title'] = true;
       this.dirty['content'] = true;
-      this.dirty['type'] = true;
+      this.dirty['listingTypeEnum'] = true;
     }
   }
 
   validate():boolean {
-    return (this.listing.title && this.listing.content && (this.listing.type!=null));
+    return (this.listing.title && this.listing.content && (this.listing.listingTypeEnum!=null));
   }
 
   updateImageIds(imageIds:string[]) {
@@ -225,5 +213,14 @@ export class CreationPage implements OnInit {
 
   public isDebug():boolean {
     return this.flagService.getFlag('debug');
+  }
+
+  private toggleAmenity(amenity:string):void {
+    let array:string[] = this.listing.amenityArray;
+    if (array.indexOf(amenity) >= 0) {
+      this.listing.amenityArray = this.listing.amenityArray.filter(a => a != amenity);
+    } else {
+      this.listing.amenityArray.push(amenity);
+    }
   }
 }

@@ -14,6 +14,22 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+.bs {
+  $theme-colors: (
+          "primary": #0074d9,
+          "danger": #ff4136
+  );
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #333333;
+  background-color: white;
+  $font-size-base: 14px;
+  $padding-base-vertical: 6px;
+  @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+  @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/theme";
+}
+
 body {
   user-select: text; // TODO(xinbenlv): AB-testing whether we wanna enable user-select
   -webkit-user-select: text;
@@ -29,3 +45,82 @@ body {
 .grey-background {
   background: #EEE;
 }
+
+@font-face {
+  font-family: "Hosted Noto Sans Regular";
+  src: url("../assets/res/fonts/NotoSans-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Hosted Noto Sans Black";
+  src: url("../assets/res/fonts/NotoSans-Black.ttf");
+}
+
+@font-face {
+  font-family: "Hosted Source Han Sans Normal";
+  src: url("../assets/res/fonts/SourceHanSans-Normal.ttc");
+}
+
+@font-face {
+  font-family: "Hosted Source Han Sans Regular";
+  src: url("../assets/res/fonts/SourceHanSans-Regular.ttc");
+}
+
+@font-face {
+  font-family: "Hosted Source Han Sans SC Regular";
+  src: url("../assets/res/fonts/SourceHanSansSC-Regular.otf");
+}
+
+.item {
+  min-height: 3rem; /* <- this can be whatever you need */
+}
+
+.hsy-listing-item-header {
+  font-family: "Hosted Noto Sans Regular";
+  font-size: 16px;
+}
+
+.hsy-listing-item-price {
+  font-family: "Hosted Noto Sans Regular";
+  font-size: 16px;
+}
+
+.hsy-listing-item-last-updated {
+  font-family: "Hosted Noto Sans Regular";
+  font-size: 14px;
+}
+
+//@todo: Remove after Issue ionic-team/ionic#11640 is fixed
+.card .item.item-block:not(:last-child) .item-inner {
+  border-bottom: 1px solid #dedede;
+}
+
+.creation {
+  ion-input.ng-dirty.ng-invalid,
+  ion-select.ng-dirty.ng-invalid {
+      border-right: $text-input-highlight-color-invalid solid;
+  }
+}
+
+// Tab Page
+#left {
+  float: left;
+  overflow-y: scroll;
+}
+
+#right {
+  float: left;
+  overflow-y: scroll;
+}
+
+.half-width {
+  width:50%;
+}
+
+.full-width {
+  width:100%;
+}
+//
+//.card .item.item-block:not(.item-input):not(.item-select):not(.item-radio):not(.item-checkbox) .item-inner {
+//  border: 0;
+//}
