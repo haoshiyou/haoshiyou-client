@@ -28,7 +28,9 @@
                 <div item-right text-wrap >
                     <div text-right *ngIf="isClaimed() && isMine()">我已认领</div>
                     <div text-right *ngIf="isClaimed() && !isMine()">房东已认领</div>
-                    <div text-right *ngIf="!isClaimed()">暂无认领</div>
+                    <div text-right *ngIf="!isClaimed()">
+                            <button ion-button small outline (click)="claimAndEdit()">我要认领</button>
+                    </div>
                 </div>
             </ion-item>
             <ion-item *ngIf="listing.lastUpdated">
@@ -94,7 +96,7 @@
                 </div>
             </ion-item>
         </ion-item-group>
-        <ion-item-group *ngIf="listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin || listing.hsyGroupNick || listing.hsyGroupEnum">
+        <ion-item-group *ngIf="hasContactInfo()">
             <ion-item-divider color="light">
                 联系方式
             </ion-item-divider>
@@ -177,11 +179,6 @@
             </ion-grid>
         </ion-item-group>
         <ion-item>
-            <button *ngIf="!isClaimed()" ion-button outline item-left large (click)="claimAndEdit()">
-                <ion-label >
-                    <ion-icon name="create"></ion-icon> 认领并编辑
-                </ion-label>
-            </button>
             <button *ngIf="isClaimed() && isMine()" ion-button outline item-left large (click)="edit()">
                 <ion-label>
                     <ion-icon name="create"></ion-icon> 编辑

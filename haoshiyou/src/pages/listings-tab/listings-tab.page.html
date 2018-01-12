@@ -5,15 +5,18 @@
         </ion-searchbar>
         <ion-buttons end>
             <button ion-button (click)="popoverFilter($event)">
-                <ion-icon name="funnel">筛选</ion-icon>
+                <ion-icon name="funnel"> 筛选</ion-icon>
             </button>
+            <button ion-button (click)="goToCreationPage()">
+                <ion-icon name="add"> 发帖</ion-icon>
+            </button>
+
         </ion-buttons>
     </ion-navbar>
 
-    <ion-navbar>
+    <ion-navbar *ngIf="!largeEnough()">
         <ion-segment [(ngModel)]="mapOrList" (ngModelChange)="updateMapOrList($event)">
             <ion-segment-button value="ONLY_LIST">列表</ion-segment-button>
-            <ion-segment-button value="BOTH" >同时</ion-segment-button>
             <ion-segment-button value="ONLY_MAP">地图</ion-segment-button>
         </ion-segment>
     </ion-navbar>

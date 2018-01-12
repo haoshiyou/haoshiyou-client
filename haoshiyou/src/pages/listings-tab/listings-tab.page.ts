@@ -337,12 +337,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
   }
 
   public updateMapOrList(value) {
-    if (value == "BOTH") {
-      this.listContainerCol.nativeElement.setAttribute('style', 'display:block;');
-      this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
-      this.listContainerCol.nativeElement.className = 'half-width';
-      this.mapContainerCol.nativeElement.className = 'half-width';
-    } else if (value == "ONLY_MAP") {
+    if (value == "ONLY_MAP") {
       this.listContainerCol.nativeElement.setAttribute('style', 'display:none;');
       this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
       this.mapContainerCol.nativeElement.className = 'full-width';
@@ -365,8 +360,7 @@ export class ListingsTabPage implements OnInit, OnDestroy {
       {'location_lng': { 'lt': lngMax }},
       {'location_lng': { 'gt': lngMin }},
     ];
-    this.initLoad();
-
+    await this.initLoad();
   }
   private async initLoad() {
     this.loadedListings = [];

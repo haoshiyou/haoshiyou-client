@@ -222,4 +222,14 @@ export class ListingDetailPage {
   private debugStr() {
     return JSON.stringify(this.listing,null, '  ');
   }
+  
+  private hasContactInfo() {
+    let listing = this.listing;
+    let has:boolean = ((listing.owner && (listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin)
+    )|| listing.hsyGroupNick && listing.hsyGroupEnum)!=null;
+    if (!has) {
+      console.warn(`listing doesn't have contact info`, this.listing);
+    }
+    return has;
+  }
 }
