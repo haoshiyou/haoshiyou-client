@@ -14,10 +14,9 @@
         </ion-buttons>
     </ion-navbar>
 
-    <ion-navbar>
+    <ion-navbar *ngIf="!largeEnough()">
         <ion-segment [(ngModel)]="mapOrList" (ngModelChange)="updateMapOrList($event)">
             <ion-segment-button value="ONLY_LIST">列表</ion-segment-button>
-            <ion-segment-button value="BOTH" >同时</ion-segment-button>
             <ion-segment-button value="ONLY_MAP">地图</ion-segment-button>
         </ion-segment>
     </ion-navbar>
