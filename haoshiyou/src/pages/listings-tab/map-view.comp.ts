@@ -98,9 +98,8 @@ export class MapViewComponent implements OnChanges {
       google.maps.event.trigger(this.map, 'resize');
       this.mapDirty = true;
     });
-
     for (let marker of this.markers) {
-      if (!marker.getMap()) marker.setMap(this.map);
+      marker.setMap(this.map);
     }
   }
 
@@ -127,7 +126,6 @@ export class MapViewComponent implements OnChanges {
         });
         this.markers.push(marker);
     });
-
   }
 
   public clearMarkers() {
