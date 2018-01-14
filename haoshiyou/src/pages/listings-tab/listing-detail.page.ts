@@ -127,14 +127,16 @@ export class ListingDetailPage {
             let local = window.localStorage;
             let meId = local['user_id']; // TODO(xinbenlv): use UserService
             this.listing.ownerId = meId;
+            this.listing.owner = null; // 防止 owner 和 ownerId 的矛盾
             this.api.upsert<HsyListing>(this.listing).take(1).toPromise()
                 .then(l => {
-                  this.listing = l;
+                  // this.listing = l; // 之前只是巧合，因为l里面的owner == null；所以第2次submit可以成功
                   this.ref.markForCheck();
                 })
                 .catch(e => {
                   console.warn(`Error in claiming post = 
-                  ${JSON.stringify(e, null, ' ')}`)});
+                      ${JSON.stringify(e, null, ' ')}`);
+                });
             return true;
           }
         }
