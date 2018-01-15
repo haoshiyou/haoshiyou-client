@@ -75,6 +75,22 @@
                 <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"
                            name="hsyGroupNick"></ion-input>
             </ion-item>
+
+            <ion-item>
+                <ion-label>电子邮箱</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.owner.contactEmail"
+                           name="contactEmail"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>联系电话</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.owner.contactPhone"
+                           name="contactPhone"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>微信号</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.owner.weixin"
+                           name="weixin"></ion-input>
+            </ion-item>
             <ng-container *ngIf="listing.listingTypeEnum == 'NeedRoommate'"><!-- 只有招租需要填写这段 -->
                 <ion-item>
                     <ion-label>整租单租</ion-label>
