@@ -121,6 +121,8 @@ export class CreationPage implements OnInit {
         lng: DEFAULT_LNG
       };
       this.listing.location = loc;
+      this.listing.location_lng = loc.lng;
+      this.listing.location_lat = loc.lat;
     }
     if (!this.listing.amenityArray) {
       this.listing.amenityArray = [];
@@ -141,6 +143,8 @@ export class CreationPage implements OnInit {
         lng: this.marker.getPosition().lng()
       };
       this.listing.location = location;
+      this.listing.location_lng = location.lng;
+      this.listing.location_lat = location.lat;
       let locality = await this.mapService.getLocality(new google.maps.LatLng(
           this.listing.location.lat, this.listing.location.lng));
       let hsyGroupEnum = getHsyGroupEnumFromLocality(locality.city, locality.county)
