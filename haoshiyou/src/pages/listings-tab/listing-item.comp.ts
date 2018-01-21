@@ -6,6 +6,8 @@ import {HsyInteractionApi} from "../../loopbacksdk/services/custom/HsyInteractio
 import {HsyInteraction} from "../../loopbacksdk/models/HsyInteraction";
 import {uuid} from "../../util/uuid";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
+import {ListingUxDetailPage} from "./listing-ux-detail.page";
+import {FlagService} from "../../services/flag.service";
 declare let ga:any;
 
 @Component({
@@ -19,7 +21,8 @@ export class ListingItem {
   constructor(private nav:NavController,
               private alertCtrl: AlertController,
               private hsyInteractionApi:HsyInteractionApi,
-              private hsyListingApi:HsyListingApi) {
+              private hsyListingApi:HsyListingApi,
+              private flagService:FlagService) {
   }
 
 
@@ -29,7 +32,9 @@ export class ListingItem {
       eventAction: 'listing-detail',
       eventLabel: 'from-listing-item'
     });
-    this.nav.push(ListingDetailPage, {listing: this.listing});
+    if (this.flagService.getFlag('newUx'))
+      this.nav.push(ListingUxDetailPage, {listing: this.listing});
+    else this.nav.push(ListingDetailPage, {listing: this.listing});
   }
 
   async bump() {

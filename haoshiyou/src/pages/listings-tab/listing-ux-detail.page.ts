@@ -16,16 +16,17 @@ declare let QRCode:any;
 declare let ga:any;
 
 @Component({
-  selector: 'listing-detail',
-  templateUrl: 'listing-detail.page.html',
+  selector: 'listing-ux-detail',
+  templateUrl: 'listing-ux-detail.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush ,
 })
-export class ListingDetailPage {
+export class ListingUxDetailPage {
   listing: HsyListing;
   title: string;
   public loading: boolean = true;
   public useGrid:boolean = !(navigator.platform == 'iPhone');
   async ionViewWillEnter() {
+    console.log(`XXX New UX!!!`);
     if (this.listing == null) await this.loadListing();
     ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
     ga('send', 'pageview');
@@ -70,16 +71,16 @@ export class ListingDetailPage {
   }
 
   constructor(
-              private nav:NavController,
-              private params:NavParams,
-              private imageService:IImageService,
-              private api:HsyListingApi,
-              private hsyUserApi:HsyUserApi,
-              private auth: AuthService,
-              private alertCtrl: AlertController,
-              private ref: ChangeDetectorRef,
-              private flagService: FlagService
-              ) {}
+      private nav:NavController,
+      private params:NavParams,
+      private imageService:IImageService,
+      private api:HsyListingApi,
+      private hsyUserApi:HsyUserApi,
+      private auth: AuthService,
+      private alertCtrl: AlertController,
+      private ref: ChangeDetectorRef,
+      private flagService: FlagService,
+  ) {}
   async backToMain() {
     ga('send', 'event', {
       eventCategory: 'go-to',
@@ -228,15 +229,15 @@ export class ListingDetailPage {
   private eligibleToViewContact() {
     return false;
   }
-  
+
   private isDebug() {
     return this.flagService.getFlag('debug');
   }
-  
+
   private debugStr() {
     return JSON.stringify(this.listing,null, '  ');
   }
-  
+
   private hasContactInfo() {
     let listing = this.listing;
     let has:boolean = ((listing.owner && (listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin)
