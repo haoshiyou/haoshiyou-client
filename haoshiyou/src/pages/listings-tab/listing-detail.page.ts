@@ -137,9 +137,12 @@ export class ListingDetailPage {
             let meId = local['user_id']; // TODO(xinbenlv): use UserService
             this.listing.ownerId = meId;
             this.listing.owner = null; // 防止 owner 和 ownerId 的矛盾
-            this.api.upsert<HsyListing>(this.listing).take(1).toPromise()
-                .then(l => {
-                  // this.listing = l; // 之前只是巧合，因为l里面的owner == null；所以第2次submit可以成功
+            this.api.upsert<HsyListing>(this.listing, ).take(1).toPromise()
+                .then(async (_) => {
+                  this.listing = await this.api.findById<HsyListing>(
+                      this.listing.uid,
+                      {include: ["owner"]}).take(1).toPromise();
+
                   this.ref.markForCheck();
                 })
                 .catch(e => {
