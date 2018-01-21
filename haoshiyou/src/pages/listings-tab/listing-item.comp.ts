@@ -6,6 +6,7 @@ import {HsyInteractionApi} from "../../loopbacksdk/services/custom/HsyInteractio
 import {HsyInteraction} from "../../loopbacksdk/models/HsyInteraction";
 import {uuid} from "../../util/uuid";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
+import {ListingUxDetailPage} from "./listing-ux-detail.page";
 declare let ga:any;
 
 @Component({

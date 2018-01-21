@@ -37,6 +37,7 @@ import {DateFormatterPipe} from "../pipes/date-formatter.pipe";
 import {FlagService} from "../services/flag.service";
 import {MineTabPage} from "../pages/mine-tab/mine-tab.page";
 import { FormsModule }   from '@angular/forms';
+import {ListingUxDetailPage} from "../pages/listings-tab/listing-ux-detail.page";
 
 export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
@@ -55,6 +56,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     ImageGridComponent,
     CreationPage,
     ListingDetailPage,
+    ListingUxDetailPage,
     ListingItem,
     ListingsTabPage,
     MapViewComponent,
@@ -78,6 +80,14 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
   imports: [
     IonicModule.forRoot(HaoshiyouApp, {
       mode: 'ios'
+    },  {
+      links: [
+        {segment: '', component: TabsPage, name: 'TabsPage' },
+        {segment: 'listing/:id', component: ListingDetailPage, name: 'ListingDetailPage' },
+        {segment: 'listing-ux/:id', component: ListingUxDetailPage, name: 'ListingUxDetailPage' },
+        // As of 2016-11-14 per https://github.com/driftyco/ionic/issues/9012,
+        // Ionic deeplinker and navigation does not work well with Tab structures.
+      ]
     }),
     BrowserModule,
     HttpModule,
@@ -92,6 +102,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     ImageGridComponent,
     CreationPage,
     ListingDetailPage,
+    ListingUxDetailPage,
     ListingItem,
     ListingsTabPage,
     MapViewComponent,

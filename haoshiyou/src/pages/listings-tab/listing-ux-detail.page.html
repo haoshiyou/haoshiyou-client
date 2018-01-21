@@ -1,0 +1,203 @@
+<ion-header>
+    <ion-navbar>
+        <ion-buttons start>
+            <button ion-button *ngIf="nav.length() < 2" (click)="backToMain()">
+                <ion-icon name="arrow-back"></ion-icon>全部
+            </button>
+        </ion-buttons>
+        <ion-title>{{ title ? title : '好室友™帖子'}}</ion-title>
+        <ion-buttons end *ngIf="isMine()">
+            <button ion-button (click)="edit()">编辑</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content id="page-container" class="grey-background">
+    <ion-card *ngIf="!loading" offset-lg-3 col-lg-6 offset-md-2 col-md-8>
+        <ion-card-header>
+            <h2>
+                {{ listing.content ? listing.title.slice(0, 30) +'...' : '详情见图片' }}
+            </h2>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-item-group>
+                <ion-item >
+                    <ion-label col-3 item-left>
+                        <ion-icon name="checkmark-circle"></ion-icon>
+                        认领
+                    </ion-label>
+                    <div item-right text-wrap >
+                        <div text-right *ngIf="isClaimed() && isMine()">我已认领</div>
+                        <div text-right *ngIf="isClaimed() && !isMine()">房东已认领</div>
+                        <div text-right *ngIf="!isClaimed()">
+                            <button ion-button small outline (click)="claimAndEdit()">我要认领</button>
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item *ngIf="listing.lastUpdated">
+                    <ion-label col-3 item-left>
+                        <ion-icon name="clock"></ion-icon>
+                        更新
+                    </ion-label>
+                    <div item-right text-wrap>
+                        <p text-right>{{ listing.lastUpdated | dateFormatterPipe }}</p>
+                        <div text-right>{{ listing.lastUpdated | timeFromNow }}</div>
+                    </div>
+                </ion-item>
+                <ion-item >
+                    <ion-label col-3 item-left>
+                        <ion-icon name="clock"></ion-icon>
+                        价格
+                    </ion-label>
+                    <div item-right text-wrap>
+                        <div text-right>{{ listing.price ? '$' + listing.price : '价格未知' }}</div>
+                    </div>
+
+                </ion-item>
+                <ion-item *ngIf="listing.addressLine && listing.addressCity">
+                    <ion-label col-3 item-left>
+                        <ion-icon name="map"></ion-icon>
+                        地址
+                    </ion-label>
+                    <div item-right text-wrap>
+                        {{listing.addressLine}}, {{listing.addressCity}}
+                    </div>
+                </ion-item>
+                <ion-item *ngIf="listing.numBedRoom && listing.numBathRoom">
+                    <ion-label col-3 item-left>
+                        <ion-icon name="map"></ion-icon>
+                        情况
+                    </ion-label>
+                    <div item-right text-wrap>
+                        {{listing.numBedRoom}} Beds, {{listing.numBathRoom}} Baths
+                    </div>
+                </ion-item>
+                <ion-item *ngIf="listing.amenityArray && listing.amenityArray.length > 0">
+                    <ion-label col-3 item-left>
+                        <ion-icon name="map"></ion-icon>
+                        设施
+                    </ion-label>
+                    <div item-right text-wrap>
+                        <ion-badge ion-badge *ngFor="let a of listing.amenityArray">
+                            {{ a }}
+                        </ion-badge>
+                    </div>
+                </ion-item>
+                <ion-item *ngIf="listing.content">
+                    <ion-label col-3 item-left>
+                        <ion-icon name="paper"></ion-icon>
+                        详情
+                    </ion-label>
+                    <div item-right text-wrap>
+                        <p>
+                            <ng-container *ngFor="let textPiece of listing.content.split('\n')">
+                                {{ textPiece }} <br/>
+                            </ng-container>
+                        </p>
+                    </div>
+                </ion-item>
+            </ion-item-group>
+            <ion-item-group *ngIf="hasContactInfo()">
+                <ion-item-divider color="light">
+                    联系方式
+                </ion-item-divider>
+                <ion-item *ngIf="flagService.getFlag('requireToContact') &&
+                             listing.requireToContact.length > 0 && !eligibleToViewContact()">
+                    <ion-label col-3 item-left>
+                        <ion-icon name="paper"></ion-icon>
+                        查看条件
+                    </ion-label>
+                    <div item-right text-wrap>
+                        <button color="primary" ion-button outline *ngFor="let req of listing.requireToContact">登陆{{req}}</button>
+                    </div>
+                </ion-item>
+                <ng-container *ngIf="listing.requireToContact == null || listing.requireToContact.length == 0 || eligibleToViewContact()">
+                    <ion-item *ngIf="listing.owner && listing.owner.contactPhone">
+                        <ion-label col-3 item-left>
+                            <ion-icon name="contact"></ion-icon>电话
+                        </ion-label>
+                        <div item-right text-wrap >
+                            <div text-right>{{ listing.owner.contactPhone }}</div>
+                        </div>
+                    </ion-item>
+                    <ion-item *ngIf="listing.owner && listing.owner.contactEmail">
+                        <ion-label col-3 item-left>
+                            <ion-icon name="contact"></ion-icon>邮件
+                        </ion-label>
+                        <div item-right text-wrap >
+                            <div text-right>{{ listing.owner.contactEmail }}</div>
+                        </div>
+                    </ion-item>
+                    <ion-item *ngIf="listing.hsyGroupEnum &&
+                (listing.hsyGroupNick || listing.ownerId.startsWith('group-collected-'))">
+                        <ion-label col-3 item-left>
+                            <ion-icon name="contact"></ion-icon>微信群
+                        </ion-label>
+                        <div item-right text-wrap >
+                            <p text-right>请在【好室友】{{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}群内搜索</p>
+                            <div text-right>
+                                {{ listing.hsyGroupNick ?
+                                listing.hsyGroupNick : listing.ownerId.replace('group-collected-', '') }}</div>
+                        </div>
+                    </ion-item>
+                    <ion-item *ngIf="listing.owner && listing.owner.weixin">
+                        <ion-label col-3 item-left>
+                            <ion-icon name="contact"></ion-icon>微信号
+                        </ion-label>
+                        <div item-right text-wrap >
+                            <div text-right>{{ listing.owner.weixin }}</div>
+                        </div>
+                    </ion-item>
+                </ng-container>
+            </ion-item-group>
+            <ion-item *ngIf="isDebug()" >
+                <div style="white-space: pre;">{{debugStr()}}</div>
+            </ion-item>
+            <ion-item-group *ngIf="listing.imageIds && listing.imageIds.length > 0">
+                <ion-item-divider>
+                    图片
+                </ion-item-divider>
+                <!--
+                    We duplicate the grid and original ion-item because responsive
+                    grid doesn't work well with iOS yet.
+                    TODO(xinbenlv): remove this ion-list when works on iOS.
+                    See https://forum.ionicframework.com/t/ion-row-wrap-attribute-doesnt-work-on-ios-devices/50603/5
+                -->
+                <ng-template [ngIf]="!useGrid">
+                    <ion-item *ngFor="let imageId of listing.imageIds">
+                        <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
+                             data-action="zoom">
+                    </ion-item>
+                </ng-template>
+                <ion-grid *ngIf="useGrid">
+                    <ion-row>
+                        <ion-col col-12 col-lg-4 col-md-4 col-sm-6 col-xs-12
+                                 *ngFor="let imageId of listing.imageIds">
+                            <img src="{{ imageId | imageIdToUrlPipe:'full' }}" alt="img-{{imageId}}"
+                                 data-action="zoom">
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item-group>
+            <ion-item>
+                <button *ngIf="isClaimed() && isMine()" ion-button outline item-left large (click)="edit()">
+                    <ion-label>
+                        <ion-icon name="create"></ion-icon> 编辑
+                    </ion-label>
+                </button>
+                <button *ngIf="!isMine() && isClaimed()" ion-button outline item-right large (click)="fakeStartChat()">
+                    <ion-label>
+                        <ion-icon name="chatbubbles"></ion-icon> 私聊
+                    </ion-label>
+                </button>
+            </ion-item>
+
+        </ion-card-content>
+    </ion-card>
+    <ion-list *ngIf="loading">
+        <ion-item>
+            <ion-row align-items-center justify-content-center>
+                <ion-spinner></ion-spinner>
+            </ion-row>
+        </ion-item>
+    </ion-list>
+</ion-content>
