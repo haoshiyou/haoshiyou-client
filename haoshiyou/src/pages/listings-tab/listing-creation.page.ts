@@ -10,6 +10,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import {MapService} from "../../services/map.service";
 import {FlagService} from "../../services/flag.service";
 import {NgForm} from "@angular/forms";
+import {HsyUser} from "../../loopbacksdk/models";
+import {HsyUserApi} from "../../loopbacksdk/services/custom";
 declare let google:any;
 
 const DEFAULT_LAT:number = 37.41666;
@@ -107,7 +109,8 @@ export class CreationPage implements OnInit {
               private authService:AuthService,
               private mapService:MapService,
               private flagService:FlagService,
-              private api:HsyListingApi,
+              private hsyListingApi:HsyListingApi,
+              private hsyUserApi:HsyUserApi,
               private ref:ChangeDetectorRef) {
     if (params.data.listing) {
       this.listing = params.data.listing;
@@ -121,6 +124,15 @@ export class CreationPage implements OnInit {
         lng: DEFAULT_LNG
       };
       this.listing.location = loc;
+      this.listing.location_lng = loc.lng;
+      this.listing.location_lat = loc.lat;
+    }
+    if (!this.listing.ownerId) {
+      this.listing.owner = <HsyUser>{};
+      let local = window.localStorage;
+      let meId = local['user_id']; // TODO(xinbenlv): use UserService
+      this.listing.ownerId = meId;
+      this.listing.owner.id = meId;
     }
     if (!this.listing.amenityArray) {
       this.listing.amenityArray = [];
@@ -129,7 +141,6 @@ export class CreationPage implements OnInit {
   }
 
   ngOnInit():any {
-
     this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/{
       position: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng),
       animation: google.maps.Animation.DROP,
@@ -141,6 +152,8 @@ export class CreationPage implements OnInit {
         lng: this.marker.getPosition().lng()
       };
       this.listing.location = location;
+      this.listing.location_lng = location.lng;
+      this.listing.location_lat = location.lat;
       let locality = await this.mapService.getLocality(new google.maps.LatLng(
           this.listing.location.lat, this.listing.location.lng));
       let hsyGroupEnum = getHsyGroupEnumFromLocality(locality.city, locality.county)
@@ -169,7 +182,11 @@ export class CreationPage implements OnInit {
       if (this.inTestGroup) {
         this.listing.hsyGroupEnum = 'TestGroup';
       }
-      await this.api.upsert<HsyListing>(this.listing).toPromise();
+      await Promise.all([
+          await this.hsyListingApi.upsert<HsyListing>(this.listing).toPromise(),
+          await this.hsyUserApi.upsert<HsyUser>(this.listing.owner).toPromise()
+      ]);
+
       await this.nav.pop();
     } else {
       this.dirty['title'] = true;
@@ -199,7 +216,7 @@ export class CreationPage implements OnInit {
         {
           text: '删除',
           handler: () => {
-            this.api.deleteById(this.listing.uid).take(1).toPromise().then(()=>{
+            this.hsyListingApi.deleteById(this.listing.uid).take(1).toPromise().then(()=>{
               this.nav.pop().then(()=>{
                 this.nav.pop();
               }); // alert
