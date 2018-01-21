@@ -53,7 +53,16 @@ export class ListingDetailPage {
     this.params.data.id = this.listing.uid;
     this.title = `好室友™帖子：` + this.listing.title;
     this.loading = false;
+    this.hackExtractHsyGroupNickAndListing();
     return;
+  }
+
+  // This is a HACK, when bot is able to handle this, we can remove this part
+  hackExtractHsyGroupNickAndListing() {
+    console.log(`XXX this.listing = ${this.listing}`);
+    if (!this.listing.hsyGroupNick && /^group-collected-/.test(this.listing.uid)) {
+      this.listing.hsyGroupNick = this.listing.uid.substr(16);
+    }
   }
 
   async ngOnInit():Promise<void> {
@@ -127,14 +136,16 @@ export class ListingDetailPage {
             let local = window.localStorage;
             let meId = local['user_id']; // TODO(xinbenlv): use UserService
             this.listing.ownerId = meId;
+            this.listing.owner = null; // 防止 owner 和 ownerId 的矛盾
             this.api.upsert<HsyListing>(this.listing).take(1).toPromise()
                 .then(l => {
-                  this.listing = l;
+                  // this.listing = l; // 之前只是巧合，因为l里面的owner == null；所以第2次submit可以成功
                   this.ref.markForCheck();
                 })
                 .catch(e => {
                   console.warn(`Error in claiming post = 
-                  ${JSON.stringify(e, null, ' ')}`)});
+                      ${JSON.stringify(e, null, ' ')}`);
+                });
             return true;
           }
         }
