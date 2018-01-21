@@ -73,6 +73,7 @@ export class CloudinaryImageService implements IImageService {
     } else {
       param += `,w_${width},h_${height}`;
     }
+    param += `,g_center`;
     return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/${param}/${id}.jpg`;
   }
 }

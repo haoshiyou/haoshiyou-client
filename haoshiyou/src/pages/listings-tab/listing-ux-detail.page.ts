@@ -79,7 +79,7 @@ export class ListingUxDetailPage {
       private auth: AuthService,
       private alertCtrl: AlertController,
       private ref: ChangeDetectorRef,
-      private flagService: FlagService
+      private flagService: FlagService,
   ) {}
   async backToMain() {
     ga('send', 'event', {

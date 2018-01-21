@@ -1,17 +1,14 @@
-<ion-header>
-    <ion-navbar>
-        <ion-buttons start>
-            <button ion-button *ngIf="nav.length() < 2" (click)="backToMain()">
-                <ion-icon name="arrow-back"></ion-icon>全部
-            </button>
-        </ion-buttons>
-        <ion-title>{{ title ? title : '好室友™帖子'}}</ion-title>
-        <ion-buttons end *ngIf="isMine()">
-            <button ion-button (click)="edit()">编辑</button>
-        </ion-buttons>
-    </ion-navbar>
-</ion-header>
+
+
 <ion-content id="page-container" class="grey-background">
+    <ion-slides pager style="height:240px" *ngIf="!loading && listing.imageIds">
+        <ng-container *ngFor="let imageId of listing.imageIds">
+            <ion-slide style="background-size:cover; background-repeat:no-repeat; background-position: center center; "
+                       [style.background-image]="'url(' + imageService.getUrlFromId(imageId) + ')'">
+            </ion-slide>
+        </ng-container>
+
+    </ion-slides>
     <ion-card *ngIf="!loading" offset-lg-3 col-lg-6 offset-md-2 col-md-8>
         <ion-card-header>
             <h2>
