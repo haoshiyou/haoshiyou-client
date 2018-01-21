@@ -53,7 +53,16 @@ export class ListingDetailPage {
     this.params.data.id = this.listing.uid;
     this.title = `好室友™帖子：` + this.listing.title;
     this.loading = false;
+    this.hackExtractHsyGroupNickAndListing();
     return;
+  }
+
+  // This is a HACK, when bot is able to handle this, we can remove this part
+  hackExtractHsyGroupNickAndListing() {
+    console.log(`XXX this.listing = ${this.listing}`);
+    if (!this.listing.hsyGroupNick && /^group-collected-/.test(this.listing.uid)) {
+      this.listing.hsyGroupNick = this.listing.uid.substr(16);
+    }
   }
 
   async ngOnInit():Promise<void> {
