@@ -14,7 +14,7 @@ export class FlagService {
     'debug': false,
     'realCreate': false,
     'requireToContact': false,
-    'newUx': false,
+    'newUx': true,
   };
 
   getAllFlags() {
