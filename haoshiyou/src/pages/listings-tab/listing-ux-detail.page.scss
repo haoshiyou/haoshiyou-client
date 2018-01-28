@@ -1,0 +1,161 @@
+listing-ux-detail {
+  .detail-image-slides {
+    height: 240px;
+    width: 100%;
+    position:absolute;
+    display:block;
+  }
+
+  .detail-header {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+    position:absolute;
+    display:block;
+  }
+
+  .detail-content {
+    top:240px;
+    position: absolute;
+
+  }
+
+  .detail-content-title-block {
+    width: 100%;
+    padding:20px;
+  }
+
+  .detail-content-map {
+    width: 100%;
+    height: 140px;
+    position: relative;
+  }
+
+  h1 {
+    width: 100%;
+    color: #4D4D4D;	font-family: Avenir;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 32px;
+  }
+
+  .subtitle {
+    display: inline;
+    padding-right: 16px;
+    color: #A5A5A5;
+    font-family: "PingFang SC";
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .detail-map-title-block {
+    bottom:0;
+    height: 34px;
+    width: 100%;
+    padding: 6px 20px;
+    background-color: rgba(255,255,255,0.75);
+    position:absolute;
+  }
+
+  .detail-map-title {
+    color: #4D4D4D;
+    font-family: Avenir;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+    height: 22px;
+    display: inline-block;
+  }
+
+  .detail-map-subtitle {
+    color: #A5A5A5;
+    font-family: "PingFang SC";
+    font-size: 12px;
+    line-height: 16px;
+    display: inline-block;
+  }
+
+  .logo-box {
+    display:inline-block;
+    width: 25%;
+    text-align: center;
+    vertical-align: top;
+    padding: 4px  0px;
+  }
+
+  .section {
+    padding: 16px 0px;
+    margin: 0px 16px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #c3c3c3;
+
+  }
+  .section .section-title {
+    height: 32px;
+    color: #4D4D4D;
+    font-family: "PingFang SC";
+    font-size: 24px;
+    line-height: 32px;
+  }
+  .section .section-title {
+    margin: 16px 0px;
+  }
+  .section .section-body {
+    margin: 16px 0px;
+  }
+
+  .section:last-child {
+    border: none;
+  }
+
+  .logo-box-logo {
+    font-size: 32px;
+  }
+
+  $height-footer: 60px;
+  .footer {
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+    height: $height-footer;
+    background-color: #f5f5f5;
+    .footer-block {
+      margin: 20px 0;
+    }
+    z-index: 10 ;
+  }
+
+  .content {
+    color: #4D4D4D;
+    font-family: Avenir;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .section-more {
+    text-align:  right;
+    color: #00B6F7;
+    font-family: "PingFang SC";
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .small-logo {
+    margin-right: 8px;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+
+  .footer {
+    box-shadow: 0 -2px 4px 0 rgba(223,223,223,0.5);
+    background-color: white;
+    vertical-align: center;
+    horiz-align: center;
+  }
+
+}
+
