@@ -12,7 +12,7 @@
     </ion-slides>
     <div class="detail-content" *ngIf="!loading">
         <div class="detail-content-title-block">
-            <h1>
+            <h1 class="title">
                 San Mateo宽敞舒适房间出租
             </h1>
             <div class="subtitle">2天前发布</div>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="section highlight-facts">
-            <div class="logo-box" *ngFor="let i of ['独栋别墅','2室1卫','12个月起租','2017/1/1开始']">
+            <div class="logo-box" *ngFor="let i of ['独栋别墅','2室1卫','12个月起租','2017/01/01开始']">
                 <div class="logo-box-logo">
                     <ion-icon name="ios-home-outline"></ion-icon>
                 </div>
@@ -61,7 +61,7 @@
         </div>
         <div class="section">
             <div class="section-title">联系房东</div>
-            <div class="full-width" *ngFor="let i of [1,2,3]">
+            <div class="grid-full-screen" *ngFor="let i of [1,2,3]">
                 <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>
                 <span class="label">电话</span>
                 <span class="contetn">812-123-4567</span>
@@ -78,10 +78,10 @@
     </ion-list>
 </ion-content>
 <ion-footer class="footer grid-container">
-    <div class="footer-button">
-        <span>$/1400</span><span>/月</span>
+    <div class="footer-button" id="price-button">
+        <span id="price">$1400</span><span id="per-month">/月</span>
     </div>
-    <div class="footer-button">
+    <div class="footer-button" id="contact-button">
         <span>联系房东</span>
     </div>
 </ion-footer>
