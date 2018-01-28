@@ -2,16 +2,39 @@ listing-ux-detail {
   .detail-image-slides {
     height: 240px;
     width: 100%;
-    position:absolute;
+    position:relative;
     display:block;
   }
 
+  .in-image-item {
+    position: absolute;
+    font-size: 24px;
+    color: white;
+    font-weight:500;
+    text-shadow: 2px 2px 4px rgba(119,119,119,0.5);
+    z-index:100;
+  }
+
+  #heart {
+    right: 16px;
+    top: 16px;
+  }
+
+  #back {
+    top: 16px;
+    left: 16px;
+  }
   .detail-header {
+    width:100%;
+    height: 100%;
+  }
+  .detail-header-shadow {
     width: 100%;
     height: 60px;
     background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
     position:absolute;
     display:block;
+    z-index: 10;
   }
 
   .detail-content {
@@ -91,7 +114,7 @@ listing-ux-detail {
   .section {
     padding: 16px 0px;
     margin: 0px 16px;
-    border-bottom-width: 1px;
+    border-bottom-width: 0.5px;
     border-bottom-style: solid;
     border-bottom-color: #c3c3c3;
 
@@ -169,6 +192,22 @@ listing-ux-detail {
     text-align: center;
     line-height: $height-footer;
   }
+
+  .swiper-pagination-bullet {
+    color: white;
+    background-color: white;
+    box-shadow: 0px 0px 2px 1.5px #c3c3c3;
+    opacity: .5;
+    height:4px;
+    width:4px;
+  }
+
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    height:6px;
+    width:6px;
+  }
+
 
   .label {
     margin-right: 32px;
