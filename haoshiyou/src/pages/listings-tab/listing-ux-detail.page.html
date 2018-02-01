@@ -2,7 +2,7 @@
     <div class="detail-header">
         <div class="detail-header-shadow">
         </div>
-        <div id="back" class="in-image-item" item-right>
+        <div id="back" class="in-image-item" item-right (click)="backToMain()">
             <ion-icon name="ios-arrow-back-outline"></ion-icon>
         </div>
         <div id="heart" class="in-image-item" item-right>
@@ -10,7 +10,6 @@
         </div>
 
     <ion-slides class="detail-image-slides" pager *ngIf="!loading && listing.imageIds">
-
         <ng-container *ngFor="let imageId of listing.imageIds;let i = index">
             <ion-slide class="slide" style="background-size:cover; background-repeat:no-repeat; background-position: center center; "
                        [style.background-image]="'url(' + imageService.getUrlFromId(imageId) + ')'">

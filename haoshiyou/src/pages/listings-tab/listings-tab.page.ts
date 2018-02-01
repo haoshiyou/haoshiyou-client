@@ -25,6 +25,7 @@ const AREA_KEY: string = 'area';
 })
 export class ListingsTabPage implements OnInit, OnDestroy {
   ngOnDestroy(): any {
+    if (this.markers)
     for (let marker of this.markers) {
       marker.setMap(null);
     }

@@ -87,7 +87,13 @@ export class ListingUxDetailPage {
       eventAction: 'listings-tab',
       eventLabel: 'direct-url'
     });
-    await this.nav.push(ListingsTabPage);
+    if (this.nav.length() > 1) {
+      await this.nav.pop();
+    } else {
+      await this.nav.setRoot(ListingsTabPage);
+      await this.nav.goToRoot({});
+    }
+
   }
   ionViewDidEnter() {
     console.log(`Entering lising detail page`);
