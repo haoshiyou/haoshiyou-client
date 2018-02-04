@@ -1,4 +1,7 @@
-import {Component, OnChanges, Input, SimpleChange, OnInit, Output, EventEmitter} from "@angular/core";
+import {
+  Component, OnChanges, Input, SimpleChange, OnInit, Output, EventEmitter, ElementRef,
+  ViewChild
+} from "@angular/core";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {ListingDetailPage} from "./listing-detail.page";
 import {NavController} from "ionic-angular";
@@ -6,7 +9,7 @@ import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 
 declare let google, document;
 declare let ga:any;
-
+const DEFAULT_CENTER = { lat: 37.6042379, lng: -122.1755228};
 
 /**
  * The addSearchButtonInMap adds a button to the map that allows
@@ -53,14 +56,15 @@ function SearchButtonInMap(controlDiv, map, eventEmitter) {
 })
 export class MapViewComponent implements OnChanges {
   private zoomLevel = 10; // default
-  private center = { lat: 37.6042379, lng: -122.1755228};
   private markers = [];
+  @ViewChild('mapCanvas') mapCanvas:ElementRef;
+
   @Output()
   onBoundaryFilter = new EventEmitter<any>();
+  @Input() showSearchButton:boolean = true;
   private map = google.maps.Maps;
   private mapDirty = false;
   constructor(private nav:NavController,) {
-
   }
   ngOnChanges(changes:{[propertyName:string]:SimpleChange}) {
     if (changes['listings']) {
@@ -77,20 +81,21 @@ export class MapViewComponent implements OnChanges {
   }
 
   public render() {
-    if (!document.getElementById('map_view_canvas')) {
+    if (!this.mapCanvas || !this.mapCanvas.nativeElement) {
       this.map = null;
       return;
     } // do nothing
-    this.map = new google.maps.Map(document.getElementById('map_view_canvas'), {
+
+    this.map = new google.maps.Map(this.mapCanvas.nativeElement, {
       zoom: this.zoomLevel,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
-    this.map.setCenter(new google.maps.LatLng(this.center.lat, this.center.lng));
+    this.setCenter(DEFAULT_CENTER);
 
     // Create the DIV to hold the control and call the CenterControl()
     // constructor passing in this DIV.
     var searchInMapButtonDiv = document.createElement('div');
-    var centerControl = new SearchButtonInMap(searchInMapButtonDiv, this.map, this.onBoundaryFilter);
+    if (this.showSearchButton) var centerControl = new SearchButtonInMap(searchInMapButtonDiv, this.map, this.onBoundaryFilter);
 
     searchInMapButtonDiv.index = 1;
     this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchInMapButtonDiv);
@@ -133,4 +138,7 @@ export class MapViewComponent implements OnChanges {
     this.markers = [];
   }
 
+  public setCenter(center) {
+    if (this.map) this.map.setCenter(new google.maps.LatLng(center.lat, center.lng));
+  }
 }
