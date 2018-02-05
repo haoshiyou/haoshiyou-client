@@ -1,6 +1,5 @@
-import {NavParams, NavController, AlertController} from "ionic-angular";
-import {Thread, User} from "../../models/models";
-import {Component, AfterViewInit, ChangeDetectionStrategy, ViewChild, ViewChildren, ElementRef} from "@angular/core";
+import {AlertController, Content, NavController, NavParams} from "ionic-angular";
+import {ChangeDetectorRef, Component, ViewChild} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
@@ -8,9 +7,9 @@ import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import {HsyUserApi} from "../../loopbacksdk/services/custom/HsyUser";
 import {ListingsTabPage} from "./listings-tab.page";
 import {AuthService} from "../../services/auth.service";
-import { ChangeDetectorRef } from '@angular/core';
 import {FlagService} from "../../services/flag.service";
 import {MapViewComponent} from "./map-view.comp";
+
 declare let window:any;
 declare let ga:any;
 
@@ -20,6 +19,7 @@ declare let ga:any;
 })
 export class ListingUxDetailPage {
   private view:MapViewComponent;
+  @ViewChild(Content) content: Content;
 
   @ViewChild('mapViewSingle') set mapView(view:MapViewComponent) {
     this.view = view;
@@ -262,5 +262,9 @@ export class ListingUxDetailPage {
       console.warn(`listing doesn't have contact info`, this.listing);
     }
     return has;
+  }
+
+  private scrollToContact() {
+    this.content.scrollToBottom();
   }
 }

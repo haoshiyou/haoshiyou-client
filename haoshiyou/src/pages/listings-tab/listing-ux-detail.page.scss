@@ -1,4 +1,25 @@
+$bg_color_grey: #eef3f5;
+
 listing-ux-detail {
+  background-color: $bg_color_grey;
+
+
+  @media (min-width: 1280px) {
+    .dynamic-width-container {
+      width: 80%;
+      margin-left: 10%;
+      margin-right: 10%;
+    }
+  }
+
+  @media (min-width: 1500px) {
+    .dynamic-width-container {
+      width: 60%;
+      margin-left: 20%;
+      margin-right: 20%;
+    }
+  }
+
   .detail-image-slides {
     height: 240px;
     width: 100%;
@@ -151,11 +172,13 @@ listing-ux-detail {
     width: 100%;
     position: absolute;
     height: $height-footer;
-    background-color: #f5f5f5;
+    background-color: $bg_color_grey;
     .footer-block {
       margin: 20px 0;
     }
     z-index: 10 ;
+    text-align: center;
+    line-height: $height-footer;
   }
 
   .content {
@@ -180,18 +203,13 @@ listing-ux-detail {
   .grid-container {
     display: grid;
     grid-template-columns: 50% 50%;
+    box-shadow: 0 -2px 4px 0 rgba(223,223,223,0.5);
   }
 
   .grid-full-screen, .grid-half-screen {
     margin: 4px 0px;
   }
 
-  .footer {
-    box-shadow: 0 -2px 4px 0 rgba(223,223,223,0.5);
-    background-color: white;
-    text-align: center;
-    line-height: $height-footer;
-  }
 
   .swiper-pagination-bullet {
     color: white;
@@ -215,13 +233,15 @@ listing-ux-detail {
 
   #price {
     font-size: 24px;
-    font-size: 24px;
   }
 
   #per-month {
     font-size: 12px;
   }
 
+  #price-button {
+    background-color: white;
+  }
   #contact-button {
     color: white;
     background-color: #0FAFFF;
