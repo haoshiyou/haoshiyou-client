@@ -8,8 +8,11 @@ import {Subscription} from "rxjs";
 import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
 import {MineTabPage} from "../mine-tab/mine-tab.page";
 import {AuthService} from "../../services/auth.service";
+import {FlagService} from "../../services/flag.service";
+import {ListingsUxTabPage} from "../listings-tab/listings-ux-tab.page";
 
 @Component({
+  selector: 'main-tab-nav',
   templateUrl: 'tabs.html',
 })
 export class TabsPage implements OnInit, OnDestroy {
@@ -33,7 +36,11 @@ export class TabsPage implements OnInit, OnDestroy {
               private platform:Platform,
               private navController: NavController,
               private network: Network,
-              private auth:AuthService) {
+              private auth:AuthService,
+              private flagService: FlagService) {
+    if(flagService.getFlag('newUx')) {
+      this.tab2Root = ListingsUxTabPage;
+    }
   }
 
   ngOnInit():void {
@@ -53,6 +60,7 @@ export class TabsPage implements OnInit, OnDestroy {
           this.disconnectModal.dismiss();
         });
       }
+
     });
   }
 

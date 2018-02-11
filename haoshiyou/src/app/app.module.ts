@@ -38,6 +38,8 @@ import {FlagService} from "../services/flag.service";
 import {MineTabPage} from "../pages/mine-tab/mine-tab.page";
 import { FormsModule }   from '@angular/forms';
 import {ListingUxDetailPage} from "../pages/listings-tab/listing-ux-detail.page";
+import {ListingsUxTabPage} from "../pages/listings-tab/listings-ux-tab.page";
+import {ListingUxItem} from "../pages/listings-tab/listing-ux-item.comp";
 
 export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
@@ -59,6 +61,8 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     ListingUxDetailPage,
     ListingItem,
     ListingsTabPage,
+    ListingUxItem,
+    ListingsUxTabPage,
     MapViewComponent,
     LongImageComponent,
     RemoveModal,
@@ -105,6 +109,8 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     ListingUxDetailPage,
     ListingItem,
     ListingsTabPage,
+    ListingUxItem,
+    ListingsUxTabPage,
     MapViewComponent,
     LongImageComponent,
     RemoveModal,

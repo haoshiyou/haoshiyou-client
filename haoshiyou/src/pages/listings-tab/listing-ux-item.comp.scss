@@ -1,0 +1,38 @@
+listing-ux-item {
+  font-size: 16px; // TODO(zzn): add logic to adapt font-size to screen
+  & > .wrapper {
+    margin: 0 0.5em;
+    font-size:1em;
+    & > .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 8em;
+      border-bottom: #e1e1e1 solid 1px;
+      padding: 0.75em 0px;
+      & > .thumbnail {
+        padding:0px;
+      }
+
+      & > .content {
+        padding-right:1em;
+        & > .title {
+          font-size: 1em;
+          line-height: 1.5em;
+          color: #4D4D4D;
+          font-family: "Hosted Noto Sans Regular";
+          margin-bottom: 0.5em;
+        }
+
+        & > .middle {
+          color: #6C6C6C;
+          font-family: "Hosted Noto Sans Regular";
+          line-height: 1em;
+          & > span {
+            margin-right: 2em;
+            font-size: 0.75em;
+          }
+
+        }
+      }
+    }
+  }
+}

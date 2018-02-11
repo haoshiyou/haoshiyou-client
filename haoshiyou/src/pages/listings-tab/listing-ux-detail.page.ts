@@ -1,32 +1,43 @@
-import {NavParams, NavController, AlertController} from "ionic-angular";
-import {Thread, User} from "../../models/models";
-import {Component, AfterViewInit, ChangeDetectionStrategy} from "@angular/core";
+import {AlertController, Content, NavController, NavParams} from "ionic-angular";
+import {ChangeDetectorRef, Component, ViewChild} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import {HsyUserApi} from "../../loopbacksdk/services/custom/HsyUser";
-import {HsyUser} from "../../loopbacksdk/models/HsyUser";
 import {ListingsTabPage} from "./listings-tab.page";
 import {AuthService} from "../../services/auth.service";
-import { ChangeDetectorRef } from '@angular/core';
 import {FlagService} from "../../services/flag.service";
+import {MapViewComponent} from "./map-view.comp";
+
 declare let window:any;
-declare let QRCode:any;
 declare let ga:any;
 
 @Component({
   selector: 'listing-ux-detail',
   templateUrl: 'listing-ux-detail.page.html',
-  changeDetection: ChangeDetectionStrategy.OnPush ,
 })
 export class ListingUxDetailPage {
+  private view:MapViewComponent;
+  @ViewChild(Content) content: Content;
+
+  @ViewChild('mapViewSingle') set mapView(view:MapViewComponent) {
+    this.view = view;
+    if (this.view) {
+      this.view.clearMarkers();
+      this.view.addListings([this.listing]);
+      this.view.render();
+      this.view.setCenter({lng: this.listing.location_lng, lat: this.listing.location_lat})
+    }
+  };
+  get mapView():MapViewComponent {
+    return this.view;
+  }
   listing: HsyListing;
   title: string;
   public loading: boolean = true;
-  public useGrid:boolean = !(navigator.platform == 'iPhone');
+
   async ionViewWillEnter() {
-    console.log(`XXX New UX!!!`);
     if (this.listing == null) await this.loadListing();
     ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
     ga('send', 'pageview');
@@ -60,7 +71,6 @@ export class ListingUxDetailPage {
 
   // This is a HACK, when bot is able to handle this, we can remove this part
   hackExtractHsyGroupNickAndListing() {
-    console.log(`XXX this.listing = ${this.listing}`);
     if (!this.listing.hsyGroupNick && /^group-collected-/.test(this.listing.uid)) {
       this.listing.hsyGroupNick = this.listing.uid.substr(16);
     }
@@ -87,7 +97,13 @@ export class ListingUxDetailPage {
       eventAction: 'listings-tab',
       eventLabel: 'direct-url'
     });
-    await this.nav.push(ListingsTabPage);
+    if (this.nav.length() > 1) {
+      await this.nav.pop();
+    } else {
+      await this.nav.setRoot(ListingsTabPage);
+      await this.nav.goToRoot({});
+    }
+
   }
   ionViewDidEnter() {
     console.log(`Entering lising detail page`);
@@ -246,5 +262,9 @@ export class ListingUxDetailPage {
       console.warn(`listing doesn't have contact info`, this.listing);
     }
     return has;
+  }
+
+  private scrollToContact() {
+    this.content.scrollToBottom();
   }
 }

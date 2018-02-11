@@ -20,10 +20,10 @@ const AREA_KEY: string = 'area';
  * A page contains a map view and a list showing the listings.
  */
 @Component({
-  selector: 'listing-tab',
-  templateUrl: 'listings-tab.page.html',
+  selector: 'listing-ux-tab',
+  templateUrl: 'listings-ux-tab.page.html',
 })
-export class ListingsTabPage implements OnInit, OnDestroy {
+export class ListingsUxTabPage implements OnInit, OnDestroy {
   ngOnDestroy(): any {
     if (this.markers)
     for (let marker of this.markers) {
