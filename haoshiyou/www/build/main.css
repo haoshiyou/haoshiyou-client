@@ -40009,13 +40009,13 @@ listing-ux-item {
 }
 
 listing-ux-item > .wrapper {
-  margin: 0 0.5em;
+  margin: 0 0.75em;
   font-size: 1em;
 }
 
 listing-ux-item > .wrapper > .grid-container {
   display: grid;
-  grid-template-columns: 1fr 8em;
+  grid-template-columns: 13.875em 8em;
   border-bottom: #e1e1e1 solid 1px;
   padding: 0.75em 0px;
 }
@@ -40026,24 +40026,58 @@ listing-ux-item > .wrapper > .grid-container > .thumbnail {
 
 listing-ux-item > .wrapper > .grid-container > .content {
   padding-right: 1em;
+  width: 100%;
 }
 
 listing-ux-item > .wrapper > .grid-container > .content > .title {
-  font-size: 1em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  /* number of lines to show */
   line-height: 1.5em;
+  /* fallback */
+  max-height: 3em;
+  /* fallback */
+  font-size: 1em;
   color: #4D4D4D;
   font-family: "Hosted Noto Sans Regular";
   margin-bottom: 0.5em;
+  word-wrap: break-word;
 }
 
 listing-ux-item > .wrapper > .grid-container > .content > .middle {
   color: #6C6C6C;
   font-family: "Hosted Noto Sans Regular";
-  line-height: 1em;
+  line-height: 0.75em;
+  margin-bottom: 0.25em;
 }
 
 listing-ux-item > .wrapper > .grid-container > .content > .middle > span {
-  margin-right: 2em;
+  font-size: 0.75em;
+  margin-right: 1.5em;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content > .middle > ion-icon {
+  font-size: 0.75em;
+  margin-right: 0.5em;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content > .middle > span.location {
+  text-transform: capitalize;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content > .price {
+  color: #21b3fe;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content > .price > span.price-dollar-number-per {
+  font-weight: 500;
+  line-height: 1.5em;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content > .price > span.month {
   font-size: 0.75em;
 }
 
