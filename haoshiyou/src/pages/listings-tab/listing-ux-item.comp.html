@@ -8,14 +8,14 @@
                 <span class="location">Mountain View</span>
                 <span class="lastUpdate">1天前</span>
             </div>
-            <div class="price"></div>
+            <div class="price"><span class="price-dollar-number-per">$1400/</span><span class="month">月</span></div>
         </div>
         <div class="thumbnail">
             <img *ngIf="listing.imageIds.length > 0"
                  src="{{ listing.imageIds[0] | imageIdToUrlPipe : 'thumbnail' }}"
                  alt="img-{{imageId}}"
                  (click)="gotoDetail()"/>
-            <img *ngIf="listing.imageIds.length == 0" src="http://via.placeholder.com/160x160" alt="" (click)="gotoDetail()">
+            <img *ngIf="listing.imageIds.length == 0" src="http://via.placeholder.com/160x120" alt="" (click)="gotoDetail()">
         </div>
     </div>
 </div>

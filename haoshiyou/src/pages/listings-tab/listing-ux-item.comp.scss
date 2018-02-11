@@ -1,7 +1,7 @@
 listing-ux-item {
   font-size: 16px; // TODO(zzn): add logic to adapt font-size to screen
   & > .wrapper {
-    margin: 0 0.5em;
+    margin: 0 0.75em;
     font-size:1em;
     & > .grid-container {
       display: grid;
@@ -25,12 +25,22 @@ listing-ux-item {
         & > .middle {
           color: #6C6C6C;
           font-family: "Hosted Noto Sans Regular";
-          line-height: 1em;
+          line-height: 0.75em;
+          margin-bottom: 0.25em;
           & > span {
-            margin-right: 2em;
             font-size: 0.75em;
+            margin-right: 2em;
           }
-
+        }
+        & > .price {
+          color: #21b3fe;
+          & > span.price-dollar-number-per {
+            font-weight:500;
+            line-height: 1.5em;
+          }
+          & > span.month {
+            font-size:0.75em;
+          }
         }
       }
     }
