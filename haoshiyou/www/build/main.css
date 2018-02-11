@@ -39743,25 +39743,71 @@ creation-page input.delete-image {
   font-size: 150%;
 }
 
+listing-ux-detail {
+  background-color: #eef3f5;
+}
+
+@media (min-width: 1280px) {
+  listing-ux-detail .dynamic-width-container {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+}
+
+@media (min-width: 1500px) {
+  listing-ux-detail .dynamic-width-container {
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
+
 listing-ux-detail .detail-image-slides {
   height: 240px;
   width: 100%;
-  position: absolute;
+  position: relative;
   display: block;
 }
 
+listing-ux-detail .in-image-item {
+  position: absolute;
+  font-size: 24px;
+  color: white;
+  font-weight: 500;
+  text-shadow: 2px 2px 4px rgba(119, 119, 119, 0.5);
+  z-index: 100;
+}
+
+listing-ux-detail #heart {
+  right: 16px;
+  top: 16px;
+}
+
+listing-ux-detail #back {
+  top: 16px;
+  left: 16px;
+}
+
 listing-ux-detail .detail-header {
+  width: 100%;
+  height: 100%;
+}
+
+listing-ux-detail .detail-header-shadow {
   width: 100%;
   height: 60px;
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.4)), to(transparent));
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
   position: absolute;
   display: block;
+  z-index: 10;
 }
 
 listing-ux-detail .detail-content {
   top: 240px;
   position: absolute;
+  width: 100%;
 }
 
 listing-ux-detail .detail-content-title-block {
@@ -39775,7 +39821,7 @@ listing-ux-detail .detail-content-title-block .title {
 
 listing-ux-detail .detail-content-map {
   width: 100%;
-  height: 140px;
+  height: 240px;
   position: relative;
 }
 
@@ -39835,7 +39881,7 @@ listing-ux-detail .logo-box {
 listing-ux-detail .section {
   padding: 16px 0px;
   margin: 0px 16px;
-  border-bottom-width: 1px;
+  border-bottom-width: 0.5px;
   border-bottom-style: solid;
   border-bottom-color: #c3c3c3;
 }
@@ -39873,8 +39919,10 @@ listing-ux-detail .footer {
   width: 100%;
   position: absolute;
   height: 48px;
-  background-color: #f5f5f5;
+  background-color: #eef3f5;
   z-index: 10;
+  text-align: center;
+  line-height: 48px;
 }
 
 listing-ux-detail .footer .footer-block {
@@ -39903,18 +39951,28 @@ listing-ux-detail .small-logo {
 listing-ux-detail .grid-container {
   display: grid;
   grid-template-columns: 50% 50%;
+  -webkit-box-shadow: 0 -2px 4px 0 rgba(223, 223, 223, 0.5);
+  box-shadow: 0 -2px 4px 0 rgba(223, 223, 223, 0.5);
 }
 
 listing-ux-detail .grid-full-screen, listing-ux-detail .grid-half-screen {
   margin: 4px 0px;
 }
 
-listing-ux-detail .footer {
-  -webkit-box-shadow: 0 -2px 4px 0 rgba(223, 223, 223, 0.5);
-  box-shadow: 0 -2px 4px 0 rgba(223, 223, 223, 0.5);
+listing-ux-detail .swiper-pagination-bullet {
+  color: white;
   background-color: white;
-  text-align: center;
-  line-height: 48px;
+  -webkit-box-shadow: 0px 0px 2px 1.5px #c3c3c3;
+  box-shadow: 0px 0px 2px 1.5px #c3c3c3;
+  opacity: .5;
+  height: 4px;
+  width: 4px;
+}
+
+listing-ux-detail .swiper-pagination-bullet-active {
+  opacity: 1;
+  height: 6px;
+  width: 6px;
 }
 
 listing-ux-detail .label {
@@ -39923,11 +39981,14 @@ listing-ux-detail .label {
 
 listing-ux-detail #price {
   font-size: 24px;
-  font-size: 24px;
 }
 
 listing-ux-detail #per-month {
   font-size: 12px;
+}
+
+listing-ux-detail #price-button {
+  background-color: white;
 }
 
 listing-ux-detail #contact-button {
@@ -39936,4 +39997,61 @@ listing-ux-detail #contact-button {
   font-family: "PingFang SC";
   font-size: 16px;
   font-weight: 500;
+}
+
+listing-ux-detail .map-view-item {
+  width: 100%;
+  height: 140px;
+}
+
+listing-ux-item {
+  font-size: 16px;
+}
+
+listing-ux-item > .wrapper {
+  margin: 0 0.5em;
+  font-size: 1em;
+}
+
+listing-ux-item > .wrapper > .grid-container {
+  display: grid;
+  grid-template-columns: 1fr 8em;
+  border-bottom: #e1e1e1 solid 1px;
+  padding: 0.75em 0px;
+}
+
+listing-ux-item > .wrapper > .grid-container > .thumbnail {
+  padding: 0px;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content {
+  padding-right: 1em;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content > .title {
+  font-size: 1em;
+  line-height: 1.5em;
+  color: #4D4D4D;
+  font-family: "Hosted Noto Sans Regular";
+  margin-bottom: 0.5em;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content > .middle {
+  color: #6C6C6C;
+  font-family: "Hosted Noto Sans Regular";
+  line-height: 1em;
+}
+
+listing-ux-item > .wrapper > .grid-container > .content > .middle > span {
+  margin-right: 2em;
+  font-size: 0.75em;
+}
+
+listing-ux-tab .split-panel-container {
+  display: grid;
+  grid-template-columns: 375px 1fr;
+}
+
+main-tab-nav .tabbar {
+  background-color: white;
 }

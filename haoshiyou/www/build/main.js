@@ -1,6 +1,190 @@
 webpackJsonp([0],{
 
-/***/ 152:
+/***/ 103:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MapViewComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__listing_detail_page__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(17);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+const DEFAULT_CENTER = { lat: 37.6042379, lng: -122.1755228 };
+/**
+ * The addSearchButtonInMap adds a button to the map that allows
+ * seach in the map.
+ * This constructor takes the control DIV as an argument.
+ * @constructor
+ */
+function SearchButtonInMap(controlDiv, map, eventEmitter) {
+    // Set CSS for the control border.
+    // TODO(xinbenlv): from Google Map developer example, to be updated.
+    var controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.border = '2px solid #fff';
+    controlUI.style.borderRadius = '3px';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.marginBottom = '22px';
+    controlUI.style.textAlign = 'center';
+    controlUI.title = 'Click to search within the map';
+    controlDiv.appendChild(controlUI);
+    // Set CSS for the control interior.
+    var controlText = document.createElement('div');
+    controlText.style.color = 'rgb(25,25,25)';
+    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+    controlText.style.fontSize = '16px';
+    controlText.style.lineHeight = '38px';
+    controlText.style.paddingLeft = '5px';
+    controlText.style.paddingRight = '5px';
+    controlText.innerHTML = '在地图区域内搜索';
+    controlUI.appendChild(controlText);
+    // Setup the click event listeners: simply set the map to Chicago.
+    controlUI.addEventListener('click', function () {
+        eventEmitter.emit(map.getBounds());
+    });
+}
+let MapViewComponent = class MapViewComponent {
+    constructor(nav) {
+        this.nav = nav;
+        this.zoomLevel = 10; // default
+        this.markers = [];
+        this.onBoundaryFilter = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.showSearchButton = true;
+        this.map = google.maps.Maps;
+        this.mapDirty = false;
+    }
+    ngOnChanges(changes) {
+        if (changes['listings']) {
+            this.render();
+        }
+    }
+    gotoListingDetail(listing) {
+        ga('send', 'event', {
+            eventCategory: 'go-to',
+            eventAction: 'listing-detail',
+            eventLabel: 'from-map-view'
+        });
+        this.nav.push(__WEBPACK_IMPORTED_MODULE_1__listing_detail_page__["a" /* ListingDetailPage */], { listing: listing });
+    }
+    render() {
+        if (!this.mapCanvas || !this.mapCanvas.nativeElement) {
+            this.map = null;
+            return;
+        } // do nothing
+        this.map = new google.maps.Map(this.mapCanvas.nativeElement, {
+            zoom: this.zoomLevel,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        this.setCenter(DEFAULT_CENTER);
+        // Create the DIV to hold the control and call the CenterControl()
+        // constructor passing in this DIV.
+        var searchInMapButtonDiv = document.createElement('div');
+        if (this.showSearchButton)
+            var centerControl = new SearchButtonInMap(searchInMapButtonDiv, this.map, this.onBoundaryFilter);
+        searchInMapButtonDiv.index = 1;
+        this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchInMapButtonDiv);
+        google.maps.event.addListener(this.map, 'bounds_changed', () => {
+            google.maps.event.trigger(this.map, 'resize');
+            this.mapDirty = true;
+        });
+        for (let marker of this.markers) {
+            marker.setMap(this.map);
+        }
+    }
+    addListings(newListings) {
+        let listingsHasLocation = newListings.filter((l) => l.location);
+        listingsHasLocation.map((listing) => {
+            let marker = new google.maps.Marker({
+                position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
+                icon: `data:image/svg+xml,
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
+    <path fill="#FFFFFF" stroke="#ccc" stroke-width=".5"
+          d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/>
+    <text transform="translate(19 18.5)" 
+          fill="#000" 
+          style="font-family: Arial, sans-serif;
+          text-align:center;"
+          font-size="10" text-anchor="middle">${listing.price ? listing.price : '待议'}
+    </text>
+</svg>`,
+                map: this.map
+            });
+            marker.addListener('click', () => {
+                this.gotoListingDetail(listing);
+            });
+            this.markers.push(marker);
+        });
+    }
+    clearMarkers() {
+        this.markers.forEach(l => l.setMap(null));
+        this.markers = [];
+    }
+    setCenter(center) {
+        if (this.map)
+            this.map.setCenter(new google.maps.LatLng(center.lat, center.lng));
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('mapCanvas'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+], MapViewComponent.prototype, "mapCanvas", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", Object)
+], MapViewComponent.prototype, "onBoundaryFilter", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Boolean)
+], MapViewComponent.prototype, "showSearchButton", void 0);
+MapViewComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'map-view',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/map-view.comp.html"*/'<div style="width:100%;height:100%" #mapCanvas\n     (load)="render()">\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/map-view.comp.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */]])
+], MapViewComponent);
+
+//# sourceMappingURL=map-view.comp.js.map
+
+/***/ }),
+
+/***/ 154:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = uuid;
+/* jshint bitwise:false, node:true */
+/* tslint:disable:no-bitwise no-var-keyword typedef */
+// taken from TodoMVC
+function uuid() {
+    var i, random;
+    var result = '';
+    for (i = 0; i < 32; i++) {
+        random = Math.random() * 16 | 0;
+        if (i === 8 || i === 12 || i === 16 || i === 20) {
+            result += '-';
+        }
+        result += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random))
+            .toString(16);
+    }
+    return result;
+}
+//# sourceMappingURL=uuid.js.map
+
+/***/ }),
+
+/***/ 155:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -74,7 +258,7 @@ class SDKStorage extends BaseStorage {
 
 /***/ }),
 
-/***/ 153:
+/***/ 156:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -139,18 +323,36 @@ MapService = __decorate([
 
 /***/ }),
 
-/***/ 154:
+/***/ 171:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyInteractionApi; });
+class UrlUtil {
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = UrlUtil;
+
+UrlUtil.getParameterByName = function (name) {
+    let url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
+    if (!results)
+        return null;
+    if (!results[2])
+        return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+//# sourceMappingURL=url_util.js.map
+
+/***/ }),
+
+/***/ 172:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterSettingsComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_auth_service__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_search_params__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_flag_service__ = __webpack_require__(25);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -160,69 +362,89 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-/* tslint:disable */
 
 
 
-
-
-
-
-/**
- * Api services for the `HsyInteraction` model.
- */
-let HsyInteractionApi = class HsyInteractionApi extends __WEBPACK_IMPORTED_MODULE_3__core_base_service__["a" /* BaseLoopBackApi */] {
-    constructor(http, models, auth, searchParams, errorHandler) {
-        super(http, models, auth, searchParams, errorHandler);
-        this.http = http;
-        this.models = models;
-        this.auth = auth;
-        this.searchParams = searchParams;
-        this.errorHandler = errorHandler;
+let FilterSettingsComponent = class FilterSettingsComponent {
+    constructor(viewCtrl, flagService, _navParams) {
+        this.viewCtrl = viewCtrl;
+        this.flagService = flagService;
+        this._navParams = _navParams;
+        // TODO(xinbenlv): use interface
+        this.filterSettings = {
+            'types': {},
+            'areas': {},
+            'duration': {}
+        };
+        this.options = [
+            'All',
+            'SanFrancisco',
+            'MidPeninsula',
+            'SouthBayWest',
+            'SouthBayEast',
+            'EastBay',
+            'ShortTerm',
+            'Seattle',
+            'TestGroup',
+        ];
+        this.optionsMap = {
+            'All': '全部',
+            'SanFrancisco': '三番',
+            'MidPeninsula': '中半岛',
+            'SouthBayWest': '南湾西',
+            'SouthBayEast': '南湾东',
+            'EastBay': '东湾',
+            'ShortTerm': '短租',
+            'Seattle': '西雅图',
+            'TestGroup': '测试',
+        };
+        this.durationList = [
+            '最近3天',
+            '最近7天',
+            '最近30天',
+            '最近90天',
+            '不限'
+        ];
+        if (this._navParams.data) {
+            console.log(" --- " + JSON.stringify(this._navParams.data));
+            //TODO: get filterSettings and initial UI
+            this.filterSettings = this._navParams.data['filterSettings'];
+        }
     }
-    /**
-     * The name of the model represented by this $resource,
-     * i.e. `HsyInteraction`.
-     */
-    getModelName() {
-        return "HsyInteraction";
+    applyFilterSettings() {
+        this.close();
+    }
+    close() {
+        this.viewCtrl.dismiss({ filterSettings: this.filterSettings });
     }
 };
-HsyInteractionApi = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"])),
-    __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_2__SDKModels__["a" /* SDKModels */])),
-    __param(2, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_4__core_auth_service__["a" /* LoopBackAuth */])),
-    __param(3, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__core_search_params__["a" /* JSONSearchParams */])),
-    __param(4, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(4, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_6__core_error_service__["a" /* ErrorHandler */])),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"],
-        __WEBPACK_IMPORTED_MODULE_2__SDKModels__["a" /* SDKModels */],
-        __WEBPACK_IMPORTED_MODULE_4__core_auth_service__["a" /* LoopBackAuth */],
-        __WEBPACK_IMPORTED_MODULE_5__core_search_params__["a" /* JSONSearchParams */],
-        __WEBPACK_IMPORTED_MODULE_6__core_error_service__["a" /* ErrorHandler */]])
-], HsyInteractionApi);
+FilterSettingsComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/'<ion-content>\n    <ion-list-header>类型</ion-list-header>\n    <ion-item>\n        <ion-label>招租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'zhaozu\']" value="ROOMMATE_WANTED"></ion-checkbox>\n    </ion-item>\n    <ion-item>\n        <ion-label>求租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'qiuzu\']"></ion-checkbox>\n    </ion-item>\n\n    <ion-list-header>区域</ion-list-header>\n    <ng-container *ngFor="let option of options; let i=index;">\n        <ion-item *ngIf="flagService.getFlag(\'debug\') || option != \'TestGroup\'">\n            <ion-label>{{optionsMap[option]}}</ion-label>\n            <ion-checkbox [(ngModel)]="filterSettings[\'areas\'][option]"  >\n            </ion-checkbox>\n        </ion-item>\n    </ng-container>\n\n    <ion-list-header>日期</ion-list-header>\n    <ion-list radio-group [(ngModel)]="filterSettings[\'duration\']">\n        <ion-item *ngFor="let option of durationList">\n            <ion-label>{{option}}</ion-label>\n            <ion-radio value="{{option}}"></ion-radio>\n        </ion-item>\n    </ion-list>\n    <ion-list-header>价格上限: {{filterSettings[\'price\']}}</ion-list-header>\n    <ion-item >\n        <ion-range min="0" max="10000" [(ngModel)]="filterSettings[\'price\']">\n        </ion-range>\n    </ion-item>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/,
+        selector: 'filter-settings',
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
+        __WEBPACK_IMPORTED_MODULE_2__services_flag_service__["a" /* FlagService */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
+], FilterSettingsComponent);
 
-//# sourceMappingURL=HsyInteraction.js.map
+//# sourceMappingURL=filter-settings.comp.js.map
 
 /***/ }),
 
-/***/ 168:
+/***/ 173:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingDetailPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_image_service__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listings_tab_page__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_auth_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_image_service__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listings_tab_page__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_auth_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(25);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -499,7 +721,326 @@ ListingDetailPage = __decorate([
 
 /***/ }),
 
-/***/ 182:
+/***/ 177:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingUxDetailPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_image_service__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listings_tab_page__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_auth_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(103);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+
+let ListingUxDetailPage = class ListingUxDetailPage {
+    constructor(nav, params, imageService, api, hsyUserApi, auth, alertCtrl, ref, flagService) {
+        this.nav = nav;
+        this.params = params;
+        this.imageService = imageService;
+        this.api = api;
+        this.hsyUserApi = hsyUserApi;
+        this.auth = auth;
+        this.alertCtrl = alertCtrl;
+        this.ref = ref;
+        this.flagService = flagService;
+        this.loading = true;
+    }
+    set mapView(view) {
+        this.view = view;
+        if (this.view) {
+            this.view.clearMarkers();
+            this.view.addListings([this.listing]);
+            this.view.render();
+            this.view.setCenter({ lng: this.listing.location_lng, lat: this.listing.location_lat });
+        }
+    }
+    ;
+    get mapView() {
+        return this.view;
+    }
+    ionViewWillEnter() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.listing == null)
+                yield this.loadListing();
+            ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
+            ga('send', 'pageview');
+            if (this.nav.length() == 1) {
+                ga('send', 'event', {
+                    eventCategory: 'go-to',
+                    eventAction: 'listing-detail',
+                    eventLabel: 'direct-url'
+                });
+            }
+        });
+    }
+    loadListing() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.params.data['listing'] != null) {
+                this.listing = yield this.params.data.listing;
+                this.ref.markForCheck();
+            }
+            else {
+                let id = this.params.data.id;
+                this.listing = (yield this.api.findById(id, {
+                    include: ['interactions', 'owner'],
+                })
+                    .take(1)
+                    .toPromise());
+                this.ref.markForCheck();
+            }
+            this.params.data.id = this.listing.uid;
+            this.title = `好室友™帖子：` + this.listing.title;
+            this.loading = false;
+            this.hackExtractHsyGroupNickAndListing();
+            return;
+        });
+    }
+    // This is a HACK, when bot is able to handle this, we can remove this part
+    hackExtractHsyGroupNickAndListing() {
+        if (!this.listing.hsyGroupNick && /^group-collected-/.test(this.listing.uid)) {
+            this.listing.hsyGroupNick = this.listing.uid.substr(16);
+        }
+    }
+    ngOnInit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.loadListing();
+        });
+    }
+    backToMain() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'listings-tab',
+                eventLabel: 'direct-url'
+            });
+            if (this.nav.length() > 1) {
+                yield this.nav.pop();
+            }
+            else {
+                yield this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_6__listings_tab_page__["a" /* ListingsTabPage */]);
+                yield this.nav.goToRoot({});
+            }
+        });
+    }
+    ionViewDidEnter() {
+        console.log(`Entering lising detail page`);
+        this.ref.markForCheck();
+    }
+    edit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */], { listing: this.listing });
+        });
+    }
+    claimAndEdit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'claim-and-edit',
+            });
+            if (!this.auth.authenticated()) {
+                let alert = this.alertCtrl.create({
+                    title: '请登录后认领',
+                    buttons: [
+                        {
+                            text: '取消',
+                        },
+                        {
+                            text: '登陆',
+                            handler: () => {
+                                this.auth.login();
+                            }
+                        }
+                    ]
+                });
+                yield alert.present();
+            }
+            else {
+                // Start claiming!
+                yield this.claim();
+            }
+        });
+    }
+    claim() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let alert = this.alertCtrl.create({
+                title: `请确认认领本帖`,
+                subTitle: `标题：${this.listing.title}`,
+                buttons: [
+                    {
+                        text: '取消',
+                    },
+                    {
+                        text: '确认',
+                        handler: () => {
+                            let local = window.localStorage;
+                            let meId = local['user_id']; // TODO(xinbenlv): use UserService
+                            this.listing.ownerId = meId;
+                            this.listing.owner = null; // 防止 owner 和 ownerId 的矛盾
+                            this.api.upsert(this.listing).take(1).toPromise()
+                                .then((_) => __awaiter(this, void 0, void 0, function* () {
+                                this.listing = yield this.api.findById(this.listing.uid, { include: ["owner"] }).take(1).toPromise();
+                                this.ref.markForCheck();
+                            }))
+                                .catch(e => {
+                                console.warn(`Error in claiming post = 
+                      ${JSON.stringify(e, null, ' ')}`);
+                            });
+                            return true;
+                        }
+                    }
+                ]
+            });
+            let ret = yield alert.present();
+            return ret;
+        });
+    }
+    fakeClaimAndEdit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'fake-claim-and-edit',
+            });
+            let alert = this.alertCtrl.create({
+                title: '新版"认领并编辑"功能正在建设中',
+                buttons: [
+                    {
+                        text: 'OK',
+                    },
+                ]
+            });
+            yield alert.present();
+        });
+    }
+    fakeStartChat() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'fake-start-chat',
+            });
+            let alert = this.alertCtrl.create({
+                title: '新版"私聊"功能正在建设中',
+                buttons: [
+                    {
+                        text: 'OK',
+                    },
+                ]
+            });
+            yield alert.present();
+        });
+    }
+    // TODO(xinbenlv): merge with the same piece of code in image-grid.
+    //noinspection JSUnusedLocalSymbols, used in HTML
+    showImage(imageId) {
+        let el = document.getElementsByTagName('body');
+        // TODO(xinbenlv): modify the viewerjs to customize the following
+        // 1. click on background area to close
+        let url = this.imageService.getUrlFromId(imageId, 0, 0);
+        let viewer = new window.Viewer(el[0], {
+            url: () => {
+                return url;
+            },
+            inline: false,
+            toolbar: true,
+            title: false,
+            movable: true,
+            keyboard: false,
+            navbar: true,
+            hidden: () => {
+                viewer.destroy();
+            }
+        });
+        viewer.show();
+    }
+    isClaimed() {
+        return !/^group-collected-/.test(this.listing.ownerId);
+    }
+    isMine() {
+        if (this.listing) {
+            return window.localStorage['user_id'] === this.listing.ownerId;
+        }
+        return false;
+    }
+    eligibleToViewContact() {
+        return false;
+    }
+    isDebug() {
+        return this.flagService.getFlag('debug');
+    }
+    debugStr() {
+        return JSON.stringify(this.listing, null, '  ');
+    }
+    hasContactInfo() {
+        let listing = this.listing;
+        let has = ((listing.owner && (listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin)) || listing.hsyGroupNick && listing.hsyGroupEnum) != null;
+        if (!has) {
+            console.warn(`listing doesn't have contact info`, this.listing);
+        }
+        return has;
+    }
+    scrollToContact() {
+        this.content.scrollToBottom();
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */])
+], ListingUxDetailPage.prototype, "content", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('mapViewSingle'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]])
+], ListingUxDetailPage.prototype, "mapView", null);
+ListingUxDetailPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+        selector: 'listing-ux-detail',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-detail.page.html"*/'<ion-content id="page-container" class="dynamic-width-container" #content>\n        <div class="detail-header">\n            <div class="detail-header-shadow">\n            </div>\n            <div id="back" class="in-image-item" item-right (click)="backToMain()">\n                <ion-icon name="ios-arrow-back-outline"></ion-icon>\n            </div>\n            <div id="heart" class="in-image-item" item-right>\n                <ion-icon name="ios-heart-outline"></ion-icon>\n            </div>\n\n        <ion-slides class="detail-image-slides" pager *ngIf="!loading && listing.imageIds">\n            <ng-container *ngFor="let imageId of listing.imageIds;let i = index">\n                <ion-slide class="slide" style="background-size:cover; background-repeat:no-repeat; background-position: center center; "\n                           [style.background-image]="\'url(\' + imageService.getUrlFromId(imageId) + \')\'">\n                </ion-slide>\n            </ng-container>\n        </ion-slides>\n        </div>\n        <div class="detail-content" *ngIf="!loading">\n            <div class="detail-content-title-block">\n                <h1 class="title">\n                    {{this.listing.title}}\n                </h1>\n                <div class="subtitle">{{ listing.lastUpdated | timeFromNow }}更新</div>\n                <div class="subtitle">110人看过</div>\n            </div>\n\n            <div class="detail-content-map" *ngIf="listing.location_lat && listing.location_lng">\n                <!--<img style="width:100%;height:100%"-->\n                     <!--src="https://maps.googleapis.com/maps/api/staticmap?center={{listing.location_lat}},{{listing.location_lng}}&zoom=12&size=375x140&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY"-->\n                     <!--alt="">-->\n                <map-view #mapViewSingle class="map-view-item" [showSearchButton]="false"> </map-view>\n                <div class="detail-map-title-block">\n                    <div class="detail-map-title">{{listing.addressCity}}</div>\n                    <div class="detail-map-subtitle"> {{ listing.addressLine || "具体地址请联系房东获得" }}</div>\n                </div>\n            </div>\n\n            <div class="section highlight-facts"\n                 *ngIf="false"> <!--TODO(zzn): reopen when this kind of information is extracted -->\n                <div class="logo-box" *ngFor="let i of [\'独栋别墅\',\'2室1卫\',\'12个月起租\',\'2017/01/01开始\']">\n                    <div class="logo-box-logo">\n                        <ion-icon name="ios-home-outline"></ion-icon>\n                    </div>\n                    <div class="logo-box-text">\n                        {{i}}\n                    </div>\n                </div>\n            </div>\n            <div class="section">\n                <div class="section-title">描述</div>\n                <div class="section-body">\n                    <p>\n                        <ng-container *ngFor="let textPiece of listing.content.split(\'\n\')">\n                            {{ textPiece }} <br/>\n                        </ng-container>\n                    </p>\n                </div>\n            </div>\n            <div class="section" *ngIf="listing.amenityArray && listing.amenityArray.length > 0">\n                <div class="section-title">设施／须知</div>\n                <div class="grid-container">\n                    <div class="grid-half-screen" *ngFor="let i of listing.amenityArray">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">{{i}}</span>\n                    </div>\n                </div>\n            </div>\n            <ng-container *ngIf="listing.requireToContact == null || listing.requireToContact.length == 0 || eligibleToViewContact()">\n                <div class="section">\n                    <div class="section-title">联系房东</div>\n                    <div class="grid-full-screen" #contact_phone *ngIf="listing.owner && listing.owner.contactPhone">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">电话</span>\n                        <span class="contetn">{{listing.owner.contactPhone}}</span>\n                    </div>\n                    <div class="grid-full-screen" #contact_email *ngIf="listing.owner && listing.owner.contactEmail">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">邮箱</span>\n                        <span class="contetn">{{listing.owner.contactEmail}}</span>\n                    </div>\n                    <div class="grid-full-screen" #contact_group_nick *ngIf="listing.hsyGroupEnum && listing.hsyGroupNick">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">微信</span>\n                        <span class="contetn">\n                            请在【好室友】{{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}群内搜索"\n                         {{ listing.hsyGroupNick ?\n                                listing.hsyGroupNick : listing.ownerId.replace(\'group-collected-\', \'\') }}"\n                        </span>\n                    </div>\n                </div>\n            </ng-container>\n        </div>\n        <ion-list *ngIf="loading">\n            <ion-item>\n                <ion-row align-items-center justify-content-center>\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n            </ion-item>\n        </ion-list>\n</ion-content>\n<ion-footer class="footer" *ngIf="!loading">\n    <div class="dynamic-width-container  grid-container">\n            <div class="footer-button" id="price-button">\n                <ng-container >\n                    <span id="price">$ {{listing.price || "价格待议" }}</span><span id="per-month">/月</span>\n                </ng-container>\n            </div>\n            <div class="footer-button" id="contact-button" (click)="scrollToContact()">\n                <span>联系房东</span>\n            </div>\n    </div>\n</ion-footer>\n\n\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-detail.page.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_3__services_image_service__["b" /* IImageService */],
+        __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
+        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__["a" /* HsyUserApi */],
+        __WEBPACK_IMPORTED_MODULE_7__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"],
+        __WEBPACK_IMPORTED_MODULE_8__services_flag_service__["a" /* FlagService */]])
+], ListingUxDetailPage);
+
+//# sourceMappingURL=listing-ux-detail.page.js.map
+
+/***/ }),
+
+/***/ 188:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -512,11 +1053,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 182;
+webpackEmptyAsyncContext.id = 188;
 
 /***/ }),
 
-/***/ 227:
+/***/ 233:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -529,24 +1070,78 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 227;
+webpackEmptyAsyncContext.id = 233;
 
 /***/ }),
 
-/***/ 267:
+/***/ 25:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FlagService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+let FlagService = class FlagService {
+    constructor() {
+        this.flagMap = {};
+        this.flags = {
+            'debug': false,
+            'realCreate': false,
+            'requireToContact': false,
+            'newUx': true,
+        };
+        let url_string = window.location.href;
+        var url = new URL(url_string);
+        var flagJsonStr = url['searchParams'].get("flags");
+        this.flagMap = JSON.parse(flagJsonStr);
+    }
+    getAllFlags() {
+        return this.flags;
+    }
+    setFlag(flagName, value) {
+        this.flags[flagName] = value;
+    }
+    getFlag(flagName) {
+        if (this.flagMap && flagName in this.flagMap) {
+            return this.flagMap[flagName];
+        }
+        return this.flags[flagName];
+    }
+};
+FlagService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [])
+], FlagService);
+
+//# sourceMappingURL=flag.service.js.map
+
+/***/ }),
+
+/***/ 273:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listings_tab_listings_tab_page__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__settings_tab_settings_tab_page__ = __webpack_require__(380);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_network__ = __webpack_require__(381);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__disconnect_modal__ = __webpack_require__(382);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__qrcode_tab_qrcode_tab_page__ = __webpack_require__(383);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__mine_tab_mine_tab_page__ = __webpack_require__(384);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_auth_service__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listings_tab_listings_tab_page__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__settings_tab_settings_tab_page__ = __webpack_require__(381);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_network__ = __webpack_require__(382);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__disconnect_modal__ = __webpack_require__(383);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__qrcode_tab_qrcode_tab_page__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__mine_tab_mine_tab_page__ = __webpack_require__(385);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_auth_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_flag_service__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__listings_tab_listings_ux_tab_page__ = __webpack_require__(386);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -565,14 +1160,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 let TabsPage = class TabsPage {
-    constructor(nav, modalCtrl, platform, navController, network, auth) {
+    constructor(nav, modalCtrl, platform, navController, network, auth, flagService) {
         this.nav = nav;
         this.modalCtrl = modalCtrl;
         this.platform = platform;
         this.navController = navController;
         this.network = network;
         this.auth = auth;
+        this.flagService = flagService;
         // this tells the tabs component which Pages
         // should be each tab's root Page
         //noinspection JSUnusedGlobalSymbols
@@ -584,6 +1182,9 @@ let TabsPage = class TabsPage {
         //noinspection JSUnusedGlobalSymbols
         this.tab5Root = __WEBPACK_IMPORTED_MODULE_7__mine_tab_mine_tab_page__["a" /* MineTabPage */];
         this.shouldShowQrCode = true;
+        if (flagService.getFlag('newUx')) {
+            this.tab2Root = __WEBPACK_IMPORTED_MODULE_10__listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */];
+        }
     }
     ngOnInit() {
         // TODO(zzn): add unread message counts
@@ -608,46 +1209,23 @@ let TabsPage = class TabsPage {
     }
 };
 TabsPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/tabs.html"*/'<ion-tabs *ngIf="shouldShowQrCode">\n    <ion-tab [root]="tab2Root" tabTitle="信息" tabIcon="map" tabUrlPath="listings-tab"></ion-tab>\n    <ion-tab [root]="tab5Root" tabTitle="我的" tabIcon="contact" tabUrlPath="mine-tab"></ion-tab>\n    <ion-tab [root]="tab3Root" tabTitle="设置" tabIcon="cog" tabUrlPath="settings-tab"></ion-tab>\n    <ion-tab [root]="tab4Root" tabTitle="加微信群" tabIcon="qr-scanner" tabUrlPath="qrcode-tab"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/tabs.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'main-tab-nav',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/tabs.html"*/'<ion-tabs *ngIf="shouldShowQrCode">\n    <ion-tab [root]="tab2Root" tabIcon="home" tabUrlPath="listings-tab"></ion-tab>\n    <ion-tab [root]="tab4Root" tabIcon="chatbubbles" tabUrlPath="qrcode-tab"></ion-tab>\n    <ion-tab [root]="tab3Root" tabIcon="cog" tabUrlPath="settings-tab"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/tabs.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* ModalController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_4__ionic_native_network__["a" /* Network */],
-        __WEBPACK_IMPORTED_MODULE_8__services_auth_service__["a" /* AuthService */]])
+        __WEBPACK_IMPORTED_MODULE_8__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_9__services_flag_service__["a" /* FlagService */]])
 ], TabsPage);
 
 //# sourceMappingURL=tabs.js.map
 
 /***/ }),
 
-/***/ 268:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = uuid;
-/* jshint bitwise:false, node:true */
-/* tslint:disable:no-bitwise no-var-keyword typedef */
-// taken from TodoMVC
-function uuid() {
-    var i, random;
-    var result = '';
-    for (i = 0; i < 32; i++) {
-        random = Math.random() * 16 | 0;
-        if (i === 8 || i === 12 || i === 16 || i === 20) {
-            result += '-';
-        }
-        result += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random))
-            .toString(16);
-    }
-    return result;
-}
-//# sourceMappingURL=uuid.js.map
-
-/***/ }),
-
-/***/ 269:
+/***/ 274:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -751,7 +1329,7 @@ class HsyUser {
 
 /***/ }),
 
-/***/ 270:
+/***/ 275:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -826,7 +1404,7 @@ class HsyInteraction {
 
 /***/ }),
 
-/***/ 273:
+/***/ 278:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -915,19 +1493,19 @@ class SDKToken {
 
 /***/ }),
 
-/***/ 281:
+/***/ 286:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HsyListing__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HsyListing__ = __webpack_require__(29);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HsyUser__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HsyUser__ = __webpack_require__(68);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__HsyUser__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__HsyInteraction__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__HsyInteraction__ = __webpack_require__(94);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SDKModels__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SDKModels__ = __webpack_require__(50);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logger_service__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logger_service__ = __webpack_require__(287);
 /* unused harmony namespace reexport */
 /* tslint:disable */
 
@@ -939,7 +1517,7 @@ class SDKToken {
 
 /***/ }),
 
-/***/ 282:
+/***/ 287:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1012,20 +1590,20 @@ LoggerService = __decorate([
 
 /***/ }),
 
-/***/ 34:
+/***/ 29:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyListingApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_search_params__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_error_service__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_HsyListing__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_HsyListing__ = __webpack_require__(48);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1379,21 +1957,21 @@ HsyListingApi = __decorate([
 
 /***/ }),
 
-/***/ 35:
+/***/ 34:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular2_jwt__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular2_jwt__ = __webpack_require__(282);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular2_jwt__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_env__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_env__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(17);
 // app/services/auth/auth.ts
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1718,323 +2296,18 @@ var AuthService_1;
 
 /***/ }),
 
-/***/ 36:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FlagService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-let FlagService = class FlagService {
-    constructor() {
-        this.flagMap = {};
-        this.flags = {
-            'debug': false,
-            'realCreate': false,
-            'requireToContact': false,
-            'newUx': true,
-        };
-        let url_string = window.location.href;
-        var url = new URL(url_string);
-        var flagJsonStr = url['searchParams'].get("flags");
-        this.flagMap = JSON.parse(flagJsonStr);
-    }
-    getAllFlags() {
-        return this.flags;
-    }
-    setFlag(flagName, value) {
-        this.flags[flagName] = value;
-    }
-    getFlag(flagName) {
-        if (this.flagMap && flagName in this.flagMap) {
-            return this.flagMap[flagName];
-        }
-        return this.flags[flagName];
-    }
-};
-FlagService = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [])
-], FlagService);
-
-//# sourceMappingURL=flag.service.js.map
-
-/***/ }),
-
-/***/ 376:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-class UrlUtil {
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = UrlUtil;
-
-UrlUtil.getParameterByName = function (name) {
-    let url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
-    if (!results)
-        return null;
-    if (!results[2])
-        return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-};
-//# sourceMappingURL=url_util.js.map
-
-/***/ }),
-
-/***/ 377:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterSettingsComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_flag_service__ = __webpack_require__(36);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-let FilterSettingsComponent = class FilterSettingsComponent {
-    constructor(viewCtrl, flagService, _navParams) {
-        this.viewCtrl = viewCtrl;
-        this.flagService = flagService;
-        this._navParams = _navParams;
-        // TODO(xinbenlv): use interface
-        this.filterSettings = {
-            'types': {},
-            'areas': {},
-            'duration': {}
-        };
-        this.options = [
-            'All',
-            'SanFrancisco',
-            'MidPeninsula',
-            'SouthBayWest',
-            'SouthBayEast',
-            'EastBay',
-            'ShortTerm',
-            'Seattle',
-            'TestGroup',
-        ];
-        this.optionsMap = {
-            'All': '全部',
-            'SanFrancisco': '三番',
-            'MidPeninsula': '中半岛',
-            'SouthBayWest': '南湾西',
-            'SouthBayEast': '南湾东',
-            'EastBay': '东湾',
-            'ShortTerm': '短租',
-            'Seattle': '西雅图',
-            'TestGroup': '测试',
-        };
-        this.durationList = [
-            '最近3天',
-            '最近7天',
-            '最近30天',
-            '最近90天',
-            '不限'
-        ];
-        if (this._navParams.data) {
-            console.log(" --- " + JSON.stringify(this._navParams.data));
-            //TODO: get filterSettings and initial UI
-            this.filterSettings = this._navParams.data['filterSettings'];
-        }
-    }
-    applyFilterSettings() {
-        this.close();
-    }
-    close() {
-        this.viewCtrl.dismiss({ filterSettings: this.filterSettings });
-    }
-};
-FilterSettingsComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/'<ion-content>\n    <ion-list-header>类型</ion-list-header>\n    <ion-item>\n        <ion-label>招租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'zhaozu\']" value="ROOMMATE_WANTED"></ion-checkbox>\n    </ion-item>\n    <ion-item>\n        <ion-label>求租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'qiuzu\']"></ion-checkbox>\n    </ion-item>\n\n    <ion-list-header>区域</ion-list-header>\n    <ng-container *ngFor="let option of options; let i=index;">\n        <ion-item *ngIf="flagService.getFlag(\'debug\') || option != \'TestGroup\'">\n            <ion-label>{{optionsMap[option]}}</ion-label>\n            <ion-checkbox [(ngModel)]="filterSettings[\'areas\'][option]"  >\n            </ion-checkbox>\n        </ion-item>\n    </ng-container>\n\n    <ion-list-header>日期</ion-list-header>\n    <ion-list radio-group [(ngModel)]="filterSettings[\'duration\']">\n        <ion-item *ngFor="let option of durationList">\n            <ion-label>{{option}}</ion-label>\n            <ion-radio value="{{option}}"></ion-radio>\n        </ion-item>\n    </ion-list>\n    <ion-list-header>价格上限: {{filterSettings[\'price\']}}</ion-list-header>\n    <ion-item >\n        <ion-range min="0" max="10000" [(ngModel)]="filterSettings[\'price\']">\n        </ion-range>\n    </ion-item>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/,
-        selector: 'filter-settings',
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
-        __WEBPACK_IMPORTED_MODULE_2__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
-], FilterSettingsComponent);
-
-//# sourceMappingURL=filter-settings.comp.js.map
-
-/***/ }),
-
-/***/ 378:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MapViewComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__listing_detail_page__ = __webpack_require__(168);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(19);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-/**
- * The addSearchButtonInMap adds a button to the map that allows
- * seach in the map.
- * This constructor takes the control DIV as an argument.
- * @constructor
- */
-function SearchButtonInMap(controlDiv, map, eventEmitter) {
-    // Set CSS for the control border.
-    // TODO(xinbenlv): from Google Map developer example, to be updated.
-    var controlUI = document.createElement('div');
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.border = '2px solid #fff';
-    controlUI.style.borderRadius = '3px';
-    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.marginBottom = '22px';
-    controlUI.style.textAlign = 'center';
-    controlUI.title = 'Click to search within the map';
-    controlDiv.appendChild(controlUI);
-    // Set CSS for the control interior.
-    var controlText = document.createElement('div');
-    controlText.style.color = 'rgb(25,25,25)';
-    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-    controlText.style.fontSize = '16px';
-    controlText.style.lineHeight = '38px';
-    controlText.style.paddingLeft = '5px';
-    controlText.style.paddingRight = '5px';
-    controlText.innerHTML = '在地图区域内搜索';
-    controlUI.appendChild(controlText);
-    // Setup the click event listeners: simply set the map to Chicago.
-    controlUI.addEventListener('click', function () {
-        eventEmitter.emit(map.getBounds());
-    });
-}
-let MapViewComponent = class MapViewComponent {
-    constructor(nav) {
-        this.nav = nav;
-        this.zoomLevel = 10; // default
-        this.center = { lat: 37.6042379, lng: -122.1755228 };
-        this.markers = [];
-        this.onBoundaryFilter = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
-        this.map = google.maps.Maps;
-        this.mapDirty = false;
-    }
-    ngOnChanges(changes) {
-        if (changes['listings']) {
-            this.render();
-        }
-    }
-    gotoListingDetail(listing) {
-        ga('send', 'event', {
-            eventCategory: 'go-to',
-            eventAction: 'listing-detail',
-            eventLabel: 'from-map-view'
-        });
-        this.nav.push(__WEBPACK_IMPORTED_MODULE_1__listing_detail_page__["a" /* ListingDetailPage */], { listing: listing });
-    }
-    render() {
-        if (!document.getElementById('map_view_canvas')) {
-            this.map = null;
-            return;
-        } // do nothing
-        this.map = new google.maps.Map(document.getElementById('map_view_canvas'), {
-            zoom: this.zoomLevel,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-        this.map.setCenter(new google.maps.LatLng(this.center.lat, this.center.lng));
-        // Create the DIV to hold the control and call the CenterControl()
-        // constructor passing in this DIV.
-        var searchInMapButtonDiv = document.createElement('div');
-        var centerControl = new SearchButtonInMap(searchInMapButtonDiv, this.map, this.onBoundaryFilter);
-        searchInMapButtonDiv.index = 1;
-        this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchInMapButtonDiv);
-        google.maps.event.addListener(this.map, 'bounds_changed', () => {
-            google.maps.event.trigger(this.map, 'resize');
-            this.mapDirty = true;
-        });
-        for (let marker of this.markers) {
-            marker.setMap(this.map);
-        }
-    }
-    addListings(newListings) {
-        let listingsHasLocation = newListings.filter((l) => l.location);
-        listingsHasLocation.map((listing) => {
-            let marker = new google.maps.Marker({
-                position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
-                icon: `data:image/svg+xml,
-<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
-    <path fill="#FFFFFF" stroke="#ccc" stroke-width=".5"
-          d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/>
-    <text transform="translate(19 18.5)" 
-          fill="#000" 
-          style="font-family: Arial, sans-serif;
-          text-align:center;"
-          font-size="10" text-anchor="middle">${listing.price ? listing.price : '待议'}
-    </text>
-</svg>`,
-                map: this.map
-            });
-            marker.addListener('click', () => {
-                this.gotoListingDetail(listing);
-            });
-            this.markers.push(marker);
-        });
-    }
-    clearMarkers() {
-        this.markers.forEach(l => l.setMap(null));
-        this.markers = [];
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
-    __metadata("design:type", Object)
-], MapViewComponent.prototype, "onBoundaryFilter", void 0);
-MapViewComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'map-view',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/map-view.comp.html"*/'<div style="width:100%;height:100%" id="map_view_canvas"\n     (load)="render()">\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/map-view.comp.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */]])
-], MapViewComponent);
-
-//# sourceMappingURL=map-view.comp.js.map
-
-/***/ }),
-
-/***/ 380:
+/***/ 381:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsTabPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_env__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_code_push__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_app_version__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_flag_service__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_env__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_code_push__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_app_version__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_flag_service__ = __webpack_require__(25);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2143,7 +2416,7 @@ SettingsTabPage = __decorate([
 
 /***/ }),
 
-/***/ 382:
+/***/ 383:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2174,7 +2447,7 @@ DisconnectModal = __decorate([
 
 /***/ }),
 
-/***/ 383:
+/***/ 384:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2213,18 +2486,18 @@ QrCodeTabPage = __decorate([
 
 /***/ }),
 
-/***/ 384:
+/***/ 385:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MineTabPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_code_push__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_app_version__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_flag_service__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_code_push__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_app_version__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_flag_service__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2324,13 +2597,443 @@ MineTabPage = __decorate([
 
 /***/ }),
 
-/***/ 385:
+/***/ 386:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingsUxTabPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_url_util__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(103);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+
+const SEGMENT_KEY = 'segment';
+const AREA_KEY = 'area';
+/**
+ * A page contains a map view and a list showing the listings.
+ */
+let ListingsUxTabPage = class ListingsUxTabPage {
+    constructor(platform, nav, alertCtrl, auth, api, flagService, popoverCtrl, ref) {
+        this.platform = platform;
+        this.nav = nav;
+        this.alertCtrl = alertCtrl;
+        this.auth = auth;
+        this.api = api;
+        this.flagService = flagService;
+        this.popoverCtrl = popoverCtrl;
+        this.ref = ref;
+        this.segmentModel = 'ROOMMATE_WANTED'; // by default for rent
+        this.areaModel = 'All'; // by default for All
+        this.useGrid = !(navigator.platform == 'iPhone');
+        this.loadedListings = [];
+        this.mapReady = false;
+        this.currentIndex = 0;
+        this.filterSettings = { 'types': {}, 'areas': {}, 'duration': {} };
+        this.whereClause = {};
+        this.isLoading = false;
+        this.mapOrList = 'ONLY_LIST';
+        this.options = [
+            'All',
+            'SanFrancisco',
+            'MidPeninsula',
+            'SouthBayWest',
+            'SouthBayEast',
+            'EastBay',
+            'ShortTerm',
+            'Seattle',
+            'TestGroup',
+        ];
+        this.optionsMap = {
+            'All': '全部',
+            'SanFrancisco': '三番',
+            'MidPeninsula': '中半岛',
+            'SouthBayWest': '南湾西',
+            'SouthBayEast': '南湾东',
+            'EastBay': '东湾',
+            'ShortTerm': '短租',
+            'Seattle': '西雅图',
+            'TestGroup': '测试',
+        };
+    }
+    ngOnDestroy() {
+        if (this.markers)
+            for (let marker of this.markers) {
+                marker.setMap(null);
+            }
+    }
+    ngOnInit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let segmentFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(SEGMENT_KEY);
+            if (segmentFromUrl) {
+                this.segmentModel = segmentFromUrl;
+            }
+            let areaFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(AREA_KEY);
+            if (areaFromUrl) {
+                this.areaModel = areaFromUrl;
+            }
+            this.updateWhereClause();
+            yield this.loadMoreListings();
+            if (this.largeEnough()) {
+                this.mapOrList = 'BOTH';
+            }
+            else
+                this.mapOrList = 'ONLY_LIST';
+            this.updateMapOrList(this.mapOrList);
+        });
+    }
+    ionViewDidEnter() {
+        ga('set', 'page', '/listings-tab.page.html');
+        ga('send', 'pageview');
+        this.ref.markForCheck();
+    }
+    //noinspection JSUnusedGlobalSymbols
+    onSegmentModelChange(newValue) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.segmentModel = newValue;
+            yield this.initLoad();
+            ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
+            ga('send', 'pageview');
+        });
+    }
+    //noinspection JSUnusedGlobalSymbols
+    onAreaModelChange(newValue) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.areaModel = newValue;
+            yield this.initLoad();
+            ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
+            ga('send', 'pageview');
+        });
+    }
+    loadMoreListings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.isLoading = true;
+            ga('send', 'event', {
+                eventCategory: 'load',
+                eventAction: 'load-more-listings',
+                eventLabel: `load-more-index-${this.loadedListings.length}`
+            });
+            let start = Date.now();
+            // southwest: 37.148070, -122.852249
+            // northeast: 38.072739, -121.473969
+            let newItems = yield this.api
+                .find({
+                // TODO(zzn): use ListTypeEnum when migrated
+                where: this.whereClause,
+                order: 'latestUpdatedOrBump DESC',
+                limit: 24,
+                offset: this.loadedListings.length,
+                include: ['interactions', 'owner'],
+            })
+                .take(1)
+                .toPromise();
+            let end = Date.now();
+            ga('send', {
+                hitType: 'timing',
+                timingCategory: 'API Call',
+                timingVar: 'load-more-listings',
+                timingValue: end - start
+            });
+            for (let item of newItems) {
+                this.loadedListings.push(item);
+            }
+            this.mapView.addListings(newItems);
+            this.isLoading = false;
+        });
+    }
+    updateMarkers() {
+        // TODO(xinbenlv): update markers
+    }
+    fakeGoToCreationPage() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'listing-creation',
+            });
+            let alert = this.alertCtrl.create({
+                title: '新版app中发帖功能正在建设中',
+                buttons: [
+                    {
+                        text: 'OK',
+                    },
+                ]
+            });
+            yield alert.present();
+        });
+    }
+    goToCreationPage() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.auth.authenticated()) {
+                //push another page onto the history stack
+                //causing the nav controller to animate the new page in
+                this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */]);
+            }
+            else {
+                let alert = this.alertCtrl.create({
+                    title: '请登录后发帖',
+                    buttons: [
+                        {
+                            text: '取消',
+                        },
+                        {
+                            text: '登陆',
+                            handler: () => {
+                                this.auth.login();
+                            }
+                        }
+                    ]
+                });
+                yield alert.present();
+            }
+        });
+    }
+    doInfinite(infiniteScroll) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.loadMoreListings();
+            infiniteScroll.complete();
+        });
+    }
+    isDebug() {
+        return this.flagService.getFlag('debug');
+    }
+    // Hack introduced due to this issue: https://github.com/ionic-team/ionic/issues/6923
+    setOption(index, event) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.options[index] != null) {
+                this.areaModel = this.options[index];
+                yield this.onAreaModelChange(this.areaModel);
+                //note you have to use "tap" or "click" - if you bind to "ionSelected" you don't get the "target" property
+                let segments = event.target.parentNode.children;
+                let len = segments.length;
+                for (let i = 0; i < len; i++) {
+                    segments[i].classList.remove('segment-activated');
+                }
+                event.target.classList.add('segment-activated');
+            }
+        });
+    }
+    bumpUpdateOrder(hsyListing) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < this.loadedListings.length; i++) {
+                let bumpedListing = hsyListing;
+                if (this.loadedListings[i] == bumpedListing) {
+                    yield this.content.scrollToTop();
+                    this.loadedListings.splice(i, 1);
+                    this.loadedListings.unshift(bumpedListing);
+                    break;
+                }
+            }
+        });
+    }
+    popoverFilter(myEvent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let popover = this.popoverCtrl.create(__WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__["a" /* FilterSettingsComponent */], { 'filterSettings': this.filterSettings }, {});
+            yield popover.onDidDismiss((data) => __awaiter(this, void 0, void 0, function* () {
+                console.log(`--- received ` + JSON.stringify(data));
+                if (data !== undefined && data !== null) {
+                    this.filterSettings = data["filterSettings"];
+                }
+                else if (this.popoverCtrl['_app'].filterSettings) {
+                    this.filterSettings = this.popoverCtrl['_app'] /*a hack to access private */.filterSettings;
+                }
+                this.updateWhereClause();
+                yield this.initLoad();
+            }));
+            yield popover.present({
+                ev: myEvent
+            });
+        });
+    }
+    updateWhereClause() {
+        /* START filtering type */
+        let type = this.getType(this.filterSettings['types']['zhaozu'], this.filterSettings['types']['qiuzu']);
+        let whereClause_ = {};
+        if (type == 0) {
+            whereClause_['listingTypeEnum'] = 'NeedRoommate';
+        }
+        else if (type == 1) {
+            whereClause_['listingTypeEnum'] = 'NeedRoom';
+        }
+        else {
+            delete whereClause_['listingTypeEnum'];
+        }
+        /* END filtering type */
+        /* START filtering duration */
+        let ago = null;
+        switch (this.filterSettings['duration']) {
+            case '最近3天':
+                ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
+                break;
+            case '最近7天':
+                ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
+                break;
+            case '最近30天':
+                ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
+                break;
+            case '最近90天':
+                ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
+                break;
+            case '不限': // fall though
+            default:
+        }
+        if (ago)
+            whereClause_['lastUpdated'] = { "gte": ago };
+        /* END filtering duration */
+        /* START filtering price */
+        if (this.filterSettings['price']) {
+            whereClause_['price'] = { lt: this.filterSettings['price'] };
+        }
+        else {
+            delete whereClause_['price'];
+        }
+        /* END filtering price */
+        /* START filtering area */
+        let allArea = this.filterSettings['areas']["All"];
+        if (allArea !== undefined && allArea === true) {
+            whereClause_['hsyGroupEnum'] = { 'nin': ['BigTeam', 'TestGroup', 'None'] };
+        }
+        else {
+            let areaClause = [];
+            for (let area in this.filterSettings['areas']) {
+                let selected = this.filterSettings['areas'][area];
+                if (selected !== undefined && selected) {
+                    areaClause.push(area);
+                }
+            }
+            if (areaClause.length > 0)
+                whereClause_['hsyGroupEnum'] = { 'inq': areaClause };
+        }
+        /* END filtering area */
+        /* EXEC filtering */
+        this.whereClause = whereClause_;
+    }
+    getType(zhaozu, qiuzu) {
+        if (zhaozu === undefined || !zhaozu) {
+            zhaozu = false;
+        }
+        if (qiuzu === undefined || !qiuzu) {
+            qiuzu = false;
+        }
+        if (zhaozu && !qiuzu) {
+            return 0;
+        }
+        if (!zhaozu && qiuzu) {
+            return 1;
+        }
+        return -1;
+    }
+    largeEnough() {
+        return window.innerWidth > 600;
+    }
+    updateMapOrList(value) {
+        if (value == "ONLY_MAP") {
+            this.listContainerCol.nativeElement.setAttribute('style', 'display:none;');
+            this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
+            this.mapContainerCol.nativeElement.className = 'full-width';
+        }
+        else if (value == "ONLY_LIST") {
+            this.listContainerCol.nativeElement.setAttribute('style', 'display:block;');
+            this.mapContainerCol.nativeElement.setAttribute('style', 'display:none;');
+            this.listContainerCol.nativeElement.className = 'full-width';
+        }
+        this.mapView.render();
+    }
+    onBoundaryFilter(boundary) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let latMax = boundary.getNorthEast().lat();
+            let latMin = boundary.getSouthWest().lat();
+            let lngMax = boundary.getNorthEast().lng();
+            let lngMin = boundary.getSouthWest().lng();
+            this.whereClause['and'] = [
+                { 'location_lat': { 'lt': latMax } },
+                { 'location_lat': { 'gt': latMin } },
+                { 'location_lng': { 'lt': lngMax } },
+                { 'location_lng': { 'gt': lngMin } },
+            ];
+            yield this.initLoad();
+        });
+    }
+    initLoad() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.loadedListings = [];
+            this.mapView.clearMarkers();
+            yield this.loadMoreListings();
+        });
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */])
+], ListingsUxTabPage.prototype, "content", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */])
+], ListingsUxTabPage.prototype, "mapView", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('mapContainerCol'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
+], ListingsUxTabPage.prototype, "mapContainerCol", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('listContainerCol'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
+], ListingsUxTabPage.prototype, "listContainerCol", void 0);
+ListingsUxTabPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-searchbar>\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <!--<button ion-button (click)="popoverFilter($event)">-->\n                <!--<ion-icon name="funnel"> 筛选</ion-icon>-->\n            <!--</button>-->\n            <!--<button ion-button (click)="goToCreationPage()">-->\n                <!--<ion-icon name="add"> 发帖</ion-icon>-->\n            <!--</button>-->\n\n        </ion-buttons>\n    </ion-navbar>\n\n    <ion-navbar *ngIf="!largeEnough()">\n        <ion-segment [(ngModel)]="mapOrList" (ngModelChange)="updateMapOrList($event)">\n            <ion-segment-button value="ONLY_LIST">列表</ion-segment-button>\n            <ion-segment-button value="ONLY_MAP">地图</ion-segment-button>\n        </ion-segment>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row class="split-panel-container" style="height: 100%;">\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n        </ion-col>\n        <!-- the main content -->\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n    </ion-row>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_3__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
+        __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["i" /* PopoverController */],
+        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
+], ListingsUxTabPage);
+
+//# sourceMappingURL=listings-ux-tab.page.js.map
+
+/***/ }),
+
+/***/ 387:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RemoveModal; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__ = __webpack_require__(17);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2380,344 +3083,7 @@ RemoveModal = __decorate([
 
 /***/ }),
 
-/***/ 386:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingUxDetailPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_image_service__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listings_tab_page__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_auth_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(36);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-
-
-let ListingUxDetailPage = class ListingUxDetailPage {
-    constructor(nav, params, imageService, api, hsyUserApi, auth, alertCtrl, ref, flagService) {
-        this.nav = nav;
-        this.params = params;
-        this.imageService = imageService;
-        this.api = api;
-        this.hsyUserApi = hsyUserApi;
-        this.auth = auth;
-        this.alertCtrl = alertCtrl;
-        this.ref = ref;
-        this.flagService = flagService;
-        this.loading = true;
-        this.useGrid = !(navigator.platform == 'iPhone');
-    }
-    ionViewWillEnter() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log(`XXX New UX!!!`);
-            if (this.listing == null)
-                yield this.loadListing();
-            ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
-            ga('send', 'pageview');
-            if (this.nav.length() == 1) {
-                ga('send', 'event', {
-                    eventCategory: 'go-to',
-                    eventAction: 'listing-detail',
-                    eventLabel: 'direct-url'
-                });
-            }
-        });
-    }
-    loadListing() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.params.data['listing'] != null) {
-                this.listing = yield this.params.data.listing;
-                this.ref.markForCheck();
-            }
-            else {
-                let id = this.params.data.id;
-                this.listing = (yield this.api.findById(id, {
-                    include: ['interactions', 'owner'],
-                })
-                    .take(1)
-                    .toPromise());
-                this.ref.markForCheck();
-            }
-            this.params.data.id = this.listing.uid;
-            this.title = `好室友™帖子：` + this.listing.title;
-            this.loading = false;
-            this.hackExtractHsyGroupNickAndListing();
-            return;
-        });
-    }
-    // This is a HACK, when bot is able to handle this, we can remove this part
-    hackExtractHsyGroupNickAndListing() {
-        console.log(`XXX this.listing = ${this.listing}`);
-        if (!this.listing.hsyGroupNick && /^group-collected-/.test(this.listing.uid)) {
-            this.listing.hsyGroupNick = this.listing.uid.substr(16);
-        }
-    }
-    ngOnInit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.loadListing();
-        });
-    }
-    backToMain() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'listings-tab',
-                eventLabel: 'direct-url'
-            });
-            yield this.nav.push(__WEBPACK_IMPORTED_MODULE_6__listings_tab_page__["a" /* ListingsTabPage */]);
-        });
-    }
-    ionViewDidEnter() {
-        console.log(`Entering lising detail page`);
-        this.ref.markForCheck();
-    }
-    edit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */], { listing: this.listing });
-        });
-    }
-    claimAndEdit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'claim-and-edit',
-            });
-            if (!this.auth.authenticated()) {
-                let alert = this.alertCtrl.create({
-                    title: '请登录后认领',
-                    buttons: [
-                        {
-                            text: '取消',
-                        },
-                        {
-                            text: '登陆',
-                            handler: () => {
-                                this.auth.login();
-                            }
-                        }
-                    ]
-                });
-                yield alert.present();
-            }
-            else {
-                // Start claiming!
-                yield this.claim();
-            }
-        });
-    }
-    claim() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let alert = this.alertCtrl.create({
-                title: `请确认认领本帖`,
-                subTitle: `标题：${this.listing.title}`,
-                buttons: [
-                    {
-                        text: '取消',
-                    },
-                    {
-                        text: '确认',
-                        handler: () => {
-                            let local = window.localStorage;
-                            let meId = local['user_id']; // TODO(xinbenlv): use UserService
-                            this.listing.ownerId = meId;
-                            this.listing.owner = null; // 防止 owner 和 ownerId 的矛盾
-                            this.api.upsert(this.listing).take(1).toPromise()
-                                .then((_) => __awaiter(this, void 0, void 0, function* () {
-                                this.listing = yield this.api.findById(this.listing.uid, { include: ["owner"] }).take(1).toPromise();
-                                this.ref.markForCheck();
-                            }))
-                                .catch(e => {
-                                console.warn(`Error in claiming post = 
-                      ${JSON.stringify(e, null, ' ')}`);
-                            });
-                            return true;
-                        }
-                    }
-                ]
-            });
-            let ret = yield alert.present();
-            return ret;
-        });
-    }
-    fakeClaimAndEdit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'fake-claim-and-edit',
-            });
-            let alert = this.alertCtrl.create({
-                title: '新版"认领并编辑"功能正在建设中',
-                buttons: [
-                    {
-                        text: 'OK',
-                    },
-                ]
-            });
-            yield alert.present();
-        });
-    }
-    fakeStartChat() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'fake-start-chat',
-            });
-            let alert = this.alertCtrl.create({
-                title: '新版"私聊"功能正在建设中',
-                buttons: [
-                    {
-                        text: 'OK',
-                    },
-                ]
-            });
-            yield alert.present();
-        });
-    }
-    // TODO(xinbenlv): merge with the same piece of code in image-grid.
-    //noinspection JSUnusedLocalSymbols, used in HTML
-    showImage(imageId) {
-        let el = document.getElementsByTagName('body');
-        // TODO(xinbenlv): modify the viewerjs to customize the following
-        // 1. click on background area to close
-        let url = this.imageService.getUrlFromId(imageId, 0, 0);
-        let viewer = new window.Viewer(el[0], {
-            url: () => {
-                return url;
-            },
-            inline: false,
-            toolbar: true,
-            title: false,
-            movable: true,
-            keyboard: false,
-            navbar: true,
-            hidden: () => {
-                viewer.destroy();
-            }
-        });
-        viewer.show();
-    }
-    isClaimed() {
-        return !/^group-collected-/.test(this.listing.ownerId);
-    }
-    isMine() {
-        if (this.listing) {
-            return window.localStorage['user_id'] === this.listing.ownerId;
-        }
-        return false;
-    }
-    eligibleToViewContact() {
-        return false;
-    }
-    isDebug() {
-        return this.flagService.getFlag('debug');
-    }
-    debugStr() {
-        return JSON.stringify(this.listing, null, '  ');
-    }
-    hasContactInfo() {
-        let listing = this.listing;
-        let has = ((listing.owner && (listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin)) || listing.hsyGroupNick && listing.hsyGroupEnum) != null;
-        if (!has) {
-            console.warn(`listing doesn't have contact info`, this.listing);
-        }
-        return has;
-    }
-};
-ListingUxDetailPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'listing-ux-detail',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-detail.page.html"*/'<ion-content id="page-container">\n    <div class="detail-header">\n        <button>Back</button>\n    </div>\n    <ion-slides class="detail-image-slides" pager *ngIf="!loading && listing.imageIds">\n        <ng-container *ngFor="let imageId of listing.imageIds">\n            <ion-slide style="background-size:cover; background-repeat:no-repeat; background-position: center center; "\n                       [style.background-image]="\'url(\' + imageService.getUrlFromId(imageId) + \')\'">\n            </ion-slide>\n        </ng-container>\n\n    </ion-slides>\n    <div class="detail-content" *ngIf="!loading">\n        <div class="detail-content-title-block">\n            <h1 class="title">\n                San Mateo宽敞舒适房间出租\n            </h1>\n            <div class="subtitle">2天前发布</div>\n            <div class="subtitle">110人看过</div>\n            <!--TODO(xinbenlv): update the subtitle with actual data-->\n        </div>\n\n        <div class="detail-content-map">\n            <img style="width:100%;height:100%"\n                 src="https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=375x140&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY"\n                 alt="">\n            <div class="detail-map-title-block">\n                <div class="detail-map-title">San Mateo</div>\n                <div class="detail-map-subtitle">具体地址请联系房东获得</div>\n            </div>\n        </div>\n\n        <div class="section highlight-facts">\n            <div class="logo-box" *ngFor="let i of [\'独栋别墅\',\'2室1卫\',\'12个月起租\',\'2017/01/01开始\']">\n                <div class="logo-box-logo">\n                    <ion-icon name="ios-home-outline"></ion-icon>\n                </div>\n                <div class="logo-box-text">\n                    {{i}}\n                </div>\n            </div>\n        </div>\n        <div class="section">\n            <div class="section-title">描述</div>\n            <div class="section-body">\n                招租 安全独立屋House分租1b1b, 独立一房一厅一卫一院，独立出入门，拎包入住, 包快WiFi网, 垃圾费, 日常消耗品等等, 安全, 安静, 干净, 便利, 气候怡人! 位于San Mateo/\n                Fos…\n            </div>\n            <div class="section-more">更多...</div>\n        </div>\n        <div class="section">\n            <div class="section-title">设施／须知</div>\n            <div class="grid-container">\n                <div class="grid-half-screen" *ngFor="let i of [\'带家具\',\'洗衣机/烘干机\',\'健身房\',\'无线网络\',\'空调\',\'停车位\']">\n                    <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                    <span class="label">{{i}}</span>\n                </div>\n            </div>\n\n            <div class="section-more">更多...</div>\n        </div>\n        <div class="section">\n            <div class="section-title">联系房东</div>\n            <div class="grid-full-screen" *ngFor="let i of [1,2,3]">\n                <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                <span class="label">电话</span>\n                <span class="contetn">812-123-4567</span>\n            </div>\n            <div class="section-more">更多...</div>\n        </div>\n    </div>\n    <ion-list *ngIf="loading">\n        <ion-item>\n            <ion-row align-items-center justify-content-center>\n                <ion-spinner></ion-spinner>\n            </ion-row>\n        </ion-item>\n    </ion-list>\n</ion-content>\n<ion-footer class="footer grid-container">\n    <div class="footer-button" id="price-button">\n        <span id="price">$1400</span><span id="per-month">/月</span>\n    </div>\n    <div class="footer-button" id="contact-button">\n        <span>联系房东</span>\n    </div>\n</ion-footer>\n\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-detail.page.html"*/,
-        changeDetection: __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectionStrategy"].OnPush,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_3__services_image_service__["b" /* IImageService */],
-        __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__["a" /* HsyUserApi */],
-        __WEBPACK_IMPORTED_MODULE_7__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"],
-        __WEBPACK_IMPORTED_MODULE_8__services_flag_service__["a" /* FlagService */]])
-], ListingUxDetailPage);
-
-//# sourceMappingURL=listing-ux-detail.page.js.map
-
-/***/ }),
-
-/***/ 49:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKModels; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_HsyListing__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_HsyUser__ = __webpack_require__(269);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_HsyInteraction__ = __webpack_require__(270);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-/* tslint:disable */
-
-
-
-
-let SDKModels = class SDKModels {
-    constructor() {
-        this.models = {
-            HsyListing: __WEBPACK_IMPORTED_MODULE_1__models_HsyListing__["a" /* HsyListing */],
-            HsyUser: __WEBPACK_IMPORTED_MODULE_2__models_HsyUser__["a" /* HsyUser */],
-            HsyInteraction: __WEBPACK_IMPORTED_MODULE_3__models_HsyInteraction__["a" /* HsyInteraction */],
-        };
-    }
-    get(modelName) {
-        return this.models[modelName];
-    }
-    getAll() {
-        return this.models;
-    }
-    getModelNames() {
-        return Object.keys(this.models);
-    }
-};
-SDKModels = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-], SDKModels);
-
-//# sourceMappingURL=SDKModels.js.map
-
-/***/ }),
-
-/***/ 50:
+/***/ 48:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2945,7 +3311,53 @@ class HsyListing {
 
 /***/ }),
 
-/***/ 506:
+/***/ 50:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKModels; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_HsyListing__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_HsyUser__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_HsyInteraction__ = __webpack_require__(275);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+/* tslint:disable */
+
+
+
+
+let SDKModels = class SDKModels {
+    constructor() {
+        this.models = {
+            HsyListing: __WEBPACK_IMPORTED_MODULE_1__models_HsyListing__["a" /* HsyListing */],
+            HsyUser: __WEBPACK_IMPORTED_MODULE_2__models_HsyUser__["a" /* HsyUser */],
+            HsyInteraction: __WEBPACK_IMPORTED_MODULE_3__models_HsyInteraction__["a" /* HsyInteraction */],
+        };
+    }
+    get(modelName) {
+        return this.models[modelName];
+    }
+    getAll() {
+        return this.models;
+    }
+    getModelNames() {
+        return Object.keys(this.models);
+    }
+};
+SDKModels = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+], SDKModels);
+
+//# sourceMappingURL=SDKModels.js.map
+
+/***/ }),
+
+/***/ 507:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3051,7 +3463,7 @@ CookieBrowser = __decorate([
 
 /***/ }),
 
-/***/ 507:
+/***/ 508:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3136,13 +3548,13 @@ StorageBrowser = __decorate([
 
 /***/ }),
 
-/***/ 508:
+/***/ 509:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(509);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(513);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(510);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(514);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -3156,7 +3568,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JSONSearchParams; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3204,58 +3616,62 @@ JSONSearchParams = __decorate([
 
 /***/ }),
 
-/***/ 513:
+/***/ 514:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export getAuthHttp */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_component__ = __webpack_require__(514);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_component__ = __webpack_require__(515);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__ = __webpack_require__(282);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_jwt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__ = __webpack_require__(377);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__ = __webpack_require__(832);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_listing_detail_page__ = __webpack_require__(168);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_listing_item_comp__ = __webpack_require__(833);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_listings_tab_page__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_listings_tab_map_view_comp__ = __webpack_require__(378);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_listings_tab_long_image_comp__ = __webpack_require__(834);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_listings_tab_remove_modal__ = __webpack_require__(385);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_settings_tab_settings_tab_page__ = __webpack_require__(380);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_tabs_disconnect_modal__ = __webpack_require__(382);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_image_service__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_auth_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_tabs_tabs__ = __webpack_require__(267);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pipes_enum_msg_pipe__ = __webpack_require__(835);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pipes_image_id_to_url_pipe__ = __webpack_require__(836);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pipes_time_from_now_pipe__ = __webpack_require__(837);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_native_storage__ = __webpack_require__(840);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_map_service__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pipes_city_n_zip_pipe__ = __webpack_require__(841);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pages_qrcode_tab_qrcode_tab_page__ = __webpack_require__(383);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__loopbacksdk_index__ = __webpack_require__(842);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pipes_hsy_group_enum_msg_pipe__ = __webpack_require__(846);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__ = __webpack_require__(833);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_listing_detail_page__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_listing_item_comp__ = __webpack_require__(834);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_listings_tab_page__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_listings_tab_map_view_comp__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_listings_tab_long_image_comp__ = __webpack_require__(835);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_listings_tab_remove_modal__ = __webpack_require__(387);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_settings_tab_settings_tab_page__ = __webpack_require__(381);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_tabs_disconnect_modal__ = __webpack_require__(383);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_image_service__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_auth_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_tabs_tabs__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pipes_enum_msg_pipe__ = __webpack_require__(836);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pipes_image_id_to_url_pipe__ = __webpack_require__(837);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pipes_time_from_now_pipe__ = __webpack_require__(838);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_native_storage__ = __webpack_require__(841);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_map_service__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pipes_city_n_zip_pipe__ = __webpack_require__(842);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pages_qrcode_tab_qrcode_tab_page__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__loopbacksdk_index__ = __webpack_require__(843);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pipes_hsy_group_enum_msg_pipe__ = __webpack_require__(847);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__angular_platform_browser__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ionic_native_transfer__ = __webpack_require__(169);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_network__ = __webpack_require__(381);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ionic_native_push__ = __webpack_require__(847);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ionic_native_code_push__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__ionic_native_app_version__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pipes_date_formatter_pipe__ = __webpack_require__(848);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__services_flag_service__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pages_mine_tab_mine_tab_page__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ionic_native_transfer__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_network__ = __webpack_require__(382);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ionic_native_push__ = __webpack_require__(848);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ionic_native_code_push__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__ionic_native_app_version__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pipes_date_formatter_pipe__ = __webpack_require__(849);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__services_flag_service__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pages_mine_tab_mine_tab_page__ = __webpack_require__(385);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__angular_forms__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__pages_listings_tab_listing_ux_detail_page__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__pages_listings_tab_listing_ux_detail_page__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__pages_listings_tab_listings_ux_tab_page__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__pages_listings_tab_listing_ux_item_comp__ = __webpack_require__(850);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -3317,6 +3733,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_38__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
             __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_listing_item_comp__["a" /* ListingItem */],
             __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_listings_tab_page__["a" /* ListingsTabPage */],
+            __WEBPACK_IMPORTED_MODULE_40__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
+            __WEBPACK_IMPORTED_MODULE_39__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
             __WEBPACK_IMPORTED_MODULE_11__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
             __WEBPACK_IMPORTED_MODULE_12__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
             __WEBPACK_IMPORTED_MODULE_13__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
@@ -3359,6 +3777,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_38__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
             __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_listing_item_comp__["a" /* ListingItem */],
             __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_listings_tab_page__["a" /* ListingsTabPage */],
+            __WEBPACK_IMPORTED_MODULE_40__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
+            __WEBPACK_IMPORTED_MODULE_39__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
             __WEBPACK_IMPORTED_MODULE_11__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
             __WEBPACK_IMPORTED_MODULE_12__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
             __WEBPACK_IMPORTED_MODULE_13__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
@@ -3391,24 +3811,24 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 514:
+/***/ 515:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HaoshiyouApp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_tabs_tabs__ = __webpack_require__(267);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_tabs_tabs__ = __webpack_require__(273);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_auth_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_auth_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__ = __webpack_require__(157);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__env__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__env__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__loopbacksdk_lb_config__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_models_HsyListing__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_code_push__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__util_url_util__ = __webpack_require__(376);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_models_HsyListing__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_code_push__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__util_url_util__ = __webpack_require__(171);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3492,7 +3912,7 @@ HaoshiyouApp = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__ = __webpack_require__(271);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__ = __webpack_require__(276);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3530,8 +3950,8 @@ ErrorHandler = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoopBackAuth; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__storage_storage_swaps__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_BaseModels__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__storage_storage_swaps__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_BaseModels__ = __webpack_require__(278);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3806,7 +4226,7 @@ LoopBackConfig.withCredentials = false;
 
 /***/ }),
 
-/***/ 556:
+/***/ 557:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3848,10 +4268,281 @@ var EnvType;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreationPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_uuid__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_auth_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_map_service__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_flag_service__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_forms__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_services_custom__ = __webpack_require__(286);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+
+const DEFAULT_LAT = 37.41666;
+const DEFAULT_LNG = -122.09106;
+const cityToHsyGroupEnum = {
+    'Mountain View': 'SouthBayWest',
+    'Sunnyvale': 'SouthBayWest',
+    'Palo Alto': 'SouthBayWest',
+    'East Palo Alto': 'SouthBayWest',
+    'Stanford': 'SouthBayWest',
+    'Menlo Park': 'SouthBayWest',
+    'Cupertino': 'SouthBayWest',
+    'Los Gatos': 'SouthBayWest',
+    'Los Altos': 'SouthBayWest',
+    'Los Altos Hills': 'SouthBayWest',
+    'Milpitas': 'SouthBayEast',
+    'San Jose': 'SouthBayEast',
+    'Saratoga': 'SouthBayEast',
+    'Santa Clara': 'SouthBayEast',
+};
+const hsyGroupEnumToName = {
+    SanFrancisco: "三番",
+    SouthBayWest: "南湾西",
+    SouthBayEast: "南湾东",
+    EastBay: "东湾",
+    MidPeninsula: '中半岛',
+    None: "暂未覆盖"
+}; // TODO(zzn): merge with bot code
+const countyToHsyGroupEnum = {
+    'San Francisco County': 'SanFrancisco',
+    'San Mateo County': 'MidPeninsula',
+    'Alameda County': 'EastBay',
+};
+const getHsyGroupEnumFromLocality = function (city, county) {
+    let ret = (county == 'Santa Clara County' ?
+        cityToHsyGroupEnum[city] : countyToHsyGroupEnum[county]);
+    let retFixed = (typeof ret === 'undefined') ? 'None' : ret;
+    return retFixed;
+};
+/**
+ * A page contains a map view and a list showing the listings.
+ */
+let CreationPage = class CreationPage {
+    constructor(platform, params, nav, alertCtrl, authService, mapService, flagService, hsyListingApi, hsyUserApi, ref) {
+        this.platform = platform;
+        this.params = params;
+        this.nav = nav;
+        this.alertCtrl = alertCtrl;
+        this.authService = authService;
+        this.mapService = mapService;
+        this.flagService = flagService;
+        this.hsyListingApi = hsyListingApi;
+        this.hsyUserApi = hsyUserApi;
+        this.ref = ref;
+        //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
+        // TODO(xinbenlv) uncomment this
+        this.listingTypeEnums = ['NeedRoommate' /*招租*/, 'NeedRoom' /*求租*/];
+        this.hsyGroupEnumOptions = [
+            'SanFrancisco',
+            'MidPeninsula',
+            'SouthBayWest',
+            'SouthBayEast',
+            'EastBay',
+            'ShortTerm',
+            'Seattle',
+            'TestGroup',
+        ];
+        this.hsyGroupEnumOptionsMap = {
+            'SanFrancisco': '三番',
+            'MidPeninsula': '中半岛',
+            'SouthBayWest': '南湾西',
+            'SouthBayEast': '南湾东',
+            'EastBay': '东湾',
+            'ShortTerm': '短租',
+            'Seattle': '西雅图',
+            'TestGroup': '测试',
+        };
+        this.amenityOptions = [
+            '洗衣机', '停车位', '可养宠物'
+        ];
+        //noinspection JSMismatchedCollectionQueryUpdate used in HTML
+        this.dirty = {};
+        if (params.data.listing) {
+            this.listing = params.data.listing;
+        }
+        else {
+            this.listing = {};
+            this.listing.uid = Object(__WEBPACK_IMPORTED_MODULE_2__util_uuid__["a" /* uuid */])();
+        }
+        if (!this.listing.location) {
+            let loc = {
+                lat: DEFAULT_LAT,
+                lng: DEFAULT_LNG
+            };
+            this.listing.location = loc;
+            this.listing.location_lng = loc.lng;
+            this.listing.location_lat = loc.lat;
+        }
+        if (!this.listing.ownerId) {
+            this.listing.owner = {};
+            let local = window.localStorage;
+            let meId = local['user_id']; // TODO(xinbenlv): use UserService
+            this.listing.ownerId = meId;
+            this.listing.owner.id = meId;
+        }
+        if (!this.listing.amenityArray) {
+            this.listing.amenityArray = [];
+        }
+        if (!this.listing.imageIds)
+            this.listing.imageIds = [];
+    }
+    ngOnInit() {
+        this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/ {
+            position: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng),
+            animation: google.maps.Animation.DROP,
+            draggable: true,
+        });
+        google.maps.event.addListener(this.marker, 'dragend', () => __awaiter(this, void 0, void 0, function* () {
+            let location = {
+                lat: this.marker.getPosition().lat(),
+                lng: this.marker.getPosition().lng()
+            };
+            this.listing.location = location;
+            this.listing.location_lng = location.lng;
+            this.listing.location_lat = location.lat;
+            let locality = yield this.mapService.getLocality(new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng));
+            let hsyGroupEnum = getHsyGroupEnumFromLocality(locality.city, locality.county);
+            this.localityText = `${locality.city}, ${locality.zip} (${hsyGroupEnumToName[hsyGroupEnum]})`;
+            this.listing.hsyGroupEnum = hsyGroupEnum;
+            this.ref.detectChanges();
+        }));
+    }
+    markAllControlsAsDirty() {
+        Object.keys(this.hsyListingForm.controls).filter(k => {
+            this.hsyListingForm.controls[k].markAsDirty();
+        });
+    }
+    save() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.markAllControlsAsDirty();
+            if (this.validate()) {
+                this.listing.lastUpdated = new Date();
+                this.listing.latestUpdatedOrBump = this.listing.lastUpdated;
+                if (!this.listing.ownerId) {
+                    let local = window.localStorage;
+                    let meId = local['user_id']; // TODO(xinbenlv): use UserService
+                    this.listing.ownerId = meId;
+                }
+                if (this.inTestGroup) {
+                    this.listing.hsyGroupEnum = 'TestGroup';
+                }
+                yield Promise.all([
+                    yield this.hsyListingApi.upsert(this.listing).toPromise(),
+                    yield this.hsyUserApi.upsert(this.listing.owner).toPromise()
+                ]);
+                yield this.nav.pop();
+            }
+            else {
+                this.dirty['title'] = true;
+                this.dirty['content'] = true;
+                this.dirty['listingTypeEnum'] = true;
+            }
+        });
+    }
+    validate() {
+        return (this.listing.title && this.listing.content && (this.listing.listingTypeEnum != null));
+    }
+    updateImageIds(imageIds) {
+        this.listing.imageIds = imageIds;
+    }
+    deleteListing() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let prompt = this.alertCtrl.create({
+                title: '确认删除?',
+                buttons: [
+                    {
+                        text: '取消',
+                        handler: () => {
+                            this.nav.pop(); // alert
+                        }
+                    },
+                    {
+                        text: '删除',
+                        handler: () => {
+                            this.hsyListingApi.deleteById(this.listing.uid).take(1).toPromise().then(() => {
+                                this.nav.pop().then(() => {
+                                    this.nav.pop();
+                                }); // alert
+                            });
+                        }
+                    }
+                ]
+            });
+            yield prompt.present();
+        });
+    }
+    isDebug() {
+        return this.flagService.getFlag('debug');
+    }
+    toggleAmenity(amenity) {
+        let array = this.listing.amenityArray;
+        if (array.indexOf(amenity) >= 0) {
+            this.listing.amenityArray = this.listing.amenityArray.filter(a => a != amenity);
+        }
+        else {
+            this.listing.amenityArray.push(amenity);
+        }
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('hsyListingForm'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__angular_forms__["d" /* NgForm */])
+], CreationPage.prototype, "hsyListingForm", void 0);
+CreationPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+        selector: 'creation-page',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-title>\n            创建\n        </ion-title>\n        <ion-buttons end>\n            <button ion-button (click)="save()">保存</button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content class="creation grey-background" id="page-container">\n        <ion-card offset-lg-3 col-lg-6 offset-md-2 col-md-8 >\n            <form #hsyListingForm="ngForm">\n            <ion-item>\n                <ion-label>类型</ion-label>\n                <ion-select interface="popover"\n                            text-right required [(ngModel)]="listing.listingTypeEnum"\n                            name="listingTypeEnum" placeholder="必选">\n                    <ion-option  *ngFor="let v of listingTypeEnums "\n                                 value={{v}}>{{ v | enumMsgPipe }}</ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"> <!-- 只有招租需要填写 -->\n                <ion-label>地址</ion-label>\n                <ion-input item-right class="address" text-right [(ngModel)]="listing.addressLine" name="addressLine"\n                ></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>城市</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.addressCity"\n                           name="addressCity"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>预期价格</ion-label>\n                <ion-input item-right text-right\n                           type="number" min="0"\n                           [(ngModel)]="listing.price" name="price"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>标题</ion-label>\n                <ion-input\n                        item-right text-right required [(ngModel)]="listing.title"\n                        name="title" placeholder="必填"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>详情</ion-label>\n                <ion-textarea item-right text-right required [(ngModel)]="listing.content"\n                              name="content"\n                              placeholder="必填"></ion-textarea>\n\n            </ion-item>\n            <ion-item *ngIf="isDebug()">\n                <ion-label>测试</ion-label>\n                <ion-checkbox item-right text-right fixed color="dark" checked="true"\n                              [(ngModel)]="inTestGroup"\n                              name="inTestGroup"\n                ></ion-checkbox>\n\n            </ion-item>\n\n\n            <ion-item>\n                <ion-label>所在好室友群</ion-label>\n                <ion-select interface="popover"\n                            text-right [(ngModel)]="listing.hsyGroupEnum"\n                            name="type">\n                    <ion-option  *ngFor="let enum of hsyGroupEnumOptions "\n                                 value={{enum}}> {{ hsyGroupEnumOptionsMap[enum] }}\n                    </ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item>\n                <ion-label>群中昵称</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"\n                           name="hsyGroupNick"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>电子邮箱</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactEmail"\n                           name="contactEmail"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>联系电话</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactPhone"\n                           name="contactPhone"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>微信号</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.weixin"\n                           name="weixin"></ion-input>\n            </ion-item>\n            <ng-container *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"><!-- 只有招租需要填写这段 -->\n                <ion-item>\n                    <ion-label>整租单租</ion-label>\n                    <ion-select item-right interface="popover" text-right\n                                [(ngModel)]="listing.isRentingEntireHouse"\n                                name="isRentingEntireHouse">\n                        <ion-option text-right [value]="true">整房出租</ion-option>\n                        <ion-option text-right [value]="false">单间出租</ion-option>\n                    </ion-select>\n                </ion-item>\n                <ion-item >\n                    <ion-label>卧室数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBedRoom"\n                    name="numBedRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>卫生间数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBathRoom"\n                    name="numBathRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>设施/须知</ion-label>\n                    <div item-right text-right text-wrap>\n                        <button ion-button small round color="primary"\n                                *ngFor="let o of amenityOptions"\n                                (click)="toggleAmenity(o)"\n                                [outline] = "listing.amenityArray.indexOf(o) < 0">{{o}}</button>\n                    </div>\n                </ion-item>\n            </ng-container>\n            <ion-item>\n                <ion-label>起租时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD"\n                              [(ngModel)]="listing.rentalStartDate"\n                name="rentalStartDate"></ion-datetime>\n            </ion-item>\n            <ion-item>\n                <ion-label>终止时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"\n                name="rentalEndDate"></ion-datetime>\n            </ion-item>\n            <ion-item *ngIf="flagService.getFlag(\'requireToContact\')">\n                <ion-label>登LinkedIn才可联系我</ion-label>\n                <ion-toggle item-right text-right name="requireToContact"></ion-toggle>\n                <!--TODO(xinbenlv): wire it-->\n            </ion-item>\n            <ion-item>\n                <ion-label>图片</ion-label>\n                <ion-input item-right disabled name="imageBlock"></ion-input>\n            </ion-item>\n            <ion-item>\n                <image-grid\n                        [imageIds]="listing.imageIds"\n                        (updateImageIds)="updateImageIds($event)"\n                        [isEdit]="true"\n                ></image-grid>\n            </ion-item>\n            <ion-row>\n                <button col-6 ion-button block color="secondary" (click)="save()">保存</button>\n                <button col-6 ion-button outline block color="danger" (click)="deleteListing()">删除</button>\n            </ion-row>\n            </form>\n        </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_4__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_5__services_map_service__["a" /* MapService */],
+        __WEBPACK_IMPORTED_MODULE_6__services_flag_service__["a" /* FlagService */],
+        __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
+        __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_services_custom__["a" /* HsyUserApi */],
+        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
+], CreationPage);
+
+//# sourceMappingURL=listing-creation.page.js.map
+
+/***/ }),
+
+/***/ 68:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyUserApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(53);
@@ -4152,11 +4843,11 @@ HsyUserApi = __decorate([
 
 /***/ }),
 
-/***/ 68:
+/***/ 69:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_env__ = __webpack_require__(556);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_env__ = __webpack_require__(557);
 
 class Env {
 }
@@ -4187,15 +4878,15 @@ Env.configHaoshiyouServer = {
 
 /***/ }),
 
-/***/ 76:
+/***/ 77:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return IImageService; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CloudinaryImageService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_transfer__ = __webpack_require__(169);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_env__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_transfer__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_env__ = __webpack_require__(69);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4289,16 +4980,16 @@ CloudinaryImageService = __decorate([
 
 /***/ }),
 
-/***/ 832:
+/***/ 833:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageGridComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_image_service__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__remove_modal__ = __webpack_require__(385);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_env__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_image_service__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__remove_modal__ = __webpack_require__(387);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_env__ = __webpack_require__(69);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4404,20 +5095,20 @@ ImageGridComponent = __decorate([
 
 /***/ }),
 
-/***/ 833:
+/***/ 834:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingItem; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_detail_page__ = __webpack_require__(168);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_models_HsyListing__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyInteraction__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_uuid__ = __webpack_require__(268);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__listing_ux_detail_page__ = __webpack_require__(386);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_detail_page__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_models_HsyListing__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyInteraction__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_uuid__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__listing_ux_detail_page__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(25);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4510,15 +5201,15 @@ ListingItem = __decorate([
 
 /***/ }),
 
-/***/ 834:
+/***/ 835:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LongImageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_transfer__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_transfer__ = __webpack_require__(174);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4755,7 +5446,7 @@ LongImageComponent = __decorate([
 
 /***/ }),
 
-/***/ 835:
+/***/ 836:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4789,14 +5480,14 @@ EnumMsgPipe = __decorate([
 
 /***/ }),
 
-/***/ 836:
+/***/ 837:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ImageIdsToUrlPipe; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageIdToUrlPipe; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_image_service__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_image_service__ = __webpack_require__(77);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4836,6 +5527,9 @@ let ImageIdToUrlPipe = class ImageIdToUrlPipe {
         else if (mode == "full") {
             return this.imageService.getUrlFromId(id, 0, 0);
         }
+        else if (mode == "thumbnail") {
+            return this.imageService.getUrlFromId(id, 200, 150);
+        }
     }
 };
 ImageIdToUrlPipe = __decorate([
@@ -4849,7 +5543,7 @@ ImageIdToUrlPipe = __decorate([
 
 /***/ }),
 
-/***/ 837:
+/***/ 838:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4881,248 +5575,248 @@ TimeFromNowPipe = __decorate([
 
 /***/ }),
 
-/***/ 839:
+/***/ 840:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 387,
-	"./af.js": 387,
-	"./ar": 388,
-	"./ar-dz": 389,
-	"./ar-dz.js": 389,
-	"./ar-kw": 390,
-	"./ar-kw.js": 390,
-	"./ar-ly": 391,
-	"./ar-ly.js": 391,
-	"./ar-ma": 392,
-	"./ar-ma.js": 392,
-	"./ar-sa": 393,
-	"./ar-sa.js": 393,
-	"./ar-tn": 394,
-	"./ar-tn.js": 394,
-	"./ar.js": 388,
-	"./az": 395,
-	"./az.js": 395,
-	"./be": 396,
-	"./be.js": 396,
-	"./bg": 397,
-	"./bg.js": 397,
-	"./bm": 398,
-	"./bm.js": 398,
-	"./bn": 399,
-	"./bn.js": 399,
-	"./bo": 400,
-	"./bo.js": 400,
-	"./br": 401,
-	"./br.js": 401,
-	"./bs": 402,
-	"./bs.js": 402,
-	"./ca": 403,
-	"./ca.js": 403,
-	"./cs": 404,
-	"./cs.js": 404,
-	"./cv": 405,
-	"./cv.js": 405,
-	"./cy": 406,
-	"./cy.js": 406,
-	"./da": 407,
-	"./da.js": 407,
-	"./de": 408,
-	"./de-at": 409,
-	"./de-at.js": 409,
-	"./de-ch": 410,
-	"./de-ch.js": 410,
-	"./de.js": 408,
-	"./dv": 411,
-	"./dv.js": 411,
-	"./el": 412,
-	"./el.js": 412,
-	"./en-au": 413,
-	"./en-au.js": 413,
-	"./en-ca": 414,
-	"./en-ca.js": 414,
-	"./en-gb": 415,
-	"./en-gb.js": 415,
-	"./en-ie": 416,
-	"./en-ie.js": 416,
-	"./en-nz": 417,
-	"./en-nz.js": 417,
-	"./eo": 418,
-	"./eo.js": 418,
-	"./es": 419,
-	"./es-do": 420,
-	"./es-do.js": 420,
-	"./es-us": 421,
-	"./es-us.js": 421,
-	"./es.js": 419,
-	"./et": 422,
-	"./et.js": 422,
-	"./eu": 423,
-	"./eu.js": 423,
-	"./fa": 424,
-	"./fa.js": 424,
-	"./fi": 425,
-	"./fi.js": 425,
-	"./fo": 426,
-	"./fo.js": 426,
-	"./fr": 427,
-	"./fr-ca": 428,
-	"./fr-ca.js": 428,
-	"./fr-ch": 429,
-	"./fr-ch.js": 429,
-	"./fr.js": 427,
-	"./fy": 430,
-	"./fy.js": 430,
-	"./gd": 431,
-	"./gd.js": 431,
-	"./gl": 432,
-	"./gl.js": 432,
-	"./gom-latn": 433,
-	"./gom-latn.js": 433,
-	"./gu": 434,
-	"./gu.js": 434,
-	"./he": 435,
-	"./he.js": 435,
-	"./hi": 436,
-	"./hi.js": 436,
-	"./hr": 437,
-	"./hr.js": 437,
-	"./hu": 438,
-	"./hu.js": 438,
-	"./hy-am": 439,
-	"./hy-am.js": 439,
-	"./id": 440,
-	"./id.js": 440,
-	"./is": 441,
-	"./is.js": 441,
-	"./it": 442,
-	"./it.js": 442,
-	"./ja": 443,
-	"./ja.js": 443,
-	"./jv": 444,
-	"./jv.js": 444,
-	"./ka": 445,
-	"./ka.js": 445,
-	"./kk": 446,
-	"./kk.js": 446,
-	"./km": 447,
-	"./km.js": 447,
-	"./kn": 448,
-	"./kn.js": 448,
-	"./ko": 449,
-	"./ko.js": 449,
-	"./ky": 450,
-	"./ky.js": 450,
-	"./lb": 451,
-	"./lb.js": 451,
-	"./lo": 452,
-	"./lo.js": 452,
-	"./lt": 453,
-	"./lt.js": 453,
-	"./lv": 454,
-	"./lv.js": 454,
-	"./me": 455,
-	"./me.js": 455,
-	"./mi": 456,
-	"./mi.js": 456,
-	"./mk": 457,
-	"./mk.js": 457,
-	"./ml": 458,
-	"./ml.js": 458,
-	"./mr": 459,
-	"./mr.js": 459,
-	"./ms": 460,
-	"./ms-my": 461,
-	"./ms-my.js": 461,
-	"./ms.js": 460,
-	"./mt": 462,
-	"./mt.js": 462,
-	"./my": 463,
-	"./my.js": 463,
-	"./nb": 464,
-	"./nb.js": 464,
-	"./ne": 465,
-	"./ne.js": 465,
-	"./nl": 466,
-	"./nl-be": 467,
-	"./nl-be.js": 467,
-	"./nl.js": 466,
-	"./nn": 468,
-	"./nn.js": 468,
-	"./pa-in": 469,
-	"./pa-in.js": 469,
-	"./pl": 470,
-	"./pl.js": 470,
-	"./pt": 471,
-	"./pt-br": 472,
-	"./pt-br.js": 472,
-	"./pt.js": 471,
-	"./ro": 473,
-	"./ro.js": 473,
-	"./ru": 474,
-	"./ru.js": 474,
-	"./sd": 475,
-	"./sd.js": 475,
-	"./se": 476,
-	"./se.js": 476,
-	"./si": 477,
-	"./si.js": 477,
-	"./sk": 478,
-	"./sk.js": 478,
-	"./sl": 479,
-	"./sl.js": 479,
-	"./sq": 480,
-	"./sq.js": 480,
-	"./sr": 481,
-	"./sr-cyrl": 482,
-	"./sr-cyrl.js": 482,
-	"./sr.js": 481,
-	"./ss": 483,
-	"./ss.js": 483,
-	"./sv": 484,
-	"./sv.js": 484,
-	"./sw": 485,
-	"./sw.js": 485,
-	"./ta": 486,
-	"./ta.js": 486,
-	"./te": 487,
-	"./te.js": 487,
-	"./tet": 488,
-	"./tet.js": 488,
-	"./th": 489,
-	"./th.js": 489,
-	"./tl-ph": 490,
-	"./tl-ph.js": 490,
-	"./tlh": 491,
-	"./tlh.js": 491,
-	"./tr": 492,
-	"./tr.js": 492,
-	"./tzl": 493,
-	"./tzl.js": 493,
-	"./tzm": 494,
-	"./tzm-latn": 495,
-	"./tzm-latn.js": 495,
-	"./tzm.js": 494,
-	"./uk": 496,
-	"./uk.js": 496,
-	"./ur": 497,
-	"./ur.js": 497,
-	"./uz": 498,
-	"./uz-latn": 499,
-	"./uz-latn.js": 499,
-	"./uz.js": 498,
-	"./vi": 500,
-	"./vi.js": 500,
-	"./x-pseudo": 501,
-	"./x-pseudo.js": 501,
-	"./yo": 502,
-	"./yo.js": 502,
-	"./zh-cn": 503,
-	"./zh-cn.js": 503,
-	"./zh-hk": 504,
-	"./zh-hk.js": 504,
-	"./zh-tw": 505,
-	"./zh-tw.js": 505
+	"./af": 388,
+	"./af.js": 388,
+	"./ar": 389,
+	"./ar-dz": 390,
+	"./ar-dz.js": 390,
+	"./ar-kw": 391,
+	"./ar-kw.js": 391,
+	"./ar-ly": 392,
+	"./ar-ly.js": 392,
+	"./ar-ma": 393,
+	"./ar-ma.js": 393,
+	"./ar-sa": 394,
+	"./ar-sa.js": 394,
+	"./ar-tn": 395,
+	"./ar-tn.js": 395,
+	"./ar.js": 389,
+	"./az": 396,
+	"./az.js": 396,
+	"./be": 397,
+	"./be.js": 397,
+	"./bg": 398,
+	"./bg.js": 398,
+	"./bm": 399,
+	"./bm.js": 399,
+	"./bn": 400,
+	"./bn.js": 400,
+	"./bo": 401,
+	"./bo.js": 401,
+	"./br": 402,
+	"./br.js": 402,
+	"./bs": 403,
+	"./bs.js": 403,
+	"./ca": 404,
+	"./ca.js": 404,
+	"./cs": 405,
+	"./cs.js": 405,
+	"./cv": 406,
+	"./cv.js": 406,
+	"./cy": 407,
+	"./cy.js": 407,
+	"./da": 408,
+	"./da.js": 408,
+	"./de": 409,
+	"./de-at": 410,
+	"./de-at.js": 410,
+	"./de-ch": 411,
+	"./de-ch.js": 411,
+	"./de.js": 409,
+	"./dv": 412,
+	"./dv.js": 412,
+	"./el": 413,
+	"./el.js": 413,
+	"./en-au": 414,
+	"./en-au.js": 414,
+	"./en-ca": 415,
+	"./en-ca.js": 415,
+	"./en-gb": 416,
+	"./en-gb.js": 416,
+	"./en-ie": 417,
+	"./en-ie.js": 417,
+	"./en-nz": 418,
+	"./en-nz.js": 418,
+	"./eo": 419,
+	"./eo.js": 419,
+	"./es": 420,
+	"./es-do": 421,
+	"./es-do.js": 421,
+	"./es-us": 422,
+	"./es-us.js": 422,
+	"./es.js": 420,
+	"./et": 423,
+	"./et.js": 423,
+	"./eu": 424,
+	"./eu.js": 424,
+	"./fa": 425,
+	"./fa.js": 425,
+	"./fi": 426,
+	"./fi.js": 426,
+	"./fo": 427,
+	"./fo.js": 427,
+	"./fr": 428,
+	"./fr-ca": 429,
+	"./fr-ca.js": 429,
+	"./fr-ch": 430,
+	"./fr-ch.js": 430,
+	"./fr.js": 428,
+	"./fy": 431,
+	"./fy.js": 431,
+	"./gd": 432,
+	"./gd.js": 432,
+	"./gl": 433,
+	"./gl.js": 433,
+	"./gom-latn": 434,
+	"./gom-latn.js": 434,
+	"./gu": 435,
+	"./gu.js": 435,
+	"./he": 436,
+	"./he.js": 436,
+	"./hi": 437,
+	"./hi.js": 437,
+	"./hr": 438,
+	"./hr.js": 438,
+	"./hu": 439,
+	"./hu.js": 439,
+	"./hy-am": 440,
+	"./hy-am.js": 440,
+	"./id": 441,
+	"./id.js": 441,
+	"./is": 442,
+	"./is.js": 442,
+	"./it": 443,
+	"./it.js": 443,
+	"./ja": 444,
+	"./ja.js": 444,
+	"./jv": 445,
+	"./jv.js": 445,
+	"./ka": 446,
+	"./ka.js": 446,
+	"./kk": 447,
+	"./kk.js": 447,
+	"./km": 448,
+	"./km.js": 448,
+	"./kn": 449,
+	"./kn.js": 449,
+	"./ko": 450,
+	"./ko.js": 450,
+	"./ky": 451,
+	"./ky.js": 451,
+	"./lb": 452,
+	"./lb.js": 452,
+	"./lo": 453,
+	"./lo.js": 453,
+	"./lt": 454,
+	"./lt.js": 454,
+	"./lv": 455,
+	"./lv.js": 455,
+	"./me": 456,
+	"./me.js": 456,
+	"./mi": 457,
+	"./mi.js": 457,
+	"./mk": 458,
+	"./mk.js": 458,
+	"./ml": 459,
+	"./ml.js": 459,
+	"./mr": 460,
+	"./mr.js": 460,
+	"./ms": 461,
+	"./ms-my": 462,
+	"./ms-my.js": 462,
+	"./ms.js": 461,
+	"./mt": 463,
+	"./mt.js": 463,
+	"./my": 464,
+	"./my.js": 464,
+	"./nb": 465,
+	"./nb.js": 465,
+	"./ne": 466,
+	"./ne.js": 466,
+	"./nl": 467,
+	"./nl-be": 468,
+	"./nl-be.js": 468,
+	"./nl.js": 467,
+	"./nn": 469,
+	"./nn.js": 469,
+	"./pa-in": 470,
+	"./pa-in.js": 470,
+	"./pl": 471,
+	"./pl.js": 471,
+	"./pt": 472,
+	"./pt-br": 473,
+	"./pt-br.js": 473,
+	"./pt.js": 472,
+	"./ro": 474,
+	"./ro.js": 474,
+	"./ru": 475,
+	"./ru.js": 475,
+	"./sd": 476,
+	"./sd.js": 476,
+	"./se": 477,
+	"./se.js": 477,
+	"./si": 478,
+	"./si.js": 478,
+	"./sk": 479,
+	"./sk.js": 479,
+	"./sl": 480,
+	"./sl.js": 480,
+	"./sq": 481,
+	"./sq.js": 481,
+	"./sr": 482,
+	"./sr-cyrl": 483,
+	"./sr-cyrl.js": 483,
+	"./sr.js": 482,
+	"./ss": 484,
+	"./ss.js": 484,
+	"./sv": 485,
+	"./sv.js": 485,
+	"./sw": 486,
+	"./sw.js": 486,
+	"./ta": 487,
+	"./ta.js": 487,
+	"./te": 488,
+	"./te.js": 488,
+	"./tet": 489,
+	"./tet.js": 489,
+	"./th": 490,
+	"./th.js": 490,
+	"./tl-ph": 491,
+	"./tl-ph.js": 491,
+	"./tlh": 492,
+	"./tlh.js": 492,
+	"./tr": 493,
+	"./tr.js": 493,
+	"./tzl": 494,
+	"./tzl.js": 494,
+	"./tzm": 495,
+	"./tzm-latn": 496,
+	"./tzm-latn.js": 496,
+	"./tzm.js": 495,
+	"./uk": 497,
+	"./uk.js": 497,
+	"./ur": 498,
+	"./ur.js": 498,
+	"./uz": 499,
+	"./uz-latn": 500,
+	"./uz-latn.js": 500,
+	"./uz.js": 499,
+	"./vi": 501,
+	"./vi.js": 501,
+	"./x-pseudo": 502,
+	"./x-pseudo.js": 502,
+	"./yo": 503,
+	"./yo.js": 503,
+	"./zh-cn": 504,
+	"./zh-cn.js": 504,
+	"./zh-hk": 505,
+	"./zh-hk.js": 505,
+	"./zh-tw": 506,
+	"./zh-tw.js": 506
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -5138,17 +5832,17 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 839;
+webpackContext.id = 840;
 
 /***/ }),
 
-/***/ 841:
+/***/ 842:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CityNZipPipe; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_map_service__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_map_service__ = __webpack_require__(156);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5184,7 +5878,7 @@ CityNZipPipe = __decorate([
 
 /***/ }),
 
-/***/ 842:
+/***/ 843:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5192,20 +5886,20 @@ CityNZipPipe = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_core_search_params__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_core_error_service__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_core_auth_service__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_custom_logger_service__ = __webpack_require__(282);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_custom_SDKModels__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__storage_storage_swaps__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_custom_logger_service__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_custom_SDKModels__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__storage_storage_swaps__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_common__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__storage_cookie_browser__ = __webpack_require__(506);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__storage_storage_browser__ = __webpack_require__(507);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_custom_HsyListing__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_custom_HsyUser__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_custom_HsyInteraction__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__models_index__ = __webpack_require__(843);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__storage_cookie_browser__ = __webpack_require__(507);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__storage_storage_browser__ = __webpack_require__(508);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_custom_HsyUser__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_custom_HsyInteraction__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__models_index__ = __webpack_require__(844);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_index__ = __webpack_require__(844);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_index__ = __webpack_require__(845);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__lb_config__ = __webpack_require__(54);
 /* unused harmony namespace reexport */
@@ -5324,36 +6018,21 @@ var SDKBrowserModule_1;
 
 /***/ }),
 
-/***/ 843:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HsyListing__ = __webpack_require__(50);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HsyUser__ = __webpack_require__(269);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__HsyInteraction__ = __webpack_require__(270);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BaseModels__ = __webpack_require__(273);
-/* unused harmony namespace reexport */
-/* tslint:disable */
-
-
-
-
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
 /***/ 844:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_index__ = __webpack_require__(845);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HsyListing__ = __webpack_require__(48);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_index__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HsyUser__ = __webpack_require__(274);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__HsyInteraction__ = __webpack_require__(275);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BaseModels__ = __webpack_require__(278);
 /* unused harmony namespace reexport */
 /* tslint:disable */
+
+
 
 
 //# sourceMappingURL=index.js.map
@@ -5361,6 +6040,21 @@ var SDKBrowserModule_1;
 /***/ }),
 
 /***/ 845:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_index__ = __webpack_require__(846);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_index__ = __webpack_require__(286);
+/* unused harmony namespace reexport */
+/* tslint:disable */
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 846:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5381,7 +6075,7 @@ var SDKBrowserModule_1;
 
 /***/ }),
 
-/***/ 846:
+/***/ 847:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5426,7 +6120,7 @@ HsyGroupEnumMsgPipe = __decorate([
 
 /***/ }),
 
-/***/ 848:
+/***/ 849:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5459,22 +6153,123 @@ DateFormatterPipe = __decorate([
 
 /***/ }),
 
-/***/ 91:
+/***/ 850:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingUxItem; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyInteraction__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_uuid__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listing_ux_detail_page__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(25);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+let ListingUxItem = class ListingUxItem {
+    constructor(nav, alertCtrl, hsyInteractionApi, hsyListingApi, flagService) {
+        this.nav = nav;
+        this.alertCtrl = alertCtrl;
+        this.hsyInteractionApi = hsyInteractionApi;
+        this.hsyListingApi = hsyListingApi;
+        this.flagService = flagService;
+        this.onBump = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    gotoDetail() {
+        ga('send', 'event', {
+            eventCategory: 'go-to',
+            eventAction: 'listing-detail',
+            eventLabel: 'from-listing-item'
+        });
+        this.nav.push(__WEBPACK_IMPORTED_MODULE_6__listing_ux_detail_page__["a" /* ListingUxDetailPage */], { listing: this.listing });
+    }
+    bump() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'interaction',
+                eventAction: 'bump',
+            });
+            let local = window.localStorage;
+            let meId = local['user_id']; // TODO(xinbenlv): use UserService
+            let now = new Date();
+            let hsyInteraction = {
+                uid: Object(__WEBPACK_IMPORTED_MODULE_4__util_uuid__["a" /* uuid */])(),
+                userId: meId,
+                type: "BUMP",
+                listingId: this.listing.uid,
+                interactionTime: now
+            };
+            this.listing.interactions.push(hsyInteraction);
+            this.onBump.emit(this.listing);
+            yield this.hsyInteractionApi.create(hsyInteraction).toPromise();
+            yield this.hsyListingApi.updateAttributes(this.listing.uid, { latestUpdatedOrBump: now }).toPromise();
+        });
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", Object)
+], ListingUxItem.prototype, "onBump", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__["a" /* HsyListing */])
+], ListingUxItem.prototype, "listing", void 0);
+ListingUxItem = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'listing-ux-item',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/'<div class="wrapper">\n\n\n    <div class="grid-container">\n        <div class="content">\n            <div class="title">San Mateo宽敞舒适房间出租,安全独立屋House分租…</div>\n            <div class="middle">\n                <span class="location">Mountain View</span>\n                <span class="lastUpdate">1天前</span>\n            </div>\n            <div class="price"></div>\n        </div>\n        <div class="thumbnail">\n            <img *ngIf="listing.imageIds.length > 0"\n                 src="{{ listing.imageIds[0] | imageIdToUrlPipe : \'thumbnail\' }}"\n                 alt="img-{{imageId}}"\n                 (click)="gotoDetail()"/>\n            <img *ngIf="listing.imageIds.length == 0" src="http://via.placeholder.com/160x160" alt="" (click)="gotoDetail()">\n        </div>\n    </div>\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyInteraction__["a" /* HsyInteractionApi */],
+        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
+        __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */]])
+], ListingUxItem);
+
+//# sourceMappingURL=listing-ux-item.comp.js.map
+
+/***/ }),
+
+/***/ 92:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingsTabPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__(157);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_url_util__ = __webpack_require__(376);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__ = __webpack_require__(377);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(378);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_url_util__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(103);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5551,9 +6346,10 @@ let ListingsTabPage = class ListingsTabPage {
         };
     }
     ngOnDestroy() {
-        for (let marker of this.markers) {
-            marker.setMap(null);
-        }
+        if (this.markers)
+            for (let marker of this.markers) {
+                marker.setMap(null);
+            }
     }
     ngOnInit() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -5888,294 +6684,23 @@ ListingsTabPage = __decorate([
 
 /***/ }),
 
-/***/ 92:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreationPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_uuid__ = __webpack_require__(268);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_auth_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_map_service__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_flag_service__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_forms__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_services_custom__ = __webpack_require__(281);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-
-
-const DEFAULT_LAT = 37.41666;
-const DEFAULT_LNG = -122.09106;
-const cityToHsyGroupEnum = {
-    'Mountain View': 'SouthBayWest',
-    'Sunnyvale': 'SouthBayWest',
-    'Palo Alto': 'SouthBayWest',
-    'East Palo Alto': 'SouthBayWest',
-    'Stanford': 'SouthBayWest',
-    'Menlo Park': 'SouthBayWest',
-    'Cupertino': 'SouthBayWest',
-    'Los Gatos': 'SouthBayWest',
-    'Los Altos': 'SouthBayWest',
-    'Los Altos Hills': 'SouthBayWest',
-    'Milpitas': 'SouthBayEast',
-    'San Jose': 'SouthBayEast',
-    'Saratoga': 'SouthBayEast',
-    'Santa Clara': 'SouthBayEast',
-};
-const hsyGroupEnumToName = {
-    SanFrancisco: "三番",
-    SouthBayWest: "南湾西",
-    SouthBayEast: "南湾东",
-    EastBay: "东湾",
-    MidPeninsula: '中半岛',
-    None: "暂未覆盖"
-}; // TODO(zzn): merge with bot code
-const countyToHsyGroupEnum = {
-    'San Francisco County': 'SanFrancisco',
-    'San Mateo County': 'MidPeninsula',
-    'Alameda County': 'EastBay',
-};
-const getHsyGroupEnumFromLocality = function (city, county) {
-    let ret = (county == 'Santa Clara County' ?
-        cityToHsyGroupEnum[city] : countyToHsyGroupEnum[county]);
-    let retFixed = (typeof ret === 'undefined') ? 'None' : ret;
-    return retFixed;
-};
-/**
- * A page contains a map view and a list showing the listings.
- */
-let CreationPage = class CreationPage {
-    constructor(platform, params, nav, alertCtrl, authService, mapService, flagService, hsyListingApi, hsyUserApi, ref) {
-        this.platform = platform;
-        this.params = params;
-        this.nav = nav;
-        this.alertCtrl = alertCtrl;
-        this.authService = authService;
-        this.mapService = mapService;
-        this.flagService = flagService;
-        this.hsyListingApi = hsyListingApi;
-        this.hsyUserApi = hsyUserApi;
-        this.ref = ref;
-        //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
-        // TODO(xinbenlv) uncomment this
-        this.listingTypeEnums = ['NeedRoommate' /*招租*/, 'NeedRoom' /*求租*/];
-        this.hsyGroupEnumOptions = [
-            'SanFrancisco',
-            'MidPeninsula',
-            'SouthBayWest',
-            'SouthBayEast',
-            'EastBay',
-            'ShortTerm',
-            'Seattle',
-            'TestGroup',
-        ];
-        this.hsyGroupEnumOptionsMap = {
-            'SanFrancisco': '三番',
-            'MidPeninsula': '中半岛',
-            'SouthBayWest': '南湾西',
-            'SouthBayEast': '南湾东',
-            'EastBay': '东湾',
-            'ShortTerm': '短租',
-            'Seattle': '西雅图',
-            'TestGroup': '测试',
-        };
-        this.amenityOptions = [
-            '洗衣机', '停车位', '可养宠物'
-        ];
-        //noinspection JSMismatchedCollectionQueryUpdate used in HTML
-        this.dirty = {};
-        if (params.data.listing) {
-            this.listing = params.data.listing;
-        }
-        else {
-            this.listing = {};
-            this.listing.uid = Object(__WEBPACK_IMPORTED_MODULE_2__util_uuid__["a" /* uuid */])();
-        }
-        if (!this.listing.location) {
-            let loc = {
-                lat: DEFAULT_LAT,
-                lng: DEFAULT_LNG
-            };
-            this.listing.location = loc;
-            this.listing.location_lng = loc.lng;
-            this.listing.location_lat = loc.lat;
-        }
-        if (!this.listing.ownerId) {
-            this.listing.owner = {};
-            let local = window.localStorage;
-            let meId = local['user_id']; // TODO(xinbenlv): use UserService
-            this.listing.ownerId = meId;
-            this.listing.owner.id = meId;
-        }
-        if (!this.listing.amenityArray) {
-            this.listing.amenityArray = [];
-        }
-        if (!this.listing.imageIds)
-            this.listing.imageIds = [];
-    }
-    ngOnInit() {
-        this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/ {
-            position: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng),
-            animation: google.maps.Animation.DROP,
-            draggable: true,
-        });
-        google.maps.event.addListener(this.marker, 'dragend', () => __awaiter(this, void 0, void 0, function* () {
-            let location = {
-                lat: this.marker.getPosition().lat(),
-                lng: this.marker.getPosition().lng()
-            };
-            this.listing.location = location;
-            this.listing.location_lng = location.lng;
-            this.listing.location_lat = location.lat;
-            let locality = yield this.mapService.getLocality(new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng));
-            let hsyGroupEnum = getHsyGroupEnumFromLocality(locality.city, locality.county);
-            this.localityText = `${locality.city}, ${locality.zip} (${hsyGroupEnumToName[hsyGroupEnum]})`;
-            this.listing.hsyGroupEnum = hsyGroupEnum;
-            this.ref.detectChanges();
-        }));
-    }
-    markAllControlsAsDirty() {
-        Object.keys(this.hsyListingForm.controls).filter(k => {
-            this.hsyListingForm.controls[k].markAsDirty();
-        });
-    }
-    save() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.markAllControlsAsDirty();
-            if (this.validate()) {
-                this.listing.lastUpdated = new Date();
-                this.listing.latestUpdatedOrBump = this.listing.lastUpdated;
-                if (!this.listing.ownerId) {
-                    let local = window.localStorage;
-                    let meId = local['user_id']; // TODO(xinbenlv): use UserService
-                    this.listing.ownerId = meId;
-                }
-                if (this.inTestGroup) {
-                    this.listing.hsyGroupEnum = 'TestGroup';
-                }
-                yield Promise.all([
-                    yield this.hsyListingApi.upsert(this.listing).toPromise(),
-                    yield this.hsyUserApi.upsert(this.listing.owner).toPromise()
-                ]);
-                yield this.nav.pop();
-            }
-            else {
-                this.dirty['title'] = true;
-                this.dirty['content'] = true;
-                this.dirty['listingTypeEnum'] = true;
-            }
-        });
-    }
-    validate() {
-        return (this.listing.title && this.listing.content && (this.listing.listingTypeEnum != null));
-    }
-    updateImageIds(imageIds) {
-        this.listing.imageIds = imageIds;
-    }
-    deleteListing() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let prompt = this.alertCtrl.create({
-                title: '确认删除?',
-                buttons: [
-                    {
-                        text: '取消',
-                        handler: () => {
-                            this.nav.pop(); // alert
-                        }
-                    },
-                    {
-                        text: '删除',
-                        handler: () => {
-                            this.hsyListingApi.deleteById(this.listing.uid).take(1).toPromise().then(() => {
-                                this.nav.pop().then(() => {
-                                    this.nav.pop();
-                                }); // alert
-                            });
-                        }
-                    }
-                ]
-            });
-            yield prompt.present();
-        });
-    }
-    isDebug() {
-        return this.flagService.getFlag('debug');
-    }
-    toggleAmenity(amenity) {
-        let array = this.listing.amenityArray;
-        if (array.indexOf(amenity) >= 0) {
-            this.listing.amenityArray = this.listing.amenityArray.filter(a => a != amenity);
-        }
-        else {
-            this.listing.amenityArray.push(amenity);
-        }
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('hsyListingForm'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__angular_forms__["d" /* NgForm */])
-], CreationPage.prototype, "hsyListingForm", void 0);
-CreationPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'creation-page',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-title>\n            创建\n        </ion-title>\n        <ion-buttons end>\n            <button ion-button (click)="save()">保存</button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content class="creation grey-background" id="page-container">\n        <ion-card offset-lg-3 col-lg-6 offset-md-2 col-md-8 >\n            <form #hsyListingForm="ngForm">\n            <ion-item>\n                <ion-label>类型</ion-label>\n                <ion-select interface="popover"\n                            text-right required [(ngModel)]="listing.listingTypeEnum"\n                            name="listingTypeEnum" placeholder="必选">\n                    <ion-option  *ngFor="let v of listingTypeEnums "\n                                 value={{v}}>{{ v | enumMsgPipe }}</ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"> <!-- 只有招租需要填写 -->\n                <ion-label>地址</ion-label>\n                <ion-input item-right class="address" text-right [(ngModel)]="listing.addressLine" name="addressLine"\n                ></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>城市</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.addressCity"\n                           name="addressCity"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>预期价格</ion-label>\n                <ion-input item-right text-right\n                           type="number" min="0"\n                           [(ngModel)]="listing.price" name="price"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>标题</ion-label>\n                <ion-input\n                        item-right text-right required [(ngModel)]="listing.title"\n                        name="title" placeholder="必填"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>详情</ion-label>\n                <ion-textarea item-right text-right required [(ngModel)]="listing.content"\n                              name="content"\n                              placeholder="必填"></ion-textarea>\n\n            </ion-item>\n            <ion-item *ngIf="isDebug()">\n                <ion-label>测试</ion-label>\n                <ion-checkbox item-right text-right fixed color="dark" checked="true"\n                              [(ngModel)]="inTestGroup"\n                              name="inTestGroup"\n                ></ion-checkbox>\n\n            </ion-item>\n\n\n            <ion-item>\n                <ion-label>所在好室友群</ion-label>\n                <ion-select interface="popover"\n                            text-right [(ngModel)]="listing.hsyGroupEnum"\n                            name="type">\n                    <ion-option  *ngFor="let enum of hsyGroupEnumOptions "\n                                 value={{enum}}> {{ hsyGroupEnumOptionsMap[enum] }}\n                    </ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item>\n                <ion-label>群中昵称</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"\n                           name="hsyGroupNick"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>电子邮箱</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactEmail"\n                           name="contactEmail"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>联系电话</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactPhone"\n                           name="contactPhone"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>微信号</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.weixin"\n                           name="weixin"></ion-input>\n            </ion-item>\n            <ng-container *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"><!-- 只有招租需要填写这段 -->\n                <ion-item>\n                    <ion-label>整租单租</ion-label>\n                    <ion-select item-right interface="popover" text-right\n                                [(ngModel)]="listing.isRentingEntireHouse"\n                                name="isRentingEntireHouse">\n                        <ion-option text-right [value]="true">整房出租</ion-option>\n                        <ion-option text-right [value]="false">单间出租</ion-option>\n                    </ion-select>\n                </ion-item>\n                <ion-item >\n                    <ion-label>卧室数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBedRoom"\n                    name="numBedRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>卫生间数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBathRoom"\n                    name="numBathRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>设施/须知</ion-label>\n                    <div item-right text-right text-wrap>\n                        <button ion-button small round color="primary"\n                                *ngFor="let o of amenityOptions"\n                                (click)="toggleAmenity(o)"\n                                [outline] = "listing.amenityArray.indexOf(o) < 0">{{o}}</button>\n                    </div>\n                </ion-item>\n            </ng-container>\n            <ion-item>\n                <ion-label>起租时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD"\n                              [(ngModel)]="listing.rentalStartDate"\n                name="rentalStartDate"></ion-datetime>\n            </ion-item>\n            <ion-item>\n                <ion-label>终止时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"\n                name="rentalEndDate"></ion-datetime>\n            </ion-item>\n            <ion-item *ngIf="flagService.getFlag(\'requireToContact\')">\n                <ion-label>登LinkedIn才可联系我</ion-label>\n                <ion-toggle item-right text-right name="requireToContact"></ion-toggle>\n                <!--TODO(xinbenlv): wire it-->\n            </ion-item>\n            <ion-item>\n                <ion-label>图片</ion-label>\n                <ion-input item-right disabled name="imageBlock"></ion-input>\n            </ion-item>\n            <ion-item>\n                <image-grid\n                        [imageIds]="listing.imageIds"\n                        (updateImageIds)="updateImageIds($event)"\n                        [isEdit]="true"\n                ></image-grid>\n            </ion-item>\n            <ion-row>\n                <button col-6 ion-button block color="secondary" (click)="save()">保存</button>\n                <button col-6 ion-button outline block color="danger" (click)="deleteListing()">删除</button>\n            </ion-row>\n            </form>\n        </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_4__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_5__services_map_service__["a" /* MapService */],
-        __WEBPACK_IMPORTED_MODULE_6__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_services_custom__["a" /* HsyUserApi */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
-], CreationPage);
-
-//# sourceMappingURL=listing-creation.page.js.map
-
-/***/ }),
-
 /***/ 93:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseLoopBackApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__search_params__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__error_service__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_service__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lb_config__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__custom_SDKModels__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__custom_SDKModels__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Subject__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_Subject__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_catch__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_catch__ = __webpack_require__(279);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_catch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_map__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_map__ = __webpack_require__(281);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -6614,7 +7139,77 @@ BaseLoopBackApi = __decorate([
 
 //# sourceMappingURL=base.service.js.map
 
+/***/ }),
+
+/***/ 94:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyInteractionApi; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_auth_service__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_search_params__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(52);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+/* tslint:disable */
+
+
+
+
+
+
+
+/**
+ * Api services for the `HsyInteraction` model.
+ */
+let HsyInteractionApi = class HsyInteractionApi extends __WEBPACK_IMPORTED_MODULE_3__core_base_service__["a" /* BaseLoopBackApi */] {
+    constructor(http, models, auth, searchParams, errorHandler) {
+        super(http, models, auth, searchParams, errorHandler);
+        this.http = http;
+        this.models = models;
+        this.auth = auth;
+        this.searchParams = searchParams;
+        this.errorHandler = errorHandler;
+    }
+    /**
+     * The name of the model represented by this $resource,
+     * i.e. `HsyInteraction`.
+     */
+    getModelName() {
+        return "HsyInteraction";
+    }
+};
+HsyInteractionApi = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"])),
+    __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_2__SDKModels__["a" /* SDKModels */])),
+    __param(2, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_4__core_auth_service__["a" /* LoopBackAuth */])),
+    __param(3, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__core_search_params__["a" /* JSONSearchParams */])),
+    __param(4, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(4, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_6__core_error_service__["a" /* ErrorHandler */])),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"],
+        __WEBPACK_IMPORTED_MODULE_2__SDKModels__["a" /* SDKModels */],
+        __WEBPACK_IMPORTED_MODULE_4__core_auth_service__["a" /* LoopBackAuth */],
+        __WEBPACK_IMPORTED_MODULE_5__core_search_params__["a" /* JSONSearchParams */],
+        __WEBPACK_IMPORTED_MODULE_6__core_error_service__["a" /* ErrorHandler */]])
+], HsyInteractionApi);
+
+//# sourceMappingURL=HsyInteraction.js.map
+
 /***/ })
 
-},[508]);
+},[509]);
 //# sourceMappingURL=main.js.map
