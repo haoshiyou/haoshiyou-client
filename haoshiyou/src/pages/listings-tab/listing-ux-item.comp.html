@@ -1,0 +1,21 @@
+<div class="wrapper">
+
+
+    <div class="grid-container">
+        <div class="content">
+            <div class="title">San Mateo宽敞舒适房间出租,安全独立屋House分租…</div>
+            <div class="middle">
+                <span class="location">Mountain View</span>
+                <span class="lastUpdate">1天前</span>
+            </div>
+            <div class="price"></div>
+        </div>
+        <div class="thumbnail">
+            <img *ngIf="listing.imageIds.length > 0"
+                 src="{{ listing.imageIds[0] | imageIdToUrlPipe : 'thumbnail' }}"
+                 alt="img-{{imageId}}"
+                 (click)="gotoDetail()"/>
+            <img *ngIf="listing.imageIds.length == 0" src="http://via.placeholder.com/160x160" alt="" (click)="gotoDetail()">
+        </div>
+    </div>
+</div>

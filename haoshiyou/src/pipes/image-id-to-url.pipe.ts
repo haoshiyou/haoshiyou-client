@@ -28,6 +28,8 @@ export class ImageIdToUrlPipe implements PipeTransform {
       return this.imageService.getUrlFromId(id);
     } else if (mode == "full") {
       return this.imageService.getUrlFromId(id, 0, 0);
+    } else if (mode == "thumbnail") {
+      return this.imageService.getUrlFromId(id, 200, 150);
     }
   }
 
