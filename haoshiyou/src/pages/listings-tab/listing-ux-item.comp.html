@@ -3,12 +3,22 @@
 
     <div class="grid-container">
         <div class="content">
-            <div class="title">San Mateo宽敞舒适房间出租,安全独立屋House分租…</div>
+            <div class="title">{{listing.content}}</div>
             <div class="middle">
-                <span class="location">Mountain View</span>
-                <span class="lastUpdate">1天前</span>
+                <ng-container *ngIf="listing.location_lat && listing.location_lng">
+                    <ion-icon
+                            name="ios-pin-outline"></ion-icon><span class="location">{{listing.addressCity}}</span>
+                </ng-container>
+                <ion-icon name="ios-time-outline"></ion-icon><span class="lastUpdate">{{listing.lastUpdated | timeFromNow }}</span>
             </div>
-            <div class="price"><span class="price-dollar-number-per">$1400/</span><span class="month">月</span></div>
+            <div class="price" >
+                <ng-container *ngIf="listing.price">
+                    <span class="price-dollar-number-per">${{listing.price}}</span><span class="month">/月</span>
+                </ng-container>
+                <ng-container *ngIf="!listing.price">
+                    <span  class="price-dollar-number-per">价格待议</span>
+                </ng-container>
+            </div>
         </div>
         <div class="thumbnail">
             <img *ngIf="listing.imageIds.length > 0"
