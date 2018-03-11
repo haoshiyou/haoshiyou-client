@@ -1,6 +1,6 @@
 listing-ux-tab {
   .split-panel-container {
       display: grid;
-      grid-template-columns: 375px 1fr;
+      grid-template-columns: 1fr minmax(30%, 600px);
   }
 }

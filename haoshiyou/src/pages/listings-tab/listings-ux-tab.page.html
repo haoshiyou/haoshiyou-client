@@ -1,29 +1,27 @@
 <ion-header>
     <ion-navbar>
+        <ion-buttons start>
+            <button ion-button (click)="goToCreationPage()">
+                <ion-icon name="md-add"></ion-icon>
+            </button>
+        </ion-buttons>
         <ion-searchbar>
 
         </ion-searchbar>
         <ion-buttons end>
-            <!--<button ion-button (click)="popoverFilter($event)">-->
-                <!--<ion-icon name="funnel"> 筛选</ion-icon>-->
-            <!--</button>-->
-            <!--<button ion-button (click)="goToCreationPage()">-->
-                <!--<ion-icon name="add"> 发帖</ion-icon>-->
-            <!--</button>-->
-
+            <button ion-button *ngIf="!largeEnough()">
+                <ion-icon *ngIf="!showMapInstead" name="map"></ion-icon>
+                <ion-icon *ngIf="showMapInstead" name="list"></ion-icon>
+            </button>
         </ion-buttons>
-    </ion-navbar>
-
-    <ion-navbar *ngIf="!largeEnough()">
-        <ion-segment [(ngModel)]="mapOrList" (ngModelChange)="updateMapOrList($event)">
-            <ion-segment-button value="ONLY_LIST">列表</ion-segment-button>
-            <ion-segment-button value="ONLY_MAP">地图</ion-segment-button>
-        </ion-segment>
     </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <ion-row class="split-panel-container" style="height: 100%;">
+    <ion-row #splitPanelContainer class="split-panel-container" style="height: 100%;">
+        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>
+            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>
+        </ion-col>
         <ion-col #listContainerCol
                  style="height: 100%;" id="left" no-padding>
             <ion-content>
@@ -40,8 +38,5 @@
             </ion-content>
         </ion-col>
         <!-- the main content -->
-        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>
-            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>
-        </ion-col>
     </ion-row>
 </ion-content>
