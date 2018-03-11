@@ -1,7 +1,7 @@
 import {Platform, NavController, AlertController, Content, PopoverController, Col, Popover} from "ionic-angular";
 import {
   OnInit, OnDestroy, Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef,
-  ElementRef
+  ElementRef, AfterViewInit, HostListener
 } from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {AuthService} from "../../services/auth.service";
@@ -23,7 +23,7 @@ const AREA_KEY: string = 'area';
   selector: 'listing-ux-tab',
   templateUrl: 'listings-ux-tab.page.html',
 })
-export class ListingsUxTabPage implements OnInit, OnDestroy {
+export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   ngOnDestroy(): any {
     if (this.markers)
     for (let marker of this.markers) {
@@ -34,6 +34,7 @@ export class ListingsUxTabPage implements OnInit, OnDestroy {
   @ViewChild(MapViewComponent) private mapView: MapViewComponent;
   @ViewChild('mapContainerCol') private mapContainerCol: ElementRef;
   @ViewChild('listContainerCol') private listContainerCol: ElementRef;
+  @ViewChild('splitPanelContainer') private splitPanelContainer: ElementRef;
   public segmentModel: string = 'ROOMMATE_WANTED'; // by default for rent
   public areaModel: string = 'All'; // by default for All
   public useGrid:boolean = !(navigator.platform == 'iPhone');
@@ -45,7 +46,8 @@ export class ListingsUxTabPage implements OnInit, OnDestroy {
   private filterSettings = {'types': {}, 'areas': {}, 'duration': {}};
   private whereClause = {};
   private isLoading = false;
-  private mapOrList = 'ONLY_LIST';
+  private showMapInstead:boolean = false;
+  private largeEnoughWas:boolean;
   constructor(private platform: Platform,
               private nav: NavController,
               private alertCtrl: AlertController,
@@ -55,7 +57,8 @@ export class ListingsUxTabPage implements OnInit, OnDestroy {
               public popoverCtrl: PopoverController,
               private ref:ChangeDetectorRef) {
   }
-  async ngOnInit() {
+  async ngAfterViewInit() {
+    console.log(`XXX called ngAfterViewInit!`);
     let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
     if (segmentFromUrl) {
       this.segmentModel = segmentFromUrl;
@@ -66,10 +69,7 @@ export class ListingsUxTabPage implements OnInit, OnDestroy {
     }
     this.updateWhereClause();
     await this.loadMoreListings();
-    if (this.largeEnough()) {
-      this.mapOrList = 'BOTH';
-    } else this.mapOrList = 'ONLY_LIST';
-    this.updateMapOrList(this.mapOrList);
+    this.updateLayout();
   }
 
   ionViewDidEnter() {
@@ -249,6 +249,7 @@ export class ListingsUxTabPage implements OnInit, OnDestroy {
       }
       this.updateWhereClause();
       await this.initLoad();
+      this.updateLayout();
     });
     await popover.present({
       ev: myEvent
@@ -334,18 +335,30 @@ export class ListingsUxTabPage implements OnInit, OnDestroy {
   }
 
   public largeEnough():boolean { // XXX this is a hack, use Bootstrap of Ionic's Grid System to make it work
-    return window.innerWidth > 600;
+    return window.innerWidth > 1200;
   }
 
-  public updateMapOrList(value) {
-    if (value == "ONLY_MAP") {
-      this.listContainerCol.nativeElement.setAttribute('style', 'display:none;');
-      this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
-      this.mapContainerCol.nativeElement.className = 'full-width';
-    } else if (value == "ONLY_LIST") {
-      this.listContainerCol.nativeElement.setAttribute('style', 'display:block;');
-      this.mapContainerCol.nativeElement.setAttribute('style', 'display:none;');
-      this.listContainerCol.nativeElement.className = 'full-width';
+  @HostListener('window:resize', ['$event.target'])
+  public onResize() {
+    if (this.largeEnoughWas != this.largeEnough()) {
+      this.updateLayout();
+      this.largeEnoughWas = this.largeEnough();
+    }
+  }
+
+  public flipMapAndList() {
+    this.showMapInstead = !this.showMapInstead;
+    this.updateLayout();
+  }
+  public updateLayout() {
+    if (!this.largeEnough()) {
+      if (this.showMapInstead) {
+        this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '1fr 0px';
+      } else {
+        this.splitPanelContainer.nativeElement.style.gridTemplateColumns ='0px 1fr';
+      }
+    } else {
+      this.splitPanelContainer.nativeElement.style.gridTemplateColumns ='1fr minmax(30%, 600px)';
     }
     this.mapView.render();
   }
