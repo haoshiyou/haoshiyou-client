@@ -2664,7 +2664,7 @@ let ListingsUxTabPage = class ListingsUxTabPage {
         this.filterSettings = { 'types': {}, 'areas': {}, 'duration': {} };
         this.whereClause = {};
         this.isLoading = false;
-        this.mapOrList = 'ONLY_LIST';
+        this.showMapInstead = false;
         this.options = [
             'All',
             'SanFrancisco',
@@ -2694,8 +2694,9 @@ let ListingsUxTabPage = class ListingsUxTabPage {
                 marker.setMap(null);
             }
     }
-    ngOnInit() {
+    ngAfterViewInit() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(`XXX called ngAfterViewInit!`);
             let segmentFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(SEGMENT_KEY);
             if (segmentFromUrl) {
                 this.segmentModel = segmentFromUrl;
@@ -2706,12 +2707,7 @@ let ListingsUxTabPage = class ListingsUxTabPage {
             }
             this.updateWhereClause();
             yield this.loadMoreListings();
-            if (this.largeEnough()) {
-                this.mapOrList = 'BOTH';
-            }
-            else
-                this.mapOrList = 'ONLY_LIST';
-            this.updateMapOrList(this.mapOrList);
+            this.updateLayout();
         });
     }
     ionViewDidEnter() {
@@ -2870,6 +2866,7 @@ let ListingsUxTabPage = class ListingsUxTabPage {
                 }
                 this.updateWhereClause();
                 yield this.initLoad();
+                this.updateLayout();
             }));
             yield popover.present({
                 ev: myEvent
@@ -2955,18 +2952,29 @@ let ListingsUxTabPage = class ListingsUxTabPage {
         return -1;
     }
     largeEnough() {
-        return window.innerWidth > 600;
+        return window.innerWidth > 1200;
     }
-    updateMapOrList(value) {
-        if (value == "ONLY_MAP") {
-            this.listContainerCol.nativeElement.setAttribute('style', 'display:none;');
-            this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
-            this.mapContainerCol.nativeElement.className = 'full-width';
+    onResize() {
+        if (this.largeEnoughWas != this.largeEnough()) {
+            this.updateLayout();
+            this.largeEnoughWas = this.largeEnough();
         }
-        else if (value == "ONLY_LIST") {
-            this.listContainerCol.nativeElement.setAttribute('style', 'display:block;');
-            this.mapContainerCol.nativeElement.setAttribute('style', 'display:none;');
-            this.listContainerCol.nativeElement.className = 'full-width';
+    }
+    flipMapAndList() {
+        this.showMapInstead = !this.showMapInstead;
+        this.updateLayout();
+    }
+    updateLayout() {
+        if (!this.largeEnough()) {
+            if (this.showMapInstead) {
+                this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '1fr 0px';
+            }
+            else {
+                this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '0px 1fr';
+            }
+        }
+        else {
+            this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '1fr minmax(30%, 600px)';
         }
         this.mapView.render();
     }
@@ -3009,9 +3017,19 @@ __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('listContainerCol'),
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
 ], ListingsUxTabPage.prototype, "listContainerCol", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('splitPanelContainer'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
+], ListingsUxTabPage.prototype, "splitPanelContainer", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["HostListener"])('window:resize', ['$event.target']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ListingsUxTabPage.prototype, "onResize", null);
 ListingsUxTabPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-searchbar>\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <!--<button ion-button (click)="popoverFilter($event)">-->\n                <!--<ion-icon name="funnel"> 筛选</ion-icon>-->\n            <!--</button>-->\n            <!--<button ion-button (click)="goToCreationPage()">-->\n                <!--<ion-icon name="add"> 发帖</ion-icon>-->\n            <!--</button>-->\n\n        </ion-buttons>\n    </ion-navbar>\n\n    <ion-navbar *ngIf="!largeEnough()">\n        <ion-segment [(ngModel)]="mapOrList" (ngModelChange)="updateMapOrList($event)">\n            <ion-segment-button value="ONLY_LIST">列表</ion-segment-button>\n            <ion-segment-button value="ONLY_MAP">地图</ion-segment-button>\n        </ion-segment>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row class="split-panel-container" style="height: 100%;">\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n        </ion-col>\n        <!-- the main content -->\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n    </ion-row>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
+        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons start>\n            <button ion-button (click)="goToCreationPage()">\n                <ion-icon name="md-add"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-searchbar>\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <button ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">\n                <ion-icon *ngIf="!showMapInstead" name="ios-map-outline"></ion-icon>\n                <ion-icon *ngIf="showMapInstead" name="ios-list-box-outline"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row #splitPanelContainer class="split-panel-container" style="height: 100%;">\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-content>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n            </ion-content>\n        </ion-col>\n        <!-- the main content -->\n    </ion-row>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
@@ -6241,7 +6259,7 @@ __decorate([
 ], ListingUxItem.prototype, "listing", void 0);
 ListingUxItem = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'listing-ux-item',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/'<div class="wrapper" (click)="gotoDetail()">\n    <div class="grid-container">\n        <div class="content">\n            <div class="title">{{listing.content}}</div>\n            <div class="middle">\n                <ng-container *ngIf="listing.location_lat && listing.location_lng">\n                    <ion-icon\n                            name="ios-pin-outline"></ion-icon><span class="location">{{listing.addressCity}}</span>\n                </ng-container>\n                <ion-icon name="ios-time-outline"></ion-icon><span class="lastUpdate">{{listing.lastUpdated | timeFromNow }}</span>\n            </div>\n            <div class="price" >\n                <ng-container *ngIf="listing.price">\n                    <span class="price-dollar-number-per">${{listing.price}}</span><span class="month">/月</span>\n                </ng-container>\n                <ng-container *ngIf="!listing.price">\n                    <span  class="price-dollar-number-per">价格待议</span>\n                </ng-container>\n            </div>\n        </div>\n        <div class="thumbnail">\n            <img *ngIf="listing.imageIds.length > 0"\n                 src="{{ listing.imageIds[0] | imageIdToUrlPipe : \'thumbnail\' }}"\n                 alt="img-{{imageId}}"\n                 (click)="gotoDetail()"/>\n            <img *ngIf="listing.imageIds.length == 0" src="http://via.placeholder.com/160x120" alt="" (click)="gotoDetail()">\n        </div>\n    </div>\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/,
+        selector: 'listing-ux-item',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/'<div class="wrapper" (click)="gotoDetail()">\n    <div class="grid-container">\n        <div class="content">\n            <div class="title">{{listing.content.substr(0, 70)}}</div>\n            <div class="middle">\n                <ng-container *ngIf="listing.location_lat && listing.location_lng">\n                    <ion-icon\n                            name="ios-pin-outline"></ion-icon><span class="location">{{listing.addressCity}}</span>\n                </ng-container>\n                <ion-icon name="ios-time-outline"></ion-icon><span class="lastUpdate">{{listing.lastUpdated | timeFromNow }}</span>\n            </div>\n            <div class="price" >\n                <ng-container *ngIf="listing.price">\n                    <span class="price-dollar-number-per">${{listing.price}}</span><span class="month">/月</span>\n                </ng-container>\n                <ng-container *ngIf="!listing.price">\n                    <span  class="price-dollar-number-per">价格待议</span>\n                </ng-container>\n            </div>\n        </div>\n        <div class="thumbnail">\n            <img *ngIf="listing.imageIds.length > 0"\n                 src="{{ listing.imageIds[0] | imageIdToUrlPipe : \'thumbnail\' }}"\n                 alt="img-{{imageId}}"\n                 (click)="gotoDetail()"/>\n            <img *ngIf="listing.imageIds.length == 0" src="http://via.placeholder.com/160x120" alt="" (click)="gotoDetail()">\n        </div>\n    </div>\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
