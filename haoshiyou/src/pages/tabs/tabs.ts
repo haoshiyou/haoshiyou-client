@@ -1,6 +1,5 @@
 import {OnInit, OnDestroy, Component} from "@angular/core";
 import {NavController, Modal, ModalController, Platform} from "ionic-angular";
-import {ListingsTabPage} from "../listings-tab/listings-tab.page";
 import {SettingsTabPage} from "../settings-tab/settings-tab.page";
 import {Network} from "@ionic-native/network";
 import {DisconnectModal} from "./disconnect.modal";
@@ -22,7 +21,7 @@ export class TabsPage implements OnInit, OnDestroy {
   // this tells the tabs component which Pages
   // should be each tab's root Page
   //noinspection JSUnusedGlobalSymbols
-  tab2Root:any = ListingsTabPage;
+  tab2Root:any = ListingsUxTabPage;
   //noinspection JSUnusedGlobalSymbols
   tab3Root:any = SettingsTabPage;
   //noinspection JSUnusedGlobalSymbols
@@ -38,9 +37,6 @@ export class TabsPage implements OnInit, OnDestroy {
               private network: Network,
               private auth:AuthService,
               private flagService: FlagService) {
-    if(flagService.getFlag('newUx')) {
-      this.tab2Root = ListingsUxTabPage;
-    }
   }
 
   ngOnInit():void {

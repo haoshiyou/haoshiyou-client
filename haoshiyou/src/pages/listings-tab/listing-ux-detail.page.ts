@@ -5,10 +5,10 @@ import {IImageService} from "../../services/image.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import {HsyUserApi} from "../../loopbacksdk/services/custom/HsyUser";
-import {ListingsTabPage} from "./listings-tab.page";
 import {AuthService} from "../../services/auth.service";
 import {FlagService} from "../../services/flag.service";
 import {MapViewComponent} from "./map-view.comp";
+import {ListingsUxTabPage} from "./listings-ux-tab.page";
 
 declare let window:any;
 declare let ga:any;
@@ -100,7 +100,7 @@ export class ListingUxDetailPage {
     if (this.nav.length() > 1) {
       await this.nav.pop();
     } else {
-      await this.nav.setRoot(ListingsTabPage);
+      await this.nav.setRoot(ListingsUxTabPage);
       await this.nav.goToRoot({});
     }
 

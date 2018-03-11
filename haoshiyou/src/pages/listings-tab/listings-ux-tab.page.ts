@@ -1,6 +1,5 @@
-import {Platform, NavController, AlertController, Content, PopoverController, Col, Popover} from "ionic-angular";
-import {
-  OnInit, OnDestroy, Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef,
+import {Platform, NavController, AlertController, Content, PopoverController, Popover} from "ionic-angular";
+import {OnDestroy, Component, ViewChild, ChangeDetectorRef,
   ElementRef, AfterViewInit, HostListener
 } from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
@@ -12,7 +11,6 @@ import UrlUtil from "../../util/url_util";
 import {FlagService} from "../../services/flag.service";
 import {FilterSettingsComponent} from "./filter-settings.comp";
 import {MapViewComponent} from "./map-view.comp";
-import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
 declare let ga:any;
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
@@ -73,7 +71,7 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    ga('set', 'page', '/listings-tab.page.html');
+    ga('set', 'page', '/listings-ux-tab.page.html');
     ga('send', 'pageview');
     this.ref.markForCheck();
   }
@@ -83,7 +81,7 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     this.segmentModel = newValue;
 
     await this.initLoad();
-    ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
+    ga('set', 'page', `/listings-ux-tab.page.html#segment-${newValue}`);
     ga('send', 'pageview');
   }
 
@@ -91,7 +89,7 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   async onAreaModelChange(newValue) {
     this.areaModel = newValue;
     await this.initLoad();
-    ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
+    ga('set', 'page', `/listings-ux-tab.page.html#area-${newValue}`);
     ga('send', 'pageview');
   }
 
