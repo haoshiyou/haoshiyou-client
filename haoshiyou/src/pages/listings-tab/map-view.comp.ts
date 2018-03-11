@@ -3,9 +3,8 @@ import {
   ViewChild
 } from "@angular/core";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
-import {ListingDetailPage} from "./listing-detail.page";
 import {NavController} from "ionic-angular";
-import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
+import {ListingUxDetailPage} from "./listing-ux-detail.page";
 
 declare let google, document;
 declare let ga:any;
@@ -77,7 +76,8 @@ export class MapViewComponent implements OnChanges {
       eventAction: 'listing-detail',
       eventLabel: 'from-map-view'
     });
-    this.nav.push(ListingDetailPage, {listing: listing});
+    this.nav.push('ListingUxDetailPage', {listing: listing});
+
   }
 
   public render() {
