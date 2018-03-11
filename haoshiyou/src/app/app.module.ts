@@ -81,8 +81,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     },  {
       links: [
         {segment: '', component: TabsPage, name: 'TabsPage' },
-        {segment: 'listing/:id', component: ListingUxDetailPage, name: 'ListingDetailPage' },
-        {segment: 'listing-ux/:id', component: ListingUxDetailPage, name: 'ListingUxDetailPage' },
+        {segment: 'listing/:id', component: ListingUxDetailPage, name: 'ListingUxDetailPage' },
         // As of 2016-11-14 per https://github.com/driftyco/ionic/issues/9012,
         // Ionic deeplinker and navigation does not work well with Tab structures.
       ]
