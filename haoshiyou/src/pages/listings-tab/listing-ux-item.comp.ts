@@ -10,6 +10,8 @@ import {ListingUxDetailPage} from "./listing-ux-detail.page";
 import {FlagService} from "../../services/flag.service";
 declare let ga:any;
 
+
+
 @Component({
   selector: 'listing-ux-item',
   templateUrl: 'listing-ux-item.comp.html',
@@ -18,6 +20,13 @@ export class ListingUxItem {
   @Output() onBump = new EventEmitter<HsyListing>();
 
   @Input() listing:HsyListing;
+  @Input() indexFromParent:number = 0;
+
+  private placeholderIds = [
+    'qfhndxx',
+    'ccygytp',
+    'yzsmdhz'
+  ];
   constructor(private nav:NavController,
               private alertCtrl: AlertController,
               private hsyInteractionApi:HsyInteractionApi,
