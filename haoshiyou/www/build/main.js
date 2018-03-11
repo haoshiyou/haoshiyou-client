@@ -1,13 +1,14 @@
 webpackJsonp([0],{
 
-/***/ 103:
+/***/ 100:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MapViewComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__listing_detail_page__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(17);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return IImageService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CloudinaryImageService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_transfer__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_env__ = __webpack_require__(67);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20,171 +21,88 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-const DEFAULT_CENTER = { lat: 37.6042379, lng: -122.1755228 };
-/**
- * The addSearchButtonInMap adds a button to the map that allows
- * seach in the map.
- * This constructor takes the control DIV as an argument.
- * @constructor
- */
-function SearchButtonInMap(controlDiv, map, eventEmitter) {
-    // Set CSS for the control border.
-    // TODO(xinbenlv): from Google Map developer example, to be updated.
-    var controlUI = document.createElement('div');
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.border = '2px solid #fff';
-    controlUI.style.borderRadius = '3px';
-    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.marginBottom = '22px';
-    controlUI.style.textAlign = 'center';
-    controlUI.title = 'Click to search within the map';
-    controlDiv.appendChild(controlUI);
-    // Set CSS for the control interior.
-    var controlText = document.createElement('div');
-    controlText.style.color = 'rgb(25,25,25)';
-    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-    controlText.style.fontSize = '16px';
-    controlText.style.lineHeight = '38px';
-    controlText.style.paddingLeft = '5px';
-    controlText.style.paddingRight = '5px';
-    controlText.innerHTML = '在地图区域内搜索';
-    controlUI.appendChild(controlText);
-    // Setup the click event listeners: simply set the map to Chicago.
-    controlUI.addEventListener('click', function () {
-        eventEmitter.emit(map.getBounds());
-    });
-}
-let MapViewComponent = class MapViewComponent {
-    constructor(nav) {
-        this.nav = nav;
-        this.zoomLevel = 10; // default
-        this.markers = [];
-        this.onBoundaryFilter = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
-        this.showSearchButton = true;
-        this.map = google.maps.Maps;
-        this.mapDirty = false;
+let IImageService = class IImageService {
+    /**
+     * @param localUris
+     * @returns {Promise<any>|Promise<TAll[]>} a list of public id of stored image.
+     * In failure, it will reject at the first failure and tell why,
+     */
+    uploadImagesAndGetIds(localUris) {
+        throw "Not implemented";
     }
-    ngOnChanges(changes) {
-        if (changes['listings']) {
-            this.render();
-        }
-    }
-    gotoListingDetail(listing) {
-        ga('send', 'event', {
-            eventCategory: 'go-to',
-            eventAction: 'listing-detail',
-            eventLabel: 'from-map-view'
-        });
-        this.nav.push(__WEBPACK_IMPORTED_MODULE_1__listing_detail_page__["a" /* ListingDetailPage */], { listing: listing });
-    }
-    render() {
-        if (!this.mapCanvas || !this.mapCanvas.nativeElement) {
-            this.map = null;
-            return;
-        } // do nothing
-        this.map = new google.maps.Map(this.mapCanvas.nativeElement, {
-            zoom: this.zoomLevel,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-        this.setCenter(DEFAULT_CENTER);
-        // Create the DIV to hold the control and call the CenterControl()
-        // constructor passing in this DIV.
-        var searchInMapButtonDiv = document.createElement('div');
-        if (this.showSearchButton)
-            var centerControl = new SearchButtonInMap(searchInMapButtonDiv, this.map, this.onBoundaryFilter);
-        searchInMapButtonDiv.index = 1;
-        this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchInMapButtonDiv);
-        google.maps.event.addListener(this.map, 'bounds_changed', () => {
-            google.maps.event.trigger(this.map, 'resize');
-            this.mapDirty = true;
-        });
-        for (let marker of this.markers) {
-            marker.setMap(this.map);
-        }
-    }
-    addListings(newListings) {
-        let listingsHasLocation = newListings.filter((l) => l.location);
-        listingsHasLocation.map((listing) => {
-            let marker = new google.maps.Marker({
-                position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
-                icon: `data:image/svg+xml,
-<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
-    <path fill="#FFFFFF" stroke="#ccc" stroke-width=".5"
-          d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/>
-    <text transform="translate(19 18.5)" 
-          fill="#000" 
-          style="font-family: Arial, sans-serif;
-          text-align:center;"
-          font-size="10" text-anchor="middle">${listing.price ? listing.price : '待议'}
-    </text>
-</svg>`,
-                map: this.map
-            });
-            marker.addListener('click', () => {
-                this.gotoListingDetail(listing);
-            });
-            this.markers.push(marker);
-        });
-    }
-    clearMarkers() {
-        this.markers.forEach(l => l.setMap(null));
-        this.markers = [];
-    }
-    setCenter(center) {
-        if (this.map)
-            this.map.setCenter(new google.maps.LatLng(center.lat, center.lng));
+    ;
+    /**
+     * Get a url string from image id.
+     * @param id
+     */
+    getUrlFromId(id, width = 200, height = 100) {
+        throw "Not implemented";
     }
 };
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('mapCanvas'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
-], MapViewComponent.prototype, "mapCanvas", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
-    __metadata("design:type", Object)
-], MapViewComponent.prototype, "onBoundaryFilter", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Boolean)
-], MapViewComponent.prototype, "showSearchButton", void 0);
-MapViewComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'map-view',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/map-view.comp.html"*/'<div style="width:100%;height:100%" #mapCanvas\n     (load)="render()">\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/map-view.comp.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* NavController */]])
-], MapViewComponent);
+IImageService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+], IImageService);
 
-//# sourceMappingURL=map-view.comp.js.map
-
-/***/ }),
-
-/***/ 154:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = uuid;
-/* jshint bitwise:false, node:true */
-/* tslint:disable:no-bitwise no-var-keyword typedef */
-// taken from TodoMVC
-function uuid() {
-    var i, random;
-    var result = '';
-    for (i = 0; i < 32; i++) {
-        random = Math.random() * 16 | 0;
-        if (i === 8 || i === 12 || i === 16 || i === 20) {
-            result += '-';
-        }
-        result += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random))
-            .toString(16);
+let CloudinaryImageService = class CloudinaryImageService {
+    constructor(transfer) {
+        this.transfer = transfer;
+        // TODO(xinbenlv): update the credentials of CloudinaryImageService.
+        this.config = {
+            cloud_name: __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].configCloudinary.cloudName,
+            api_key: __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].configCloudinary.apiKey,
+            upload_preset: __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].configCloudinary.uploadPreset
+        };
     }
-    return result;
-}
-//# sourceMappingURL=uuid.js.map
+    /**
+     * override
+     */
+    uploadImagesAndGetIds(localUris) {
+        let fileTransfer = this.transfer.create();
+        let uploadUrl = "https://api.cloudinary.com/v1_1/" + this.config.cloud_name + "/image/upload";
+        return Promise.all(localUris.map((uri) => {
+            return fileTransfer.upload(uri, uploadUrl, {
+                params: this.config
+            }).then((result) => {
+                let data = JSON.parse(result['response']);
+                return data.public_id;
+            }).catch((error) => {
+            });
+        }));
+    }
+    //noinspection JSUnusedGlobalSymbols
+    /**
+     * override
+     */
+    getUrlFromId(id, width = 300, height = 200) {
+        let param = "c_fill,g_north";
+        if (width == 0 && height == 0) {
+            let ion_card_width = 560; //TODO: get the card width
+            param += ',w_' + ion_card_width; // 1242 is the width of iphone 6plus.
+            // param = 'w_300,h_150,c_fill,g_auto';
+        }
+        else if (width == 0) {
+            param += `,h_${height}`;
+        }
+        else if (height == 0) {
+            param += `,w_${width}`;
+        }
+        else {
+            param += `,w_${width},h_${height}`;
+        }
+        param += `,g_center`;
+        return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/${param}/${id}.jpg`;
+    }
+};
+CloudinaryImageService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__ionic_native_transfer__["a" /* Transfer */]])
+], CloudinaryImageService);
+
+//# sourceMappingURL=image.service.js.map
 
 /***/ }),
 
-/***/ 155:
+/***/ 150:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -258,12 +176,731 @@ class SDKStorage extends BaseStorage {
 
 /***/ }),
 
-/***/ 156:
+/***/ 153:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingsUxTabPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__(291);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_url_util__ = __webpack_require__(382);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__ = __webpack_require__(383);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(170);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+
+const SEGMENT_KEY = 'segment';
+const AREA_KEY = 'area';
+/**
+ * A page contains a map view and a list showing the listings.
+ */
+let ListingsUxTabPage = class ListingsUxTabPage {
+    constructor(platform, nav, alertCtrl, auth, api, flagService, popoverCtrl, ref) {
+        this.platform = platform;
+        this.nav = nav;
+        this.alertCtrl = alertCtrl;
+        this.auth = auth;
+        this.api = api;
+        this.flagService = flagService;
+        this.popoverCtrl = popoverCtrl;
+        this.ref = ref;
+        this.segmentModel = 'ROOMMATE_WANTED'; // by default for rent
+        this.areaModel = 'All'; // by default for All
+        this.useGrid = !(navigator.platform == 'iPhone');
+        this.loadedListings = [];
+        this.mapReady = false;
+        this.currentIndex = 0;
+        this.filterSettings = { 'types': {}, 'areas': {}, 'duration': {} };
+        this.whereClause = {};
+        this.isLoading = false;
+        this.showMapInstead = false;
+        this.options = [
+            'All',
+            'SanFrancisco',
+            'MidPeninsula',
+            'SouthBayWest',
+            'SouthBayEast',
+            'EastBay',
+            'ShortTerm',
+            'Seattle',
+            'TestGroup',
+        ];
+        this.optionsMap = {
+            'All': '全部',
+            'SanFrancisco': '三番',
+            'MidPeninsula': '中半岛',
+            'SouthBayWest': '南湾西',
+            'SouthBayEast': '南湾东',
+            'EastBay': '东湾',
+            'ShortTerm': '短租',
+            'Seattle': '西雅图',
+            'TestGroup': '测试',
+        };
+    }
+    ngOnDestroy() {
+        if (this.markers)
+            for (let marker of this.markers) {
+                marker.setMap(null);
+            }
+    }
+    ngAfterViewInit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(`XXX called ngAfterViewInit!`);
+            let segmentFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(SEGMENT_KEY);
+            if (segmentFromUrl) {
+                this.segmentModel = segmentFromUrl;
+            }
+            let areaFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(AREA_KEY);
+            if (areaFromUrl) {
+                this.areaModel = areaFromUrl;
+            }
+            this.updateWhereClause();
+            yield this.loadMoreListings();
+            this.updateLayout();
+        });
+    }
+    ionViewDidEnter() {
+        ga('set', 'page', '/listings-ux-tab.page.html');
+        ga('send', 'pageview');
+        this.ref.markForCheck();
+    }
+    //noinspection JSUnusedGlobalSymbols
+    onSegmentModelChange(newValue) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.segmentModel = newValue;
+            yield this.initLoad();
+            ga('set', 'page', `/listings-ux-tab.page.html#segment-${newValue}`);
+            ga('send', 'pageview');
+        });
+    }
+    //noinspection JSUnusedGlobalSymbols
+    onAreaModelChange(newValue) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.areaModel = newValue;
+            yield this.initLoad();
+            ga('set', 'page', `/listings-ux-tab.page.html#area-${newValue}`);
+            ga('send', 'pageview');
+        });
+    }
+    loadMoreListings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.isLoading = true;
+            ga('send', 'event', {
+                eventCategory: 'load',
+                eventAction: 'load-more-listings',
+                eventLabel: `load-more-index-${this.loadedListings.length}`
+            });
+            let start = Date.now();
+            // southwest: 37.148070, -122.852249
+            // northeast: 38.072739, -121.473969
+            let newItems = yield this.api
+                .find({
+                // TODO(zzn): use ListTypeEnum when migrated
+                where: this.whereClause,
+                order: 'latestUpdatedOrBump DESC',
+                limit: 24,
+                offset: this.loadedListings.length,
+                include: ['interactions', 'owner'],
+            })
+                .take(1)
+                .toPromise();
+            let end = Date.now();
+            ga('send', {
+                hitType: 'timing',
+                timingCategory: 'API Call',
+                timingVar: 'load-more-listings',
+                timingValue: end - start
+            });
+            for (let item of newItems) {
+                this.loadedListings.push(item);
+            }
+            this.mapView.addListings(newItems);
+            this.isLoading = false;
+        });
+    }
+    updateMarkers() {
+        // TODO(xinbenlv): update markers
+    }
+    fakeGoToCreationPage() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'listing-creation',
+            });
+            let alert = this.alertCtrl.create({
+                title: '新版app中发帖功能正在建设中',
+                buttons: [
+                    {
+                        text: 'OK',
+                    },
+                ]
+            });
+            yield alert.present();
+        });
+    }
+    goToCreationPage() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.auth.authenticated()) {
+                //push another page onto the history stack
+                //causing the nav controller to animate the new page in
+                this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */]);
+            }
+            else {
+                let alert = this.alertCtrl.create({
+                    title: '请登录后发帖',
+                    buttons: [
+                        {
+                            text: '取消',
+                        },
+                        {
+                            text: '登陆',
+                            handler: () => {
+                                this.auth.login();
+                            }
+                        }
+                    ]
+                });
+                yield alert.present();
+            }
+        });
+    }
+    doInfinite(infiniteScroll) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.loadMoreListings();
+            infiniteScroll.complete();
+        });
+    }
+    isDebug() {
+        return this.flagService.getFlag('debug');
+    }
+    // Hack introduced due to this issue: https://github.com/ionic-team/ionic/issues/6923
+    setOption(index, event) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.options[index] != null) {
+                this.areaModel = this.options[index];
+                yield this.onAreaModelChange(this.areaModel);
+                //note you have to use "tap" or "click" - if you bind to "ionSelected" you don't get the "target" property
+                let segments = event.target.parentNode.children;
+                let len = segments.length;
+                for (let i = 0; i < len; i++) {
+                    segments[i].classList.remove('segment-activated');
+                }
+                event.target.classList.add('segment-activated');
+            }
+        });
+    }
+    bumpUpdateOrder(hsyListing) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < this.loadedListings.length; i++) {
+                let bumpedListing = hsyListing;
+                if (this.loadedListings[i] == bumpedListing) {
+                    yield this.content.scrollToTop();
+                    this.loadedListings.splice(i, 1);
+                    this.loadedListings.unshift(bumpedListing);
+                    break;
+                }
+            }
+        });
+    }
+    popoverFilter(myEvent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let popover = this.popoverCtrl.create(__WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__["a" /* FilterSettingsComponent */], { 'filterSettings': this.filterSettings }, {});
+            yield popover.onDidDismiss((data) => __awaiter(this, void 0, void 0, function* () {
+                console.log(`--- received ` + JSON.stringify(data));
+                if (data !== undefined && data !== null) {
+                    this.filterSettings = data["filterSettings"];
+                }
+                else if (this.popoverCtrl['_app'].filterSettings) {
+                    this.filterSettings = this.popoverCtrl['_app'] /*a hack to access private */.filterSettings;
+                }
+                this.updateWhereClause();
+                yield this.initLoad();
+                this.updateLayout();
+            }));
+            yield popover.present({
+                ev: myEvent
+            });
+        });
+    }
+    updateWhereClause() {
+        /* START filtering type */
+        let type = this.getType(this.filterSettings['types']['zhaozu'], this.filterSettings['types']['qiuzu']);
+        let whereClause_ = {};
+        if (type == 0) {
+            whereClause_['listingTypeEnum'] = 'NeedRoommate';
+        }
+        else if (type == 1) {
+            whereClause_['listingTypeEnum'] = 'NeedRoom';
+        }
+        else {
+            delete whereClause_['listingTypeEnum'];
+        }
+        /* END filtering type */
+        /* START filtering duration */
+        let ago = null;
+        switch (this.filterSettings['duration']) {
+            case '最近3天':
+                ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
+                break;
+            case '最近7天':
+                ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
+                break;
+            case '最近30天':
+                ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
+                break;
+            case '最近90天':
+                ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
+                break;
+            case '不限': // fall though
+            default:
+        }
+        if (ago)
+            whereClause_['lastUpdated'] = { "gte": ago };
+        /* END filtering duration */
+        /* START filtering price */
+        if (this.filterSettings['price']) {
+            whereClause_['price'] = { lt: this.filterSettings['price'] };
+        }
+        else {
+            delete whereClause_['price'];
+        }
+        /* END filtering price */
+        /* START filtering area */
+        let allArea = this.filterSettings['areas']["All"];
+        if (allArea !== undefined && allArea === true) {
+            whereClause_['hsyGroupEnum'] = { 'nin': ['BigTeam', 'TestGroup', 'None'] };
+        }
+        else {
+            let areaClause = [];
+            for (let area in this.filterSettings['areas']) {
+                let selected = this.filterSettings['areas'][area];
+                if (selected !== undefined && selected) {
+                    areaClause.push(area);
+                }
+            }
+            if (areaClause.length > 0)
+                whereClause_['hsyGroupEnum'] = { 'inq': areaClause };
+        }
+        /* END filtering area */
+        /* EXEC filtering */
+        this.whereClause = whereClause_;
+    }
+    getType(zhaozu, qiuzu) {
+        if (zhaozu === undefined || !zhaozu) {
+            zhaozu = false;
+        }
+        if (qiuzu === undefined || !qiuzu) {
+            qiuzu = false;
+        }
+        if (zhaozu && !qiuzu) {
+            return 0;
+        }
+        if (!zhaozu && qiuzu) {
+            return 1;
+        }
+        return -1;
+    }
+    largeEnough() {
+        return window.innerWidth > 1200;
+    }
+    onResize() {
+        if (this.largeEnoughWas != this.largeEnough()) {
+            this.updateLayout();
+            this.largeEnoughWas = this.largeEnough();
+        }
+    }
+    flipMapAndList() {
+        this.showMapInstead = !this.showMapInstead;
+        this.updateLayout();
+    }
+    updateLayout() {
+        if (!this.largeEnough()) {
+            if (this.showMapInstead) {
+                this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '1fr 0px';
+            }
+            else {
+                this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '0px 1fr';
+            }
+        }
+        else {
+            this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '1fr minmax(30%, 600px)';
+        }
+        this.mapView.render();
+    }
+    onBoundaryFilter(boundary) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let latMax = boundary.getNorthEast().lat();
+            let latMin = boundary.getSouthWest().lat();
+            let lngMax = boundary.getNorthEast().lng();
+            let lngMin = boundary.getSouthWest().lng();
+            this.whereClause['and'] = [
+                { 'location_lat': { 'lt': latMax } },
+                { 'location_lat': { 'gt': latMin } },
+                { 'location_lng': { 'lt': lngMax } },
+                { 'location_lng': { 'gt': lngMin } },
+            ];
+            yield this.initLoad();
+        });
+    }
+    initLoad() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.loadedListings = [];
+            this.mapView.clearMarkers();
+            yield this.loadMoreListings();
+        });
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */])
+], ListingsUxTabPage.prototype, "content", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */])
+], ListingsUxTabPage.prototype, "mapView", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('mapContainerCol'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
+], ListingsUxTabPage.prototype, "mapContainerCol", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('listContainerCol'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
+], ListingsUxTabPage.prototype, "listContainerCol", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('splitPanelContainer'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
+], ListingsUxTabPage.prototype, "splitPanelContainer", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["HostListener"])('window:resize', ['$event.target']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ListingsUxTabPage.prototype, "onResize", null);
+ListingsUxTabPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons start>\n            <button ion-button (click)="goToCreationPage()">\n                <ion-icon name="md-add"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-searchbar>\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <button ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">\n                <ion-icon *ngIf="!showMapInstead" name="ios-map-outline"></ion-icon>\n                <ion-icon *ngIf="showMapInstead" name="ios-list-box-outline"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row #splitPanelContainer class="split-panel-container" style="height: 100%;">\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-content fullscreen>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"\n                                [indexFromParent]="i">\n\n                </listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n            </ion-content>\n        </ion-col>\n        <!-- the main content -->\n    </ion-row>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_3__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
+        __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["i" /* PopoverController */],
+        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
+], ListingsUxTabPage);
+
+//# sourceMappingURL=listings-ux-tab.page.js.map
+
+/***/ }),
+
+/***/ 154:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreationPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_uuid__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_map_service__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_flag_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_forms__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_services_custom__ = __webpack_require__(289);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+
+const DEFAULT_LAT = 37.41666;
+const DEFAULT_LNG = -122.09106;
+const cityToHsyGroupEnum = {
+    'Mountain View': 'SouthBayWest',
+    'Sunnyvale': 'SouthBayWest',
+    'Palo Alto': 'SouthBayWest',
+    'East Palo Alto': 'SouthBayWest',
+    'Stanford': 'SouthBayWest',
+    'Menlo Park': 'SouthBayWest',
+    'Cupertino': 'SouthBayWest',
+    'Los Gatos': 'SouthBayWest',
+    'Los Altos': 'SouthBayWest',
+    'Los Altos Hills': 'SouthBayWest',
+    'Milpitas': 'SouthBayEast',
+    'San Jose': 'SouthBayEast',
+    'Saratoga': 'SouthBayEast',
+    'Santa Clara': 'SouthBayEast',
+};
+const hsyGroupEnumToName = {
+    SanFrancisco: "三番",
+    SouthBayWest: "南湾西",
+    SouthBayEast: "南湾东",
+    EastBay: "东湾",
+    MidPeninsula: '中半岛',
+    None: "暂未覆盖"
+}; // TODO(zzn): merge with bot code
+const countyToHsyGroupEnum = {
+    'San Francisco County': 'SanFrancisco',
+    'San Mateo County': 'MidPeninsula',
+    'Alameda County': 'EastBay',
+};
+const getHsyGroupEnumFromLocality = function (city, county) {
+    let ret = (county == 'Santa Clara County' ?
+        cityToHsyGroupEnum[city] : countyToHsyGroupEnum[county]);
+    let retFixed = (typeof ret === 'undefined') ? 'None' : ret;
+    return retFixed;
+};
+/**
+ * A page contains a map view and a list showing the listings.
+ */
+let CreationPage = class CreationPage {
+    constructor(platform, params, nav, alertCtrl, authService, mapService, flagService, hsyListingApi, hsyUserApi, ref) {
+        this.platform = platform;
+        this.params = params;
+        this.nav = nav;
+        this.alertCtrl = alertCtrl;
+        this.authService = authService;
+        this.mapService = mapService;
+        this.flagService = flagService;
+        this.hsyListingApi = hsyListingApi;
+        this.hsyUserApi = hsyUserApi;
+        this.ref = ref;
+        //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
+        // TODO(xinbenlv) uncomment this
+        this.listingTypeEnums = ['NeedRoommate' /*招租*/, 'NeedRoom' /*求租*/];
+        this.hsyGroupEnumOptions = [
+            'SanFrancisco',
+            'MidPeninsula',
+            'SouthBayWest',
+            'SouthBayEast',
+            'EastBay',
+            'ShortTerm',
+            'Seattle',
+            'TestGroup',
+        ];
+        this.hsyGroupEnumOptionsMap = {
+            'SanFrancisco': '三番',
+            'MidPeninsula': '中半岛',
+            'SouthBayWest': '南湾西',
+            'SouthBayEast': '南湾东',
+            'EastBay': '东湾',
+            'ShortTerm': '短租',
+            'Seattle': '西雅图',
+            'TestGroup': '测试',
+        };
+        this.amenityOptions = [
+            '洗衣机', '停车位', '可养宠物'
+        ];
+        //noinspection JSMismatchedCollectionQueryUpdate used in HTML
+        this.dirty = {};
+        if (params.data.listing) {
+            this.listing = params.data.listing;
+        }
+        else {
+            this.listing = {};
+            this.listing.uid = Object(__WEBPACK_IMPORTED_MODULE_2__util_uuid__["a" /* uuid */])();
+        }
+        if (!this.listing.location) {
+            let loc = {
+                lat: DEFAULT_LAT,
+                lng: DEFAULT_LNG
+            };
+            this.listing.location = loc;
+            this.listing.location_lng = loc.lng;
+            this.listing.location_lat = loc.lat;
+        }
+        if (!this.listing.ownerId) {
+            this.listing.owner = {};
+            let local = window.localStorage;
+            let meId = local['user_id']; // TODO(xinbenlv): use UserService
+            this.listing.ownerId = meId;
+            this.listing.owner.id = meId;
+        }
+        if (!this.listing.amenityArray) {
+            this.listing.amenityArray = [];
+        }
+        if (!this.listing.imageIds)
+            this.listing.imageIds = [];
+    }
+    ngOnInit() {
+        this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/ {
+            position: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng),
+            animation: google.maps.Animation.DROP,
+            draggable: true,
+        });
+        google.maps.event.addListener(this.marker, 'dragend', () => __awaiter(this, void 0, void 0, function* () {
+            let location = {
+                lat: this.marker.getPosition().lat(),
+                lng: this.marker.getPosition().lng()
+            };
+            this.listing.location = location;
+            this.listing.location_lng = location.lng;
+            this.listing.location_lat = location.lat;
+            let locality = yield this.mapService.getLocality(new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng));
+            let hsyGroupEnum = getHsyGroupEnumFromLocality(locality.city, locality.county);
+            this.localityText = `${locality.city}, ${locality.zip} (${hsyGroupEnumToName[hsyGroupEnum]})`;
+            this.listing.hsyGroupEnum = hsyGroupEnum;
+            this.ref.detectChanges();
+        }));
+    }
+    markAllControlsAsDirty() {
+        Object.keys(this.hsyListingForm.controls).filter(k => {
+            this.hsyListingForm.controls[k].markAsDirty();
+        });
+    }
+    save() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.markAllControlsAsDirty();
+            if (this.validate()) {
+                this.listing.lastUpdated = new Date();
+                this.listing.latestUpdatedOrBump = this.listing.lastUpdated;
+                if (!this.listing.ownerId) {
+                    let local = window.localStorage;
+                    let meId = local['user_id']; // TODO(xinbenlv): use UserService
+                    this.listing.ownerId = meId;
+                }
+                if (this.inTestGroup) {
+                    this.listing.hsyGroupEnum = 'TestGroup';
+                }
+                yield Promise.all([
+                    yield this.hsyListingApi.upsert(this.listing).toPromise(),
+                    yield this.hsyUserApi.upsert(this.listing.owner).toPromise()
+                ]);
+                yield this.nav.pop();
+            }
+            else {
+                this.dirty['title'] = true;
+                this.dirty['content'] = true;
+                this.dirty['listingTypeEnum'] = true;
+            }
+        });
+    }
+    validate() {
+        return (this.listing.title && this.listing.content && (this.listing.listingTypeEnum != null));
+    }
+    updateImageIds(imageIds) {
+        this.listing.imageIds = imageIds;
+    }
+    deleteListing() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let prompt = this.alertCtrl.create({
+                title: '确认删除?',
+                buttons: [
+                    {
+                        text: '取消',
+                        handler: () => {
+                            this.nav.pop(); // alert
+                        }
+                    },
+                    {
+                        text: '删除',
+                        handler: () => {
+                            this.hsyListingApi.deleteById(this.listing.uid).take(1).toPromise().then(() => {
+                                this.nav.pop().then(() => {
+                                    this.nav.pop();
+                                }); // alert
+                            });
+                        }
+                    }
+                ]
+            });
+            yield prompt.present();
+        });
+    }
+    isDebug() {
+        return this.flagService.getFlag('debug');
+    }
+    toggleAmenity(amenity) {
+        let array = this.listing.amenityArray;
+        if (array.indexOf(amenity) >= 0) {
+            this.listing.amenityArray = this.listing.amenityArray.filter(a => a != amenity);
+        }
+        else {
+            this.listing.amenityArray.push(amenity);
+        }
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('hsyListingForm'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__angular_forms__["d" /* NgForm */])
+], CreationPage.prototype, "hsyListingForm", void 0);
+CreationPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+        selector: 'creation-page',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-title>\n            创建\n        </ion-title>\n        <ion-buttons end>\n            <button ion-button (click)="save()">保存</button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content class="creation grey-background" id="page-container">\n        <ion-card offset-lg-3 col-lg-6 offset-md-2 col-md-8 >\n            <form #hsyListingForm="ngForm">\n            <ion-item>\n                <ion-label>类型</ion-label>\n                <ion-select interface="popover"\n                            text-right required [(ngModel)]="listing.listingTypeEnum"\n                            name="listingTypeEnum" placeholder="必选">\n                    <ion-option  *ngFor="let v of listingTypeEnums "\n                                 value={{v}}>{{ v | enumMsgPipe }}</ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"> <!-- 只有招租需要填写 -->\n                <ion-label>地址</ion-label>\n                <ion-input item-right class="address" text-right [(ngModel)]="listing.addressLine" name="addressLine"\n                ></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>城市</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.addressCity"\n                           name="addressCity"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>预期价格</ion-label>\n                <ion-input item-right text-right\n                           type="number" min="0"\n                           [(ngModel)]="listing.price" name="price"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>标题</ion-label>\n                <ion-input\n                        item-right text-right required [(ngModel)]="listing.title"\n                        name="title" placeholder="必填"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>详情</ion-label>\n                <ion-textarea item-right text-right required [(ngModel)]="listing.content"\n                              name="content"\n                              placeholder="必填"></ion-textarea>\n\n            </ion-item>\n            <ion-item *ngIf="isDebug()">\n                <ion-label>测试</ion-label>\n                <ion-checkbox item-right text-right fixed color="dark" checked="true"\n                              [(ngModel)]="inTestGroup"\n                              name="inTestGroup"\n                ></ion-checkbox>\n\n            </ion-item>\n\n\n            <ion-item>\n                <ion-label>所在好室友群</ion-label>\n                <ion-select interface="popover"\n                            text-right [(ngModel)]="listing.hsyGroupEnum"\n                            name="type">\n                    <ion-option  *ngFor="let enum of hsyGroupEnumOptions "\n                                 value={{enum}}> {{ hsyGroupEnumOptionsMap[enum] }}\n                    </ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item>\n                <ion-label>群中昵称</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"\n                           name="hsyGroupNick"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>电子邮箱</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactEmail"\n                           name="contactEmail"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>联系电话</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactPhone"\n                           name="contactPhone"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>微信号</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.weixin"\n                           name="weixin"></ion-input>\n            </ion-item>\n            <ng-container *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"><!-- 只有招租需要填写这段 -->\n                <ion-item>\n                    <ion-label>整租单租</ion-label>\n                    <ion-select item-right interface="popover" text-right\n                                [(ngModel)]="listing.isRentingEntireHouse"\n                                name="isRentingEntireHouse">\n                        <ion-option text-right [value]="true">整房出租</ion-option>\n                        <ion-option text-right [value]="false">单间出租</ion-option>\n                    </ion-select>\n                </ion-item>\n                <ion-item >\n                    <ion-label>卧室数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBedRoom"\n                    name="numBedRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>卫生间数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBathRoom"\n                    name="numBathRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>设施/须知</ion-label>\n                    <div item-right text-right text-wrap>\n                        <button ion-button small round color="primary"\n                                *ngFor="let o of amenityOptions"\n                                (click)="toggleAmenity(o)"\n                                [outline] = "listing.amenityArray.indexOf(o) < 0">{{o}}</button>\n                    </div>\n                </ion-item>\n            </ng-container>\n            <ion-item>\n                <ion-label>起租时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD"\n                              [(ngModel)]="listing.rentalStartDate"\n                name="rentalStartDate"></ion-datetime>\n            </ion-item>\n            <ion-item>\n                <ion-label>终止时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"\n                name="rentalEndDate"></ion-datetime>\n            </ion-item>\n            <ion-item *ngIf="flagService.getFlag(\'requireToContact\')">\n                <ion-label>登LinkedIn才可联系我</ion-label>\n                <ion-toggle item-right text-right name="requireToContact"></ion-toggle>\n                <!--TODO(xinbenlv): wire it-->\n            </ion-item>\n            <ion-item>\n                <ion-label>图片</ion-label>\n                <ion-input item-right disabled name="imageBlock"></ion-input>\n            </ion-item>\n            <ion-item>\n                <image-grid\n                        [imageIds]="listing.imageIds"\n                        (updateImageIds)="updateImageIds($event)"\n                        [isEdit]="true"\n                ></image-grid>\n            </ion-item>\n            <ion-row>\n                <button col-6 ion-button block color="secondary" (click)="save()">保存</button>\n                <button col-6 ion-button outline block color="danger" (click)="deleteListing()">删除</button>\n            </ion-row>\n            </form>\n        </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_4__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_5__services_map_service__["a" /* MapService */],
+        __WEBPACK_IMPORTED_MODULE_6__services_flag_service__["a" /* FlagService */],
+        __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
+        __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_services_custom__["a" /* HsyUserApi */],
+        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
+], CreationPage);
+
+//# sourceMappingURL=listing-creation.page.js.map
+
+/***/ }),
+
+/***/ 155:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MapService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -323,36 +960,18 @@ MapService = __decorate([
 
 /***/ }),
 
-/***/ 171:
+/***/ 156:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-class UrlUtil {
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = UrlUtil;
-
-UrlUtil.getParameterByName = function (name) {
-    let url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
-    if (!results)
-        return null;
-    if (!results[2])
-        return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-};
-//# sourceMappingURL=url_util.js.map
-
-/***/ }),
-
-/***/ 172:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterSettingsComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_flag_service__ = __webpack_require__(25);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyInteractionApi; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_auth_service__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_search_params__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(52);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -362,106 +981,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
-
-
-let FilterSettingsComponent = class FilterSettingsComponent {
-    constructor(viewCtrl, flagService, _navParams) {
-        this.viewCtrl = viewCtrl;
-        this.flagService = flagService;
-        this._navParams = _navParams;
-        // TODO(xinbenlv): use interface
-        this.filterSettings = {
-            'types': {},
-            'areas': {},
-            'duration': {}
-        };
-        this.options = [
-            'All',
-            'SanFrancisco',
-            'MidPeninsula',
-            'SouthBayWest',
-            'SouthBayEast',
-            'EastBay',
-            'ShortTerm',
-            'Seattle',
-            'TestGroup',
-        ];
-        this.optionsMap = {
-            'All': '全部',
-            'SanFrancisco': '三番',
-            'MidPeninsula': '中半岛',
-            'SouthBayWest': '南湾西',
-            'SouthBayEast': '南湾东',
-            'EastBay': '东湾',
-            'ShortTerm': '短租',
-            'Seattle': '西雅图',
-            'TestGroup': '测试',
-        };
-        this.durationList = [
-            '最近3天',
-            '最近7天',
-            '最近30天',
-            '最近90天',
-            '不限'
-        ];
-        if (this._navParams.data) {
-            console.log(" --- " + JSON.stringify(this._navParams.data));
-            //TODO: get filterSettings and initial UI
-            this.filterSettings = this._navParams.data['filterSettings'];
-        }
-    }
-    applyFilterSettings() {
-        this.close();
-    }
-    close() {
-        this.viewCtrl.dismiss({ filterSettings: this.filterSettings });
-    }
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
 };
-FilterSettingsComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/'<ion-content>\n    <ion-list-header>类型</ion-list-header>\n    <ion-item>\n        <ion-label>招租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'zhaozu\']" value="ROOMMATE_WANTED"></ion-checkbox>\n    </ion-item>\n    <ion-item>\n        <ion-label>求租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'qiuzu\']"></ion-checkbox>\n    </ion-item>\n\n    <ion-list-header>区域</ion-list-header>\n    <ng-container *ngFor="let option of options; let i=index;">\n        <ion-item *ngIf="flagService.getFlag(\'debug\') || option != \'TestGroup\'">\n            <ion-label>{{optionsMap[option]}}</ion-label>\n            <ion-checkbox [(ngModel)]="filterSettings[\'areas\'][option]"  >\n            </ion-checkbox>\n        </ion-item>\n    </ng-container>\n\n    <ion-list-header>日期</ion-list-header>\n    <ion-list radio-group [(ngModel)]="filterSettings[\'duration\']">\n        <ion-item *ngFor="let option of durationList">\n            <ion-label>{{option}}</ion-label>\n            <ion-radio value="{{option}}"></ion-radio>\n        </ion-item>\n    </ion-list>\n    <ion-list-header>价格上限: {{filterSettings[\'price\']}}</ion-list-header>\n    <ion-item >\n        <ion-range min="0" max="10000" [(ngModel)]="filterSettings[\'price\']">\n        </ion-range>\n    </ion-item>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/,
-        selector: 'filter-settings',
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
-        __WEBPACK_IMPORTED_MODULE_2__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
-], FilterSettingsComponent);
-
-//# sourceMappingURL=filter-settings.comp.js.map
-
-/***/ }),
-
-/***/ 173:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingDetailPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_image_service__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listings_tab_page__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(25);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+/* tslint:disable */
 
 
 
@@ -469,679 +992,234 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
 
 
-
-
-
-let ListingDetailPage = class ListingDetailPage {
-    constructor(nav, params, imageService, api, hsyUserApi, auth, alertCtrl, ref, flagService) {
-        this.nav = nav;
-        this.params = params;
-        this.imageService = imageService;
-        this.api = api;
-        this.hsyUserApi = hsyUserApi;
+/**
+ * Api services for the `HsyInteraction` model.
+ */
+let HsyInteractionApi = class HsyInteractionApi extends __WEBPACK_IMPORTED_MODULE_3__core_base_service__["a" /* BaseLoopBackApi */] {
+    constructor(http, models, auth, searchParams, errorHandler) {
+        super(http, models, auth, searchParams, errorHandler);
+        this.http = http;
+        this.models = models;
         this.auth = auth;
-        this.alertCtrl = alertCtrl;
-        this.ref = ref;
-        this.flagService = flagService;
-        this.loading = true;
-        this.useGrid = !(navigator.platform == 'iPhone');
+        this.searchParams = searchParams;
+        this.errorHandler = errorHandler;
     }
-    ionViewWillEnter() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.listing == null)
-                yield this.loadListing();
-            ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
-            ga('send', 'pageview');
-            if (this.nav.length() == 1) {
-                ga('send', 'event', {
-                    eventCategory: 'go-to',
-                    eventAction: 'listing-detail',
-                    eventLabel: 'direct-url'
-                });
-            }
-        });
-    }
-    loadListing() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.params.data['listing'] != null) {
-                this.listing = yield this.params.data.listing;
-                this.ref.markForCheck();
-            }
-            else {
-                let id = this.params.data.id;
-                this.listing = (yield this.api.findById(id, {
-                    include: ['interactions', 'owner'],
-                })
-                    .take(1)
-                    .toPromise());
-                this.ref.markForCheck();
-            }
-            this.params.data.id = this.listing.uid;
-            this.title = `好室友™帖子：` + this.listing.title;
-            this.loading = false;
-            this.hackExtractHsyGroupNickAndListing();
-            return;
-        });
-    }
-    // This is a HACK, when bot is able to handle this, we can remove this part
-    hackExtractHsyGroupNickAndListing() {
-        console.log(`XXX this.listing = ${this.listing}`);
-        if (!this.listing.hsyGroupNick && /^group-collected-/.test(this.listing.uid)) {
-            this.listing.hsyGroupNick = this.listing.uid.substr(16);
-        }
-    }
-    ngOnInit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.loadListing();
-        });
-    }
-    backToMain() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'listings-tab',
-                eventLabel: 'direct-url'
-            });
-            yield this.nav.push(__WEBPACK_IMPORTED_MODULE_6__listings_tab_page__["a" /* ListingsTabPage */]);
-        });
-    }
-    ionViewDidEnter() {
-        console.log(`Entering lising detail page`);
-        this.ref.markForCheck();
-    }
-    edit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */], { listing: this.listing });
-        });
-    }
-    claimAndEdit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'claim-and-edit',
-            });
-            if (!this.auth.authenticated()) {
-                let alert = this.alertCtrl.create({
-                    title: '请登录后认领',
-                    buttons: [
-                        {
-                            text: '取消',
-                        },
-                        {
-                            text: '登陆',
-                            handler: () => {
-                                this.auth.login();
-                            }
-                        }
-                    ]
-                });
-                yield alert.present();
-            }
-            else {
-                // Start claiming!
-                yield this.claim();
-            }
-        });
-    }
-    claim() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let alert = this.alertCtrl.create({
-                title: `请确认认领本帖`,
-                subTitle: `标题：${this.listing.title}`,
-                buttons: [
-                    {
-                        text: '取消',
-                    },
-                    {
-                        text: '确认',
-                        handler: () => {
-                            let local = window.localStorage;
-                            let meId = local['user_id']; // TODO(xinbenlv): use UserService
-                            this.listing.ownerId = meId;
-                            this.listing.owner = null; // 防止 owner 和 ownerId 的矛盾
-                            this.api.upsert(this.listing).take(1).toPromise()
-                                .then((_) => __awaiter(this, void 0, void 0, function* () {
-                                this.listing = yield this.api.findById(this.listing.uid, { include: ["owner"] }).take(1).toPromise();
-                                this.ref.markForCheck();
-                            }))
-                                .catch(e => {
-                                console.warn(`Error in claiming post = 
-                      ${JSON.stringify(e, null, ' ')}`);
-                            });
-                            return true;
-                        }
-                    }
-                ]
-            });
-            let ret = yield alert.present();
-            return ret;
-        });
-    }
-    fakeClaimAndEdit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'fake-claim-and-edit',
-            });
-            let alert = this.alertCtrl.create({
-                title: '新版"认领并编辑"功能正在建设中',
-                buttons: [
-                    {
-                        text: 'OK',
-                    },
-                ]
-            });
-            yield alert.present();
-        });
-    }
-    fakeStartChat() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'fake-start-chat',
-            });
-            let alert = this.alertCtrl.create({
-                title: '新版"私聊"功能正在建设中',
-                buttons: [
-                    {
-                        text: 'OK',
-                    },
-                ]
-            });
-            yield alert.present();
-        });
-    }
-    // TODO(xinbenlv): merge with the same piece of code in image-grid.
-    //noinspection JSUnusedLocalSymbols, used in HTML
-    showImage(imageId) {
-        let el = document.getElementsByTagName('body');
-        // TODO(xinbenlv): modify the viewerjs to customize the following
-        // 1. click on background area to close
-        let url = this.imageService.getUrlFromId(imageId, 0, 0);
-        let viewer = new window.Viewer(el[0], {
-            url: () => {
-                return url;
-            },
-            inline: false,
-            toolbar: true,
-            title: false,
-            movable: true,
-            keyboard: false,
-            navbar: true,
-            hidden: () => {
-                viewer.destroy();
-            }
-        });
-        viewer.show();
-    }
-    isClaimed() {
-        return !/^group-collected-/.test(this.listing.ownerId);
-    }
-    isMine() {
-        if (this.listing) {
-            return window.localStorage['user_id'] === this.listing.ownerId;
-        }
-        return false;
-    }
-    eligibleToViewContact() {
-        return false;
-    }
-    isDebug() {
-        return this.flagService.getFlag('debug');
-    }
-    debugStr() {
-        return JSON.stringify(this.listing, null, '  ');
-    }
-    hasContactInfo() {
-        let listing = this.listing;
-        let has = ((listing.owner && (listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin)) || listing.hsyGroupNick && listing.hsyGroupEnum) != null;
-        if (!has) {
-            console.warn(`listing doesn't have contact info`, this.listing);
-        }
-        return has;
+    /**
+     * The name of the model represented by this $resource,
+     * i.e. `HsyInteraction`.
+     */
+    getModelName() {
+        return "HsyInteraction";
     }
 };
-ListingDetailPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'listing-detail',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-detail.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons start>\n            <button ion-button *ngIf="nav.length() < 2" (click)="backToMain()">\n                <ion-icon name="arrow-back"></ion-icon>全部\n            </button>\n        </ion-buttons>\n        <ion-title>{{ title ? title : \'好室友™帖子\'}}</ion-title>\n        <ion-buttons end *ngIf="isMine()">\n            <button ion-button (click)="edit()">编辑</button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content id="page-container" class="grey-background">\n    <ion-card *ngIf="!loading" offset-lg-3 col-lg-6 offset-md-2 col-md-8>\n        <ion-card-header>\n            <h2>\n                {{ listing.content ? listing.title.slice(0, 30) +\'...\' : \'详情见图片\' }}\n            </h2>\n        </ion-card-header>\n        <ion-card-content>\n        <ion-item-group>\n            <ion-item >\n                <ion-label col-3 item-left>\n                    <ion-icon name="checkmark-circle"></ion-icon>\n                    认领\n                </ion-label>\n                <div item-right text-wrap >\n                    <div text-right *ngIf="isClaimed() && isMine()">我已认领</div>\n                    <div text-right *ngIf="isClaimed() && !isMine()">房东已认领</div>\n                    <div text-right *ngIf="!isClaimed()">\n                            <button ion-button small outline (click)="claimAndEdit()">我要认领</button>\n                    </div>\n                </div>\n            </ion-item>\n            <ion-item *ngIf="listing.lastUpdated">\n                <ion-label col-3 item-left>\n                    <ion-icon name="clock"></ion-icon>\n                    更新\n                </ion-label>\n                <div item-right text-wrap>\n                    <p text-right>{{ listing.lastUpdated | dateFormatterPipe }}</p>\n                    <div text-right>{{ listing.lastUpdated | timeFromNow }}</div>\n                </div>\n            </ion-item>\n            <ion-item >\n                <ion-label col-3 item-left>\n                    <ion-icon name="clock"></ion-icon>\n                    价格\n                </ion-label>\n                <div item-right text-wrap>\n                    <div text-right>{{ listing.price ? \'$\' + listing.price : \'价格未知\' }}</div>\n                </div>\n\n            </ion-item>\n            <ion-item *ngIf="listing.addressLine && listing.addressCity">\n                <ion-label col-3 item-left>\n                    <ion-icon name="map"></ion-icon>\n                    地址\n                </ion-label>\n                <div item-right text-wrap>\n                    {{listing.addressLine}}, {{listing.addressCity}}\n                </div>\n            </ion-item>\n            <ion-item *ngIf="listing.numBedRoom && listing.numBathRoom">\n                <ion-label col-3 item-left>\n                    <ion-icon name="map"></ion-icon>\n                    情况\n                </ion-label>\n                <div item-right text-wrap>\n                    {{listing.numBedRoom}} Beds, {{listing.numBathRoom}} Baths\n                </div>\n            </ion-item>\n            <ion-item *ngIf="listing.amenityArray && listing.amenityArray.length > 0">\n                <ion-label col-3 item-left>\n                    <ion-icon name="map"></ion-icon>\n                    设施\n                </ion-label>\n                <div item-right text-wrap>\n                    <ion-badge ion-badge *ngFor="let a of listing.amenityArray">\n                        {{ a }}\n                    </ion-badge>\n                </div>\n            </ion-item>\n            <ion-item *ngIf="listing.content">\n                <ion-label col-3 item-left>\n                    <ion-icon name="paper"></ion-icon>\n                    详情\n                </ion-label>\n                <div item-right text-wrap>\n                    <p>\n                        <ng-container *ngFor="let textPiece of listing.content.split(\'\n\')">\n                            {{ textPiece }} <br/>\n                        </ng-container>\n                    </p>\n                </div>\n            </ion-item>\n        </ion-item-group>\n        <ion-item-group *ngIf="hasContactInfo()">\n            <ion-item-divider color="light">\n                联系方式\n            </ion-item-divider>\n            <ion-item *ngIf="flagService.getFlag(\'requireToContact\') &&\n                             listing.requireToContact.length > 0 && !eligibleToViewContact()">\n                <ion-label col-3 item-left>\n                    <ion-icon name="paper"></ion-icon>\n                    查看条件\n                </ion-label>\n                <div item-right text-wrap>\n                    <button color="primary" ion-button outline *ngFor="let req of listing.requireToContact">登陆{{req}}</button>\n                </div>\n            </ion-item>\n            <ng-container *ngIf="listing.requireToContact == null || listing.requireToContact.length == 0 || eligibleToViewContact()">\n                <ion-item *ngIf="listing.owner && listing.owner.contactPhone">\n                    <ion-label col-3 item-left>\n                        <ion-icon name="contact"></ion-icon>电话\n                    </ion-label>\n                    <div item-right text-wrap >\n                        <div text-right>{{ listing.owner.contactPhone }}</div>\n                    </div>\n                </ion-item>\n                <ion-item *ngIf="listing.owner && listing.owner.contactEmail">\n                    <ion-label col-3 item-left>\n                        <ion-icon name="contact"></ion-icon>邮件\n                    </ion-label>\n                    <div item-right text-wrap >\n                        <div text-right>{{ listing.owner.contactEmail }}</div>\n                    </div>\n                </ion-item>\n                <ion-item *ngIf="listing.hsyGroupEnum &&\n                (listing.hsyGroupNick || listing.ownerId.startsWith(\'group-collected-\'))">\n                    <ion-label col-3 item-left>\n                        <ion-icon name="contact"></ion-icon>微信群\n                    </ion-label>\n                    <div item-right text-wrap >\n                        <p text-right>请在【好室友】{{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}群内搜索</p>\n                        <div text-right>\n                            {{ listing.hsyGroupNick ?\n                            listing.hsyGroupNick : listing.ownerId.replace(\'group-collected-\', \'\') }}</div>\n                    </div>\n                </ion-item>\n                <ion-item *ngIf="listing.owner && listing.owner.weixin">\n                    <ion-label col-3 item-left>\n                        <ion-icon name="contact"></ion-icon>微信号\n                    </ion-label>\n                    <div item-right text-wrap >\n                        <div text-right>{{ listing.owner.weixin }}</div>\n                    </div>\n                </ion-item>\n            </ng-container>\n        </ion-item-group>\n            <ion-item *ngIf="isDebug()" >\n                <div style="white-space: pre;">{{debugStr()}}</div>\n            </ion-item>\n        <ion-item-group *ngIf="listing.imageIds && listing.imageIds.length > 0">\n            <ion-item-divider>\n                图片\n            </ion-item-divider>\n            <!--\n                We duplicate the grid and original ion-item because responsive\n                grid doesn\'t work well with iOS yet.\n                TODO(xinbenlv): remove this ion-list when works on iOS.\n                See https://forum.ionicframework.com/t/ion-row-wrap-attribute-doesnt-work-on-ios-devices/50603/5\n            -->\n            <ng-template [ngIf]="!useGrid">\n                <ion-item *ngFor="let imageId of listing.imageIds">\n                    <img src="{{ imageId | imageIdToUrlPipe:\'full\' }}" alt="img-{{imageId}}"\n                         data-action="zoom">\n                </ion-item>\n            </ng-template>\n            <ion-grid *ngIf="useGrid">\n                <ion-row>\n                    <ion-col col-12 col-lg-4 col-md-4 col-sm-6 col-xs-12\n                             *ngFor="let imageId of listing.imageIds">\n                        <img src="{{ imageId | imageIdToUrlPipe:\'full\' }}" alt="img-{{imageId}}"\n                             data-action="zoom">\n                    </ion-col>\n                </ion-row>\n            </ion-grid>\n        </ion-item-group>\n        <ion-item>\n            <button *ngIf="isClaimed() && isMine()" ion-button outline item-left large (click)="edit()">\n                <ion-label>\n                    <ion-icon name="create"></ion-icon> 编辑\n                </ion-label>\n            </button>\n            <button *ngIf="!isMine() && isClaimed()" ion-button outline item-right large (click)="fakeStartChat()">\n                <ion-label>\n                    <ion-icon name="chatbubbles"></ion-icon> 私聊\n                </ion-label>\n            </button>\n        </ion-item>\n\n        </ion-card-content>\n    </ion-card>\n    <ion-list *ngIf="loading">\n        <ion-item>\n            <ion-row align-items-center justify-content-center>\n                <ion-spinner></ion-spinner>\n            </ion-row>\n        </ion-item>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-detail.page.html"*/,
-        changeDetection: __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectionStrategy"].OnPush,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_3__services_image_service__["b" /* IImageService */],
-        __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__["a" /* HsyUserApi */],
-        __WEBPACK_IMPORTED_MODULE_7__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"],
-        __WEBPACK_IMPORTED_MODULE_8__services_flag_service__["a" /* FlagService */]])
-], ListingDetailPage);
-
-//# sourceMappingURL=listing-detail.page.js.map
-
-/***/ }),
-
-/***/ 177:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingUxDetailPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_image_service__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listings_tab_page__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(103);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-
-
-let ListingUxDetailPage = class ListingUxDetailPage {
-    constructor(nav, params, imageService, api, hsyUserApi, auth, alertCtrl, ref, flagService) {
-        this.nav = nav;
-        this.params = params;
-        this.imageService = imageService;
-        this.api = api;
-        this.hsyUserApi = hsyUserApi;
-        this.auth = auth;
-        this.alertCtrl = alertCtrl;
-        this.ref = ref;
-        this.flagService = flagService;
-        this.loading = true;
-    }
-    set mapView(view) {
-        this.view = view;
-        if (this.view) {
-            this.view.clearMarkers();
-            this.view.addListings([this.listing]);
-            this.view.render();
-            this.view.setCenter({ lng: this.listing.location_lng, lat: this.listing.location_lat });
-        }
-    }
-    ;
-    get mapView() {
-        return this.view;
-    }
-    ionViewWillEnter() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.listing == null)
-                yield this.loadListing();
-            ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
-            ga('send', 'pageview');
-            if (this.nav.length() == 1) {
-                ga('send', 'event', {
-                    eventCategory: 'go-to',
-                    eventAction: 'listing-detail',
-                    eventLabel: 'direct-url'
-                });
-            }
-        });
-    }
-    loadListing() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.params.data['listing'] != null) {
-                this.listing = yield this.params.data.listing;
-                this.ref.markForCheck();
-            }
-            else {
-                let id = this.params.data.id;
-                this.listing = (yield this.api.findById(id, {
-                    include: ['interactions', 'owner'],
-                })
-                    .take(1)
-                    .toPromise());
-                this.ref.markForCheck();
-            }
-            this.params.data.id = this.listing.uid;
-            this.title = `好室友™帖子：` + this.listing.title;
-            this.loading = false;
-            this.hackExtractHsyGroupNickAndListing();
-            return;
-        });
-    }
-    // This is a HACK, when bot is able to handle this, we can remove this part
-    hackExtractHsyGroupNickAndListing() {
-        if (!this.listing.hsyGroupNick && /^group-collected-/.test(this.listing.uid)) {
-            this.listing.hsyGroupNick = this.listing.uid.substr(16);
-        }
-    }
-    ngOnInit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.loadListing();
-        });
-    }
-    backToMain() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'listings-tab',
-                eventLabel: 'direct-url'
-            });
-            if (this.nav.length() > 1) {
-                yield this.nav.pop();
-            }
-            else {
-                yield this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_6__listings_tab_page__["a" /* ListingsTabPage */]);
-                yield this.nav.goToRoot({});
-            }
-        });
-    }
-    ionViewDidEnter() {
-        console.log(`Entering lising detail page`);
-        this.ref.markForCheck();
-    }
-    edit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */], { listing: this.listing });
-        });
-    }
-    claimAndEdit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'claim-and-edit',
-            });
-            if (!this.auth.authenticated()) {
-                let alert = this.alertCtrl.create({
-                    title: '请登录后认领',
-                    buttons: [
-                        {
-                            text: '取消',
-                        },
-                        {
-                            text: '登陆',
-                            handler: () => {
-                                this.auth.login();
-                            }
-                        }
-                    ]
-                });
-                yield alert.present();
-            }
-            else {
-                // Start claiming!
-                yield this.claim();
-            }
-        });
-    }
-    claim() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let alert = this.alertCtrl.create({
-                title: `请确认认领本帖`,
-                subTitle: `标题：${this.listing.title}`,
-                buttons: [
-                    {
-                        text: '取消',
-                    },
-                    {
-                        text: '确认',
-                        handler: () => {
-                            let local = window.localStorage;
-                            let meId = local['user_id']; // TODO(xinbenlv): use UserService
-                            this.listing.ownerId = meId;
-                            this.listing.owner = null; // 防止 owner 和 ownerId 的矛盾
-                            this.api.upsert(this.listing).take(1).toPromise()
-                                .then((_) => __awaiter(this, void 0, void 0, function* () {
-                                this.listing = yield this.api.findById(this.listing.uid, { include: ["owner"] }).take(1).toPromise();
-                                this.ref.markForCheck();
-                            }))
-                                .catch(e => {
-                                console.warn(`Error in claiming post = 
-                      ${JSON.stringify(e, null, ' ')}`);
-                            });
-                            return true;
-                        }
-                    }
-                ]
-            });
-            let ret = yield alert.present();
-            return ret;
-        });
-    }
-    fakeClaimAndEdit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'fake-claim-and-edit',
-            });
-            let alert = this.alertCtrl.create({
-                title: '新版"认领并编辑"功能正在建设中',
-                buttons: [
-                    {
-                        text: 'OK',
-                    },
-                ]
-            });
-            yield alert.present();
-        });
-    }
-    fakeStartChat() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'fake-start-chat',
-            });
-            let alert = this.alertCtrl.create({
-                title: '新版"私聊"功能正在建设中',
-                buttons: [
-                    {
-                        text: 'OK',
-                    },
-                ]
-            });
-            yield alert.present();
-        });
-    }
-    // TODO(xinbenlv): merge with the same piece of code in image-grid.
-    //noinspection JSUnusedLocalSymbols, used in HTML
-    showImage(imageId) {
-        let el = document.getElementsByTagName('body');
-        // TODO(xinbenlv): modify the viewerjs to customize the following
-        // 1. click on background area to close
-        let url = this.imageService.getUrlFromId(imageId, 0, 0);
-        let viewer = new window.Viewer(el[0], {
-            url: () => {
-                return url;
-            },
-            inline: false,
-            toolbar: true,
-            title: false,
-            movable: true,
-            keyboard: false,
-            navbar: true,
-            hidden: () => {
-                viewer.destroy();
-            }
-        });
-        viewer.show();
-    }
-    isClaimed() {
-        return !/^group-collected-/.test(this.listing.ownerId);
-    }
-    isMine() {
-        if (this.listing) {
-            return window.localStorage['user_id'] === this.listing.ownerId;
-        }
-        return false;
-    }
-    eligibleToViewContact() {
-        return false;
-    }
-    isDebug() {
-        return this.flagService.getFlag('debug');
-    }
-    debugStr() {
-        return JSON.stringify(this.listing, null, '  ');
-    }
-    hasContactInfo() {
-        let listing = this.listing;
-        let has = ((listing.owner && (listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin)) || listing.hsyGroupNick && listing.hsyGroupEnum) != null;
-        if (!has) {
-            console.warn(`listing doesn't have contact info`, this.listing);
-        }
-        return has;
-    }
-    scrollToContact() {
-        this.content.scrollToBottom();
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */])
-], ListingUxDetailPage.prototype, "content", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('mapViewSingle'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]])
-], ListingUxDetailPage.prototype, "mapView", null);
-ListingUxDetailPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'listing-ux-detail',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-detail.page.html"*/'<ion-content id="page-container" class="dynamic-width-container" #content>\n        <div class="detail-header">\n            <div class="detail-header-shadow">\n            </div>\n            <div id="back" class="in-image-item" item-right (click)="backToMain()">\n                <ion-icon name="ios-arrow-back-outline"></ion-icon>\n            </div>\n            <div id="heart" class="in-image-item" item-right>\n                <ion-icon name="ios-heart-outline"></ion-icon>\n            </div>\n\n        <ion-slides class="detail-image-slides" pager *ngIf="!loading && listing.imageIds">\n            <ng-container *ngFor="let imageId of listing.imageIds;let i = index">\n                <ion-slide class="slide" style="background-size:cover; background-repeat:no-repeat; background-position: center center; "\n                           [style.background-image]="\'url(\' + imageService.getUrlFromId(imageId) + \')\'">\n                </ion-slide>\n            </ng-container>\n        </ion-slides>\n        </div>\n        <div class="detail-content" *ngIf="!loading">\n            <div class="detail-content-title-block">\n                <h1 class="title">\n                    {{this.listing.title}}\n                </h1>\n                <div class="subtitle">{{ listing.lastUpdated | timeFromNow }}更新</div>\n                <div class="subtitle">110人看过</div>\n            </div>\n\n            <div class="detail-content-map" *ngIf="listing.location_lat && listing.location_lng">\n                <!--<img style="width:100%;height:100%"-->\n                     <!--src="https://maps.googleapis.com/maps/api/staticmap?center={{listing.location_lat}},{{listing.location_lng}}&zoom=12&size=375x140&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY"-->\n                     <!--alt="">-->\n                <map-view #mapViewSingle class="map-view-item" [showSearchButton]="false"> </map-view>\n                <div class="detail-map-title-block">\n                    <div class="detail-map-title">{{listing.addressCity}}</div>\n                    <div class="detail-map-subtitle"> {{ listing.addressLine || "具体地址请联系房东获得" }}</div>\n                </div>\n            </div>\n\n            <div class="section highlight-facts"\n                 *ngIf="false"> <!--TODO(zzn): reopen when this kind of information is extracted -->\n                <div class="logo-box" *ngFor="let i of [\'独栋别墅\',\'2室1卫\',\'12个月起租\',\'2017/01/01开始\']">\n                    <div class="logo-box-logo">\n                        <ion-icon name="ios-home-outline"></ion-icon>\n                    </div>\n                    <div class="logo-box-text">\n                        {{i}}\n                    </div>\n                </div>\n            </div>\n            <div class="section">\n                <div class="section-title">描述</div>\n                <div class="section-body">\n                    <p>\n                        <ng-container *ngFor="let textPiece of listing.content.split(\'\n\')">\n                            {{ textPiece }} <br/>\n                        </ng-container>\n                    </p>\n                </div>\n            </div>\n            <div class="section" *ngIf="listing.amenityArray && listing.amenityArray.length > 0">\n                <div class="section-title">设施／须知</div>\n                <div class="grid-container">\n                    <div class="grid-half-screen" *ngFor="let i of listing.amenityArray">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">{{i}}</span>\n                    </div>\n                </div>\n            </div>\n            <ng-container *ngIf="listing.requireToContact == null || listing.requireToContact.length == 0 || eligibleToViewContact()">\n                <div class="section">\n                    <div class="section-title">联系房东</div>\n                    <div class="grid-full-screen" #contact_phone *ngIf="listing.owner && listing.owner.contactPhone">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">电话</span>\n                        <span class="contetn">{{listing.owner.contactPhone}}</span>\n                    </div>\n                    <div class="grid-full-screen" #contact_email *ngIf="listing.owner && listing.owner.contactEmail">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">邮箱</span>\n                        <span class="contetn">{{listing.owner.contactEmail}}</span>\n                    </div>\n                    <div class="grid-full-screen" #contact_group_nick *ngIf="listing.hsyGroupEnum && listing.hsyGroupNick">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">微信</span>\n                        <span class="contetn">\n                            请在【好室友】{{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}群内搜索"\n                         {{ listing.hsyGroupNick ?\n                                listing.hsyGroupNick : listing.ownerId.replace(\'group-collected-\', \'\') }}"\n                        </span>\n                    </div>\n                </div>\n            </ng-container>\n        </div>\n        <ion-list *ngIf="loading">\n            <ion-item>\n                <ion-row align-items-center justify-content-center>\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n            </ion-item>\n        </ion-list>\n</ion-content>\n<ion-footer class="footer" *ngIf="!loading">\n    <div class="dynamic-width-container  grid-container">\n            <div class="footer-button" id="price-button">\n                <ng-container >\n                    <span id="price">$ {{listing.price || "价格待议" }}</span><span id="per-month">/月</span>\n                </ng-container>\n            </div>\n            <div class="footer-button" id="contact-button" (click)="scrollToContact()">\n                <span>联系房东</span>\n            </div>\n    </div>\n</ion-footer>\n\n\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-detail.page.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_3__services_image_service__["b" /* IImageService */],
-        __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__["a" /* HsyUserApi */],
-        __WEBPACK_IMPORTED_MODULE_7__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"],
-        __WEBPACK_IMPORTED_MODULE_8__services_flag_service__["a" /* FlagService */]])
-], ListingUxDetailPage);
-
-//# sourceMappingURL=listing-ux-detail.page.js.map
-
-/***/ }),
-
-/***/ 188:
-/***/ (function(module, exports) {
-
-function webpackEmptyAsyncContext(req) {
-	// Here Promise.resolve().then() is used instead of new Promise() to prevent
-	// uncatched exception popping up in devtools
-	return Promise.resolve().then(function() {
-		throw new Error("Cannot find module '" + req + "'.");
-	});
-}
-webpackEmptyAsyncContext.keys = function() { return []; };
-webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
-module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 188;
-
-/***/ }),
-
-/***/ 233:
-/***/ (function(module, exports) {
-
-function webpackEmptyAsyncContext(req) {
-	// Here Promise.resolve().then() is used instead of new Promise() to prevent
-	// uncatched exception popping up in devtools
-	return Promise.resolve().then(function() {
-		throw new Error("Cannot find module '" + req + "'.");
-	});
-}
-webpackEmptyAsyncContext.keys = function() { return []; };
-webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
-module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 233;
-
-/***/ }),
-
-/***/ 25:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FlagService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-let FlagService = class FlagService {
-    constructor() {
-        this.flagMap = {};
-        this.flags = {
-            'debug': false,
-            'realCreate': false,
-            'requireToContact': false,
-            'newUx': true,
-        };
-        let url_string = window.location.href;
-        var url = new URL(url_string);
-        var flagJsonStr = url['searchParams'].get("flags");
-        this.flagMap = JSON.parse(flagJsonStr);
-    }
-    getAllFlags() {
-        return this.flags;
-    }
-    setFlag(flagName, value) {
-        this.flags[flagName] = value;
-    }
-    getFlag(flagName) {
-        if (this.flagMap && flagName in this.flagMap) {
-            return this.flagMap[flagName];
-        }
-        return this.flags[flagName];
-    }
-};
-FlagService = __decorate([
+HsyInteractionApi = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [])
-], FlagService);
+    __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"])),
+    __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_2__SDKModels__["a" /* SDKModels */])),
+    __param(2, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_4__core_auth_service__["a" /* LoopBackAuth */])),
+    __param(3, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__core_search_params__["a" /* JSONSearchParams */])),
+    __param(4, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(4, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_6__core_error_service__["a" /* ErrorHandler */])),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"],
+        __WEBPACK_IMPORTED_MODULE_2__SDKModels__["a" /* SDKModels */],
+        __WEBPACK_IMPORTED_MODULE_4__core_auth_service__["a" /* LoopBackAuth */],
+        __WEBPACK_IMPORTED_MODULE_5__core_search_params__["a" /* JSONSearchParams */],
+        __WEBPACK_IMPORTED_MODULE_6__core_error_service__["a" /* ErrorHandler */]])
+], HsyInteractionApi);
 
-//# sourceMappingURL=flag.service.js.map
+//# sourceMappingURL=HsyInteraction.js.map
 
 /***/ }),
 
-/***/ 273:
+/***/ 170:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MapViewComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+const DEFAULT_CENTER = { lat: 37.6042379, lng: -122.1755228 };
+/**
+ * The addSearchButtonInMap adds a button to the map that allows
+ * seach in the map.
+ * This constructor takes the control DIV as an argument.
+ * @constructor
+ */
+function SearchButtonInMap(controlDiv, map, eventEmitter) {
+    // Set CSS for the control border.
+    // TODO(xinbenlv): from Google Map developer example, to be updated.
+    var controlUI = document.createElement('div');
+    controlUI.classList = ['search-in-map-btn'];
+    controlUI.innerHTML = '在地图区域内搜索';
+    controlDiv.appendChild(controlUI);
+    // Setup the click event listeners: simply set the map to Chicago.
+    controlUI.addEventListener('click', function () {
+        eventEmitter.emit(map.getBounds());
+    });
+}
+let MapViewComponent = class MapViewComponent {
+    constructor(nav) {
+        this.nav = nav;
+        this.zoomLevel = 10; // default
+        this.markers = [];
+        this.onBoundaryFilter = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.showSearchButton = true;
+        this.map = google.maps.Maps;
+        this.mapDirty = false;
+    }
+    ngOnChanges(changes) {
+        if (changes['listings']) {
+            this.render();
+        }
+    }
+    gotoListingDetail(listing) {
+        ga('send', 'event', {
+            eventCategory: 'go-to',
+            eventAction: 'listing-detail',
+            eventLabel: 'from-map-view'
+        });
+        this.nav.push('ListingUxDetailPage', { listing: listing });
+    }
+    render() {
+        if (!this.mapCanvas || !this.mapCanvas.nativeElement) {
+            this.map = null;
+            return;
+        } // do nothing
+        this.map = new google.maps.Map(this.mapCanvas.nativeElement, {
+            zoom: this.zoomLevel,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        this.setCenter(DEFAULT_CENTER);
+        // Create the DIV to hold the control and call the CenterControl()
+        // constructor passing in this DIV.
+        var searchInMapButtonDiv = document.createElement('div');
+        if (this.showSearchButton)
+            var centerControl = new SearchButtonInMap(searchInMapButtonDiv, this.map, this.onBoundaryFilter);
+        searchInMapButtonDiv.index = 1;
+        this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchInMapButtonDiv);
+        google.maps.event.addListener(this.map, 'bounds_changed', () => {
+            google.maps.event.trigger(this.map, 'resize');
+            this.mapDirty = true;
+        });
+        for (let marker of this.markers) {
+            marker.setMap(this.map);
+        }
+    }
+    addListings(newListings) {
+        let listingsHasLocation = newListings.filter((l) => l.location);
+        listingsHasLocation.map((listing) => {
+            let marker = new google.maps.Marker({
+                position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
+                icon: `data:image/svg+xml,
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
+    <path fill="#21b3fe" stroke="#ccc" stroke-width=".5"
+          d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/>
+    <text transform="translate(19 18.5)" 
+          fill="#fff" 
+          style="font-family: Arial, sans-serif;
+          text-align:center;"
+          font-size="10" text-anchor="middle">${listing.price ? listing.price : '待议'}
+    </text>
+</svg>`,
+                map: this.map
+            });
+            marker.addListener('click', () => {
+                this.gotoListingDetail(listing);
+            });
+            this.markers.push(marker);
+        });
+    }
+    clearMarkers() {
+        this.markers.forEach(l => l.setMap(null));
+        this.markers = [];
+    }
+    setCenter(center) {
+        if (this.map)
+            this.map.setCenter(new google.maps.LatLng(center.lat, center.lng));
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('mapCanvas'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+], MapViewComponent.prototype, "mapCanvas", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", Object)
+], MapViewComponent.prototype, "onBoundaryFilter", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Boolean)
+], MapViewComponent.prototype, "showSearchButton", void 0);
+MapViewComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'map-view',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/map-view.comp.html"*/'<div style="width:100%;height:100%" #mapCanvas\n     (load)="render()">\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/map-view.comp.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]])
+], MapViewComponent);
+
+//# sourceMappingURL=map-view.comp.js.map
+
+/***/ }),
+
+/***/ 182:
+/***/ (function(module, exports) {
+
+function webpackEmptyAsyncContext(req) {
+	// Here Promise.resolve().then() is used instead of new Promise() to prevent
+	// uncatched exception popping up in devtools
+	return Promise.resolve().then(function() {
+		throw new Error("Cannot find module '" + req + "'.");
+	});
+}
+webpackEmptyAsyncContext.keys = function() { return []; };
+webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
+module.exports = webpackEmptyAsyncContext;
+webpackEmptyAsyncContext.id = 182;
+
+/***/ }),
+
+/***/ 227:
+/***/ (function(module, exports) {
+
+function webpackEmptyAsyncContext(req) {
+	// Here Promise.resolve().then() is used instead of new Promise() to prevent
+	// uncatched exception popping up in devtools
+	return Promise.resolve().then(function() {
+		throw new Error("Cannot find module '" + req + "'.");
+	});
+}
+webpackEmptyAsyncContext.keys = function() { return []; };
+webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
+module.exports = webpackEmptyAsyncContext;
+webpackEmptyAsyncContext.id = 227;
+
+/***/ }),
+
+/***/ 267:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listings_tab_listings_tab_page__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__settings_tab_settings_tab_page__ = __webpack_require__(381);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_network__ = __webpack_require__(382);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__disconnect_modal__ = __webpack_require__(383);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__qrcode_tab_qrcode_tab_page__ = __webpack_require__(384);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__mine_tab_mine_tab_page__ = __webpack_require__(385);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_flag_service__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__listings_tab_listings_ux_tab_page__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__settings_tab_settings_tab_page__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_network__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__disconnect_modal__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__qrcode_tab_qrcode_tab_page__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mine_tab_mine_tab_page__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__listings_tab_listings_ux_tab_page__ = __webpack_require__(153);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1151,7 +1229,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -1174,24 +1251,21 @@ let TabsPage = class TabsPage {
         // this tells the tabs component which Pages
         // should be each tab's root Page
         //noinspection JSUnusedGlobalSymbols
-        this.tab2Root = __WEBPACK_IMPORTED_MODULE_2__listings_tab_listings_tab_page__["a" /* ListingsTabPage */];
+        this.tab2Root = __WEBPACK_IMPORTED_MODULE_9__listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */];
         //noinspection JSUnusedGlobalSymbols
-        this.tab3Root = __WEBPACK_IMPORTED_MODULE_3__settings_tab_settings_tab_page__["a" /* SettingsTabPage */];
+        this.tab3Root = __WEBPACK_IMPORTED_MODULE_2__settings_tab_settings_tab_page__["a" /* SettingsTabPage */];
         //noinspection JSUnusedGlobalSymbols
-        this.tab4Root = __WEBPACK_IMPORTED_MODULE_6__qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */];
+        this.tab4Root = __WEBPACK_IMPORTED_MODULE_5__qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */];
         //noinspection JSUnusedGlobalSymbols
-        this.tab5Root = __WEBPACK_IMPORTED_MODULE_7__mine_tab_mine_tab_page__["a" /* MineTabPage */];
+        this.tab5Root = __WEBPACK_IMPORTED_MODULE_6__mine_tab_mine_tab_page__["a" /* MineTabPage */];
         this.shouldShowQrCode = true;
-        if (flagService.getFlag('newUx')) {
-            this.tab2Root = __WEBPACK_IMPORTED_MODULE_10__listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */];
-        }
     }
     ngOnInit() {
         // TODO(zzn): add unread message counts
         this.platform.ready().then(() => {
             // this.shouldShowQrCode = !this.platform.is('cordova');
             if (this.platform.is("ios") || this.platform.is("android")) {
-                this.disconnectModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_5__disconnect_modal__["a" /* DisconnectModal */]);
+                this.disconnectModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_4__disconnect_modal__["a" /* DisconnectModal */]);
                 this.onDisconnect = this.network.onDisconnect().subscribe(() => {
                     this.disconnectModal.present();
                 });
@@ -1216,16 +1290,136 @@ TabsPage = __decorate([
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* ModalController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_4__ionic_native_network__["a" /* Network */],
-        __WEBPACK_IMPORTED_MODULE_8__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_9__services_flag_service__["a" /* FlagService */]])
+        __WEBPACK_IMPORTED_MODULE_3__ionic_native_network__["a" /* Network */],
+        __WEBPACK_IMPORTED_MODULE_7__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_8__services_flag_service__["a" /* FlagService */]])
 ], TabsPage);
 
 //# sourceMappingURL=tabs.js.map
 
 /***/ }),
 
-/***/ 274:
+/***/ 268:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsTabPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_env__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_code_push__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_app_version__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_flag_service__ = __webpack_require__(34);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+let SettingsTabPage = class SettingsTabPage {
+    constructor(auth, codePush, platform, appVersion, toastCtr, flagService) {
+        this.auth = auth;
+        this.codePush = codePush;
+        this.platform = platform;
+        this.appVersion = appVersion;
+        this.toastCtr = toastCtr;
+        this.flagService = flagService;
+        this.versionEnv = __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].version;
+        this.serverUrl = __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].configHaoshiyouServer.serverUrl;
+        this.versionDownloaded = null;
+        this.versionPending = null;
+        this.versionRemote = null;
+        this.versionApp = null;
+        this.debugCounter = 0;
+        this.flagNames = null;
+        let flags = flagService.getAllFlags();
+        this.flagNames = Object.keys(flags);
+    }
+    ionViewWillEnter() {
+        ga('set', 'page', '/settings-tab.page.html');
+        ga('send', 'pageview');
+    }
+    debugIncrementer() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.debugCounter++;
+            if (this.debugCounter > 3 && this.debugCounter < 9) {
+                let toast = this.toastCtr.create({
+                    message: `${9 - this.debugCounter} more clicks before debug...`,
+                    duration: 2000,
+                    position: 'bottom'
+                });
+                yield toast.present();
+            }
+        });
+    }
+    isDebug() {
+        return this.debugCounter > 8 || this.flagService.getFlag(`debug`);
+    }
+    startSync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.codePush.sync().subscribe((syncStatus) => console.log(syncStatus));
+            let downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); };
+            this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
+            yield this.updateVersions();
+        });
+    }
+    updateVersions() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.platform.is('cordova')) {
+                this.versionApp = (yield this.appVersion.getPackageName()) + `(${yield this.appVersion.getVersionCode()})`;
+                yield this.platform.ready();
+                let currentPackageInfo = yield this.codePush.getCurrentPackage();
+                this.versionDownloaded = currentPackageInfo ? currentPackageInfo.appVersion : `无`;
+                let pendingPackageInfo = yield this.codePush.getPendingPackage();
+                this.versionPending = pendingPackageInfo ? pendingPackageInfo.appVersion : `无`;
+                let remotePackageInfo = yield this.codePush.checkForUpdate();
+                this.versionRemote = remotePackageInfo ? remotePackageInfo.downloadUrl : `无`;
+            }
+            else
+                this.versionApp = '无';
+        });
+    }
+    ngOnInit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.updateVersions();
+        });
+    }
+};
+SettingsTabPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/settings-tab/settings-tab.page.html"*/'<ion-header>\n    <ion-toolbar>\n        <ion-title>\n            设置\n        </ion-title>\n    </ion-toolbar>\n</ion-header>\n\n<ion-content class="grey-background">\n    <ion-card *ngIf="auth.authenticated()">\n        <ion-item *ngIf="auth.user != null">\n            <ion-avatar item-left>\n                <img src="{{ auth.user.picture }}">\n            </ion-avatar>\n            <h2>{{ auth.user.nickname }}</h2>\n            <p>{{ auth.user.email }}</p>\n            <button ion-button item-right (click)="auth.logout()">登出</button>\n        </ion-item>\n    </ion-card>\n    <ion-list>\n        <ion-item *ngIf="!auth.authenticated()">\n            <ion-label>请登录</ion-label>\n            <button ion-button item-right (click)="auth.login()">登录</button>\n        </ion-item>\n        <ion-item (click)="debugIncrementer()">\n            <ion-label>关于\n                <span *ngIf="debugCounter > 1">({{debugCounter}})</span>\n            </ion-label>\n        </ion-item>\n        <ion-list *ngIf="isDebug()" >\n            <ion-item-divider>\n                版本\n            </ion-item-divider>\n            <ion-item>\n                <ion-label>\n                    环境版本: {{ versionEnv }} - 6.0.0.{{debugCounter}}\n                </ion-label>\n                <button ion-button item-right (click)="startSync()">刷新</button>\n            </ion-item>\n            <ion-item>\n                服务器: {{ serverUrl }}\n            </ion-item>\n            <ion-item>\n                应用版本: {{ versionApp }}\n            </ion-item>\n            <ion-item>\n                已下载版本: {{ versionDownloaded }}\n            </ion-item>\n            <ion-item>\n                等待版本: {{ versionPending }}\n            </ion-item>\n            <ion-item>\n                远程版本: {{ versionRemote }}\n            </ion-item>\n            <ion-item-divider>\n                Flags\n            </ion-item-divider>\n            <ion-item *ngFor="let flagName of flagNames">\n                <ion-label item-start>\n                    {{ flagName }}\n                </ion-label>\n                <ion-toggle\n                        color="secondary"\n                        [ngModel]="flagService.getFlag(flagName)" (ngModelChange)="flagService.setFlag(flagName, $event)"\n                ></ion-toggle>\n            </ion-item>\n        </ion-list>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/settings-tab/settings-tab.page.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_3__ionic_native_code_push__["a" /* CodePush */],
+        __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["h" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_5__ionic_native_app_version__["a" /* AppVersion */],
+        __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["j" /* ToastController */],
+        __WEBPACK_IMPORTED_MODULE_6__services_flag_service__["a" /* FlagService */]])
+], SettingsTabPage);
+
+//# sourceMappingURL=settings-tab.page.js.map
+
+/***/ }),
+
+/***/ 273:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1329,7 +1523,7 @@ class HsyUser {
 
 /***/ }),
 
-/***/ 275:
+/***/ 274:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1404,7 +1598,7 @@ class HsyInteraction {
 
 /***/ }),
 
-/***/ 278:
+/***/ 277:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1493,19 +1687,225 @@ class SDKToken {
 
 /***/ }),
 
+/***/ 285:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DisconnectModal; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+let DisconnectModal = class DisconnectModal {
+    constructor() {
+    }
+};
+DisconnectModal = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'disconnect-modal',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/disconnect.modal.html"*/'<ion-content>\n    <ion-list>\n        <ion-item>\n            <h2>网络已断</h2>\n            <p>请连接网络再使用本应用。</p>\n        </ion-item>\n    </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/disconnect.modal.html"*/
+    }),
+    __metadata("design:paramtypes", [])
+], DisconnectModal);
+
+//# sourceMappingURL=disconnect.modal.js.map
+
+/***/ }),
+
 /***/ 286:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HsyListing__ = __webpack_require__(29);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QrCodeTabPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+let QrCodeTabPage = class QrCodeTabPage {
+    constructor() {
+        this.shouldShow = false;
+    }
+    ionViewWillEnter() {
+        ga('set', 'page', '/qrcode-tab.page.html');
+        ga('send', 'pageview');
+    }
+    showQrCode() {
+        ga('send', 'event', {
+            eventCategory: 'show-qrcode',
+            eventAction: 'qrcode-tab',
+        });
+        this.shouldShow = true;
+    }
+};
+QrCodeTabPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'qrcode-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/qrcode-tab/qrcode-tab.page.html"*/'<ion-header>\n    <ion-toolbar>\n        <ion-title>\n            加微信群\n        </ion-title>\n    </ion-toolbar>\n</ion-header>\n<ion-content class="grey-background">\n    <ion-list *ngIf="!shouldShow"  padding center style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">\n        <button center style="text-align: center;" id="show_qrcode_btn" ion-button (click)="showQrCode()">\n            <ion-icon name="qr-scanner"></ion-icon> <span>点此加小助手自动拉入微信群</span>\n        </button>\n    </ion-list>\n    <ion-list *ngIf="shouldShow">\n        <ion-item style="text-align: center; width:100%">\n            <img src="../../assets/res/haoshiyou-bot2.jpeg"\n                 style="max-width: 350px"\n                 alt="好室友™微信群介绍">\n        </ion-item>\n    </ion-list>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/qrcode-tab/qrcode-tab.page.html"*/,
+    })
+], QrCodeTabPage);
+
+//# sourceMappingURL=qrcode-tab-page.js.map
+
+/***/ }),
+
+/***/ 287:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MineTabPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_code_push__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_app_version__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_flag_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(42);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+let MineTabPage = class MineTabPage {
+    constructor(auth, codePush, platform, appVersion, toastCtr, flagService, api) {
+        this.auth = auth;
+        this.codePush = codePush;
+        this.platform = platform;
+        this.appVersion = appVersion;
+        this.toastCtr = toastCtr;
+        this.flagService = flagService;
+        this.api = api;
+        this.flagNames = null;
+        this.listings = [];
+        let flags = flagService.getAllFlags();
+        this.flagNames = Object.keys(flags);
+    }
+    ionViewWillAppear() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('set', 'page', '/mine-tab.page.html');
+            ga('send', 'pageview');
+            console.log(`Appear!`);
+            yield this.loadMyListings();
+        });
+    }
+    loadMyListings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let local = window.localStorage;
+            let meId = local['user_id']; // TODO(xinbenlv): use UserService
+            if (!meId) {
+                return; // not logged in ;
+            }
+            let whereClause = {
+                'ownerId': meId,
+            };
+            ga('send', 'event', {
+                eventCategory: 'load',
+                eventAction: 'load-my-listings',
+            });
+            let start = Date.now();
+            let newItems = yield this.api
+                .find({
+                where: whereClause,
+            })
+                .toPromise();
+            let end = Date.now();
+            ga('send', {
+                hitType: 'timing',
+                timingCategory: 'API Call',
+                timingVar: 'load-my-listings',
+                timingValue: end - start
+            });
+            this.listings = newItems;
+        });
+    }
+    ;
+    ngOnInit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.loadMyListings();
+        });
+    }
+};
+MineTabPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/mine-tab/mine-tab.page.html"*/'<ion-header>\n    <ion-toolbar>\n        <ion-title>\n            我的\n        </ion-title>\n    </ion-toolbar>\n</ion-header>\n\n<ion-content class="grey-background">\n    <ion-list *ngIf="!auth.authenticated()">\n        <ion-item >\n            <ion-label>请登录</ion-label>\n            <button ion-button item-right (click)="auth.login()">登录</button>\n        </ion-item>\n    </ion-list>\n    <ion-list>\n        <ion-grid *ngIf="auth.authenticated()">\n            <ion-row>\n                <ion-col col-12 col-lg-3 col-md-4 col-sm-12 col-xs-12\n                         *ngFor="let listing of listings; let i = index">\n                    <listing-ux-item [listing]=listing></listing-ux-item>\n                </ion-col>\n            </ion-row>\n        </ion-grid>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/mine-tab/mine-tab.page.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_2__ionic_native_code_push__["a" /* CodePush */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_4__ionic_native_app_version__["a" /* AppVersion */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* ToastController */],
+        __WEBPACK_IMPORTED_MODULE_5__services_flag_service__["a" /* FlagService */],
+        __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */]])
+], MineTabPage);
+
+//# sourceMappingURL=mine-tab.page.js.map
+
+/***/ }),
+
+/***/ 288:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = uuid;
+/* jshint bitwise:false, node:true */
+/* tslint:disable:no-bitwise no-var-keyword typedef */
+// taken from TodoMVC
+function uuid() {
+    var i, random;
+    var result = '';
+    for (i = 0; i < 32; i++) {
+        random = Math.random() * 16 | 0;
+        if (i === 8 || i === 12 || i === 16 || i === 20) {
+            result += '-';
+        }
+        result += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random))
+            .toString(16);
+    }
+    return result;
+}
+//# sourceMappingURL=uuid.js.map
+
+/***/ }),
+
+/***/ 289:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HsyListing__ = __webpack_require__(42);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HsyUser__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HsyUser__ = __webpack_require__(89);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__HsyUser__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__HsyInteraction__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__HsyInteraction__ = __webpack_require__(156);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SDKModels__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SDKModels__ = __webpack_require__(49);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logger_service__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logger_service__ = __webpack_require__(290);
 /* unused harmony namespace reexport */
 /* tslint:disable */
 
@@ -1517,12 +1917,12 @@ class SDKToken {
 
 /***/ }),
 
-/***/ 287:
+/***/ 290:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoggerService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lb_config__ = __webpack_require__(54);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1590,20 +1990,575 @@ LoggerService = __decorate([
 
 /***/ }),
 
-/***/ 29:
+/***/ 34:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FlagService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+let FlagService = class FlagService {
+    constructor() {
+        this.flagMap = {};
+        this.flags = {
+            'debug': false,
+            'realCreate': false,
+            'requireToContact': false,
+            'newUx': true,
+        };
+        let url_string = window.location.href;
+        var url = new URL(url_string);
+        var flagJsonStr = url['searchParams'].get("flags");
+        this.flagMap = JSON.parse(flagJsonStr);
+    }
+    getAllFlags() {
+        return this.flags;
+    }
+    setFlag(flagName, value) {
+        this.flags[flagName] = value;
+    }
+    getFlag(flagName) {
+        if (this.flagMap && flagName in this.flagMap) {
+            return this.flagMap[flagName];
+        }
+        return this.flags[flagName];
+    }
+};
+FlagService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [])
+], FlagService);
+
+//# sourceMappingURL=flag.service.js.map
+
+/***/ }),
+
+/***/ 382:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class UrlUtil {
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = UrlUtil;
+
+UrlUtil.getParameterByName = function (name) {
+    let url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
+    if (!results)
+        return null;
+    if (!results[2])
+        return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+//# sourceMappingURL=url_util.js.map
+
+/***/ }),
+
+/***/ 383:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterSettingsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_flag_service__ = __webpack_require__(34);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+let FilterSettingsComponent = class FilterSettingsComponent {
+    constructor(viewCtrl, flagService, _navParams) {
+        this.viewCtrl = viewCtrl;
+        this.flagService = flagService;
+        this._navParams = _navParams;
+        // TODO(xinbenlv): use interface
+        this.filterSettings = {
+            'types': {},
+            'areas': {},
+            'duration': {}
+        };
+        this.options = [
+            'All',
+            'SanFrancisco',
+            'MidPeninsula',
+            'SouthBayWest',
+            'SouthBayEast',
+            'EastBay',
+            'ShortTerm',
+            'Seattle',
+            'TestGroup',
+        ];
+        this.optionsMap = {
+            'All': '全部',
+            'SanFrancisco': '三番',
+            'MidPeninsula': '中半岛',
+            'SouthBayWest': '南湾西',
+            'SouthBayEast': '南湾东',
+            'EastBay': '东湾',
+            'ShortTerm': '短租',
+            'Seattle': '西雅图',
+            'TestGroup': '测试',
+        };
+        this.durationList = [
+            '最近3天',
+            '最近7天',
+            '最近30天',
+            '最近90天',
+            '不限'
+        ];
+        if (this._navParams.data) {
+            console.log(" --- " + JSON.stringify(this._navParams.data));
+            //TODO: get filterSettings and initial UI
+            this.filterSettings = this._navParams.data['filterSettings'];
+        }
+    }
+    applyFilterSettings() {
+        this.close();
+    }
+    close() {
+        this.viewCtrl.dismiss({ filterSettings: this.filterSettings });
+    }
+};
+FilterSettingsComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/'<ion-content>\n    <ion-list-header>类型</ion-list-header>\n    <ion-item>\n        <ion-label>招租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'zhaozu\']" value="ROOMMATE_WANTED"></ion-checkbox>\n    </ion-item>\n    <ion-item>\n        <ion-label>求租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'qiuzu\']"></ion-checkbox>\n    </ion-item>\n\n    <ion-list-header>区域</ion-list-header>\n    <ng-container *ngFor="let option of options; let i=index;">\n        <ion-item *ngIf="flagService.getFlag(\'debug\') || option != \'TestGroup\'">\n            <ion-label>{{optionsMap[option]}}</ion-label>\n            <ion-checkbox [(ngModel)]="filterSettings[\'areas\'][option]"  >\n            </ion-checkbox>\n        </ion-item>\n    </ng-container>\n\n    <ion-list-header>日期</ion-list-header>\n    <ion-list radio-group [(ngModel)]="filterSettings[\'duration\']">\n        <ion-item *ngFor="let option of durationList">\n            <ion-label>{{option}}</ion-label>\n            <ion-radio value="{{option}}"></ion-radio>\n        </ion-item>\n    </ion-list>\n    <ion-list-header>价格上限: {{filterSettings[\'price\']}}</ion-list-header>\n    <ion-item >\n        <ion-range min="0" max="10000" [(ngModel)]="filterSettings[\'price\']">\n        </ion-range>\n    </ion-item>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/,
+        selector: 'filter-settings',
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
+        __WEBPACK_IMPORTED_MODULE_2__services_flag_service__["a" /* FlagService */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
+], FilterSettingsComponent);
+
+//# sourceMappingURL=filter-settings.comp.js.map
+
+/***/ }),
+
+/***/ 384:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RemoveModal; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__ = __webpack_require__(21);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+let RemoveModal = class RemoveModal {
+    constructor(nav, params, viewCtrl) {
+        this.nav = nav;
+        this.viewCtrl = viewCtrl;
+        this.imageIds = params.data.imageIds;
+        this.checkboxes = new Array(this.imageIds.length);
+    }
+    dismiss() {
+        let data = { imageIds: this.imageIds };
+        this.viewCtrl.dismiss(data);
+    }
+    save() {
+        let imagesAfterSave = [];
+        for (let i = 0; i < this.checkboxes.length; i++) {
+            if (!this.checkboxes[i]) {
+                imagesAfterSave.push(this.imageIds[i]);
+            }
+        }
+        this.imageIds = imagesAfterSave;
+        this.dismiss();
+    }
+    cancel() {
+        this.dismiss();
+    }
+};
+RemoveModal = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'remove-modal',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/remove.modal.html"*/'<ion-content>\n    <ion-list>\n        <ion-item *ngFor="let imageId of imageIds; let i = index">\n            <ion-thumbnail item-left>\n                <img src="{{imageId | imageIdToUrlPipe }}" alt="Image {{imageId}">\n            </ion-thumbnail>\n            <ion-checkbox color="dark" [(ngModel)]="checkboxes[i]" item-right></ion-checkbox>\n        </ion-item>\n        <button ion-button block color="primary" (click)="save()">完毕</button>\n        <button ion-button block clear (click)="cancel()" >取消</button>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/remove.modal.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["g" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["k" /* ViewController */]])
+], RemoveModal);
+
+//# sourceMappingURL=remove.modal.js.map
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular2_jwt__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular2_jwt__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_env__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(21);
+// app/services/auth/auth.ts
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+// TODO(xinbenlv): update Auth0 once my pull request is pulled. https://github.com/auth0/lock/pull/447
+let zhDict = {
+    error: {
+        forgotPassword: {
+            "too_many_requests": "您尝试登录次数过多 请稍后再试。",
+            "lock.fallback": "对不起，请求修改密码时出现错误。"
+        },
+        login: {
+            "blocked_user": "该账号已被锁定。",
+            "invalid_user_password": "密码错误",
+            "lock.fallback": "对不起，请求登陆时出现错误。",
+            "lock.invalid_code": "代码错误。",
+            "lock.invalid_email_password": "邮箱或密码错误。",
+            "lock.invalid_username_password": "账号或密码错误。",
+            "lock.network": "无法连接到服务器，请检查网络连接后重试。",
+            "lock.popup_closed": "弹出窗口被关闭，请重试",
+            "lock.unauthorized": "权限不足，请重试。",
+            "password_change_required": "由于这是第一次登录或者您的密码已过期，请更新密码。",
+            "password_leaked": "由于您的密码在其他网站已泄露，该账户已被锁定，请查看邮件解除锁定。",
+            "too_many_attempts": "由于登录操作太频繁，您的帐号已被锁定。"
+        },
+        passwordless: {
+            "bad.email": "邮箱错误",
+            "bad.phone_number": "手机号码格式不正确。",
+            "lock.fallback": "对不起，出现错误。"
+        },
+        signUp: {
+            "invalid_password": "密码错误",
+            "lock.fallback": "对不起，请求注册时出现错误。",
+            "password_dictionary_error": "密码过于常见。",
+            "password_no_user_info_error": "密码中出现账号信息。",
+            "password_strength_error": "密码过于简单。",
+            "user_exists": "该账号已存在。",
+            "username_exists": "该用户名已存在。"
+        }
+    },
+    success: {
+        logIn: "登录成功",
+        forgotPassword: "重置密码的邮件已发送",
+        magicLink: "已向您发送链接<br />到 %s 登录",
+        signUp: "感谢您的注册。"
+    },
+    blankErrorHint: "不能为空",
+    codeInputPlaceholder: "您的代码",
+    databaseEnterpriseLoginInstructions: "",
+    databaseEnterpriseAlternativeLoginInstructions: "或",
+    databaseSignUpInstructions: "",
+    databaseAlternativeSignUpInstructions: "或",
+    emailInputPlaceholder: "yours@example.com",
+    enterpriseLoginIntructions: "请用您的企业账号登录",
+    enterpriseActiveLoginInstructions: "请输入您的企业账号 %s。",
+    failedLabel: "失败!",
+    forgotPasswordAction: "忘记您的密码？",
+    forgotPasswordInstructions: "请输入您的邮箱，我们将为你发送重置密码的邮件。",
+    forgotPasswordSubmitLabel: "发电子邮件",
+    invalidErrorHint: "错误",
+    lastLoginInstructions: "上次登陆的信息为",
+    loginAtLabel: "登录到 %s",
+    loginLabel: "登录",
+    loginSubmitLabel: "登录",
+    loginWithLabel: "用 %s 登录",
+    notYourAccountAction: "不是您的账号?",
+    passwordInputPlaceholder: "您的密码",
+    passwordStrength: {
+        containsAtLeast: "至少包含%d个以下%d种字符:",
+        identicalChars: "不能多于%d个相同的字符在同一行(例如,不允许出现 \"%s\" )",
+        nonEmpty: "密码不能为空",
+        numbers: "数字 (如 0-9)",
+        lengthAtLeast: "最少长度为%d个字符",
+        lowerCase: "小写字母(a-z)",
+        shouldContain: "应包含:",
+        specialCharacters: "特殊字符 (如 !@#$%^&*)",
+        upperCase: "大写字母(A-Z)"
+    },
+    passwordlessEmailAlternativeInstructions: "您还可以通过邮箱登录<br>或者创建账号",
+    passwordlessEmailCodeInstructions: "代码已通过邮件发送到 %s。",
+    passwordlessEmailInstructions: "输入邮箱登录<br>或者创建账号。",
+    passwordlessSMSAlternativeInstructions: "您还可以通过手机号码登录<br>或者创建账号。",
+    passwordlessSMSCodeInstructions: "代码已通过短信发送到<br> %s。",
+    passwordlessSMSInstructions: "输入手机号码登录<br>或者创建账号",
+    phoneNumberInputPlaceholder: "您的手机号码",
+    resendCodeAction: "没有收到号码?",
+    resendLabel: "重新发送",
+    resendingLabel: "重新发送中...",
+    retryLabel: "重试",
+    sentLabel: "发送!",
+    signUpLabel: "注册",
+    signUpSubmitLabel: "注册",
+    signUpTerms: "",
+    signUpWithLabel: "通过 %s 注册",
+    socialLoginInstructions: "",
+    socialSignUpInstructions: "",
+    ssoEnabled: "单点登录已激活",
+    submitLabel: "提交",
+    unrecoverableError: "出现错误。<br />请联系技术人员。",
+    usernameFormatErrorHint: "请使用%d-%d个字母, 数字或 \"_\"的组合",
+    usernameInputPlaceholder: "您的用户名",
+    usernameOrEmailInputPlaceholder: "用户名/邮箱",
+    title: "好室友™",
+    welcome: "欢迎 %s!",
+    windowsAuthInstructions: "您已连接到组织网络&hellip;",
+    windowsAuthLabel: "Windows认证"
+};
+let AuthService = AuthService_1 = class AuthService {
+    constructor(zone, api, toastCtrl) {
+        this.api = api;
+        this.toastCtrl = toastCtrl;
+        this.local = window.localStorage;
+        //noinspection JSUnusedLocalSymbols
+        this.jwtHelper = new __WEBPACK_IMPORTED_MODULE_0_angular2_jwt__["JwtHelper"](); // do nothing
+        this.auth0 = new Auth0({
+            clientID: __WEBPACK_IMPORTED_MODULE_5__app_env__["a" /* Env */].configAuth0.clientId,
+            domain: __WEBPACK_IMPORTED_MODULE_5__app_env__["a" /* Env */].configAuth0.accountDomain
+        });
+        this.lock = new Auth0Lock(__WEBPACK_IMPORTED_MODULE_5__app_env__["a" /* Env */].configAuth0.clientId, __WEBPACK_IMPORTED_MODULE_5__app_env__["a" /* Env */].configAuth0.accountDomain, {
+            auth: {
+                redirect: false,
+                params: {
+                    scope: 'openid email offline_access' // Learn about scopes: https://auth0.com/docs/scopes
+                }
+            },
+            theme: {
+                logo: "assets/res/icon.png",
+            },
+            languageDictionary: zhDict,
+            autoclose: true
+        });
+        this.lock.on('authenticated_error', (err) => {
+            this.showLoginErrorToast(err);
+        });
+        this.lock.on('authenticated', authResult => {
+            this.idToken = authResult.idToken;
+            this.userId = authResult.idTokenPayload.sub;
+            this.local.setItem('id_token', this.idToken);
+            this.local.setItem('user_id', this.userId);
+            // Fetch profile information
+            this.lock.getProfile(authResult.idToken, (err, profile) => __awaiter(this, void 0, void 0, function* () {
+                if (err) {
+                    alert(err); // TODO(xinbenlv): handle error
+                }
+                else {
+                    this.user = yield this.findHsyUser(profile.user_id);
+                    if (this.user === null) {
+                        console.log(`Creating a new user`);
+                        this.user = yield this.createHsyUserInDB(profile);
+                    }
+                    else {
+                        console.log(`User already existed, skip creating: ${JSON.stringify(this.user)} a`);
+                    }
+                    // If authentication is successful, save the items
+                    // in local storage
+                    this.local.setItem('profile', JSON.stringify(profile));
+                    this.local.setItem('id_token', this.idToken);
+                    this.local.setItem('user_id', this.userId);
+                    // TODO(xinbenlv): put into UserService
+                    this.local.setItem('refresh_token', authResult.refreshToken);
+                    this.zoneImpl.run(() => this.user = profile);
+                    // Schedule a token refresh
+                    this.scheduleRefresh();
+                    this.userSubject.next(AuthService_1.createHsyUser(this.user));
+                }
+            }));
+            this.showLoginSuccessToast();
+        });
+        this.zoneImpl = zone;
+        this.userSubject = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
+        // If there is a profile saved in local storage
+        let profile = this.local.getItem('profile');
+        if (profile != null && profile.length > 0) {
+            this.user = JSON.parse(profile);
+            this.userSubject.next(AuthService_1.createHsyUser(this.user));
+        }
+        this.idToken = this.local.getItem('id_token');
+        this.userId = this.local.getItem('user_id');
+    }
+    authenticated() {
+        // Check if there's an unexpired JWT
+        return Object(__WEBPACK_IMPORTED_MODULE_0_angular2_jwt__["tokenNotExpired"])('id_token', this.idToken) && (this.local.getItem('user_id') != null);
+    }
+    getUser() {
+        return this.user;
+    }
+    login() {
+        this.lock.show({ autoclose: true });
+    }
+    logout() {
+        this.local.removeItem('profile');
+        this.local.removeItem('id_token');
+        this.local.removeItem('user_id');
+        this.local.removeItem('refresh_token');
+        this.idToken = null;
+        this.userId = null;
+        this.zoneImpl.run(() => this.user = null);
+        this.userSubject.next(null); // logout
+        // Unschedule the token refresh
+        this.unscheduleRefresh();
+    }
+    /**
+     * Expose as an observable.
+     * @returns {Subject<HsyUser>}
+     */
+    userObservable() {
+        return this.userSubject;
+    }
+    static createHsyUser(user) {
+        return {
+            id: user['user_id'] /* using BASE64 email as unique userId*/,
+            avatarId: user['picture'],
+            name: user['name']
+            /*avatarSrc: user['picture']*/
+        };
+    }
+    findHsyUser(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(" --- user_id in findHsyUser: " + user_id);
+            return yield this.api.findById(user_id).toPromise()
+                .catch(e => {
+                console.info(e);
+                return null;
+            });
+        });
+    }
+    createHsyUserInDB(profile) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(" --- create new HsyUser --- ");
+            let _user = {};
+            let _currentTime = new Date();
+            _user.id = profile['user_id'];
+            _user.name = profile['name'];
+            _user.avatarId = profile['picture'];
+            _user.created = _currentTime;
+            _user.lastUpdated = _currentTime;
+            let savedUser = yield this.api.upsert(_user).toPromise();
+            return savedUser;
+        });
+    }
+    scheduleRefresh() {
+        // If the user is authenticated, use the token stream
+        // provided by angular2-jwt and flatMap the token
+        let source = __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__["Observable"].of(this.idToken).flatMap(token => {
+            console.log('token here', token);
+            // The delay to generate in this case is the difference
+            // between the expiry time and the issued at time
+            let jwtIat = this.jwtHelper.decodeToken(token).iat;
+            let jwtExp = this.jwtHelper.decodeToken(token).exp;
+            let iat = new Date(0);
+            let exp = new Date(0);
+            let delay = (exp.setUTCSeconds(jwtExp) - iat.setUTCSeconds(jwtIat));
+            return __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__["Observable"].interval(delay);
+        });
+        this.refreshSubscription = source.subscribe(() => {
+            this.getNewJwt();
+        });
+    }
+    unscheduleRefresh() {
+        // Unsubscribe fromt the refresh
+        if (this.refreshSubscription) {
+            this.refreshSubscription.unsubscribe();
+        }
+    }
+    getNewJwt() {
+        // Get a new JWT from Auth0 using the refresh token saved
+        // in local storage
+        let token = this.local.getItem('refresh_token');
+        this.auth0.refreshToken(token, (err, delegationRequest) => {
+            if (err) {
+                alert(err);
+            }
+            this.local.setItem('id_token', delegationRequest.id_token);
+            this.idToken = delegationRequest.id_token;
+        });
+    }
+    showLoginSuccessToast() {
+        let toast = this.toastCtrl.create({
+            message: '登录成功!',
+            duration: 5000
+        });
+        toast.present();
+    }
+    showLoginErrorToast(error) {
+        let toast = this.toastCtrl.create({
+            message: `登录失败!原因: ${error}`,
+            duration: 5000
+        });
+        toast.present();
+    }
+};
+AuthService = AuthService_1 = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgZone"],
+        __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_services_custom_HsyUser__["a" /* HsyUserApi */],
+        __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["j" /* ToastController */]])
+], AuthService);
+
+var AuthService_1;
+//# sourceMappingURL=auth.service.js.map
+
+/***/ }),
+
+/***/ 42:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyListingApi; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_search_params__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_error_service__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_HsyListing__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_HsyListing__ = __webpack_require__(50);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1957,1151 +2912,53 @@ HsyListingApi = __decorate([
 
 /***/ }),
 
-/***/ 34:
+/***/ 49:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular2_jwt__ = __webpack_require__(282);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular2_jwt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_env__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(17);
-// app/services/auth/auth.ts
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKModels; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_HsyListing__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_HsyUser__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_HsyInteraction__ = __webpack_require__(274);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+/* tslint:disable */
 
 
 
 
-
-
-
-// TODO(xinbenlv): update Auth0 once my pull request is pulled. https://github.com/auth0/lock/pull/447
-let zhDict = {
-    error: {
-        forgotPassword: {
-            "too_many_requests": "您尝试登录次数过多 请稍后再试。",
-            "lock.fallback": "对不起，请求修改密码时出现错误。"
-        },
-        login: {
-            "blocked_user": "该账号已被锁定。",
-            "invalid_user_password": "密码错误",
-            "lock.fallback": "对不起，请求登陆时出现错误。",
-            "lock.invalid_code": "代码错误。",
-            "lock.invalid_email_password": "邮箱或密码错误。",
-            "lock.invalid_username_password": "账号或密码错误。",
-            "lock.network": "无法连接到服务器，请检查网络连接后重试。",
-            "lock.popup_closed": "弹出窗口被关闭，请重试",
-            "lock.unauthorized": "权限不足，请重试。",
-            "password_change_required": "由于这是第一次登录或者您的密码已过期，请更新密码。",
-            "password_leaked": "由于您的密码在其他网站已泄露，该账户已被锁定，请查看邮件解除锁定。",
-            "too_many_attempts": "由于登录操作太频繁，您的帐号已被锁定。"
-        },
-        passwordless: {
-            "bad.email": "邮箱错误",
-            "bad.phone_number": "手机号码格式不正确。",
-            "lock.fallback": "对不起，出现错误。"
-        },
-        signUp: {
-            "invalid_password": "密码错误",
-            "lock.fallback": "对不起，请求注册时出现错误。",
-            "password_dictionary_error": "密码过于常见。",
-            "password_no_user_info_error": "密码中出现账号信息。",
-            "password_strength_error": "密码过于简单。",
-            "user_exists": "该账号已存在。",
-            "username_exists": "该用户名已存在。"
-        }
-    },
-    success: {
-        logIn: "登录成功",
-        forgotPassword: "重置密码的邮件已发送",
-        magicLink: "已向您发送链接<br />到 %s 登录",
-        signUp: "感谢您的注册。"
-    },
-    blankErrorHint: "不能为空",
-    codeInputPlaceholder: "您的代码",
-    databaseEnterpriseLoginInstructions: "",
-    databaseEnterpriseAlternativeLoginInstructions: "或",
-    databaseSignUpInstructions: "",
-    databaseAlternativeSignUpInstructions: "或",
-    emailInputPlaceholder: "yours@example.com",
-    enterpriseLoginIntructions: "请用您的企业账号登录",
-    enterpriseActiveLoginInstructions: "请输入您的企业账号 %s。",
-    failedLabel: "失败!",
-    forgotPasswordAction: "忘记您的密码？",
-    forgotPasswordInstructions: "请输入您的邮箱，我们将为你发送重置密码的邮件。",
-    forgotPasswordSubmitLabel: "发电子邮件",
-    invalidErrorHint: "错误",
-    lastLoginInstructions: "上次登陆的信息为",
-    loginAtLabel: "登录到 %s",
-    loginLabel: "登录",
-    loginSubmitLabel: "登录",
-    loginWithLabel: "用 %s 登录",
-    notYourAccountAction: "不是您的账号?",
-    passwordInputPlaceholder: "您的密码",
-    passwordStrength: {
-        containsAtLeast: "至少包含%d个以下%d种字符:",
-        identicalChars: "不能多于%d个相同的字符在同一行(例如,不允许出现 \"%s\" )",
-        nonEmpty: "密码不能为空",
-        numbers: "数字 (如 0-9)",
-        lengthAtLeast: "最少长度为%d个字符",
-        lowerCase: "小写字母(a-z)",
-        shouldContain: "应包含:",
-        specialCharacters: "特殊字符 (如 !@#$%^&*)",
-        upperCase: "大写字母(A-Z)"
-    },
-    passwordlessEmailAlternativeInstructions: "您还可以通过邮箱登录<br>或者创建账号",
-    passwordlessEmailCodeInstructions: "代码已通过邮件发送到 %s。",
-    passwordlessEmailInstructions: "输入邮箱登录<br>或者创建账号。",
-    passwordlessSMSAlternativeInstructions: "您还可以通过手机号码登录<br>或者创建账号。",
-    passwordlessSMSCodeInstructions: "代码已通过短信发送到<br> %s。",
-    passwordlessSMSInstructions: "输入手机号码登录<br>或者创建账号",
-    phoneNumberInputPlaceholder: "您的手机号码",
-    resendCodeAction: "没有收到号码?",
-    resendLabel: "重新发送",
-    resendingLabel: "重新发送中...",
-    retryLabel: "重试",
-    sentLabel: "发送!",
-    signUpLabel: "注册",
-    signUpSubmitLabel: "注册",
-    signUpTerms: "",
-    signUpWithLabel: "通过 %s 注册",
-    socialLoginInstructions: "",
-    socialSignUpInstructions: "",
-    ssoEnabled: "单点登录已激活",
-    submitLabel: "提交",
-    unrecoverableError: "出现错误。<br />请联系技术人员。",
-    usernameFormatErrorHint: "请使用%d-%d个字母, 数字或 \"_\"的组合",
-    usernameInputPlaceholder: "您的用户名",
-    usernameOrEmailInputPlaceholder: "用户名/邮箱",
-    title: "好室友™",
-    welcome: "欢迎 %s!",
-    windowsAuthInstructions: "您已连接到组织网络&hellip;",
-    windowsAuthLabel: "Windows认证"
-};
-let AuthService = AuthService_1 = class AuthService {
-    constructor(zone, api, toastCtrl) {
-        this.api = api;
-        this.toastCtrl = toastCtrl;
-        this.local = window.localStorage;
-        //noinspection JSUnusedLocalSymbols
-        this.jwtHelper = new __WEBPACK_IMPORTED_MODULE_0_angular2_jwt__["JwtHelper"](); // do nothing
-        this.auth0 = new Auth0({
-            clientID: __WEBPACK_IMPORTED_MODULE_5__app_env__["a" /* Env */].configAuth0.clientId,
-            domain: __WEBPACK_IMPORTED_MODULE_5__app_env__["a" /* Env */].configAuth0.accountDomain
-        });
-        this.lock = new Auth0Lock(__WEBPACK_IMPORTED_MODULE_5__app_env__["a" /* Env */].configAuth0.clientId, __WEBPACK_IMPORTED_MODULE_5__app_env__["a" /* Env */].configAuth0.accountDomain, {
-            auth: {
-                redirect: false,
-                params: {
-                    scope: 'openid email offline_access' // Learn about scopes: https://auth0.com/docs/scopes
-                }
-            },
-            theme: {
-                logo: "assets/res/icon.png",
-            },
-            languageDictionary: zhDict,
-            autoclose: true
-        });
-        this.lock.on('authenticated_error', (err) => {
-            this.showLoginErrorToast(err);
-        });
-        this.lock.on('authenticated', authResult => {
-            this.idToken = authResult.idToken;
-            this.userId = authResult.idTokenPayload.sub;
-            this.local.setItem('id_token', this.idToken);
-            this.local.setItem('user_id', this.userId);
-            // Fetch profile information
-            this.lock.getProfile(authResult.idToken, (err, profile) => __awaiter(this, void 0, void 0, function* () {
-                if (err) {
-                    alert(err); // TODO(xinbenlv): handle error
-                }
-                else {
-                    this.user = yield this.findHsyUser(profile.user_id);
-                    if (this.user === null) {
-                        console.log(`Creating a new user`);
-                        this.user = yield this.createHsyUserInDB(profile);
-                    }
-                    else {
-                        console.log(`User already existed, skip creating: ${JSON.stringify(this.user)} a`);
-                    }
-                    // If authentication is successful, save the items
-                    // in local storage
-                    this.local.setItem('profile', JSON.stringify(profile));
-                    this.local.setItem('id_token', this.idToken);
-                    this.local.setItem('user_id', this.userId);
-                    // TODO(xinbenlv): put into UserService
-                    this.local.setItem('refresh_token', authResult.refreshToken);
-                    this.zoneImpl.run(() => this.user = profile);
-                    // Schedule a token refresh
-                    this.scheduleRefresh();
-                    this.userSubject.next(AuthService_1.createHsyUser(this.user));
-                }
-            }));
-            this.showLoginSuccessToast();
-        });
-        this.zoneImpl = zone;
-        this.userSubject = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
-        // If there is a profile saved in local storage
-        let profile = this.local.getItem('profile');
-        if (profile != null && profile.length > 0) {
-            this.user = JSON.parse(profile);
-            this.userSubject.next(AuthService_1.createHsyUser(this.user));
-        }
-        this.idToken = this.local.getItem('id_token');
-        this.userId = this.local.getItem('user_id');
-    }
-    authenticated() {
-        // Check if there's an unexpired JWT
-        return Object(__WEBPACK_IMPORTED_MODULE_0_angular2_jwt__["tokenNotExpired"])('id_token', this.idToken) && (this.local.getItem('user_id') != null);
-    }
-    getUser() {
-        return this.user;
-    }
-    login() {
-        this.lock.show({ autoclose: true });
-    }
-    logout() {
-        this.local.removeItem('profile');
-        this.local.removeItem('id_token');
-        this.local.removeItem('user_id');
-        this.local.removeItem('refresh_token');
-        this.idToken = null;
-        this.userId = null;
-        this.zoneImpl.run(() => this.user = null);
-        this.userSubject.next(null); // logout
-        // Unschedule the token refresh
-        this.unscheduleRefresh();
-    }
-    /**
-     * Expose as an observable.
-     * @returns {Subject<HsyUser>}
-     */
-    userObservable() {
-        return this.userSubject;
-    }
-    static createHsyUser(user) {
-        return {
-            id: user['user_id'] /* using BASE64 email as unique userId*/,
-            avatarId: user['picture'],
-            name: user['name']
-            /*avatarSrc: user['picture']*/
+let SDKModels = class SDKModels {
+    constructor() {
+        this.models = {
+            HsyListing: __WEBPACK_IMPORTED_MODULE_1__models_HsyListing__["a" /* HsyListing */],
+            HsyUser: __WEBPACK_IMPORTED_MODULE_2__models_HsyUser__["a" /* HsyUser */],
+            HsyInteraction: __WEBPACK_IMPORTED_MODULE_3__models_HsyInteraction__["a" /* HsyInteraction */],
         };
     }
-    findHsyUser(user_id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log(" --- user_id in findHsyUser: " + user_id);
-            return yield this.api.findById(user_id).toPromise()
-                .catch(e => {
-                console.info(e);
-                return null;
-            });
-        });
+    get(modelName) {
+        return this.models[modelName];
     }
-    createHsyUserInDB(profile) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log(" --- create new HsyUser --- ");
-            let _user = {};
-            let _currentTime = new Date();
-            _user.id = profile['user_id'];
-            _user.name = profile['name'];
-            _user.avatarId = profile['picture'];
-            _user.created = _currentTime;
-            _user.lastUpdated = _currentTime;
-            let savedUser = yield this.api.upsert(_user).toPromise();
-            return savedUser;
-        });
+    getAll() {
+        return this.models;
     }
-    scheduleRefresh() {
-        // If the user is authenticated, use the token stream
-        // provided by angular2-jwt and flatMap the token
-        let source = __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__["Observable"].of(this.idToken).flatMap(token => {
-            console.log('token here', token);
-            // The delay to generate in this case is the difference
-            // between the expiry time and the issued at time
-            let jwtIat = this.jwtHelper.decodeToken(token).iat;
-            let jwtExp = this.jwtHelper.decodeToken(token).exp;
-            let iat = new Date(0);
-            let exp = new Date(0);
-            let delay = (exp.setUTCSeconds(jwtExp) - iat.setUTCSeconds(jwtIat));
-            return __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__["Observable"].interval(delay);
-        });
-        this.refreshSubscription = source.subscribe(() => {
-            this.getNewJwt();
-        });
-    }
-    unscheduleRefresh() {
-        // Unsubscribe fromt the refresh
-        if (this.refreshSubscription) {
-            this.refreshSubscription.unsubscribe();
-        }
-    }
-    getNewJwt() {
-        // Get a new JWT from Auth0 using the refresh token saved
-        // in local storage
-        let token = this.local.getItem('refresh_token');
-        this.auth0.refreshToken(token, (err, delegationRequest) => {
-            if (err) {
-                alert(err);
-            }
-            this.local.setItem('id_token', delegationRequest.id_token);
-            this.idToken = delegationRequest.id_token;
-        });
-    }
-    showLoginSuccessToast() {
-        let toast = this.toastCtrl.create({
-            message: '登录成功!',
-            duration: 5000
-        });
-        toast.present();
-    }
-    showLoginErrorToast(error) {
-        let toast = this.toastCtrl.create({
-            message: `登录失败!原因: ${error}`,
-            duration: 5000
-        });
-        toast.present();
+    getModelNames() {
+        return Object.keys(this.models);
     }
 };
-AuthService = AuthService_1 = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgZone"],
-        __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_services_custom_HsyUser__["a" /* HsyUserApi */],
-        __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["j" /* ToastController */]])
-], AuthService);
+SDKModels = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+], SDKModels);
 
-var AuthService_1;
-//# sourceMappingURL=auth.service.js.map
+//# sourceMappingURL=SDKModels.js.map
 
 /***/ }),
 
-/***/ 381:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SettingsTabPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_env__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_code_push__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_app_version__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_flag_service__ = __webpack_require__(25);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-let SettingsTabPage = class SettingsTabPage {
-    constructor(auth, codePush, platform, appVersion, toastCtr, flagService) {
-        this.auth = auth;
-        this.codePush = codePush;
-        this.platform = platform;
-        this.appVersion = appVersion;
-        this.toastCtr = toastCtr;
-        this.flagService = flagService;
-        this.versionEnv = __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].version;
-        this.serverUrl = __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].configHaoshiyouServer.serverUrl;
-        this.versionDownloaded = null;
-        this.versionPending = null;
-        this.versionRemote = null;
-        this.versionApp = null;
-        this.debugCounter = 0;
-        this.flagNames = null;
-        let flags = flagService.getAllFlags();
-        this.flagNames = Object.keys(flags);
-    }
-    ionViewWillEnter() {
-        ga('set', 'page', '/settings-tab.page.html');
-        ga('send', 'pageview');
-    }
-    debugIncrementer() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.debugCounter++;
-            if (this.debugCounter > 3 && this.debugCounter < 9) {
-                let toast = this.toastCtr.create({
-                    message: `${9 - this.debugCounter} more clicks before debug...`,
-                    duration: 2000,
-                    position: 'bottom'
-                });
-                yield toast.present();
-            }
-        });
-    }
-    isDebug() {
-        return this.debugCounter > 8 || this.flagService.getFlag(`debug`);
-    }
-    startSync() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.codePush.sync().subscribe((syncStatus) => console.log(syncStatus));
-            let downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); };
-            this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
-            yield this.updateVersions();
-        });
-    }
-    updateVersions() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.platform.is('cordova')) {
-                this.versionApp = (yield this.appVersion.getPackageName()) + `(${yield this.appVersion.getVersionCode()})`;
-                yield this.platform.ready();
-                let currentPackageInfo = yield this.codePush.getCurrentPackage();
-                this.versionDownloaded = currentPackageInfo ? currentPackageInfo.appVersion : `无`;
-                let pendingPackageInfo = yield this.codePush.getPendingPackage();
-                this.versionPending = pendingPackageInfo ? pendingPackageInfo.appVersion : `无`;
-                let remotePackageInfo = yield this.codePush.checkForUpdate();
-                this.versionRemote = remotePackageInfo ? remotePackageInfo.downloadUrl : `无`;
-            }
-            else
-                this.versionApp = '无';
-        });
-    }
-    ngOnInit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.updateVersions();
-        });
-    }
-};
-SettingsTabPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/settings-tab/settings-tab.page.html"*/'<ion-header>\n    <ion-toolbar>\n        <ion-title>\n            设置\n        </ion-title>\n    </ion-toolbar>\n</ion-header>\n\n<ion-content class="grey-background">\n    <ion-card *ngIf="auth.authenticated()">\n        <ion-item *ngIf="auth.user != null">\n            <ion-avatar item-left>\n                <img src="{{ auth.user.picture }}">\n            </ion-avatar>\n            <h2>{{ auth.user.nickname }}</h2>\n            <p>{{ auth.user.email }}</p>\n            <button ion-button item-right (click)="auth.logout()">登出</button>\n        </ion-item>\n    </ion-card>\n    <ion-list>\n        <ion-item *ngIf="!auth.authenticated()">\n            <ion-label>请登录</ion-label>\n            <button ion-button item-right (click)="auth.login()">登录</button>\n        </ion-item>\n        <ion-item (click)="debugIncrementer()">\n            <ion-label>关于\n                <span *ngIf="debugCounter > 1">({{debugCounter}})</span>\n            </ion-label>\n        </ion-item>\n        <ion-list *ngIf="isDebug()" >\n            <ion-item-divider>\n                版本\n            </ion-item-divider>\n            <ion-item>\n                <ion-label>\n                    环境版本: {{ versionEnv }} - 6.0.0.{{debugCounter}}\n                </ion-label>\n                <button ion-button item-right (click)="startSync()">刷新</button>\n            </ion-item>\n            <ion-item>\n                服务器: {{ serverUrl }}\n            </ion-item>\n            <ion-item>\n                应用版本: {{ versionApp }}\n            </ion-item>\n            <ion-item>\n                已下载版本: {{ versionDownloaded }}\n            </ion-item>\n            <ion-item>\n                等待版本: {{ versionPending }}\n            </ion-item>\n            <ion-item>\n                远程版本: {{ versionRemote }}\n            </ion-item>\n            <ion-item-divider>\n                Flags\n            </ion-item-divider>\n            <ion-item *ngFor="let flagName of flagNames">\n                <ion-label item-start>\n                    {{ flagName }}\n                </ion-label>\n                <ion-toggle\n                        color="secondary"\n                        [ngModel]="flagService.getFlag(flagName)" (ngModelChange)="flagService.setFlag(flagName, $event)"\n                ></ion-toggle>\n            </ion-item>\n        </ion-list>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/settings-tab/settings-tab.page.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_3__ionic_native_code_push__["a" /* CodePush */],
-        __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["h" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_5__ionic_native_app_version__["a" /* AppVersion */],
-        __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["j" /* ToastController */],
-        __WEBPACK_IMPORTED_MODULE_6__services_flag_service__["a" /* FlagService */]])
-], SettingsTabPage);
-
-//# sourceMappingURL=settings-tab.page.js.map
-
-/***/ }),
-
-/***/ 383:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DisconnectModal; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-let DisconnectModal = class DisconnectModal {
-    constructor() {
-    }
-};
-DisconnectModal = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'disconnect-modal',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/disconnect.modal.html"*/'<ion-content>\n    <ion-list>\n        <ion-item>\n            <h2>网络已断</h2>\n            <p>请连接网络再使用本应用。</p>\n        </ion-item>\n    </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/disconnect.modal.html"*/
-    }),
-    __metadata("design:paramtypes", [])
-], DisconnectModal);
-
-//# sourceMappingURL=disconnect.modal.js.map
-
-/***/ }),
-
-/***/ 384:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QrCodeTabPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-let QrCodeTabPage = class QrCodeTabPage {
-    constructor() {
-        this.shouldShow = false;
-    }
-    ionViewWillEnter() {
-        ga('set', 'page', '/qrcode-tab.page.html');
-        ga('send', 'pageview');
-    }
-    showQrCode() {
-        ga('send', 'event', {
-            eventCategory: 'show-qrcode',
-            eventAction: 'qrcode-tab',
-        });
-        this.shouldShow = true;
-    }
-};
-QrCodeTabPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'qrcode-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/qrcode-tab/qrcode-tab.page.html"*/'<ion-header>\n    <ion-toolbar>\n        <ion-title>\n            加微信群\n        </ion-title>\n    </ion-toolbar>\n</ion-header>\n<ion-content class="grey-background">\n    <ion-list *ngIf="!shouldShow"  padding center style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">\n        <button center style="text-align: center;" id="show_qrcode_btn" ion-button (click)="showQrCode()">\n            <ion-icon name="qr-scanner"></ion-icon> <span>点此加小助手自动拉入微信群</span>\n        </button>\n    </ion-list>\n    <ion-list *ngIf="shouldShow">\n        <ion-item style="text-align: center; width:100%">\n            <img src="../../assets/res/haoshiyou-bot2.jpeg"\n                 style="max-width: 350px"\n                 alt="好室友™微信群介绍">\n        </ion-item>\n    </ion-list>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/qrcode-tab/qrcode-tab.page.html"*/,
-    })
-], QrCodeTabPage);
-
-//# sourceMappingURL=qrcode-tab-page.js.map
-
-/***/ }),
-
-/***/ 385:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MineTabPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_code_push__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_app_version__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_flag_service__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-let MineTabPage = class MineTabPage {
-    constructor(auth, codePush, platform, appVersion, toastCtr, flagService, api) {
-        this.auth = auth;
-        this.codePush = codePush;
-        this.platform = platform;
-        this.appVersion = appVersion;
-        this.toastCtr = toastCtr;
-        this.flagService = flagService;
-        this.api = api;
-        this.flagNames = null;
-        this.listings = [];
-        let flags = flagService.getAllFlags();
-        this.flagNames = Object.keys(flags);
-    }
-    ionViewWillAppear() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('set', 'page', '/mine-tab.page.html');
-            ga('send', 'pageview');
-            console.log(`Appear!`);
-            yield this.loadMyListings();
-        });
-    }
-    loadMyListings() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let local = window.localStorage;
-            let meId = local['user_id']; // TODO(xinbenlv): use UserService
-            if (!meId) {
-                return; // not logged in ;
-            }
-            let whereClause = {
-                'ownerId': meId,
-            };
-            ga('send', 'event', {
-                eventCategory: 'load',
-                eventAction: 'load-my-listings',
-            });
-            let start = Date.now();
-            let newItems = yield this.api
-                .find({
-                where: whereClause,
-            })
-                .toPromise();
-            let end = Date.now();
-            ga('send', {
-                hitType: 'timing',
-                timingCategory: 'API Call',
-                timingVar: 'load-my-listings',
-                timingValue: end - start
-            });
-            this.listings = newItems;
-        });
-    }
-    ;
-    ngOnInit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.loadMyListings();
-        });
-    }
-};
-MineTabPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/mine-tab/mine-tab.page.html"*/'<ion-header>\n    <ion-toolbar>\n        <ion-title>\n            我的\n        </ion-title>\n    </ion-toolbar>\n</ion-header>\n\n<ion-content class="grey-background">\n    <ion-list *ngIf="!auth.authenticated()">\n        <ion-item >\n            <ion-label>请登录</ion-label>\n            <button ion-button item-right (click)="auth.login()">登录</button>\n        </ion-item>\n    </ion-list>\n    <ion-list>\n        <ion-grid *ngIf="auth.authenticated()">\n            <ion-row>\n                <ion-col col-12 col-lg-3 col-md-4 col-sm-12 col-xs-12\n                         *ngFor="let listing of listings; let i = index">\n                    <listing-item [listing]=listing></listing-item>\n                </ion-col>\n            </ion-row>\n        </ion-grid>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/mine-tab/mine-tab.page.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_2__ionic_native_code_push__["a" /* CodePush */],
-        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_4__ionic_native_app_version__["a" /* AppVersion */],
-        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* ToastController */],
-        __WEBPACK_IMPORTED_MODULE_5__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */]])
-], MineTabPage);
-
-//# sourceMappingURL=mine-tab.page.js.map
-
-/***/ }),
-
-/***/ 386:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingsUxTabPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_url_util__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(103);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-
-
-const SEGMENT_KEY = 'segment';
-const AREA_KEY = 'area';
-/**
- * A page contains a map view and a list showing the listings.
- */
-let ListingsUxTabPage = class ListingsUxTabPage {
-    constructor(platform, nav, alertCtrl, auth, api, flagService, popoverCtrl, ref) {
-        this.platform = platform;
-        this.nav = nav;
-        this.alertCtrl = alertCtrl;
-        this.auth = auth;
-        this.api = api;
-        this.flagService = flagService;
-        this.popoverCtrl = popoverCtrl;
-        this.ref = ref;
-        this.segmentModel = 'ROOMMATE_WANTED'; // by default for rent
-        this.areaModel = 'All'; // by default for All
-        this.useGrid = !(navigator.platform == 'iPhone');
-        this.loadedListings = [];
-        this.mapReady = false;
-        this.currentIndex = 0;
-        this.filterSettings = { 'types': {}, 'areas': {}, 'duration': {} };
-        this.whereClause = {};
-        this.isLoading = false;
-        this.showMapInstead = false;
-        this.options = [
-            'All',
-            'SanFrancisco',
-            'MidPeninsula',
-            'SouthBayWest',
-            'SouthBayEast',
-            'EastBay',
-            'ShortTerm',
-            'Seattle',
-            'TestGroup',
-        ];
-        this.optionsMap = {
-            'All': '全部',
-            'SanFrancisco': '三番',
-            'MidPeninsula': '中半岛',
-            'SouthBayWest': '南湾西',
-            'SouthBayEast': '南湾东',
-            'EastBay': '东湾',
-            'ShortTerm': '短租',
-            'Seattle': '西雅图',
-            'TestGroup': '测试',
-        };
-    }
-    ngOnDestroy() {
-        if (this.markers)
-            for (let marker of this.markers) {
-                marker.setMap(null);
-            }
-    }
-    ngAfterViewInit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log(`XXX called ngAfterViewInit!`);
-            let segmentFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(SEGMENT_KEY);
-            if (segmentFromUrl) {
-                this.segmentModel = segmentFromUrl;
-            }
-            let areaFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(AREA_KEY);
-            if (areaFromUrl) {
-                this.areaModel = areaFromUrl;
-            }
-            this.updateWhereClause();
-            yield this.loadMoreListings();
-            this.updateLayout();
-        });
-    }
-    ionViewDidEnter() {
-        ga('set', 'page', '/listings-tab.page.html');
-        ga('send', 'pageview');
-        this.ref.markForCheck();
-    }
-    //noinspection JSUnusedGlobalSymbols
-    onSegmentModelChange(newValue) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.segmentModel = newValue;
-            yield this.initLoad();
-            ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
-            ga('send', 'pageview');
-        });
-    }
-    //noinspection JSUnusedGlobalSymbols
-    onAreaModelChange(newValue) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.areaModel = newValue;
-            yield this.initLoad();
-            ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
-            ga('send', 'pageview');
-        });
-    }
-    loadMoreListings() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.isLoading = true;
-            ga('send', 'event', {
-                eventCategory: 'load',
-                eventAction: 'load-more-listings',
-                eventLabel: `load-more-index-${this.loadedListings.length}`
-            });
-            let start = Date.now();
-            // southwest: 37.148070, -122.852249
-            // northeast: 38.072739, -121.473969
-            let newItems = yield this.api
-                .find({
-                // TODO(zzn): use ListTypeEnum when migrated
-                where: this.whereClause,
-                order: 'latestUpdatedOrBump DESC',
-                limit: 24,
-                offset: this.loadedListings.length,
-                include: ['interactions', 'owner'],
-            })
-                .take(1)
-                .toPromise();
-            let end = Date.now();
-            ga('send', {
-                hitType: 'timing',
-                timingCategory: 'API Call',
-                timingVar: 'load-more-listings',
-                timingValue: end - start
-            });
-            for (let item of newItems) {
-                this.loadedListings.push(item);
-            }
-            this.mapView.addListings(newItems);
-            this.isLoading = false;
-        });
-    }
-    updateMarkers() {
-        // TODO(xinbenlv): update markers
-    }
-    fakeGoToCreationPage() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'listing-creation',
-            });
-            let alert = this.alertCtrl.create({
-                title: '新版app中发帖功能正在建设中',
-                buttons: [
-                    {
-                        text: 'OK',
-                    },
-                ]
-            });
-            yield alert.present();
-        });
-    }
-    goToCreationPage() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.auth.authenticated()) {
-                //push another page onto the history stack
-                //causing the nav controller to animate the new page in
-                this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */]);
-            }
-            else {
-                let alert = this.alertCtrl.create({
-                    title: '请登录后发帖',
-                    buttons: [
-                        {
-                            text: '取消',
-                        },
-                        {
-                            text: '登陆',
-                            handler: () => {
-                                this.auth.login();
-                            }
-                        }
-                    ]
-                });
-                yield alert.present();
-            }
-        });
-    }
-    doInfinite(infiniteScroll) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.loadMoreListings();
-            infiniteScroll.complete();
-        });
-    }
-    isDebug() {
-        return this.flagService.getFlag('debug');
-    }
-    // Hack introduced due to this issue: https://github.com/ionic-team/ionic/issues/6923
-    setOption(index, event) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.options[index] != null) {
-                this.areaModel = this.options[index];
-                yield this.onAreaModelChange(this.areaModel);
-                //note you have to use "tap" or "click" - if you bind to "ionSelected" you don't get the "target" property
-                let segments = event.target.parentNode.children;
-                let len = segments.length;
-                for (let i = 0; i < len; i++) {
-                    segments[i].classList.remove('segment-activated');
-                }
-                event.target.classList.add('segment-activated');
-            }
-        });
-    }
-    bumpUpdateOrder(hsyListing) {
-        return __awaiter(this, void 0, void 0, function* () {
-            for (let i = 0; i < this.loadedListings.length; i++) {
-                let bumpedListing = hsyListing;
-                if (this.loadedListings[i] == bumpedListing) {
-                    yield this.content.scrollToTop();
-                    this.loadedListings.splice(i, 1);
-                    this.loadedListings.unshift(bumpedListing);
-                    break;
-                }
-            }
-        });
-    }
-    popoverFilter(myEvent) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let popover = this.popoverCtrl.create(__WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__["a" /* FilterSettingsComponent */], { 'filterSettings': this.filterSettings }, {});
-            yield popover.onDidDismiss((data) => __awaiter(this, void 0, void 0, function* () {
-                console.log(`--- received ` + JSON.stringify(data));
-                if (data !== undefined && data !== null) {
-                    this.filterSettings = data["filterSettings"];
-                }
-                else if (this.popoverCtrl['_app'].filterSettings) {
-                    this.filterSettings = this.popoverCtrl['_app'] /*a hack to access private */.filterSettings;
-                }
-                this.updateWhereClause();
-                yield this.initLoad();
-                this.updateLayout();
-            }));
-            yield popover.present({
-                ev: myEvent
-            });
-        });
-    }
-    updateWhereClause() {
-        /* START filtering type */
-        let type = this.getType(this.filterSettings['types']['zhaozu'], this.filterSettings['types']['qiuzu']);
-        let whereClause_ = {};
-        if (type == 0) {
-            whereClause_['listingTypeEnum'] = 'NeedRoommate';
-        }
-        else if (type == 1) {
-            whereClause_['listingTypeEnum'] = 'NeedRoom';
-        }
-        else {
-            delete whereClause_['listingTypeEnum'];
-        }
-        /* END filtering type */
-        /* START filtering duration */
-        let ago = null;
-        switch (this.filterSettings['duration']) {
-            case '最近3天':
-                ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近7天':
-                ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近30天':
-                ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近90天':
-                ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
-                break;
-            case '不限': // fall though
-            default:
-        }
-        if (ago)
-            whereClause_['lastUpdated'] = { "gte": ago };
-        /* END filtering duration */
-        /* START filtering price */
-        if (this.filterSettings['price']) {
-            whereClause_['price'] = { lt: this.filterSettings['price'] };
-        }
-        else {
-            delete whereClause_['price'];
-        }
-        /* END filtering price */
-        /* START filtering area */
-        let allArea = this.filterSettings['areas']["All"];
-        if (allArea !== undefined && allArea === true) {
-            whereClause_['hsyGroupEnum'] = { 'nin': ['BigTeam', 'TestGroup', 'None'] };
-        }
-        else {
-            let areaClause = [];
-            for (let area in this.filterSettings['areas']) {
-                let selected = this.filterSettings['areas'][area];
-                if (selected !== undefined && selected) {
-                    areaClause.push(area);
-                }
-            }
-            if (areaClause.length > 0)
-                whereClause_['hsyGroupEnum'] = { 'inq': areaClause };
-        }
-        /* END filtering area */
-        /* EXEC filtering */
-        this.whereClause = whereClause_;
-    }
-    getType(zhaozu, qiuzu) {
-        if (zhaozu === undefined || !zhaozu) {
-            zhaozu = false;
-        }
-        if (qiuzu === undefined || !qiuzu) {
-            qiuzu = false;
-        }
-        if (zhaozu && !qiuzu) {
-            return 0;
-        }
-        if (!zhaozu && qiuzu) {
-            return 1;
-        }
-        return -1;
-    }
-    largeEnough() {
-        return window.innerWidth > 1200;
-    }
-    onResize() {
-        if (this.largeEnoughWas != this.largeEnough()) {
-            this.updateLayout();
-            this.largeEnoughWas = this.largeEnough();
-        }
-    }
-    flipMapAndList() {
-        this.showMapInstead = !this.showMapInstead;
-        this.updateLayout();
-    }
-    updateLayout() {
-        if (!this.largeEnough()) {
-            if (this.showMapInstead) {
-                this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '1fr 0px';
-            }
-            else {
-                this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '0px 1fr';
-            }
-        }
-        else {
-            this.splitPanelContainer.nativeElement.style.gridTemplateColumns = '1fr minmax(30%, 600px)';
-        }
-        this.mapView.render();
-    }
-    onBoundaryFilter(boundary) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let latMax = boundary.getNorthEast().lat();
-            let latMin = boundary.getSouthWest().lat();
-            let lngMax = boundary.getNorthEast().lng();
-            let lngMin = boundary.getSouthWest().lng();
-            this.whereClause['and'] = [
-                { 'location_lat': { 'lt': latMax } },
-                { 'location_lat': { 'gt': latMin } },
-                { 'location_lng': { 'lt': lngMax } },
-                { 'location_lng': { 'gt': lngMin } },
-            ];
-            yield this.initLoad();
-        });
-    }
-    initLoad() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.loadedListings = [];
-            this.mapView.clearMarkers();
-            yield this.loadMoreListings();
-        });
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */])
-], ListingsUxTabPage.prototype, "content", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */])
-], ListingsUxTabPage.prototype, "mapView", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('mapContainerCol'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
-], ListingsUxTabPage.prototype, "mapContainerCol", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('listContainerCol'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
-], ListingsUxTabPage.prototype, "listContainerCol", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('splitPanelContainer'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
-], ListingsUxTabPage.prototype, "splitPanelContainer", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["HostListener"])('window:resize', ['$event.target']),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ListingsUxTabPage.prototype, "onResize", null);
-ListingsUxTabPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons start>\n            <button ion-button (click)="goToCreationPage()">\n                <ion-icon name="md-add"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-searchbar>\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <button ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">\n                <ion-icon *ngIf="!showMapInstead" name="ios-map-outline"></ion-icon>\n                <ion-icon *ngIf="showMapInstead" name="ios-list-box-outline"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row #splitPanelContainer class="split-panel-container" style="height: 100%;">\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-content fullscreen>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"\n                                [indexFromParent]="i">\n\n                </listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n            </ion-content>\n        </ion-col>\n        <!-- the main content -->\n    </ion-row>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_3__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["i" /* PopoverController */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
-], ListingsUxTabPage);
-
-//# sourceMappingURL=listings-ux-tab.page.js.map
-
-/***/ }),
-
-/***/ 387:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RemoveModal; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__ = __webpack_require__(17);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-let RemoveModal = class RemoveModal {
-    constructor(nav, params, viewCtrl) {
-        this.nav = nav;
-        this.viewCtrl = viewCtrl;
-        this.imageIds = params.data.imageIds;
-        this.checkboxes = new Array(this.imageIds.length);
-    }
-    dismiss() {
-        let data = { imageIds: this.imageIds };
-        this.viewCtrl.dismiss(data);
-    }
-    save() {
-        let imagesAfterSave = [];
-        for (let i = 0; i < this.checkboxes.length; i++) {
-            if (!this.checkboxes[i]) {
-                imagesAfterSave.push(this.imageIds[i]);
-            }
-        }
-        this.imageIds = imagesAfterSave;
-        this.dismiss();
-    }
-    cancel() {
-        this.dismiss();
-    }
-};
-RemoveModal = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'remove-modal',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/remove.modal.html"*/'<ion-content>\n    <ion-list>\n        <ion-item *ngFor="let imageId of imageIds; let i = index">\n            <ion-thumbnail item-left>\n                <img src="{{imageId | imageIdToUrlPipe }}" alt="Image {{imageId}">\n            </ion-thumbnail>\n            <ion-checkbox color="dark" [(ngModel)]="checkboxes[i]" item-right></ion-checkbox>\n        </ion-item>\n        <button ion-button block color="primary" (click)="save()">完毕</button>\n        <button ion-button block clear (click)="cancel()" >取消</button>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/remove.modal.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["k" /* ViewController */]])
-], RemoveModal);
-
-//# sourceMappingURL=remove.modal.js.map
-
-/***/ }),
-
-/***/ 48:
+/***/ 50:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3329,58 +3186,12 @@ class HsyListing {
 
 /***/ }),
 
-/***/ 50:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKModels; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_HsyListing__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_HsyUser__ = __webpack_require__(274);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_HsyInteraction__ = __webpack_require__(275);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-/* tslint:disable */
-
-
-
-
-let SDKModels = class SDKModels {
-    constructor() {
-        this.models = {
-            HsyListing: __WEBPACK_IMPORTED_MODULE_1__models_HsyListing__["a" /* HsyListing */],
-            HsyUser: __WEBPACK_IMPORTED_MODULE_2__models_HsyUser__["a" /* HsyUser */],
-            HsyInteraction: __WEBPACK_IMPORTED_MODULE_3__models_HsyInteraction__["a" /* HsyInteraction */],
-        };
-    }
-    get(modelName) {
-        return this.models[modelName];
-    }
-    getAll() {
-        return this.models;
-    }
-    getModelNames() {
-        return Object.keys(this.models);
-    }
-};
-SDKModels = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-], SDKModels);
-
-//# sourceMappingURL=SDKModels.js.map
-
-/***/ }),
-
-/***/ 507:
+/***/ 504:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CookieBrowser; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3481,12 +3292,12 @@ CookieBrowser = __decorate([
 
 /***/ }),
 
-/***/ 508:
+/***/ 505:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StorageBrowser; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3566,13 +3377,332 @@ StorageBrowser = __decorate([
 
 /***/ }),
 
-/***/ 509:
+/***/ 506:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingUxDetailPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_image_service__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__map_view_comp__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__listings_ux_tab_page__ = __webpack_require__(153);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+
+let ListingUxDetailPage = class ListingUxDetailPage {
+    constructor(nav, params, imageService, api, hsyUserApi, auth, alertCtrl, ref, flagService) {
+        this.nav = nav;
+        this.params = params;
+        this.imageService = imageService;
+        this.api = api;
+        this.hsyUserApi = hsyUserApi;
+        this.auth = auth;
+        this.alertCtrl = alertCtrl;
+        this.ref = ref;
+        this.flagService = flagService;
+        this.loading = true;
+    }
+    set mapView(view) {
+        this.view = view;
+        if (this.view) {
+            this.view.clearMarkers();
+            this.view.addListings([this.listing]);
+            this.view.render();
+            this.view.setCenter({ lng: this.listing.location_lng, lat: this.listing.location_lat });
+        }
+    }
+    ;
+    get mapView() {
+        return this.view;
+    }
+    ionViewWillEnter() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.listing == null)
+                yield this.loadListing();
+            ga('set', 'page', `/listing-detail.page.html#${this.listing.uid}`);
+            ga('send', 'pageview');
+            if (this.nav.length() == 1) {
+                ga('send', 'event', {
+                    eventCategory: 'go-to',
+                    eventAction: 'listing-detail',
+                    eventLabel: 'direct-url'
+                });
+            }
+        });
+    }
+    loadListing() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.params.data['listing'] != null) {
+                this.listing = yield this.params.data.listing;
+                this.ref.markForCheck();
+            }
+            else {
+                let id = this.params.data.id;
+                this.listing = (yield this.api.findById(id, {
+                    include: ['interactions', 'owner'],
+                })
+                    .take(1)
+                    .toPromise());
+                this.ref.markForCheck();
+            }
+            this.params.data.id = this.listing.uid;
+            this.title = `好室友™帖子：` + this.listing.title;
+            this.loading = false;
+            this.hackExtractHsyGroupNickAndListing();
+            return;
+        });
+    }
+    // This is a HACK, when bot is able to handle this, we can remove this part
+    hackExtractHsyGroupNickAndListing() {
+        if (!this.listing.hsyGroupNick && /^group-collected-/.test(this.listing.uid)) {
+            this.listing.hsyGroupNick = this.listing.uid.substr(16);
+        }
+    }
+    ngOnInit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.loadListing();
+        });
+    }
+    backToMain() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'listings-tab',
+                eventLabel: 'direct-url'
+            });
+            if (this.nav.length() > 1) {
+                yield this.nav.pop();
+            }
+            else {
+                yield this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_9__listings_ux_tab_page__["a" /* ListingsUxTabPage */]);
+                yield this.nav.goToRoot({});
+            }
+        });
+    }
+    ionViewDidEnter() {
+        console.log(`Entering lising detail page`);
+        this.ref.markForCheck();
+    }
+    edit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */], { listing: this.listing });
+        });
+    }
+    claimAndEdit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'claim-and-edit',
+            });
+            if (!this.auth.authenticated()) {
+                let alert = this.alertCtrl.create({
+                    title: '请登录后认领',
+                    buttons: [
+                        {
+                            text: '取消',
+                        },
+                        {
+                            text: '登陆',
+                            handler: () => {
+                                this.auth.login();
+                            }
+                        }
+                    ]
+                });
+                yield alert.present();
+            }
+            else {
+                // Start claiming!
+                yield this.claim();
+            }
+        });
+    }
+    claim() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let alert = this.alertCtrl.create({
+                title: `请确认认领本帖`,
+                subTitle: `标题：${this.listing.title}`,
+                buttons: [
+                    {
+                        text: '取消',
+                    },
+                    {
+                        text: '确认',
+                        handler: () => {
+                            let local = window.localStorage;
+                            let meId = local['user_id']; // TODO(xinbenlv): use UserService
+                            this.listing.ownerId = meId;
+                            this.listing.owner = null; // 防止 owner 和 ownerId 的矛盾
+                            this.api.upsert(this.listing).take(1).toPromise()
+                                .then((_) => __awaiter(this, void 0, void 0, function* () {
+                                this.listing = yield this.api.findById(this.listing.uid, { include: ["owner"] }).take(1).toPromise();
+                                this.ref.markForCheck();
+                            }))
+                                .catch(e => {
+                                console.warn(`Error in claiming post = 
+                      ${JSON.stringify(e, null, ' ')}`);
+                            });
+                            return true;
+                        }
+                    }
+                ]
+            });
+            let ret = yield alert.present();
+            return ret;
+        });
+    }
+    fakeClaimAndEdit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'fake-claim-and-edit',
+            });
+            let alert = this.alertCtrl.create({
+                title: '新版"认领并编辑"功能正在建设中',
+                buttons: [
+                    {
+                        text: 'OK',
+                    },
+                ]
+            });
+            yield alert.present();
+        });
+    }
+    fakeStartChat() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'go-to',
+                eventAction: 'fake-start-chat',
+            });
+            let alert = this.alertCtrl.create({
+                title: '新版"私聊"功能正在建设中',
+                buttons: [
+                    {
+                        text: 'OK',
+                    },
+                ]
+            });
+            yield alert.present();
+        });
+    }
+    // TODO(xinbenlv): merge with the same piece of code in image-grid.
+    //noinspection JSUnusedLocalSymbols, used in HTML
+    showImage(imageId) {
+        let el = document.getElementsByTagName('body');
+        // TODO(xinbenlv): modify the viewerjs to customize the following
+        // 1. click on background area to close
+        let url = this.imageService.getUrlFromId(imageId, 0, 0);
+        let viewer = new window.Viewer(el[0], {
+            url: () => {
+                return url;
+            },
+            inline: false,
+            toolbar: true,
+            title: false,
+            movable: true,
+            keyboard: false,
+            navbar: true,
+            hidden: () => {
+                viewer.destroy();
+            }
+        });
+        viewer.show();
+    }
+    isClaimed() {
+        return !/^group-collected-/.test(this.listing.ownerId);
+    }
+    isMine() {
+        if (this.listing) {
+            return window.localStorage['user_id'] === this.listing.ownerId;
+        }
+        return false;
+    }
+    eligibleToViewContact() {
+        return false;
+    }
+    isDebug() {
+        return this.flagService.getFlag('debug');
+    }
+    debugStr() {
+        return JSON.stringify(this.listing, null, '  ');
+    }
+    hasContactInfo() {
+        let listing = this.listing;
+        let has = ((listing.owner && (listing.owner.contactPhone || listing.owner.contactEmail || listing.owner.weixin)) || listing.hsyGroupNick && listing.hsyGroupEnum) != null;
+        if (!has) {
+            console.warn(`listing doesn't have contact info`, this.listing);
+        }
+        return has;
+    }
+    scrollToContact() {
+        this.content.scrollToBottom();
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */])
+], ListingUxDetailPage.prototype, "content", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('mapViewSingle'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_8__map_view_comp__["a" /* MapViewComponent */]),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_8__map_view_comp__["a" /* MapViewComponent */]])
+], ListingUxDetailPage.prototype, "mapView", null);
+ListingUxDetailPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+        selector: 'listing-ux-detail',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-detail.page.html"*/'<ion-content id="page-container" class="dynamic-width-container" #content>\n        <div class="detail-header">\n            <div class="detail-header-shadow">\n            </div>\n            <div id="back" class="in-image-item" item-right (click)="backToMain()">\n                <ion-icon name="ios-arrow-back-outline"></ion-icon>\n            </div>\n            <div id="heart" class="in-image-item" item-right>\n                <ion-icon name="ios-heart-outline"></ion-icon>\n            </div>\n\n        <ion-slides class="detail-image-slides" pager *ngIf="!loading && listing.imageIds">\n            <ng-container *ngFor="let imageId of listing.imageIds;let i = index">\n                <ion-slide class="slide" style="background-size:cover; background-repeat:no-repeat; background-position: center center; "\n                           [style.background-image]="\'url(\' + imageService.getUrlFromId(imageId) + \')\'">\n                </ion-slide>\n            </ng-container>\n        </ion-slides>\n        </div>\n        <div class="detail-content" *ngIf="!loading">\n            <div class="detail-content-title-block">\n                <h1 class="title">\n                    {{this.listing.title}}\n                </h1>\n                <div class="subtitle">{{ listing.lastUpdated | timeFromNow }}更新</div>\n                <div class="subtitle">110人看过</div>\n            </div>\n\n            <div class="detail-content-map" *ngIf="listing.location_lat && listing.location_lng">\n                <!--<img style="width:100%;height:100%"-->\n                     <!--src="https://maps.googleapis.com/maps/api/staticmap?center={{listing.location_lat}},{{listing.location_lng}}&zoom=12&size=375x140&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY"-->\n                     <!--alt="">-->\n                <map-view #mapViewSingle class="map-view-item" [showSearchButton]="false"> </map-view>\n                <div class="detail-map-title-block">\n                    <div class="detail-map-title">{{listing.addressCity}}</div>\n                    <div class="detail-map-subtitle"> {{ listing.addressLine || "具体地址请联系房东获得" }}</div>\n                </div>\n            </div>\n\n            <div class="section highlight-facts"\n                 *ngIf="false"> <!--TODO(zzn): reopen when this kind of information is extracted -->\n                <div class="logo-box" *ngFor="let i of [\'独栋别墅\',\'2室1卫\',\'12个月起租\',\'2017/01/01开始\']">\n                    <div class="logo-box-logo">\n                        <ion-icon name="ios-home-outline"></ion-icon>\n                    </div>\n                    <div class="logo-box-text">\n                        {{i}}\n                    </div>\n                </div>\n            </div>\n            <div class="section">\n                <div class="section-title">描述</div>\n                <div class="section-body">\n                    <p>\n                        <ng-container *ngFor="let textPiece of listing.content.split(\'\n\')">\n                            {{ textPiece }} <br/>\n                        </ng-container>\n                    </p>\n                </div>\n            </div>\n            <div class="section" *ngIf="listing.amenityArray && listing.amenityArray.length > 0">\n                <div class="section-title">设施／须知</div>\n                <div class="grid-container">\n                    <div class="grid-half-screen" *ngFor="let i of listing.amenityArray">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">{{i}}</span>\n                    </div>\n                </div>\n            </div>\n            <ng-container *ngIf="listing.requireToContact == null || listing.requireToContact.length == 0 || eligibleToViewContact()">\n                <div class="section">\n                    <div class="section-title">联系房东</div>\n                    <div class="grid-full-screen" #contact_phone *ngIf="listing.owner && listing.owner.contactPhone">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">电话</span>\n                        <span class="contetn">{{listing.owner.contactPhone}}</span>\n                    </div>\n                    <div class="grid-full-screen" #contact_email *ngIf="listing.owner && listing.owner.contactEmail">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">邮箱</span>\n                        <span class="contetn">{{listing.owner.contactEmail}}</span>\n                    </div>\n                    <div class="grid-full-screen" #contact_group_nick *ngIf="listing.hsyGroupEnum && listing.hsyGroupNick">\n                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>\n                        <span class="label">微信</span>\n                        <span class="contetn">\n                            请在【好室友】{{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}群内搜索"\n                         {{ listing.hsyGroupNick ?\n                                listing.hsyGroupNick : listing.ownerId.replace(\'group-collected-\', \'\') }}"\n                        </span>\n                    </div>\n                </div>\n            </ng-container>\n        </div>\n        <ion-list *ngIf="loading">\n            <ion-item>\n                <ion-row align-items-center justify-content-center>\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n            </ion-item>\n        </ion-list>\n</ion-content>\n<ion-footer class="footer" *ngIf="!loading">\n    <div class="dynamic-width-container  grid-container">\n            <div class="footer-button" id="price-button">\n                <ng-container >\n                    <span id="price">$ {{listing.price || "价格待议" }}</span><span id="per-month">/月</span>\n                </ng-container>\n            </div>\n            <div class="footer-button" id="contact-button" (click)="scrollToContact()">\n                <span>联系房东</span>\n            </div>\n    </div>\n</ion-footer>\n\n\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-detail.page.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_3__services_image_service__["b" /* IImageService */],
+        __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
+        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyUser__["a" /* HsyUserApi */],
+        __WEBPACK_IMPORTED_MODULE_6__services_auth_service__["a" /* AuthService */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"],
+        __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */]])
+], ListingUxDetailPage);
+
+//# sourceMappingURL=listing-ux-detail.page.js.map
+
+/***/ }),
+
+/***/ 507:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(510);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(514);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(508);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(512);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -3585,8 +3715,8 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JSONSearchParams; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3634,63 +3764,57 @@ JSONSearchParams = __decorate([
 
 /***/ }),
 
-/***/ 514:
+/***/ 512:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export getAuthHttp */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_component__ = __webpack_require__(515);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_component__ = __webpack_require__(513);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_jwt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__ = __webpack_require__(833);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_listing_detail_page__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_listing_item_comp__ = __webpack_require__(834);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_listings_tab_page__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_listings_tab_map_view_comp__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_listings_tab_long_image_comp__ = __webpack_require__(835);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_listings_tab_remove_modal__ = __webpack_require__(387);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_settings_tab_settings_tab_page__ = __webpack_require__(381);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_tabs_disconnect_modal__ = __webpack_require__(383);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_image_service__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_tabs_tabs__ = __webpack_require__(273);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pipes_enum_msg_pipe__ = __webpack_require__(836);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pipes_image_id_to_url_pipe__ = __webpack_require__(837);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pipes_time_from_now_pipe__ = __webpack_require__(838);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_native_storage__ = __webpack_require__(841);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_map_service__ = __webpack_require__(156);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pipes_city_n_zip_pipe__ = __webpack_require__(842);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pages_qrcode_tab_qrcode_tab_page__ = __webpack_require__(384);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__loopbacksdk_index__ = __webpack_require__(843);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pipes_hsy_group_enum_msg_pipe__ = __webpack_require__(847);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__angular_platform_browser__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ionic_native_transfer__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_network__ = __webpack_require__(382);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ionic_native_push__ = __webpack_require__(848);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ionic_native_code_push__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__ionic_native_app_version__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pipes_date_formatter_pipe__ = __webpack_require__(849);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__services_flag_service__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pages_mine_tab_mine_tab_page__ = __webpack_require__(385);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__angular_forms__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__pages_listings_tab_listing_ux_detail_page__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__pages_listings_tab_listings_ux_tab_page__ = __webpack_require__(386);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__pages_listings_tab_listing_ux_item_comp__ = __webpack_require__(850);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__ = __webpack_require__(383);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__ = __webpack_require__(831);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_map_view_comp__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_long_image_comp__ = __webpack_require__(832);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_remove_modal__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_settings_tab_settings_tab_page__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_tabs_disconnect_modal__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_image_service__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_tabs_tabs__ = __webpack_require__(267);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pipes_enum_msg_pipe__ = __webpack_require__(833);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pipes_image_id_to_url_pipe__ = __webpack_require__(834);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pipes_time_from_now_pipe__ = __webpack_require__(835);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_native_storage__ = __webpack_require__(838);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_map_service__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pipes_city_n_zip_pipe__ = __webpack_require__(839);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_qrcode_tab_qrcode_tab_page__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__loopbacksdk_index__ = __webpack_require__(840);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pipes_hsy_group_enum_msg_pipe__ = __webpack_require__(844);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__angular_platform_browser__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ionic_native_transfer__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ionic_native_network__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ionic_native_push__ = __webpack_require__(845);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ionic_native_code_push__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_app_version__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pipes_date_formatter_pipe__ = __webpack_require__(846);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__services_flag_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__pages_mine_tab_mine_tab_page__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__angular_forms__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listing_ux_detail_page__ = __webpack_require__(506);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listings_ux_tab_page__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_listing_ux_item_comp__ = __webpack_require__(847);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-
-
 
 
 
@@ -3744,83 +3868,76 @@ AppModule = __decorate([
             // All Components
             __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* HaoshiyouApp */],
             __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__["a" /* FilterSettingsComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__pages_tabs_tabs__["a" /* TabsPage */],
+            __WEBPACK_IMPORTED_MODULE_15__pages_tabs_tabs__["a" /* TabsPage */],
             __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__["a" /* ImageGridComponent */],
             __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__["a" /* CreationPage */],
-            __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_listing_detail_page__["a" /* ListingDetailPage */],
-            __WEBPACK_IMPORTED_MODULE_38__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
-            __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_listing_item_comp__["a" /* ListingItem */],
-            __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_listings_tab_page__["a" /* ListingsTabPage */],
-            __WEBPACK_IMPORTED_MODULE_40__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
-            __WEBPACK_IMPORTED_MODULE_39__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
-            __WEBPACK_IMPORTED_MODULE_11__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
-            __WEBPACK_IMPORTED_MODULE_13__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
-            __WEBPACK_IMPORTED_MODULE_14__pages_settings_tab_settings_tab_page__["a" /* SettingsTabPage */],
-            __WEBPACK_IMPORTED_MODULE_15__pages_tabs_disconnect_modal__["a" /* DisconnectModal */],
-            __WEBPACK_IMPORTED_MODULE_25__pages_qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */],
-            __WEBPACK_IMPORTED_MODULE_36__pages_mine_tab_mine_tab_page__["a" /* MineTabPage */],
+            __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
+            __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
+            __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
+            __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
+            __WEBPACK_IMPORTED_MODULE_11__pages_settings_tab_settings_tab_page__["a" /* SettingsTabPage */],
+            __WEBPACK_IMPORTED_MODULE_12__pages_tabs_disconnect_modal__["a" /* DisconnectModal */],
+            __WEBPACK_IMPORTED_MODULE_22__pages_qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */],
+            __WEBPACK_IMPORTED_MODULE_33__pages_mine_tab_mine_tab_page__["a" /* MineTabPage */],
             // All Pipes
-            __WEBPACK_IMPORTED_MODULE_19__pipes_enum_msg_pipe__["a" /* EnumMsgPipe */],
-            __WEBPACK_IMPORTED_MODULE_27__pipes_hsy_group_enum_msg_pipe__["a" /* HsyGroupEnumMsgPipe */],
-            __WEBPACK_IMPORTED_MODULE_20__pipes_image_id_to_url_pipe__["b" /* ImageIdsToUrlPipe */],
-            __WEBPACK_IMPORTED_MODULE_20__pipes_image_id_to_url_pipe__["a" /* ImageIdToUrlPipe */],
-            __WEBPACK_IMPORTED_MODULE_21__pipes_time_from_now_pipe__["a" /* TimeFromNowPipe */],
-            __WEBPACK_IMPORTED_MODULE_24__pipes_city_n_zip_pipe__["a" /* CityNZipPipe */],
-            __WEBPACK_IMPORTED_MODULE_34__pipes_date_formatter_pipe__["a" /* DateFormatterPipe */],
+            __WEBPACK_IMPORTED_MODULE_16__pipes_enum_msg_pipe__["a" /* EnumMsgPipe */],
+            __WEBPACK_IMPORTED_MODULE_24__pipes_hsy_group_enum_msg_pipe__["a" /* HsyGroupEnumMsgPipe */],
+            __WEBPACK_IMPORTED_MODULE_17__pipes_image_id_to_url_pipe__["b" /* ImageIdsToUrlPipe */],
+            __WEBPACK_IMPORTED_MODULE_17__pipes_image_id_to_url_pipe__["a" /* ImageIdToUrlPipe */],
+            __WEBPACK_IMPORTED_MODULE_18__pipes_time_from_now_pipe__["a" /* TimeFromNowPipe */],
+            __WEBPACK_IMPORTED_MODULE_21__pipes_city_n_zip_pipe__["a" /* CityNZipPipe */],
+            __WEBPACK_IMPORTED_MODULE_31__pipes_date_formatter_pipe__["a" /* DateFormatterPipe */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* HaoshiyouApp */], {
                 mode: 'ios'
             }, {
                 links: [
-                    { segment: '', component: __WEBPACK_IMPORTED_MODULE_18__pages_tabs_tabs__["a" /* TabsPage */], name: 'TabsPage' },
-                    { segment: 'listing/:id', component: __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_listing_detail_page__["a" /* ListingDetailPage */], name: 'ListingDetailPage' },
-                    { segment: 'listing-ux/:id', component: __WEBPACK_IMPORTED_MODULE_38__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */], name: 'ListingUxDetailPage' },
+                    { segment: '', component: __WEBPACK_IMPORTED_MODULE_15__pages_tabs_tabs__["a" /* TabsPage */], name: 'TabsPage' },
+                    { segment: 'listing/:id', component: __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */], name: 'ListingUxDetailPage' },
                 ]
             }),
-            __WEBPACK_IMPORTED_MODULE_28__angular_platform_browser__["a" /* BrowserModule */],
+            __WEBPACK_IMPORTED_MODULE_25__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["HttpModule"],
-            __WEBPACK_IMPORTED_MODULE_26__loopbacksdk_index__["a" /* SDKBrowserModule */].forRoot(),
-            __WEBPACK_IMPORTED_MODULE_37__angular_forms__["a" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_23__loopbacksdk_index__["a" /* SDKBrowserModule */].forRoot(),
+            __WEBPACK_IMPORTED_MODULE_34__angular_forms__["a" /* FormsModule */],
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* IonicApp */]],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* HaoshiyouApp */],
             __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__["a" /* FilterSettingsComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__pages_tabs_tabs__["a" /* TabsPage */],
+            __WEBPACK_IMPORTED_MODULE_15__pages_tabs_tabs__["a" /* TabsPage */],
             __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__["a" /* ImageGridComponent */],
             __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__["a" /* CreationPage */],
-            __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_listing_detail_page__["a" /* ListingDetailPage */],
-            __WEBPACK_IMPORTED_MODULE_38__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
-            __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_listing_item_comp__["a" /* ListingItem */],
-            __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_listings_tab_page__["a" /* ListingsTabPage */],
-            __WEBPACK_IMPORTED_MODULE_40__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
-            __WEBPACK_IMPORTED_MODULE_39__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
-            __WEBPACK_IMPORTED_MODULE_11__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
-            __WEBPACK_IMPORTED_MODULE_13__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
-            __WEBPACK_IMPORTED_MODULE_14__pages_settings_tab_settings_tab_page__["a" /* SettingsTabPage */],
-            __WEBPACK_IMPORTED_MODULE_15__pages_tabs_disconnect_modal__["a" /* DisconnectModal */],
-            __WEBPACK_IMPORTED_MODULE_25__pages_qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */],
-            __WEBPACK_IMPORTED_MODULE_36__pages_mine_tab_mine_tab_page__["a" /* MineTabPage */]
+            __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
+            __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
+            __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
+            __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
+            __WEBPACK_IMPORTED_MODULE_11__pages_settings_tab_settings_tab_page__["a" /* SettingsTabPage */],
+            __WEBPACK_IMPORTED_MODULE_12__pages_tabs_disconnect_modal__["a" /* DisconnectModal */],
+            __WEBPACK_IMPORTED_MODULE_22__pages_qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */],
+            __WEBPACK_IMPORTED_MODULE_33__pages_mine_tab_mine_tab_page__["a" /* MineTabPage */]
         ],
         providers: [
-            { provide: __WEBPACK_IMPORTED_MODULE_16__services_image_service__["b" /* IImageService */], useClass: __WEBPACK_IMPORTED_MODULE_16__services_image_service__["a" /* CloudinaryImageService */] },
-            __WEBPACK_IMPORTED_MODULE_23__services_map_service__["a" /* MapService */],
-            __WEBPACK_IMPORTED_MODULE_17__services_auth_service__["a" /* AuthService */],
+            { provide: __WEBPACK_IMPORTED_MODULE_13__services_image_service__["b" /* IImageService */], useClass: __WEBPACK_IMPORTED_MODULE_13__services_image_service__["a" /* CloudinaryImageService */] },
+            __WEBPACK_IMPORTED_MODULE_20__services_map_service__["a" /* MapService */],
+            __WEBPACK_IMPORTED_MODULE_14__services_auth_service__["a" /* AuthService */],
             {
                 provide: __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__["AuthHttp"],
                 useFactory: getAuthHttp,
-                deps: [__WEBPACK_IMPORTED_MODULE_3__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_22__ionic_native_native_storage__["a" /* NativeStorage */]]
+                deps: [__WEBPACK_IMPORTED_MODULE_3__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_19__ionic_native_native_storage__["a" /* NativeStorage */]]
             },
-            __WEBPACK_IMPORTED_MODULE_22__ionic_native_native_storage__["a" /* NativeStorage */],
-            __WEBPACK_IMPORTED_MODULE_29__ionic_native_transfer__["a" /* Transfer */],
-            __WEBPACK_IMPORTED_MODULE_30__ionic_native_network__["a" /* Network */],
-            __WEBPACK_IMPORTED_MODULE_31__ionic_native_push__["a" /* Push */],
-            __WEBPACK_IMPORTED_MODULE_32__ionic_native_code_push__["a" /* CodePush */],
-            __WEBPACK_IMPORTED_MODULE_33__ionic_native_app_version__["a" /* AppVersion */],
-            __WEBPACK_IMPORTED_MODULE_35__services_flag_service__["a" /* FlagService */]
+            __WEBPACK_IMPORTED_MODULE_19__ionic_native_native_storage__["a" /* NativeStorage */],
+            __WEBPACK_IMPORTED_MODULE_26__ionic_native_transfer__["a" /* Transfer */],
+            __WEBPACK_IMPORTED_MODULE_27__ionic_native_network__["a" /* Network */],
+            __WEBPACK_IMPORTED_MODULE_28__ionic_native_push__["a" /* Push */],
+            __WEBPACK_IMPORTED_MODULE_29__ionic_native_code_push__["a" /* CodePush */],
+            __WEBPACK_IMPORTED_MODULE_30__ionic_native_app_version__["a" /* AppVersion */],
+            __WEBPACK_IMPORTED_MODULE_32__services_flag_service__["a" /* FlagService */]
         ]
     })
 ], AppModule);
@@ -3829,24 +3946,24 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 515:
+/***/ 513:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HaoshiyouApp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_tabs_tabs__ = __webpack_require__(273);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_tabs_tabs__ = __webpack_require__(267);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__ = __webpack_require__(291);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__env__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__env__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__loopbacksdk_lb_config__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_models_HsyListing__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_code_push__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__util_url_util__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_models_HsyListing__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_code_push__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__util_url_util__ = __webpack_require__(382);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3927,10 +4044,10 @@ HaoshiyouApp = __decorate([
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ErrorHandler; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__ = __webpack_require__(275);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3967,9 +4084,9 @@ ErrorHandler = __decorate([
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoopBackAuth; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__storage_storage_swaps__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_BaseModels__ = __webpack_require__(278);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__storage_storage_swaps__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_BaseModels__ = __webpack_require__(277);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4244,7 +4361,7 @@ LoopBackConfig.withCredentials = false;
 
 /***/ }),
 
-/***/ 557:
+/***/ 555:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4286,16 +4403,1117 @@ var EnvType;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreationPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_uuid__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_map_service__ = __webpack_require__(156);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_flag_service__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_forms__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_services_custom__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_env__ = __webpack_require__(555);
+
+class Env {
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Env;
+
+Env.version = "4.0";
+Env.envType = __WEBPACK_IMPORTED_MODULE_0__base_env__["a" /* EnvType */].Dev;
+Env.flags = {};
+Env.configAuth0 = {
+    clientId: 'StjMTE6NRzI9qmUPT2ij4LvEzmlja8OY',
+    accountDomain: 'xinbenlv.auth0.com',
+};
+Env.configCloudinary = {
+    cloudName: 'xinbenlv',
+    apiKey: '999284541119412',
+    uploadPreset: 'haoshiyou-dev',
+};
+Env.configGoogleAnalytics = {
+    propertyId: 'UA-55311687-3'
+};
+Env.configLogSense = {
+    token: '85b11658-5721-4734-a396-cb552d8e5e96'
+};
+Env.configHaoshiyouServer = {
+    serverUrl: "http://haoshiyou-server-dev.herokuapp.com"
+};
+//# sourceMappingURL=env.js.map
+
+/***/ }),
+
+/***/ 831:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageGridComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_image_service__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__remove_modal__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_env__ = __webpack_require__(67);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+let ImageGridComponent = class ImageGridComponent {
+    constructor(imageService, nav, modalCtrl, platform) {
+        this.imageService = imageService;
+        this.nav = nav;
+        this.modalCtrl = modalCtrl;
+        this.platform = platform;
+        this.updateImageIds = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    ngOnInit() {
+        this.platform.ready().then(() => {
+            this.initUploader();
+        });
+    }
+    //noinspection JSUnusedLocalSymbols, used in HTML
+    showImage(imageId) {
+        let el = document.getElementsByTagName('body');
+        // TODO(xinbenlv): modify the viewerjs to customize the following
+        // 1. click on background area to close
+        let url = this.imageService.getUrlFromId(imageId, 0, 0);
+        let viewer = new window.Viewer(el[0], {
+            url: () => {
+                return url;
+            },
+            inline: false,
+            toolbar: true,
+            title: false,
+            movable: true,
+            keyboard: false,
+            navbar: true,
+            hidden: () => {
+                viewer.destroy();
+            }
+        });
+        viewer.show();
+    }
+    initUploader() {
+        var uploadImageFormData = {
+            "timestamp": $.now(),
+            "api_key": __WEBPACK_IMPORTED_MODULE_4__app_env__["a" /* Env */].configCloudinary.apiKey,
+            "upload_preset": __WEBPACK_IMPORTED_MODULE_4__app_env__["a" /* Env */].configCloudinary.uploadPreset,
+        };
+        var escapedFormData = JSON.stringify(uploadImageFormData);
+        $('.cloudinary-fileupload')
+            .attr("data-form-data", escapedFormData)
+            .bind('cloudinarydone', (e, data) => {
+            if (!this.imageIds)
+                this.imageIds = [];
+            this.onUpdateImageIds(this.imageIds.concat(data.result.public_id));
+            return true;
+        })
+            .cloudinary_fileupload();
+    }
+    //noinspection JSUnusedLocalSymbols, used in HTML
+    clickDelete() {
+        this.removeModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_2__remove_modal__["a" /* RemoveModal */], { imageIds: this.imageIds });
+        this.removeModal.onDidDismiss((data) => {
+            this.onUpdateImageIds(data.imageIds);
+        });
+        this.removeModal.present();
+    }
+    onUpdateImageIds(imageIds) {
+        this.imageIds = imageIds;
+        this.updateImageIds.emit(this.imageIds); // notify parent
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Array)
+], ImageGridComponent.prototype, "imageIds", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", Object)
+], ImageGridComponent.prototype, "updateImageIds", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Boolean)
+], ImageGridComponent.prototype, "isEdit", void 0);
+ImageGridComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'image-grid',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/image-grid.comp.html"*/'<ion-row wrap >\n    <ion-col width-33 *ngFor="let imageId of imageIds;">\n        <img src="{{imageId | imageIdToUrlPipe}}"\n             alt="Image {{imageId}}"\n             (click)="showImage(imageId)">\n    </ion-col>\n\n    <ion-col width-33 *ngIf="isEdit" width="300px" height="300px">\n        <label class="custom-file-upload">\n            <img src="http://placehold.it/300x300?text=添加" />\n            <input name="file" type="file" multiple="" class="cloudinary-fileupload" data-cloudinary-field="image_id" />\n        </label>\n    </ion-col>\n    <ion-col width-33 *ngIf="isEdit && imageIds.length > 0 ">\n        <img src="http://placehold.it/300x300?text=删除" (click)="clickDelete()">\n    </ion-col>\n</ion-row>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/image-grid.comp.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_image_service__["b" /* IImageService */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["e" /* ModalController */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* Platform */]])
+], ImageGridComponent);
+
+//# sourceMappingURL=image-grid.comp.js.map
+
+/***/ }),
+
+/***/ 832:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LongImageComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_transfer__ = __webpack_require__(171);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+let LongImageComponent = class LongImageComponent {
+    constructor(platform, transfer) {
+        this.platform = platform;
+        this.transfer = transfer;
+        this.canvasWidth = 600;
+        console.log(this.platform.versions());
+        this.fileTransfer = this.transfer.create();
+    }
+    generateLongImage() {
+        console.log(" --- generateLongImage... --- ");
+        let c = document.createElement('canvas');
+        c.width = this.canvasWidth;
+        let ctx = c.getContext('2d');
+        var title = this.listing.title;
+        var description = this.listing.content;
+        var despHeight = this.preCalculateHeight(ctx, description, 550, 25);
+        var qrcodeHeight = 400;
+        this.canvasHeight = 100 + despHeight + qrcodeHeight; // title + description
+        if (this.hasLocation()) {
+            this.canvasHeight += 250;
+        }
+        var promises = new Array();
+        let images = this.preloadElements(promises);
+        let imagesHeight = 0;
+        Promise.all(promises).then(values => {
+            this.resizeCanvas(c, images);
+            this.drawElements(c, despHeight, title, description, images);
+        });
+    }
+    preloadElements(promises) {
+        var map_image = null;
+        if (this.hasLocation()) {
+            map_image = new Image();
+            var lat = this.listing.location.lat;
+            var lng = this.listing.location.lng;
+            var map_size = '598x250';
+            var map_src = 'https://maps.googleapis.com/maps/api/staticmap?&zoom=12&size='
+                + map_size + '&maptype=roadmap&markers=color:red|'
+                + lat + ',' + lng + '&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY';
+            map_image.crossOrigin = 'Anonymous';
+            promises.push(new Promise(function (resolve, reject) {
+                map_image.onload = function () {
+                    resolve();
+                };
+            }));
+            map_image.src = map_src;
+        }
+        var qrcenter_image = new Image();
+        var qrcenter_src = '/assets/res/favicon/apple-touch-icon-72x72.png';
+        qrcenter_image.crossOrigin = 'Anonymous';
+        promises.push(new Promise(function (resolve, reject) {
+            qrcenter_image.onload = function () {
+                resolve();
+            };
+        }));
+        qrcenter_image.src = qrcenter_src;
+        var imageCnt = this.listing.imageIds === undefined ? 0 : this.listing.imageIds.length;
+        let base_images = new Array(imageCnt);
+        for (let i = 0; i < imageCnt; i++) {
+            base_images[i] = new Image();
+            base_images[i].crossOrigin = 'Anonymous';
+            base_images[i].src = 'http://res.cloudinary.com/xinbenlv/image/upload/q_70,w_600/' + this.listing.imageIds[i];
+            promises.push(new Promise(function (resolve, reject) {
+                base_images[i].onload = function () {
+                    resolve();
+                };
+            }));
+        }
+        let qrcode_image = this.getQrcodeImage(document.location.href);
+        /*
+        var goto_image = new Image();
+        var goto_src = '/assets/res/long-image/haoshiyou-goto.png'
+        goto_image.crossOrigin = 'Anonymous';
+        promises.push(new Promise(function(resolve,reject){
+          goto_image.onload = function(){
+            resolve();
+          };
+        }));
+        goto_image.src = goto_src;
+        */
+        return {
+            map_image: map_image,
+            base_images: base_images,
+            qrcode_image: qrcode_image,
+            qrcenter_image: qrcenter_image
+            // goto_image: goto_image
+        };
+    }
+    resizeCanvas(c, images) {
+        let imageCnt = images.base_images == undefined ? 0 : images.base_images.length;
+        let imagesHeight = 0;
+        for (let i = 0; i < imageCnt; i++) {
+            imagesHeight += images.base_images[i].height;
+        }
+        c.height = this.canvasHeight + imagesHeight;
+    }
+    hasLocation() {
+        return this.listing.location != undefined && this.listing.location.lat != 0;
+    }
+    drawElements(c, despHeight, title, description, images) {
+        console.log(" --- drawElements... --- ");
+        let imageCnt = images.base_images == undefined ? 0 : images.base_images.length;
+        let ctx = c.getContext('2d');
+        ctx.fillStyle = "black";
+        ctx.font = "30px Arial";
+        ctx.fillText(title, 10, 50);
+        ctx.font = "20px Arial";
+        this.fillMultiLines(ctx, description, 25, 80, 550, 25);
+        let imageY = 100 + despHeight;
+        if (this.hasLocation()) {
+            ctx.drawImage(images.map_image, 0, imageY);
+            imageY += 250;
+        }
+        for (let i = 0; i < imageCnt; i++) {
+            ctx.drawImage(images.base_images[i], 0, imageY);
+            imageY += images.base_images[i].height;
+        }
+        var qrcodeY = imageY + 70;
+        ctx.drawImage(images.qrcode_image, 170, qrcodeY);
+        ctx.drawImage(images.qrcenter_image, (this.canvasWidth - 72) / 2, qrcodeY + 95);
+        var qrcodeHintY = qrcodeY - 20;
+        ctx.fillStyle = "black";
+        ctx.font = "20px Arial";
+        var gotoY = qrcodeY + 300;
+        ctx.fillText('扫描二维码查看详情，可私信po主', 160, qrcodeHintY);
+        ctx.fillStyle = "black";
+        ctx.font = "30px Arial";
+        ctx.fillText('更多咨询请查看haoshiyou.org', 100, gotoY);
+        // ctx.drawImage(images.goto_image, 6, gotoY);
+        // draw boundaries
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, this.canvasWidth, c.height); //for white background
+        ctx.globalCompositeOperation = "source-over";
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#000000";
+        ctx.strokeRect(0, 0, this.canvasWidth, c.height); //for white background
+        console.log(" --- Begin to download... --- ");
+        let fileName = 'haoshiyou-' + (new Date(this.listing.lastUpdated)).toISOString() + '.png';
+        if (this.platform.is('core')) {
+            if (navigator.userAgent.indexOf("MSIE") > 0 ||
+                navigator.userAgent.match(/Trident.*rv\:11\./)) {
+                var blob = c.msToBlob();
+                window.navigator.msSaveBlob(blob, fileName);
+            }
+            else {
+                var a = document.getElementById("downloadLink");
+                a.setAttribute("href", c.toDataURL());
+                a.setAttribute("download", fileName);
+                a.click();
+            }
+        }
+        else {
+            var imgDataUrl = c.toDataURL();
+            var targetPath = cordova.file.dataDirectory + "/haoshiyou/" + fileName;
+            var options = {};
+            this.fileTransfer.download(imgDataUrl, targetPath, true)
+                .then(function (result) {
+                // Success!
+                console.log("Download");
+            }, function (err) {
+                // Error
+                console.log("Not Download");
+            });
+        }
+    }
+    getQrcodeImage(link) {
+        var el = document.createElement('div');
+        el.style.margin = "20%";
+        var qrcode = new QRCode(el);
+        qrcode.makeCode(link);
+        return el.firstChild;
+    }
+    preCalculateHeight(context, text, maxWidth, lineHeight) {
+        var words = text.split(' ');
+        var line = '';
+        var lines = 0;
+        for (var n = 0; n < words.length; n++) {
+            var testLine = line + words[n] + ' ';
+            var metrics = context.measureText(testLine);
+            var testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                lines++;
+            }
+        }
+        return lines * lineHeight; // height
+    }
+    fillMultiLines(context, text, x, y, maxWidth, lineHeight) {
+        var words = text.split(' ');
+        var line = '';
+        var lines = 0;
+        for (var n = 0; n < words.length; n++) {
+            var testLine = line + words[n] + ' ';
+            var metrics = context.measureText(testLine);
+            var testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                context.fillText(line, x, y);
+                line = words[n] + ' ';
+                y += lineHeight;
+                lines++;
+            }
+            else {
+                line = testLine;
+            }
+        }
+        context.fillText(line, x, y);
+    }
+};
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__["a" /* HsyListing */])
+], LongImageComponent.prototype, "listing", void 0);
+LongImageComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'long-image',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/long-image.comp.html"*/'<button ion-button color="primary" clear item-left (click)="generateLongImage()">\n    下载长图片 <ion-icon name="ios-long-image"></ion-icon>\n</button>\n<a id="downloadLink" hidden></a>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/long-image.comp.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_transfer__["a" /* Transfer */]])
+], LongImageComponent);
+
+//# sourceMappingURL=long-image.comp.js.map
+
+/***/ }),
+
+/***/ 833:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnumMsgPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+let EnumMsgPipe = class EnumMsgPipe {
+    transform(value) {
+        // TODO(xinbenlv): fix it
+        if (value == 'NeedRoom') {
+            return '求租';
+        }
+        else if (value == 'NeedRoommate') {
+            return '招租';
+        }
+        else
+            return '招租';
+    }
+};
+EnumMsgPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'enumMsgPipe' })
+], EnumMsgPipe);
+
+//# sourceMappingURL=enum-msg.pipe.js.map
+
+/***/ }),
+
+/***/ 834:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ImageIdsToUrlPipe; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageIdToUrlPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_image_service__ = __webpack_require__(100);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+let ImageIdsToUrlPipe = class ImageIdsToUrlPipe {
+    constructor(imageService) {
+        this.imageService = imageService;
+    }
+    transform(ids) {
+        return ids.map((id) => {
+            return this.imageService.getUrlFromId(id);
+        });
+    }
+};
+ImageIdsToUrlPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
+        name: 'imageIdsToUrlPipe',
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_image_service__["b" /* IImageService */]])
+], ImageIdsToUrlPipe);
+
+let ImageIdToUrlPipe = class ImageIdToUrlPipe {
+    constructor(imageService) {
+        this.imageService = imageService;
+    }
+    transform(id, mode = "default") {
+        if (mode == "default") {
+            return this.imageService.getUrlFromId(id);
+        }
+        else if (mode == "full") {
+            return this.imageService.getUrlFromId(id, 0, 0);
+        }
+        else if (mode == "thumbnail") {
+            return this.imageService.getUrlFromId(id, 200, 150);
+        }
+    }
+};
+ImageIdToUrlPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
+        name: 'imageIdToUrlPipe',
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_image_service__["b" /* IImageService */]])
+], ImageIdToUrlPipe);
+
+//# sourceMappingURL=image-id-to-url.pipe.js.map
+
+/***/ }),
+
+/***/ 835:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TimeFromNowPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+__WEBPACK_IMPORTED_MODULE_1_moment___default.a.locale('zh-cn');
+let TimeFromNowPipe = class TimeFromNowPipe {
+    transform(value /*time in UTC ms */) {
+        return __WEBPACK_IMPORTED_MODULE_1_moment___default()(new Date(value)).fromNow();
+    }
+};
+TimeFromNowPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
+        name: 'timeFromNow'
+    })
+], TimeFromNowPipe);
+
+//# sourceMappingURL=time-from-now.pipe.js.map
+
+/***/ }),
+
+/***/ 837:
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./af": 385,
+	"./af.js": 385,
+	"./ar": 386,
+	"./ar-dz": 387,
+	"./ar-dz.js": 387,
+	"./ar-kw": 388,
+	"./ar-kw.js": 388,
+	"./ar-ly": 389,
+	"./ar-ly.js": 389,
+	"./ar-ma": 390,
+	"./ar-ma.js": 390,
+	"./ar-sa": 391,
+	"./ar-sa.js": 391,
+	"./ar-tn": 392,
+	"./ar-tn.js": 392,
+	"./ar.js": 386,
+	"./az": 393,
+	"./az.js": 393,
+	"./be": 394,
+	"./be.js": 394,
+	"./bg": 395,
+	"./bg.js": 395,
+	"./bm": 396,
+	"./bm.js": 396,
+	"./bn": 397,
+	"./bn.js": 397,
+	"./bo": 398,
+	"./bo.js": 398,
+	"./br": 399,
+	"./br.js": 399,
+	"./bs": 400,
+	"./bs.js": 400,
+	"./ca": 401,
+	"./ca.js": 401,
+	"./cs": 402,
+	"./cs.js": 402,
+	"./cv": 403,
+	"./cv.js": 403,
+	"./cy": 404,
+	"./cy.js": 404,
+	"./da": 405,
+	"./da.js": 405,
+	"./de": 406,
+	"./de-at": 407,
+	"./de-at.js": 407,
+	"./de-ch": 408,
+	"./de-ch.js": 408,
+	"./de.js": 406,
+	"./dv": 409,
+	"./dv.js": 409,
+	"./el": 410,
+	"./el.js": 410,
+	"./en-au": 411,
+	"./en-au.js": 411,
+	"./en-ca": 412,
+	"./en-ca.js": 412,
+	"./en-gb": 413,
+	"./en-gb.js": 413,
+	"./en-ie": 414,
+	"./en-ie.js": 414,
+	"./en-nz": 415,
+	"./en-nz.js": 415,
+	"./eo": 416,
+	"./eo.js": 416,
+	"./es": 417,
+	"./es-do": 418,
+	"./es-do.js": 418,
+	"./es-us": 419,
+	"./es-us.js": 419,
+	"./es.js": 417,
+	"./et": 420,
+	"./et.js": 420,
+	"./eu": 421,
+	"./eu.js": 421,
+	"./fa": 422,
+	"./fa.js": 422,
+	"./fi": 423,
+	"./fi.js": 423,
+	"./fo": 424,
+	"./fo.js": 424,
+	"./fr": 425,
+	"./fr-ca": 426,
+	"./fr-ca.js": 426,
+	"./fr-ch": 427,
+	"./fr-ch.js": 427,
+	"./fr.js": 425,
+	"./fy": 428,
+	"./fy.js": 428,
+	"./gd": 429,
+	"./gd.js": 429,
+	"./gl": 430,
+	"./gl.js": 430,
+	"./gom-latn": 431,
+	"./gom-latn.js": 431,
+	"./gu": 432,
+	"./gu.js": 432,
+	"./he": 433,
+	"./he.js": 433,
+	"./hi": 434,
+	"./hi.js": 434,
+	"./hr": 435,
+	"./hr.js": 435,
+	"./hu": 436,
+	"./hu.js": 436,
+	"./hy-am": 437,
+	"./hy-am.js": 437,
+	"./id": 438,
+	"./id.js": 438,
+	"./is": 439,
+	"./is.js": 439,
+	"./it": 440,
+	"./it.js": 440,
+	"./ja": 441,
+	"./ja.js": 441,
+	"./jv": 442,
+	"./jv.js": 442,
+	"./ka": 443,
+	"./ka.js": 443,
+	"./kk": 444,
+	"./kk.js": 444,
+	"./km": 445,
+	"./km.js": 445,
+	"./kn": 446,
+	"./kn.js": 446,
+	"./ko": 447,
+	"./ko.js": 447,
+	"./ky": 448,
+	"./ky.js": 448,
+	"./lb": 449,
+	"./lb.js": 449,
+	"./lo": 450,
+	"./lo.js": 450,
+	"./lt": 451,
+	"./lt.js": 451,
+	"./lv": 452,
+	"./lv.js": 452,
+	"./me": 453,
+	"./me.js": 453,
+	"./mi": 454,
+	"./mi.js": 454,
+	"./mk": 455,
+	"./mk.js": 455,
+	"./ml": 456,
+	"./ml.js": 456,
+	"./mr": 457,
+	"./mr.js": 457,
+	"./ms": 458,
+	"./ms-my": 459,
+	"./ms-my.js": 459,
+	"./ms.js": 458,
+	"./mt": 460,
+	"./mt.js": 460,
+	"./my": 461,
+	"./my.js": 461,
+	"./nb": 462,
+	"./nb.js": 462,
+	"./ne": 463,
+	"./ne.js": 463,
+	"./nl": 464,
+	"./nl-be": 465,
+	"./nl-be.js": 465,
+	"./nl.js": 464,
+	"./nn": 466,
+	"./nn.js": 466,
+	"./pa-in": 467,
+	"./pa-in.js": 467,
+	"./pl": 468,
+	"./pl.js": 468,
+	"./pt": 469,
+	"./pt-br": 470,
+	"./pt-br.js": 470,
+	"./pt.js": 469,
+	"./ro": 471,
+	"./ro.js": 471,
+	"./ru": 472,
+	"./ru.js": 472,
+	"./sd": 473,
+	"./sd.js": 473,
+	"./se": 474,
+	"./se.js": 474,
+	"./si": 475,
+	"./si.js": 475,
+	"./sk": 476,
+	"./sk.js": 476,
+	"./sl": 477,
+	"./sl.js": 477,
+	"./sq": 478,
+	"./sq.js": 478,
+	"./sr": 479,
+	"./sr-cyrl": 480,
+	"./sr-cyrl.js": 480,
+	"./sr.js": 479,
+	"./ss": 481,
+	"./ss.js": 481,
+	"./sv": 482,
+	"./sv.js": 482,
+	"./sw": 483,
+	"./sw.js": 483,
+	"./ta": 484,
+	"./ta.js": 484,
+	"./te": 485,
+	"./te.js": 485,
+	"./tet": 486,
+	"./tet.js": 486,
+	"./th": 487,
+	"./th.js": 487,
+	"./tl-ph": 488,
+	"./tl-ph.js": 488,
+	"./tlh": 489,
+	"./tlh.js": 489,
+	"./tr": 490,
+	"./tr.js": 490,
+	"./tzl": 491,
+	"./tzl.js": 491,
+	"./tzm": 492,
+	"./tzm-latn": 493,
+	"./tzm-latn.js": 493,
+	"./tzm.js": 492,
+	"./uk": 494,
+	"./uk.js": 494,
+	"./ur": 495,
+	"./ur.js": 495,
+	"./uz": 496,
+	"./uz-latn": 497,
+	"./uz-latn.js": 497,
+	"./uz.js": 496,
+	"./vi": 498,
+	"./vi.js": 498,
+	"./x-pseudo": 499,
+	"./x-pseudo.js": 499,
+	"./yo": 500,
+	"./yo.js": 500,
+	"./zh-cn": 501,
+	"./zh-cn.js": 501,
+	"./zh-hk": 502,
+	"./zh-hk.js": 502,
+	"./zh-tw": 503,
+	"./zh-tw.js": 503
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 837;
+
+/***/ }),
+
+/***/ 839:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CityNZipPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_map_service__ = __webpack_require__(155);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+let CityNZipPipe = class CityNZipPipe {
+    constructor(mapService) {
+        this.mapService = mapService;
+    }
+    transform(latlng /*:google.maps.LatLng*/) {
+        return this.mapService.getLocality(latlng).then((locality) => {
+            return locality.city + ", " + locality.zip;
+        }).catch((e) => {
+            console.log(e);
+            return Promise.resolve("Unknown City");
+        });
+    }
+};
+CityNZipPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
+        name: 'cityNZipPipe',
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_map_service__["a" /* MapService */]])
+], CityNZipPipe);
+
+//# sourceMappingURL=city-n-zip.pipe.js.map
+
+/***/ }),
+
+/***/ 840:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKBrowserModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_core_search_params__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_core_error_service__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_core_auth_service__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_custom_logger_service__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_custom_SDKModels__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__storage_storage_swaps__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_common__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__storage_cookie_browser__ = __webpack_require__(504);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__storage_storage_browser__ = __webpack_require__(505);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_custom_HsyListing__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_custom_HsyUser__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_custom_HsyInteraction__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__models_index__ = __webpack_require__(841);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_index__ = __webpack_require__(842);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__lb_config__ = __webpack_require__(54);
+/* unused harmony namespace reexport */
+/* unused harmony namespace reexport */
+/* unused harmony reexport CookieBrowser */
+/* unused harmony reexport StorageBrowser */
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+/* tslint:disable */
+/**
+* @module SDKModule
+* @author Jonathan Casarrubias <t:@johncasarrubias> <gh:jonathan-casarrubias>
+* @license MIT 2016 Jonathan Casarrubias
+* @version 2.1.0
+* @description
+* The SDKModule is a generated Software Development Kit automatically built by
+* the LoopBack SDK Builder open source module.
+*
+* The SDKModule provides Angular 2 >= RC.5 support, which means that NgModules
+* can import this Software Development Kit as follows:
+*
+*
+* APP Route Module Context
+* ============================================================================
+* import { NgModule }       from '@angular/core';
+* import { BrowserModule }  from '@angular/platform-browser';
+* // App Root
+* import { AppComponent }   from './app.component';
+* // Feature Modules
+* import { SDK[Browser|Node|Native]Module } from './shared/sdk/sdk.module';
+* // Import Routing
+* import { routing }        from './app.routing';
+* @NgModule({
+*  imports: [
+*    BrowserModule,
+*    routing,
+*    SDK[Browser|Node|Native]Module.forRoot()
+*  ],
+*  declarations: [ AppComponent ],
+*  bootstrap:    [ AppComponent ]
+* })
+* export class AppModule { }
+*
+**/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+* @module SDKBrowserModule
+* @description
+* This module should be imported when building a Web Application in the following scenarios:
+*
+*  1.- Regular web application
+*  2.- Angular universal application (Browser Portion)
+*  3.- Progressive applications (Angular Mobile, Ionic, WebViews, etc)
+**/
+let SDKBrowserModule = SDKBrowserModule_1 = class SDKBrowserModule {
+    static forRoot(internalStorageProvider = {
+            provide: __WEBPACK_IMPORTED_MODULE_5__storage_storage_swaps__["a" /* InternalStorage */],
+            useClass: __WEBPACK_IMPORTED_MODULE_9__storage_cookie_browser__["a" /* CookieBrowser */]
+        }) {
+        return {
+            ngModule: SDKBrowserModule_1,
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_2__services_core_auth_service__["a" /* LoopBackAuth */],
+                __WEBPACK_IMPORTED_MODULE_3__services_custom_logger_service__["a" /* LoggerService */],
+                __WEBPACK_IMPORTED_MODULE_0__services_core_search_params__["a" /* JSONSearchParams */],
+                __WEBPACK_IMPORTED_MODULE_4__services_custom_SDKModels__["a" /* SDKModels */],
+                __WEBPACK_IMPORTED_MODULE_11__services_custom_HsyListing__["a" /* HsyListingApi */],
+                __WEBPACK_IMPORTED_MODULE_12__services_custom_HsyUser__["a" /* HsyUserApi */],
+                __WEBPACK_IMPORTED_MODULE_13__services_custom_HsyInteraction__["a" /* HsyInteractionApi */],
+                internalStorageProvider,
+                { provide: __WEBPACK_IMPORTED_MODULE_5__storage_storage_swaps__["b" /* SDKStorage */], useClass: __WEBPACK_IMPORTED_MODULE_10__storage_storage_browser__["a" /* StorageBrowser */] }
+            ]
+        };
+    }
+};
+SDKBrowserModule = SDKBrowserModule_1 = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_8__angular_core__["NgModule"])({
+        imports: [__WEBPACK_IMPORTED_MODULE_7__angular_common__["b" /* CommonModule */], __WEBPACK_IMPORTED_MODULE_6__angular_http__["HttpModule"]],
+        declarations: [],
+        exports: [],
+        providers: [
+            __WEBPACK_IMPORTED_MODULE_1__services_core_error_service__["a" /* ErrorHandler */]
+        ]
+    })
+], SDKBrowserModule);
+
+/**
+* Have Fun!!!
+* - Jon
+**/
+
+
+
+
+
+
+var SDKBrowserModule_1;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 841:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HsyListing__ = __webpack_require__(50);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HsyUser__ = __webpack_require__(273);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__HsyInteraction__ = __webpack_require__(274);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BaseModels__ = __webpack_require__(277);
+/* unused harmony namespace reexport */
+/* tslint:disable */
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 842:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_index__ = __webpack_require__(843);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_index__ = __webpack_require__(289);
+/* unused harmony namespace reexport */
+/* tslint:disable */
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 843:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__auth_service__ = __webpack_require__(53);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error_service__ = __webpack_require__(52);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__search_params__ = __webpack_require__(51);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__base_service__ = __webpack_require__(90);
+/* unused harmony namespace reexport */
+/* tslint:disable */
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 844:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyGroupEnumMsgPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+let HsyGroupEnumMsgPipe = class HsyGroupEnumMsgPipe {
+    transform(value) {
+        switch (value) {
+            case 'SanFrancisco':
+                return '三番';
+            case 'SouthBayWest':
+                return '南湾西';
+            case 'SouthBayEast':
+                return '南湾东';
+            case 'EastBay':
+                return '东湾';
+            case 'MidPeninsula':
+                return '中半岛';
+            case 'Seattle':
+                return '西雅图';
+            case 'ShortTerm':
+                return '短租';
+            case 'TestGroup':
+                return '测试';
+            default:
+                return value;
+        }
+    }
+};
+HsyGroupEnumMsgPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'hsyGroupEnumMsgPipe' })
+], HsyGroupEnumMsgPipe);
+
+//# sourceMappingURL=hsy-group-enum-msg.pipe.js.map
+
+/***/ }),
+
+/***/ 846:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DateFormatterPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+__WEBPACK_IMPORTED_MODULE_1_moment___default.a.locale('zh-cn');
+let DateFormatterPipe = class DateFormatterPipe {
+    transform(value /*time in UTC ms */) {
+        let date = new Date(value);
+        return __WEBPACK_IMPORTED_MODULE_1_moment___default()(date).format('YYYY-MM-DD HH:MM');
+    }
+};
+DateFormatterPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
+        name: 'dateFormatterPipe'
+    })
+], DateFormatterPipe);
+
+//# sourceMappingURL=date-formatter.pipe.js.map
+
+/***/ }),
+
+/***/ 847:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingUxItem; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyInteraction__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_uuid__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listing_ux_detail_page__ = __webpack_require__(506);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(34);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4321,247 +5539,88 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
 
 
-
-
-const DEFAULT_LAT = 37.41666;
-const DEFAULT_LNG = -122.09106;
-const cityToHsyGroupEnum = {
-    'Mountain View': 'SouthBayWest',
-    'Sunnyvale': 'SouthBayWest',
-    'Palo Alto': 'SouthBayWest',
-    'East Palo Alto': 'SouthBayWest',
-    'Stanford': 'SouthBayWest',
-    'Menlo Park': 'SouthBayWest',
-    'Cupertino': 'SouthBayWest',
-    'Los Gatos': 'SouthBayWest',
-    'Los Altos': 'SouthBayWest',
-    'Los Altos Hills': 'SouthBayWest',
-    'Milpitas': 'SouthBayEast',
-    'San Jose': 'SouthBayEast',
-    'Saratoga': 'SouthBayEast',
-    'Santa Clara': 'SouthBayEast',
-};
-const hsyGroupEnumToName = {
-    SanFrancisco: "三番",
-    SouthBayWest: "南湾西",
-    SouthBayEast: "南湾东",
-    EastBay: "东湾",
-    MidPeninsula: '中半岛',
-    None: "暂未覆盖"
-}; // TODO(zzn): merge with bot code
-const countyToHsyGroupEnum = {
-    'San Francisco County': 'SanFrancisco',
-    'San Mateo County': 'MidPeninsula',
-    'Alameda County': 'EastBay',
-};
-const getHsyGroupEnumFromLocality = function (city, county) {
-    let ret = (county == 'Santa Clara County' ?
-        cityToHsyGroupEnum[city] : countyToHsyGroupEnum[county]);
-    let retFixed = (typeof ret === 'undefined') ? 'None' : ret;
-    return retFixed;
-};
-/**
- * A page contains a map view and a list showing the listings.
- */
-let CreationPage = class CreationPage {
-    constructor(platform, params, nav, alertCtrl, authService, mapService, flagService, hsyListingApi, hsyUserApi, ref) {
-        this.platform = platform;
-        this.params = params;
+let ListingUxItem = class ListingUxItem {
+    constructor(nav, alertCtrl, hsyInteractionApi, hsyListingApi, flagService) {
         this.nav = nav;
         this.alertCtrl = alertCtrl;
-        this.authService = authService;
-        this.mapService = mapService;
-        this.flagService = flagService;
+        this.hsyInteractionApi = hsyInteractionApi;
         this.hsyListingApi = hsyListingApi;
-        this.hsyUserApi = hsyUserApi;
-        this.ref = ref;
-        //noinspection JSUnusedLocalSymbols, JSMismatchedCollectionQueryUpdate
-        // TODO(xinbenlv) uncomment this
-        this.listingTypeEnums = ['NeedRoommate' /*招租*/, 'NeedRoom' /*求租*/];
-        this.hsyGroupEnumOptions = [
-            'SanFrancisco',
-            'MidPeninsula',
-            'SouthBayWest',
-            'SouthBayEast',
-            'EastBay',
-            'ShortTerm',
-            'Seattle',
-            'TestGroup',
+        this.flagService = flagService;
+        this.onBump = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.indexFromParent = 0;
+        this.placeholderIds = [
+            'qfhndxx',
+            'ccygytp',
+            'yzsmdhz'
         ];
-        this.hsyGroupEnumOptionsMap = {
-            'SanFrancisco': '三番',
-            'MidPeninsula': '中半岛',
-            'SouthBayWest': '南湾西',
-            'SouthBayEast': '南湾东',
-            'EastBay': '东湾',
-            'ShortTerm': '短租',
-            'Seattle': '西雅图',
-            'TestGroup': '测试',
-        };
-        this.amenityOptions = [
-            '洗衣机', '停车位', '可养宠物'
-        ];
-        //noinspection JSMismatchedCollectionQueryUpdate used in HTML
-        this.dirty = {};
-        if (params.data.listing) {
-            this.listing = params.data.listing;
-        }
-        else {
-            this.listing = {};
-            this.listing.uid = Object(__WEBPACK_IMPORTED_MODULE_2__util_uuid__["a" /* uuid */])();
-        }
-        if (!this.listing.location) {
-            let loc = {
-                lat: DEFAULT_LAT,
-                lng: DEFAULT_LNG
-            };
-            this.listing.location = loc;
-            this.listing.location_lng = loc.lng;
-            this.listing.location_lat = loc.lat;
-        }
-        if (!this.listing.ownerId) {
-            this.listing.owner = {};
+    }
+    gotoDetail() {
+        ga('send', 'event', {
+            eventCategory: 'go-to',
+            eventAction: 'listing-detail',
+            eventLabel: 'from-listing-item'
+        });
+        this.nav.push(__WEBPACK_IMPORTED_MODULE_6__listing_ux_detail_page__["a" /* ListingUxDetailPage */], { listing: this.listing });
+    }
+    bump() {
+        return __awaiter(this, void 0, void 0, function* () {
+            ga('send', 'event', {
+                eventCategory: 'interaction',
+                eventAction: 'bump',
+            });
             let local = window.localStorage;
             let meId = local['user_id']; // TODO(xinbenlv): use UserService
-            this.listing.ownerId = meId;
-            this.listing.owner.id = meId;
-        }
-        if (!this.listing.amenityArray) {
-            this.listing.amenityArray = [];
-        }
-        if (!this.listing.imageIds)
-            this.listing.imageIds = [];
-    }
-    ngOnInit() {
-        this.marker = new google.maps.Marker(/*<google.maps.MarkerOptions>*/ {
-            position: new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng),
-            animation: google.maps.Animation.DROP,
-            draggable: true,
-        });
-        google.maps.event.addListener(this.marker, 'dragend', () => __awaiter(this, void 0, void 0, function* () {
-            let location = {
-                lat: this.marker.getPosition().lat(),
-                lng: this.marker.getPosition().lng()
+            let now = new Date();
+            let hsyInteraction = {
+                uid: Object(__WEBPACK_IMPORTED_MODULE_4__util_uuid__["a" /* uuid */])(),
+                userId: meId,
+                type: "BUMP",
+                listingId: this.listing.uid,
+                interactionTime: now
             };
-            this.listing.location = location;
-            this.listing.location_lng = location.lng;
-            this.listing.location_lat = location.lat;
-            let locality = yield this.mapService.getLocality(new google.maps.LatLng(this.listing.location.lat, this.listing.location.lng));
-            let hsyGroupEnum = getHsyGroupEnumFromLocality(locality.city, locality.county);
-            this.localityText = `${locality.city}, ${locality.zip} (${hsyGroupEnumToName[hsyGroupEnum]})`;
-            this.listing.hsyGroupEnum = hsyGroupEnum;
-            this.ref.detectChanges();
-        }));
-    }
-    markAllControlsAsDirty() {
-        Object.keys(this.hsyListingForm.controls).filter(k => {
-            this.hsyListingForm.controls[k].markAsDirty();
+            this.listing.interactions.push(hsyInteraction);
+            this.onBump.emit(this.listing);
+            yield this.hsyInteractionApi.create(hsyInteraction).toPromise();
+            yield this.hsyListingApi.updateAttributes(this.listing.uid, { latestUpdatedOrBump: now }).toPromise();
         });
-    }
-    save() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.markAllControlsAsDirty();
-            if (this.validate()) {
-                this.listing.lastUpdated = new Date();
-                this.listing.latestUpdatedOrBump = this.listing.lastUpdated;
-                if (!this.listing.ownerId) {
-                    let local = window.localStorage;
-                    let meId = local['user_id']; // TODO(xinbenlv): use UserService
-                    this.listing.ownerId = meId;
-                }
-                if (this.inTestGroup) {
-                    this.listing.hsyGroupEnum = 'TestGroup';
-                }
-                yield Promise.all([
-                    yield this.hsyListingApi.upsert(this.listing).toPromise(),
-                    yield this.hsyUserApi.upsert(this.listing.owner).toPromise()
-                ]);
-                yield this.nav.pop();
-            }
-            else {
-                this.dirty['title'] = true;
-                this.dirty['content'] = true;
-                this.dirty['listingTypeEnum'] = true;
-            }
-        });
-    }
-    validate() {
-        return (this.listing.title && this.listing.content && (this.listing.listingTypeEnum != null));
-    }
-    updateImageIds(imageIds) {
-        this.listing.imageIds = imageIds;
-    }
-    deleteListing() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let prompt = this.alertCtrl.create({
-                title: '确认删除?',
-                buttons: [
-                    {
-                        text: '取消',
-                        handler: () => {
-                            this.nav.pop(); // alert
-                        }
-                    },
-                    {
-                        text: '删除',
-                        handler: () => {
-                            this.hsyListingApi.deleteById(this.listing.uid).take(1).toPromise().then(() => {
-                                this.nav.pop().then(() => {
-                                    this.nav.pop();
-                                }); // alert
-                            });
-                        }
-                    }
-                ]
-            });
-            yield prompt.present();
-        });
-    }
-    isDebug() {
-        return this.flagService.getFlag('debug');
-    }
-    toggleAmenity(amenity) {
-        let array = this.listing.amenityArray;
-        if (array.indexOf(amenity) >= 0) {
-            this.listing.amenityArray = this.listing.amenityArray.filter(a => a != amenity);
-        }
-        else {
-            this.listing.amenityArray.push(amenity);
-        }
     }
 };
 __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('hsyListingForm'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_7__angular_forms__["d" /* NgForm */])
-], CreationPage.prototype, "hsyListingForm", void 0);
-CreationPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'creation-page',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-title>\n            创建\n        </ion-title>\n        <ion-buttons end>\n            <button ion-button (click)="save()">保存</button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content class="creation grey-background" id="page-container">\n        <ion-card offset-lg-3 col-lg-6 offset-md-2 col-md-8 >\n            <form #hsyListingForm="ngForm">\n            <ion-item>\n                <ion-label>类型</ion-label>\n                <ion-select interface="popover"\n                            text-right required [(ngModel)]="listing.listingTypeEnum"\n                            name="listingTypeEnum" placeholder="必选">\n                    <ion-option  *ngFor="let v of listingTypeEnums "\n                                 value={{v}}>{{ v | enumMsgPipe }}</ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"> <!-- 只有招租需要填写 -->\n                <ion-label>地址</ion-label>\n                <ion-input item-right class="address" text-right [(ngModel)]="listing.addressLine" name="addressLine"\n                ></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>城市</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.addressCity"\n                           name="addressCity"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>预期价格</ion-label>\n                <ion-input item-right text-right\n                           type="number" min="0"\n                           [(ngModel)]="listing.price" name="price"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>标题</ion-label>\n                <ion-input\n                        item-right text-right required [(ngModel)]="listing.title"\n                        name="title" placeholder="必填"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>详情</ion-label>\n                <ion-textarea item-right text-right required [(ngModel)]="listing.content"\n                              name="content"\n                              placeholder="必填"></ion-textarea>\n\n            </ion-item>\n            <ion-item *ngIf="isDebug()">\n                <ion-label>测试</ion-label>\n                <ion-checkbox item-right text-right fixed color="dark" checked="true"\n                              [(ngModel)]="inTestGroup"\n                              name="inTestGroup"\n                ></ion-checkbox>\n\n            </ion-item>\n\n\n            <ion-item>\n                <ion-label>所在好室友群</ion-label>\n                <ion-select interface="popover"\n                            text-right [(ngModel)]="listing.hsyGroupEnum"\n                            name="type">\n                    <ion-option  *ngFor="let enum of hsyGroupEnumOptions "\n                                 value={{enum}}> {{ hsyGroupEnumOptionsMap[enum] }}\n                    </ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item>\n                <ion-label>群中昵称</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"\n                           name="hsyGroupNick"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>电子邮箱</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactEmail"\n                           name="contactEmail"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>联系电话</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactPhone"\n                           name="contactPhone"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>微信号</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.weixin"\n                           name="weixin"></ion-input>\n            </ion-item>\n            <ng-container *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"><!-- 只有招租需要填写这段 -->\n                <ion-item>\n                    <ion-label>整租单租</ion-label>\n                    <ion-select item-right interface="popover" text-right\n                                [(ngModel)]="listing.isRentingEntireHouse"\n                                name="isRentingEntireHouse">\n                        <ion-option text-right [value]="true">整房出租</ion-option>\n                        <ion-option text-right [value]="false">单间出租</ion-option>\n                    </ion-select>\n                </ion-item>\n                <ion-item >\n                    <ion-label>卧室数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBedRoom"\n                    name="numBedRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>卫生间数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBathRoom"\n                    name="numBathRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>设施/须知</ion-label>\n                    <div item-right text-right text-wrap>\n                        <button ion-button small round color="primary"\n                                *ngFor="let o of amenityOptions"\n                                (click)="toggleAmenity(o)"\n                                [outline] = "listing.amenityArray.indexOf(o) < 0">{{o}}</button>\n                    </div>\n                </ion-item>\n            </ng-container>\n            <ion-item>\n                <ion-label>起租时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD"\n                              [(ngModel)]="listing.rentalStartDate"\n                name="rentalStartDate"></ion-datetime>\n            </ion-item>\n            <ion-item>\n                <ion-label>终止时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"\n                name="rentalEndDate"></ion-datetime>\n            </ion-item>\n            <ion-item *ngIf="flagService.getFlag(\'requireToContact\')">\n                <ion-label>登LinkedIn才可联系我</ion-label>\n                <ion-toggle item-right text-right name="requireToContact"></ion-toggle>\n                <!--TODO(xinbenlv): wire it-->\n            </ion-item>\n            <ion-item>\n                <ion-label>图片</ion-label>\n                <ion-input item-right disabled name="imageBlock"></ion-input>\n            </ion-item>\n            <ion-item>\n                <image-grid\n                        [imageIds]="listing.imageIds"\n                        (updateImageIds)="updateImageIds($event)"\n                        [isEdit]="true"\n                ></image-grid>\n            </ion-item>\n            <ion-row>\n                <button col-6 ion-button block color="secondary" (click)="save()">保存</button>\n                <button col-6 ion-button outline block color="danger" (click)="deleteListing()">删除</button>\n            </ion-row>\n            </form>\n        </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", Object)
+], ListingUxItem.prototype, "onBump", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__["a" /* HsyListing */])
+], ListingUxItem.prototype, "listing", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Number)
+], ListingUxItem.prototype, "indexFromParent", void 0);
+ListingUxItem = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'listing-ux-item',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/'<div class="wrapper" (click)="gotoDetail()">\n    <div class="grid-container">\n        <div class="content">\n            <div class="title">{{listing.content.substr(0, 70)}}</div>\n            <div class="middle">\n                <ng-container *ngIf="listing.location_lat && listing.location_lng">\n                    <ion-icon\n                            name="ios-pin-outline"></ion-icon><span class="location">{{listing.addressCity}}</span>\n                </ng-container>\n                <ion-icon name="ios-time-outline"></ion-icon><span class="lastUpdate">{{listing.lastUpdated | timeFromNow }}</span>\n            </div>\n            <div class="price" >\n                <ng-container *ngIf="listing.price">\n                    <span class="price-dollar-number-per">${{listing.price}}</span><span class="month">/月</span>\n                </ng-container>\n                <ng-container *ngIf="!listing.price">\n                    <span  class="price-dollar-number-per">价格待议</span>\n                </ng-container>\n            </div>\n        </div>\n        <div class="thumbnail">\n            <img *ngIf="listing.imageIds.length > 0"\n                 src="{{ listing.imageIds[0] | imageIdToUrlPipe : \'thumbnail\' }}"\n                 alt="img-{{imageId}}"\n                 (click)="gotoDetail()"/>\n            <img *ngIf="listing.imageIds.length == 0"\n                 src="{{\'../../assets/res/placeholders/\'+ placeholderIds[indexFromParent % 3] + \'.png\'}}"\n                 alt="" (click)="gotoDetail()">\n        </div>\n    </div>\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_4__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_5__services_map_service__["a" /* MapService */],
-        __WEBPACK_IMPORTED_MODULE_6__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_8__loopbacksdk_services_custom__["a" /* HsyUserApi */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
-], CreationPage);
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
+        __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyInteraction__["a" /* HsyInteractionApi */],
+        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
+        __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */]])
+], ListingUxItem);
 
-//# sourceMappingURL=listing-creation.page.js.map
+//# sourceMappingURL=listing-ux-item.comp.js.map
 
 /***/ }),
 
-/***/ 68:
+/***/ 89:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyUserApi; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_search_params__ = __webpack_require__(51);
@@ -4861,1874 +5920,23 @@ HsyUserApi = __decorate([
 
 /***/ }),
 
-/***/ 69:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_env__ = __webpack_require__(557);
-
-class Env {
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Env;
-
-Env.version = "4.0";
-Env.envType = __WEBPACK_IMPORTED_MODULE_0__base_env__["a" /* EnvType */].Dev;
-Env.flags = {};
-Env.configAuth0 = {
-    clientId: 'StjMTE6NRzI9qmUPT2ij4LvEzmlja8OY',
-    accountDomain: 'xinbenlv.auth0.com',
-};
-Env.configCloudinary = {
-    cloudName: 'xinbenlv',
-    apiKey: '999284541119412',
-    uploadPreset: 'haoshiyou-dev',
-};
-Env.configGoogleAnalytics = {
-    propertyId: 'UA-55311687-3'
-};
-Env.configLogSense = {
-    token: '85b11658-5721-4734-a396-cb552d8e5e96'
-};
-Env.configHaoshiyouServer = {
-    serverUrl: "http://haoshiyou-server-dev.herokuapp.com"
-};
-//# sourceMappingURL=env.js.map
-
-/***/ }),
-
-/***/ 77:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return IImageService; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CloudinaryImageService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_transfer__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_env__ = __webpack_require__(69);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-let IImageService = class IImageService {
-    /**
-     * @param localUris
-     * @returns {Promise<any>|Promise<TAll[]>} a list of public id of stored image.
-     * In failure, it will reject at the first failure and tell why,
-     */
-    uploadImagesAndGetIds(localUris) {
-        throw "Not implemented";
-    }
-    ;
-    /**
-     * Get a url string from image id.
-     * @param id
-     */
-    getUrlFromId(id, width = 200, height = 100) {
-        throw "Not implemented";
-    }
-};
-IImageService = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-], IImageService);
-
-let CloudinaryImageService = class CloudinaryImageService {
-    constructor(transfer) {
-        this.transfer = transfer;
-        // TODO(xinbenlv): update the credentials of CloudinaryImageService.
-        this.config = {
-            cloud_name: __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].configCloudinary.cloudName,
-            api_key: __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].configCloudinary.apiKey,
-            upload_preset: __WEBPACK_IMPORTED_MODULE_2__app_env__["a" /* Env */].configCloudinary.uploadPreset
-        };
-    }
-    /**
-     * override
-     */
-    uploadImagesAndGetIds(localUris) {
-        let fileTransfer = this.transfer.create();
-        let uploadUrl = "https://api.cloudinary.com/v1_1/" + this.config.cloud_name + "/image/upload";
-        return Promise.all(localUris.map((uri) => {
-            return fileTransfer.upload(uri, uploadUrl, {
-                params: this.config
-            }).then((result) => {
-                let data = JSON.parse(result['response']);
-                return data.public_id;
-            }).catch((error) => {
-            });
-        }));
-    }
-    //noinspection JSUnusedGlobalSymbols
-    /**
-     * override
-     */
-    getUrlFromId(id, width = 300, height = 200) {
-        let param = "c_fill,g_north";
-        if (width == 0 && height == 0) {
-            let ion_card_width = 560; //TODO: get the card width
-            param += ',w_' + ion_card_width; // 1242 is the width of iphone 6plus.
-            // param = 'w_300,h_150,c_fill,g_auto';
-        }
-        else if (width == 0) {
-            param += `,h_${height}`;
-        }
-        else if (height == 0) {
-            param += `,w_${width}`;
-        }
-        else {
-            param += `,w_${width},h_${height}`;
-        }
-        param += `,g_center`;
-        return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/${param}/${id}.jpg`;
-    }
-};
-CloudinaryImageService = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__ionic_native_transfer__["a" /* Transfer */]])
-], CloudinaryImageService);
-
-//# sourceMappingURL=image.service.js.map
-
-/***/ }),
-
-/***/ 833:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageGridComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_image_service__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__remove_modal__ = __webpack_require__(387);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_env__ = __webpack_require__(69);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-let ImageGridComponent = class ImageGridComponent {
-    constructor(imageService, nav, modalCtrl, platform) {
-        this.imageService = imageService;
-        this.nav = nav;
-        this.modalCtrl = modalCtrl;
-        this.platform = platform;
-        this.updateImageIds = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
-    }
-    ngOnInit() {
-        this.platform.ready().then(() => {
-            this.initUploader();
-        });
-    }
-    //noinspection JSUnusedLocalSymbols, used in HTML
-    showImage(imageId) {
-        let el = document.getElementsByTagName('body');
-        // TODO(xinbenlv): modify the viewerjs to customize the following
-        // 1. click on background area to close
-        let url = this.imageService.getUrlFromId(imageId, 0, 0);
-        let viewer = new window.Viewer(el[0], {
-            url: () => {
-                return url;
-            },
-            inline: false,
-            toolbar: true,
-            title: false,
-            movable: true,
-            keyboard: false,
-            navbar: true,
-            hidden: () => {
-                viewer.destroy();
-            }
-        });
-        viewer.show();
-    }
-    initUploader() {
-        var uploadImageFormData = {
-            "timestamp": $.now(),
-            "api_key": __WEBPACK_IMPORTED_MODULE_4__app_env__["a" /* Env */].configCloudinary.apiKey,
-            "upload_preset": __WEBPACK_IMPORTED_MODULE_4__app_env__["a" /* Env */].configCloudinary.uploadPreset,
-        };
-        var escapedFormData = JSON.stringify(uploadImageFormData);
-        $('.cloudinary-fileupload')
-            .attr("data-form-data", escapedFormData)
-            .bind('cloudinarydone', (e, data) => {
-            if (!this.imageIds)
-                this.imageIds = [];
-            this.onUpdateImageIds(this.imageIds.concat(data.result.public_id));
-            return true;
-        })
-            .cloudinary_fileupload();
-    }
-    //noinspection JSUnusedLocalSymbols, used in HTML
-    clickDelete() {
-        this.removeModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_2__remove_modal__["a" /* RemoveModal */], { imageIds: this.imageIds });
-        this.removeModal.onDidDismiss((data) => {
-            this.onUpdateImageIds(data.imageIds);
-        });
-        this.removeModal.present();
-    }
-    onUpdateImageIds(imageIds) {
-        this.imageIds = imageIds;
-        this.updateImageIds.emit(this.imageIds); // notify parent
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Array)
-], ImageGridComponent.prototype, "imageIds", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
-    __metadata("design:type", Object)
-], ImageGridComponent.prototype, "updateImageIds", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Boolean)
-], ImageGridComponent.prototype, "isEdit", void 0);
-ImageGridComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'image-grid',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/image-grid.comp.html"*/'<ion-row wrap >\n    <ion-col width-33 *ngFor="let imageId of imageIds;">\n        <img src="{{imageId | imageIdToUrlPipe}}"\n             alt="Image {{imageId}}"\n             (click)="showImage(imageId)">\n    </ion-col>\n\n    <ion-col width-33 *ngIf="isEdit" width="300px" height="300px">\n        <label class="custom-file-upload">\n            <img src="http://placehold.it/300x300?text=添加" />\n            <input name="file" type="file" multiple="" class="cloudinary-fileupload" data-cloudinary-field="image_id" />\n        </label>\n    </ion-col>\n    <ion-col width-33 *ngIf="isEdit && imageIds.length > 0 ">\n        <img src="http://placehold.it/300x300?text=删除" (click)="clickDelete()">\n    </ion-col>\n</ion-row>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/image-grid.comp.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_image_service__["b" /* IImageService */],
-        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["e" /* ModalController */],
-        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* Platform */]])
-], ImageGridComponent);
-
-//# sourceMappingURL=image-grid.comp.js.map
-
-/***/ }),
-
-/***/ 834:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingItem; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_detail_page__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_models_HsyListing__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyInteraction__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_uuid__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__listing_ux_detail_page__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_flag_service__ = __webpack_require__(25);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-
-let ListingItem = class ListingItem {
-    constructor(nav, alertCtrl, hsyInteractionApi, hsyListingApi, flagService) {
-        this.nav = nav;
-        this.alertCtrl = alertCtrl;
-        this.hsyInteractionApi = hsyInteractionApi;
-        this.hsyListingApi = hsyListingApi;
-        this.flagService = flagService;
-        this.onBump = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
-    }
-    gotoDetail() {
-        ga('send', 'event', {
-            eventCategory: 'go-to',
-            eventAction: 'listing-detail',
-            eventLabel: 'from-listing-item'
-        });
-        if (this.flagService.getFlag('newUx'))
-            this.nav.push(__WEBPACK_IMPORTED_MODULE_7__listing_ux_detail_page__["a" /* ListingUxDetailPage */], { listing: this.listing });
-        else
-            this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_detail_page__["a" /* ListingDetailPage */], { listing: this.listing });
-    }
-    bump() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'interaction',
-                eventAction: 'bump',
-            });
-            let local = window.localStorage;
-            let meId = local['user_id']; // TODO(xinbenlv): use UserService
-            let now = new Date();
-            let hsyInteraction = {
-                uid: Object(__WEBPACK_IMPORTED_MODULE_5__util_uuid__["a" /* uuid */])(),
-                userId: meId,
-                type: "BUMP",
-                listingId: this.listing.uid,
-                interactionTime: now
-            };
-            this.listing.interactions.push(hsyInteraction);
-            this.onBump.emit(this.listing);
-            yield this.hsyInteractionApi.create(hsyInteraction).toPromise();
-            yield this.hsyListingApi.updateAttributes(this.listing.uid, { latestUpdatedOrBump: now }).toPromise();
-        });
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
-    __metadata("design:type", Object)
-], ListingItem.prototype, "onBump", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_models_HsyListing__["a" /* HsyListing */])
-], ListingItem.prototype, "listing", void 0);
-ListingItem = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'listing-item',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-item.comp.html"*/'<ion-card *ngIf="listing">\n    <img *ngIf="listing.imageIds.length > 0"\n         src="{{ listing.imageIds[0] | imageIdToUrlPipe }}"\n         alt="img-{{imageId}}"\n         (click)="gotoDetail()"/>\n    <img *ngIf="listing.imageIds.length == 0" src="assets/res/no-photo-placeholder.png" alt="" (click)="gotoDetail()">\n    <ion-card-header class="listing-item-header" no-padding padding-top padding-left padding-right (click)="gotoDetail()">\n        <span class="hsy-listing-item-header">{{ listing.content ? listing.title.slice(0, 30) +\'...\' : \'详情见图片\' }}</span><br>\n    </ion-card-header>\n    <ion-card-content no-padding no-margin padding-left>\n        <ion-label no-padding no-margin class="hsy-listing-item-price" color="primary">{{ listing.price ? \'$\' + listing.price.toString() : \'价格待议\' }}</ion-label>\n        <ion-item no-padding no-margin>\n            <ion-label item-left class="hsy-listing-item-last-updated" color="grey">{{ listing.lastUpdated | timeFromNow }}更新</ion-label>\n            <ion-label item-right ion-button icon-left clear color="grey">\n                <ion-icon name="thumbs-up-outline"></ion-icon>\n                <span *ngIf="listing.interactions.length > 0">{{listing.interactions.length}}</span>\n            </ion-label>\n            <ion-label item-right ion-button icon-left clear color="grey">\n                <ion-icon name="eye-outline"></ion-icon>\n            </ion-label>\n        </ion-item>\n    </ion-card-content>\n</ion-card>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-item.comp.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_4__loopbacksdk_services_custom_HsyInteraction__["a" /* HsyInteractionApi */],
-        __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_8__services_flag_service__["a" /* FlagService */]])
-], ListingItem);
-
-//# sourceMappingURL=listing-item.comp.js.map
-
-/***/ }),
-
-/***/ 835:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LongImageComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_transfer__ = __webpack_require__(174);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-let LongImageComponent = class LongImageComponent {
-    constructor(platform, transfer) {
-        this.platform = platform;
-        this.transfer = transfer;
-        this.canvasWidth = 600;
-        console.log(this.platform.versions());
-        this.fileTransfer = this.transfer.create();
-    }
-    generateLongImage() {
-        console.log(" --- generateLongImage... --- ");
-        let c = document.createElement('canvas');
-        c.width = this.canvasWidth;
-        let ctx = c.getContext('2d');
-        var title = this.listing.title;
-        var description = this.listing.content;
-        var despHeight = this.preCalculateHeight(ctx, description, 550, 25);
-        var qrcodeHeight = 400;
-        this.canvasHeight = 100 + despHeight + qrcodeHeight; // title + description
-        if (this.hasLocation()) {
-            this.canvasHeight += 250;
-        }
-        var promises = new Array();
-        let images = this.preloadElements(promises);
-        let imagesHeight = 0;
-        Promise.all(promises).then(values => {
-            this.resizeCanvas(c, images);
-            this.drawElements(c, despHeight, title, description, images);
-        });
-    }
-    preloadElements(promises) {
-        var map_image = null;
-        if (this.hasLocation()) {
-            map_image = new Image();
-            var lat = this.listing.location.lat;
-            var lng = this.listing.location.lng;
-            var map_size = '598x250';
-            var map_src = 'https://maps.googleapis.com/maps/api/staticmap?&zoom=12&size='
-                + map_size + '&maptype=roadmap&markers=color:red|'
-                + lat + ',' + lng + '&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY';
-            map_image.crossOrigin = 'Anonymous';
-            promises.push(new Promise(function (resolve, reject) {
-                map_image.onload = function () {
-                    resolve();
-                };
-            }));
-            map_image.src = map_src;
-        }
-        var qrcenter_image = new Image();
-        var qrcenter_src = '/assets/res/favicon/apple-touch-icon-72x72.png';
-        qrcenter_image.crossOrigin = 'Anonymous';
-        promises.push(new Promise(function (resolve, reject) {
-            qrcenter_image.onload = function () {
-                resolve();
-            };
-        }));
-        qrcenter_image.src = qrcenter_src;
-        var imageCnt = this.listing.imageIds === undefined ? 0 : this.listing.imageIds.length;
-        let base_images = new Array(imageCnt);
-        for (let i = 0; i < imageCnt; i++) {
-            base_images[i] = new Image();
-            base_images[i].crossOrigin = 'Anonymous';
-            base_images[i].src = 'http://res.cloudinary.com/xinbenlv/image/upload/q_70,w_600/' + this.listing.imageIds[i];
-            promises.push(new Promise(function (resolve, reject) {
-                base_images[i].onload = function () {
-                    resolve();
-                };
-            }));
-        }
-        let qrcode_image = this.getQrcodeImage(document.location.href);
-        /*
-        var goto_image = new Image();
-        var goto_src = '/assets/res/long-image/haoshiyou-goto.png'
-        goto_image.crossOrigin = 'Anonymous';
-        promises.push(new Promise(function(resolve,reject){
-          goto_image.onload = function(){
-            resolve();
-          };
-        }));
-        goto_image.src = goto_src;
-        */
-        return {
-            map_image: map_image,
-            base_images: base_images,
-            qrcode_image: qrcode_image,
-            qrcenter_image: qrcenter_image
-            // goto_image: goto_image
-        };
-    }
-    resizeCanvas(c, images) {
-        let imageCnt = images.base_images == undefined ? 0 : images.base_images.length;
-        let imagesHeight = 0;
-        for (let i = 0; i < imageCnt; i++) {
-            imagesHeight += images.base_images[i].height;
-        }
-        c.height = this.canvasHeight + imagesHeight;
-    }
-    hasLocation() {
-        return this.listing.location != undefined && this.listing.location.lat != 0;
-    }
-    drawElements(c, despHeight, title, description, images) {
-        console.log(" --- drawElements... --- ");
-        let imageCnt = images.base_images == undefined ? 0 : images.base_images.length;
-        let ctx = c.getContext('2d');
-        ctx.fillStyle = "black";
-        ctx.font = "30px Arial";
-        ctx.fillText(title, 10, 50);
-        ctx.font = "20px Arial";
-        this.fillMultiLines(ctx, description, 25, 80, 550, 25);
-        let imageY = 100 + despHeight;
-        if (this.hasLocation()) {
-            ctx.drawImage(images.map_image, 0, imageY);
-            imageY += 250;
-        }
-        for (let i = 0; i < imageCnt; i++) {
-            ctx.drawImage(images.base_images[i], 0, imageY);
-            imageY += images.base_images[i].height;
-        }
-        var qrcodeY = imageY + 70;
-        ctx.drawImage(images.qrcode_image, 170, qrcodeY);
-        ctx.drawImage(images.qrcenter_image, (this.canvasWidth - 72) / 2, qrcodeY + 95);
-        var qrcodeHintY = qrcodeY - 20;
-        ctx.fillStyle = "black";
-        ctx.font = "20px Arial";
-        var gotoY = qrcodeY + 300;
-        ctx.fillText('扫描二维码查看详情，可私信po主', 160, qrcodeHintY);
-        ctx.fillStyle = "black";
-        ctx.font = "30px Arial";
-        ctx.fillText('更多咨询请查看haoshiyou.org', 100, gotoY);
-        // ctx.drawImage(images.goto_image, 6, gotoY);
-        // draw boundaries
-        ctx.globalCompositeOperation = "destination-over";
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect(0, 0, this.canvasWidth, c.height); //for white background
-        ctx.globalCompositeOperation = "source-over";
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "#000000";
-        ctx.strokeRect(0, 0, this.canvasWidth, c.height); //for white background
-        console.log(" --- Begin to download... --- ");
-        let fileName = 'haoshiyou-' + (new Date(this.listing.lastUpdated)).toISOString() + '.png';
-        if (this.platform.is('core')) {
-            if (navigator.userAgent.indexOf("MSIE") > 0 ||
-                navigator.userAgent.match(/Trident.*rv\:11\./)) {
-                var blob = c.msToBlob();
-                window.navigator.msSaveBlob(blob, fileName);
-            }
-            else {
-                var a = document.getElementById("downloadLink");
-                a.setAttribute("href", c.toDataURL());
-                a.setAttribute("download", fileName);
-                a.click();
-            }
-        }
-        else {
-            var imgDataUrl = c.toDataURL();
-            var targetPath = cordova.file.dataDirectory + "/haoshiyou/" + fileName;
-            var options = {};
-            this.fileTransfer.download(imgDataUrl, targetPath, true)
-                .then(function (result) {
-                // Success!
-                console.log("Download");
-            }, function (err) {
-                // Error
-                console.log("Not Download");
-            });
-        }
-    }
-    getQrcodeImage(link) {
-        var el = document.createElement('div');
-        el.style.margin = "20%";
-        var qrcode = new QRCode(el);
-        qrcode.makeCode(link);
-        return el.firstChild;
-    }
-    preCalculateHeight(context, text, maxWidth, lineHeight) {
-        var words = text.split(' ');
-        var line = '';
-        var lines = 0;
-        for (var n = 0; n < words.length; n++) {
-            var testLine = line + words[n] + ' ';
-            var metrics = context.measureText(testLine);
-            var testWidth = metrics.width;
-            if (testWidth > maxWidth && n > 0) {
-                lines++;
-            }
-        }
-        return lines * lineHeight; // height
-    }
-    fillMultiLines(context, text, x, y, maxWidth, lineHeight) {
-        var words = text.split(' ');
-        var line = '';
-        var lines = 0;
-        for (var n = 0; n < words.length; n++) {
-            var testLine = line + words[n] + ' ';
-            var metrics = context.measureText(testLine);
-            var testWidth = metrics.width;
-            if (testWidth > maxWidth && n > 0) {
-                context.fillText(line, x, y);
-                line = words[n] + ' ';
-                y += lineHeight;
-                lines++;
-            }
-            else {
-                line = testLine;
-            }
-        }
-        context.fillText(line, x, y);
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__["a" /* HsyListing */])
-], LongImageComponent.prototype, "listing", void 0);
-LongImageComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'long-image',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/long-image.comp.html"*/'<button ion-button color="primary" clear item-left (click)="generateLongImage()">\n    下载长图片 <ion-icon name="ios-long-image"></ion-icon>\n</button>\n<a id="downloadLink" hidden></a>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/long-image.comp.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_transfer__["a" /* Transfer */]])
-], LongImageComponent);
-
-//# sourceMappingURL=long-image.comp.js.map
-
-/***/ }),
-
-/***/ 836:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EnumMsgPipe; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-let EnumMsgPipe = class EnumMsgPipe {
-    transform(value) {
-        // TODO(xinbenlv): fix it
-        if (value == 'NeedRoom') {
-            return '求租';
-        }
-        else if (value == 'NeedRoommate') {
-            return '招租';
-        }
-        else
-            return '招租';
-    }
-};
-EnumMsgPipe = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'enumMsgPipe' })
-], EnumMsgPipe);
-
-//# sourceMappingURL=enum-msg.pipe.js.map
-
-/***/ }),
-
-/***/ 837:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ImageIdsToUrlPipe; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageIdToUrlPipe; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_image_service__ = __webpack_require__(77);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-let ImageIdsToUrlPipe = class ImageIdsToUrlPipe {
-    constructor(imageService) {
-        this.imageService = imageService;
-    }
-    transform(ids) {
-        return ids.map((id) => {
-            return this.imageService.getUrlFromId(id);
-        });
-    }
-};
-ImageIdsToUrlPipe = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
-        name: 'imageIdsToUrlPipe',
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_image_service__["b" /* IImageService */]])
-], ImageIdsToUrlPipe);
-
-let ImageIdToUrlPipe = class ImageIdToUrlPipe {
-    constructor(imageService) {
-        this.imageService = imageService;
-    }
-    transform(id, mode = "default") {
-        if (mode == "default") {
-            return this.imageService.getUrlFromId(id);
-        }
-        else if (mode == "full") {
-            return this.imageService.getUrlFromId(id, 0, 0);
-        }
-        else if (mode == "thumbnail") {
-            return this.imageService.getUrlFromId(id, 200, 150);
-        }
-    }
-};
-ImageIdToUrlPipe = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
-        name: 'imageIdToUrlPipe',
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_image_service__["b" /* IImageService */]])
-], ImageIdToUrlPipe);
-
-//# sourceMappingURL=image-id-to-url.pipe.js.map
-
-/***/ }),
-
-/***/ 838:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TimeFromNowPipe; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-__WEBPACK_IMPORTED_MODULE_1_moment___default.a.locale('zh-cn');
-let TimeFromNowPipe = class TimeFromNowPipe {
-    transform(value /*time in UTC ms */) {
-        return __WEBPACK_IMPORTED_MODULE_1_moment___default()(new Date(value)).fromNow();
-    }
-};
-TimeFromNowPipe = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
-        name: 'timeFromNow'
-    })
-], TimeFromNowPipe);
-
-//# sourceMappingURL=time-from-now.pipe.js.map
-
-/***/ }),
-
-/***/ 840:
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./af": 388,
-	"./af.js": 388,
-	"./ar": 389,
-	"./ar-dz": 390,
-	"./ar-dz.js": 390,
-	"./ar-kw": 391,
-	"./ar-kw.js": 391,
-	"./ar-ly": 392,
-	"./ar-ly.js": 392,
-	"./ar-ma": 393,
-	"./ar-ma.js": 393,
-	"./ar-sa": 394,
-	"./ar-sa.js": 394,
-	"./ar-tn": 395,
-	"./ar-tn.js": 395,
-	"./ar.js": 389,
-	"./az": 396,
-	"./az.js": 396,
-	"./be": 397,
-	"./be.js": 397,
-	"./bg": 398,
-	"./bg.js": 398,
-	"./bm": 399,
-	"./bm.js": 399,
-	"./bn": 400,
-	"./bn.js": 400,
-	"./bo": 401,
-	"./bo.js": 401,
-	"./br": 402,
-	"./br.js": 402,
-	"./bs": 403,
-	"./bs.js": 403,
-	"./ca": 404,
-	"./ca.js": 404,
-	"./cs": 405,
-	"./cs.js": 405,
-	"./cv": 406,
-	"./cv.js": 406,
-	"./cy": 407,
-	"./cy.js": 407,
-	"./da": 408,
-	"./da.js": 408,
-	"./de": 409,
-	"./de-at": 410,
-	"./de-at.js": 410,
-	"./de-ch": 411,
-	"./de-ch.js": 411,
-	"./de.js": 409,
-	"./dv": 412,
-	"./dv.js": 412,
-	"./el": 413,
-	"./el.js": 413,
-	"./en-au": 414,
-	"./en-au.js": 414,
-	"./en-ca": 415,
-	"./en-ca.js": 415,
-	"./en-gb": 416,
-	"./en-gb.js": 416,
-	"./en-ie": 417,
-	"./en-ie.js": 417,
-	"./en-nz": 418,
-	"./en-nz.js": 418,
-	"./eo": 419,
-	"./eo.js": 419,
-	"./es": 420,
-	"./es-do": 421,
-	"./es-do.js": 421,
-	"./es-us": 422,
-	"./es-us.js": 422,
-	"./es.js": 420,
-	"./et": 423,
-	"./et.js": 423,
-	"./eu": 424,
-	"./eu.js": 424,
-	"./fa": 425,
-	"./fa.js": 425,
-	"./fi": 426,
-	"./fi.js": 426,
-	"./fo": 427,
-	"./fo.js": 427,
-	"./fr": 428,
-	"./fr-ca": 429,
-	"./fr-ca.js": 429,
-	"./fr-ch": 430,
-	"./fr-ch.js": 430,
-	"./fr.js": 428,
-	"./fy": 431,
-	"./fy.js": 431,
-	"./gd": 432,
-	"./gd.js": 432,
-	"./gl": 433,
-	"./gl.js": 433,
-	"./gom-latn": 434,
-	"./gom-latn.js": 434,
-	"./gu": 435,
-	"./gu.js": 435,
-	"./he": 436,
-	"./he.js": 436,
-	"./hi": 437,
-	"./hi.js": 437,
-	"./hr": 438,
-	"./hr.js": 438,
-	"./hu": 439,
-	"./hu.js": 439,
-	"./hy-am": 440,
-	"./hy-am.js": 440,
-	"./id": 441,
-	"./id.js": 441,
-	"./is": 442,
-	"./is.js": 442,
-	"./it": 443,
-	"./it.js": 443,
-	"./ja": 444,
-	"./ja.js": 444,
-	"./jv": 445,
-	"./jv.js": 445,
-	"./ka": 446,
-	"./ka.js": 446,
-	"./kk": 447,
-	"./kk.js": 447,
-	"./km": 448,
-	"./km.js": 448,
-	"./kn": 449,
-	"./kn.js": 449,
-	"./ko": 450,
-	"./ko.js": 450,
-	"./ky": 451,
-	"./ky.js": 451,
-	"./lb": 452,
-	"./lb.js": 452,
-	"./lo": 453,
-	"./lo.js": 453,
-	"./lt": 454,
-	"./lt.js": 454,
-	"./lv": 455,
-	"./lv.js": 455,
-	"./me": 456,
-	"./me.js": 456,
-	"./mi": 457,
-	"./mi.js": 457,
-	"./mk": 458,
-	"./mk.js": 458,
-	"./ml": 459,
-	"./ml.js": 459,
-	"./mr": 460,
-	"./mr.js": 460,
-	"./ms": 461,
-	"./ms-my": 462,
-	"./ms-my.js": 462,
-	"./ms.js": 461,
-	"./mt": 463,
-	"./mt.js": 463,
-	"./my": 464,
-	"./my.js": 464,
-	"./nb": 465,
-	"./nb.js": 465,
-	"./ne": 466,
-	"./ne.js": 466,
-	"./nl": 467,
-	"./nl-be": 468,
-	"./nl-be.js": 468,
-	"./nl.js": 467,
-	"./nn": 469,
-	"./nn.js": 469,
-	"./pa-in": 470,
-	"./pa-in.js": 470,
-	"./pl": 471,
-	"./pl.js": 471,
-	"./pt": 472,
-	"./pt-br": 473,
-	"./pt-br.js": 473,
-	"./pt.js": 472,
-	"./ro": 474,
-	"./ro.js": 474,
-	"./ru": 475,
-	"./ru.js": 475,
-	"./sd": 476,
-	"./sd.js": 476,
-	"./se": 477,
-	"./se.js": 477,
-	"./si": 478,
-	"./si.js": 478,
-	"./sk": 479,
-	"./sk.js": 479,
-	"./sl": 480,
-	"./sl.js": 480,
-	"./sq": 481,
-	"./sq.js": 481,
-	"./sr": 482,
-	"./sr-cyrl": 483,
-	"./sr-cyrl.js": 483,
-	"./sr.js": 482,
-	"./ss": 484,
-	"./ss.js": 484,
-	"./sv": 485,
-	"./sv.js": 485,
-	"./sw": 486,
-	"./sw.js": 486,
-	"./ta": 487,
-	"./ta.js": 487,
-	"./te": 488,
-	"./te.js": 488,
-	"./tet": 489,
-	"./tet.js": 489,
-	"./th": 490,
-	"./th.js": 490,
-	"./tl-ph": 491,
-	"./tl-ph.js": 491,
-	"./tlh": 492,
-	"./tlh.js": 492,
-	"./tr": 493,
-	"./tr.js": 493,
-	"./tzl": 494,
-	"./tzl.js": 494,
-	"./tzm": 495,
-	"./tzm-latn": 496,
-	"./tzm-latn.js": 496,
-	"./tzm.js": 495,
-	"./uk": 497,
-	"./uk.js": 497,
-	"./ur": 498,
-	"./ur.js": 498,
-	"./uz": 499,
-	"./uz-latn": 500,
-	"./uz-latn.js": 500,
-	"./uz.js": 499,
-	"./vi": 501,
-	"./vi.js": 501,
-	"./x-pseudo": 502,
-	"./x-pseudo.js": 502,
-	"./yo": 503,
-	"./yo.js": 503,
-	"./zh-cn": 504,
-	"./zh-cn.js": 504,
-	"./zh-hk": 505,
-	"./zh-hk.js": 505,
-	"./zh-tw": 506,
-	"./zh-tw.js": 506
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 840;
-
-/***/ }),
-
-/***/ 842:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CityNZipPipe; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_map_service__ = __webpack_require__(156);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-let CityNZipPipe = class CityNZipPipe {
-    constructor(mapService) {
-        this.mapService = mapService;
-    }
-    transform(latlng /*:google.maps.LatLng*/) {
-        return this.mapService.getLocality(latlng).then((locality) => {
-            return locality.city + ", " + locality.zip;
-        }).catch((e) => {
-            console.log(e);
-            return Promise.resolve("Unknown City");
-        });
-    }
-};
-CityNZipPipe = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
-        name: 'cityNZipPipe',
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_map_service__["a" /* MapService */]])
-], CityNZipPipe);
-
-//# sourceMappingURL=city-n-zip.pipe.js.map
-
-/***/ }),
-
-/***/ 843:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKBrowserModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_core_search_params__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_core_error_service__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_core_auth_service__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_custom_logger_service__ = __webpack_require__(287);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_custom_SDKModels__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__storage_storage_swaps__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_common__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__storage_cookie_browser__ = __webpack_require__(507);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__storage_storage_browser__ = __webpack_require__(508);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_custom_HsyUser__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_custom_HsyInteraction__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__models_index__ = __webpack_require__(844);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_index__ = __webpack_require__(845);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__lb_config__ = __webpack_require__(54);
-/* unused harmony namespace reexport */
-/* unused harmony namespace reexport */
-/* unused harmony reexport CookieBrowser */
-/* unused harmony reexport StorageBrowser */
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-/* tslint:disable */
-/**
-* @module SDKModule
-* @author Jonathan Casarrubias <t:@johncasarrubias> <gh:jonathan-casarrubias>
-* @license MIT 2016 Jonathan Casarrubias
-* @version 2.1.0
-* @description
-* The SDKModule is a generated Software Development Kit automatically built by
-* the LoopBack SDK Builder open source module.
-*
-* The SDKModule provides Angular 2 >= RC.5 support, which means that NgModules
-* can import this Software Development Kit as follows:
-*
-*
-* APP Route Module Context
-* ============================================================================
-* import { NgModule }       from '@angular/core';
-* import { BrowserModule }  from '@angular/platform-browser';
-* // App Root
-* import { AppComponent }   from './app.component';
-* // Feature Modules
-* import { SDK[Browser|Node|Native]Module } from './shared/sdk/sdk.module';
-* // Import Routing
-* import { routing }        from './app.routing';
-* @NgModule({
-*  imports: [
-*    BrowserModule,
-*    routing,
-*    SDK[Browser|Node|Native]Module.forRoot()
-*  ],
-*  declarations: [ AppComponent ],
-*  bootstrap:    [ AppComponent ]
-* })
-* export class AppModule { }
-*
-**/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
-* @module SDKBrowserModule
-* @description
-* This module should be imported when building a Web Application in the following scenarios:
-*
-*  1.- Regular web application
-*  2.- Angular universal application (Browser Portion)
-*  3.- Progressive applications (Angular Mobile, Ionic, WebViews, etc)
-**/
-let SDKBrowserModule = SDKBrowserModule_1 = class SDKBrowserModule {
-    static forRoot(internalStorageProvider = {
-            provide: __WEBPACK_IMPORTED_MODULE_5__storage_storage_swaps__["a" /* InternalStorage */],
-            useClass: __WEBPACK_IMPORTED_MODULE_9__storage_cookie_browser__["a" /* CookieBrowser */]
-        }) {
-        return {
-            ngModule: SDKBrowserModule_1,
-            providers: [
-                __WEBPACK_IMPORTED_MODULE_2__services_core_auth_service__["a" /* LoopBackAuth */],
-                __WEBPACK_IMPORTED_MODULE_3__services_custom_logger_service__["a" /* LoggerService */],
-                __WEBPACK_IMPORTED_MODULE_0__services_core_search_params__["a" /* JSONSearchParams */],
-                __WEBPACK_IMPORTED_MODULE_4__services_custom_SDKModels__["a" /* SDKModels */],
-                __WEBPACK_IMPORTED_MODULE_11__services_custom_HsyListing__["a" /* HsyListingApi */],
-                __WEBPACK_IMPORTED_MODULE_12__services_custom_HsyUser__["a" /* HsyUserApi */],
-                __WEBPACK_IMPORTED_MODULE_13__services_custom_HsyInteraction__["a" /* HsyInteractionApi */],
-                internalStorageProvider,
-                { provide: __WEBPACK_IMPORTED_MODULE_5__storage_storage_swaps__["b" /* SDKStorage */], useClass: __WEBPACK_IMPORTED_MODULE_10__storage_storage_browser__["a" /* StorageBrowser */] }
-            ]
-        };
-    }
-};
-SDKBrowserModule = SDKBrowserModule_1 = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_8__angular_core__["NgModule"])({
-        imports: [__WEBPACK_IMPORTED_MODULE_7__angular_common__["b" /* CommonModule */], __WEBPACK_IMPORTED_MODULE_6__angular_http__["HttpModule"]],
-        declarations: [],
-        exports: [],
-        providers: [
-            __WEBPACK_IMPORTED_MODULE_1__services_core_error_service__["a" /* ErrorHandler */]
-        ]
-    })
-], SDKBrowserModule);
-
-/**
-* Have Fun!!!
-* - Jon
-**/
-
-
-
-
-
-
-var SDKBrowserModule_1;
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 844:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HsyListing__ = __webpack_require__(48);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HsyUser__ = __webpack_require__(274);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__HsyInteraction__ = __webpack_require__(275);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BaseModels__ = __webpack_require__(278);
-/* unused harmony namespace reexport */
-/* tslint:disable */
-
-
-
-
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 845:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_index__ = __webpack_require__(846);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_index__ = __webpack_require__(286);
-/* unused harmony namespace reexport */
-/* tslint:disable */
-
-
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 846:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__auth_service__ = __webpack_require__(53);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error_service__ = __webpack_require__(52);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__search_params__ = __webpack_require__(51);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__base_service__ = __webpack_require__(93);
-/* unused harmony namespace reexport */
-/* tslint:disable */
-
-
-
-
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 847:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyGroupEnumMsgPipe; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-let HsyGroupEnumMsgPipe = class HsyGroupEnumMsgPipe {
-    transform(value) {
-        switch (value) {
-            case 'SanFrancisco':
-                return '三番';
-            case 'SouthBayWest':
-                return '南湾西';
-            case 'SouthBayEast':
-                return '南湾东';
-            case 'EastBay':
-                return '东湾';
-            case 'MidPeninsula':
-                return '中半岛';
-            case 'Seattle':
-                return '西雅图';
-            case 'ShortTerm':
-                return '短租';
-            case 'TestGroup':
-                return '测试';
-            default:
-                return value;
-        }
-    }
-};
-HsyGroupEnumMsgPipe = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'hsyGroupEnumMsgPipe' })
-], HsyGroupEnumMsgPipe);
-
-//# sourceMappingURL=hsy-group-enum-msg.pipe.js.map
-
-/***/ }),
-
-/***/ 849:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DateFormatterPipe; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-__WEBPACK_IMPORTED_MODULE_1_moment___default.a.locale('zh-cn');
-let DateFormatterPipe = class DateFormatterPipe {
-    transform(value /*time in UTC ms */) {
-        let date = new Date(value);
-        return __WEBPACK_IMPORTED_MODULE_1_moment___default()(date).format('YYYY-MM-DD HH:MM');
-    }
-};
-DateFormatterPipe = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
-        name: 'dateFormatterPipe'
-    })
-], DateFormatterPipe);
-
-//# sourceMappingURL=date-formatter.pipe.js.map
-
-/***/ }),
-
-/***/ 850:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingUxItem; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyInteraction__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_uuid__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__listing_ux_detail_page__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(25);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-let ListingUxItem = class ListingUxItem {
-    constructor(nav, alertCtrl, hsyInteractionApi, hsyListingApi, flagService) {
-        this.nav = nav;
-        this.alertCtrl = alertCtrl;
-        this.hsyInteractionApi = hsyInteractionApi;
-        this.hsyListingApi = hsyListingApi;
-        this.flagService = flagService;
-        this.onBump = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
-        this.indexFromParent = 0;
-        this.placeholderIds = [
-            'qfhndxx',
-            'ccygytp',
-            'yzsmdhz'
-        ];
-    }
-    gotoDetail() {
-        ga('send', 'event', {
-            eventCategory: 'go-to',
-            eventAction: 'listing-detail',
-            eventLabel: 'from-listing-item'
-        });
-        this.nav.push(__WEBPACK_IMPORTED_MODULE_6__listing_ux_detail_page__["a" /* ListingUxDetailPage */], { listing: this.listing });
-    }
-    bump() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'interaction',
-                eventAction: 'bump',
-            });
-            let local = window.localStorage;
-            let meId = local['user_id']; // TODO(xinbenlv): use UserService
-            let now = new Date();
-            let hsyInteraction = {
-                uid: Object(__WEBPACK_IMPORTED_MODULE_4__util_uuid__["a" /* uuid */])(),
-                userId: meId,
-                type: "BUMP",
-                listingId: this.listing.uid,
-                interactionTime: now
-            };
-            this.listing.interactions.push(hsyInteraction);
-            this.onBump.emit(this.listing);
-            yield this.hsyInteractionApi.create(hsyInteraction).toPromise();
-            yield this.hsyListingApi.updateAttributes(this.listing.uid, { latestUpdatedOrBump: now }).toPromise();
-        });
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
-    __metadata("design:type", Object)
-], ListingUxItem.prototype, "onBump", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_models_HsyListing__["a" /* HsyListing */])
-], ListingUxItem.prototype, "listing", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Number)
-], ListingUxItem.prototype, "indexFromParent", void 0);
-ListingUxItem = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'listing-ux-item',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/'<div class="wrapper" (click)="gotoDetail()">\n    <div class="grid-container">\n        <div class="content">\n            <div class="title">{{listing.content.substr(0, 70)}}</div>\n            <div class="middle">\n                <ng-container *ngIf="listing.location_lat && listing.location_lng">\n                    <ion-icon\n                            name="ios-pin-outline"></ion-icon><span class="location">{{listing.addressCity}}</span>\n                </ng-container>\n                <ion-icon name="ios-time-outline"></ion-icon><span class="lastUpdate">{{listing.lastUpdated | timeFromNow }}</span>\n            </div>\n            <div class="price" >\n                <ng-container *ngIf="listing.price">\n                    <span class="price-dollar-number-per">${{listing.price}}</span><span class="month">/月</span>\n                </ng-container>\n                <ng-container *ngIf="!listing.price">\n                    <span  class="price-dollar-number-per">价格待议</span>\n                </ng-container>\n            </div>\n        </div>\n        <div class="thumbnail">\n            <img *ngIf="listing.imageIds.length > 0"\n                 src="{{ listing.imageIds[0] | imageIdToUrlPipe : \'thumbnail\' }}"\n                 alt="img-{{imageId}}"\n                 (click)="gotoDetail()"/>\n            <img *ngIf="listing.imageIds.length == 0"\n                 src="{{\'../../assets/res/placeholders/\'+ placeholderIds[indexFromParent % 3] + \'.png\'}}"\n                 alt="" (click)="gotoDetail()">\n        </div>\n    </div>\n</div>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-ux-item.comp.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_3__loopbacksdk_services_custom_HsyInteraction__["a" /* HsyInteractionApi */],
-        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */]])
-], ListingUxItem);
-
-//# sourceMappingURL=listing-ux-item.comp.js.map
-
-/***/ }),
-
-/***/ 92:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingsTabPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__listing_creation_page__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_url_util__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(103);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-
-
-const SEGMENT_KEY = 'segment';
-const AREA_KEY = 'area';
-/**
- * A page contains a map view and a list showing the listings.
- */
-let ListingsTabPage = class ListingsTabPage {
-    constructor(platform, nav, alertCtrl, auth, api, flagService, popoverCtrl, ref) {
-        this.platform = platform;
-        this.nav = nav;
-        this.alertCtrl = alertCtrl;
-        this.auth = auth;
-        this.api = api;
-        this.flagService = flagService;
-        this.popoverCtrl = popoverCtrl;
-        this.ref = ref;
-        this.segmentModel = 'ROOMMATE_WANTED'; // by default for rent
-        this.areaModel = 'All'; // by default for All
-        this.useGrid = !(navigator.platform == 'iPhone');
-        this.loadedListings = [];
-        this.mapReady = false;
-        this.currentIndex = 0;
-        this.filterSettings = { 'types': {}, 'areas': {}, 'duration': {} };
-        this.whereClause = {};
-        this.isLoading = false;
-        this.mapOrList = 'ONLY_LIST';
-        this.options = [
-            'All',
-            'SanFrancisco',
-            'MidPeninsula',
-            'SouthBayWest',
-            'SouthBayEast',
-            'EastBay',
-            'ShortTerm',
-            'Seattle',
-            'TestGroup',
-        ];
-        this.optionsMap = {
-            'All': '全部',
-            'SanFrancisco': '三番',
-            'MidPeninsula': '中半岛',
-            'SouthBayWest': '南湾西',
-            'SouthBayEast': '南湾东',
-            'EastBay': '东湾',
-            'ShortTerm': '短租',
-            'Seattle': '西雅图',
-            'TestGroup': '测试',
-        };
-    }
-    ngOnDestroy() {
-        if (this.markers)
-            for (let marker of this.markers) {
-                marker.setMap(null);
-            }
-    }
-    ngOnInit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let segmentFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(SEGMENT_KEY);
-            if (segmentFromUrl) {
-                this.segmentModel = segmentFromUrl;
-            }
-            let areaFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(AREA_KEY);
-            if (areaFromUrl) {
-                this.areaModel = areaFromUrl;
-            }
-            this.updateWhereClause();
-            yield this.loadMoreListings();
-            if (this.largeEnough()) {
-                this.mapOrList = 'BOTH';
-            }
-            else
-                this.mapOrList = 'ONLY_LIST';
-            this.updateMapOrList(this.mapOrList);
-        });
-    }
-    ionViewDidEnter() {
-        ga('set', 'page', '/listings-tab.page.html');
-        ga('send', 'pageview');
-        this.ref.markForCheck();
-    }
-    //noinspection JSUnusedGlobalSymbols
-    onSegmentModelChange(newValue) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.segmentModel = newValue;
-            yield this.initLoad();
-            ga('set', 'page', `/listings-tab.page.html#segment-${newValue}`);
-            ga('send', 'pageview');
-        });
-    }
-    //noinspection JSUnusedGlobalSymbols
-    onAreaModelChange(newValue) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.areaModel = newValue;
-            yield this.initLoad();
-            ga('set', 'page', `/listings-tab.page.html#area-${newValue}`);
-            ga('send', 'pageview');
-        });
-    }
-    loadMoreListings() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.isLoading = true;
-            ga('send', 'event', {
-                eventCategory: 'load',
-                eventAction: 'load-more-listings',
-                eventLabel: `load-more-index-${this.loadedListings.length}`
-            });
-            let start = Date.now();
-            // southwest: 37.148070, -122.852249
-            // northeast: 38.072739, -121.473969
-            let newItems = yield this.api
-                .find({
-                // TODO(zzn): use ListTypeEnum when migrated
-                where: this.whereClause,
-                order: 'latestUpdatedOrBump DESC',
-                limit: 24,
-                offset: this.loadedListings.length,
-                include: ['interactions', 'owner'],
-            })
-                .take(1)
-                .toPromise();
-            let end = Date.now();
-            ga('send', {
-                hitType: 'timing',
-                timingCategory: 'API Call',
-                timingVar: 'load-more-listings',
-                timingValue: end - start
-            });
-            for (let item of newItems) {
-                this.loadedListings.push(item);
-            }
-            this.mapView.addListings(newItems);
-            this.isLoading = false;
-        });
-    }
-    updateMarkers() {
-        // TODO(xinbenlv): update markers
-    }
-    fakeGoToCreationPage() {
-        return __awaiter(this, void 0, void 0, function* () {
-            ga('send', 'event', {
-                eventCategory: 'go-to',
-                eventAction: 'listing-creation',
-            });
-            let alert = this.alertCtrl.create({
-                title: '新版app中发帖功能正在建设中',
-                buttons: [
-                    {
-                        text: 'OK',
-                    },
-                ]
-            });
-            yield alert.present();
-        });
-    }
-    goToCreationPage() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.auth.authenticated()) {
-                //push another page onto the history stack
-                //causing the nav controller to animate the new page in
-                this.nav.push(__WEBPACK_IMPORTED_MODULE_2__listing_creation_page__["a" /* CreationPage */]);
-            }
-            else {
-                let alert = this.alertCtrl.create({
-                    title: '请登录后发帖',
-                    buttons: [
-                        {
-                            text: '取消',
-                        },
-                        {
-                            text: '登陆',
-                            handler: () => {
-                                this.auth.login();
-                            }
-                        }
-                    ]
-                });
-                yield alert.present();
-            }
-        });
-    }
-    doInfinite(infiniteScroll) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.loadMoreListings();
-            infiniteScroll.complete();
-        });
-    }
-    isDebug() {
-        return this.flagService.getFlag('debug');
-    }
-    // Hack introduced due to this issue: https://github.com/ionic-team/ionic/issues/6923
-    setOption(index, event) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.options[index] != null) {
-                this.areaModel = this.options[index];
-                yield this.onAreaModelChange(this.areaModel);
-                //note you have to use "tap" or "click" - if you bind to "ionSelected" you don't get the "target" property
-                let segments = event.target.parentNode.children;
-                let len = segments.length;
-                for (let i = 0; i < len; i++) {
-                    segments[i].classList.remove('segment-activated');
-                }
-                event.target.classList.add('segment-activated');
-            }
-        });
-    }
-    bumpUpdateOrder(hsyListing) {
-        return __awaiter(this, void 0, void 0, function* () {
-            for (let i = 0; i < this.loadedListings.length; i++) {
-                let bumpedListing = hsyListing;
-                if (this.loadedListings[i] == bumpedListing) {
-                    yield this.content.scrollToTop();
-                    this.loadedListings.splice(i, 1);
-                    this.loadedListings.unshift(bumpedListing);
-                    break;
-                }
-            }
-        });
-    }
-    popoverFilter(myEvent) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let popover = this.popoverCtrl.create(__WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__["a" /* FilterSettingsComponent */], { 'filterSettings': this.filterSettings }, {});
-            yield popover.onDidDismiss((data) => __awaiter(this, void 0, void 0, function* () {
-                console.log(`--- received ` + JSON.stringify(data));
-                if (data !== undefined && data !== null) {
-                    this.filterSettings = data["filterSettings"];
-                }
-                else if (this.popoverCtrl['_app'].filterSettings) {
-                    this.filterSettings = this.popoverCtrl['_app'] /*a hack to access private */.filterSettings;
-                }
-                this.updateWhereClause();
-                yield this.initLoad();
-            }));
-            yield popover.present({
-                ev: myEvent
-            });
-        });
-    }
-    updateWhereClause() {
-        /* START filtering type */
-        let type = this.getType(this.filterSettings['types']['zhaozu'], this.filterSettings['types']['qiuzu']);
-        let whereClause_ = {};
-        if (type == 0) {
-            whereClause_['listingTypeEnum'] = 'NeedRoommate';
-        }
-        else if (type == 1) {
-            whereClause_['listingTypeEnum'] = 'NeedRoom';
-        }
-        else {
-            delete whereClause_['listingTypeEnum'];
-        }
-        /* END filtering type */
-        /* START filtering duration */
-        let ago = null;
-        switch (this.filterSettings['duration']) {
-            case '最近3天':
-                ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近7天':
-                ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近30天':
-                ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近90天':
-                ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
-                break;
-            case '不限': // fall though
-            default:
-        }
-        if (ago)
-            whereClause_['lastUpdated'] = { "gte": ago };
-        /* END filtering duration */
-        /* START filtering price */
-        if (this.filterSettings['price']) {
-            whereClause_['price'] = { lt: this.filterSettings['price'] };
-        }
-        else {
-            delete whereClause_['price'];
-        }
-        /* END filtering price */
-        /* START filtering area */
-        let allArea = this.filterSettings['areas']["All"];
-        if (allArea !== undefined && allArea === true) {
-            whereClause_['hsyGroupEnum'] = { 'nin': ['BigTeam', 'TestGroup', 'None'] };
-        }
-        else {
-            let areaClause = [];
-            for (let area in this.filterSettings['areas']) {
-                let selected = this.filterSettings['areas'][area];
-                if (selected !== undefined && selected) {
-                    areaClause.push(area);
-                }
-            }
-            if (areaClause.length > 0)
-                whereClause_['hsyGroupEnum'] = { 'inq': areaClause };
-        }
-        /* END filtering area */
-        /* EXEC filtering */
-        this.whereClause = whereClause_;
-    }
-    getType(zhaozu, qiuzu) {
-        if (zhaozu === undefined || !zhaozu) {
-            zhaozu = false;
-        }
-        if (qiuzu === undefined || !qiuzu) {
-            qiuzu = false;
-        }
-        if (zhaozu && !qiuzu) {
-            return 0;
-        }
-        if (!zhaozu && qiuzu) {
-            return 1;
-        }
-        return -1;
-    }
-    largeEnough() {
-        return window.innerWidth > 600;
-    }
-    updateMapOrList(value) {
-        if (value == "ONLY_MAP") {
-            this.listContainerCol.nativeElement.setAttribute('style', 'display:none;');
-            this.mapContainerCol.nativeElement.setAttribute('style', 'display:block;');
-            this.mapContainerCol.nativeElement.className = 'full-width';
-        }
-        else if (value == "ONLY_LIST") {
-            this.listContainerCol.nativeElement.setAttribute('style', 'display:block;');
-            this.mapContainerCol.nativeElement.setAttribute('style', 'display:none;');
-            this.listContainerCol.nativeElement.className = 'full-width';
-        }
-        this.mapView.render();
-    }
-    onBoundaryFilter(boundary) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let latMax = boundary.getNorthEast().lat();
-            let latMin = boundary.getSouthWest().lat();
-            let lngMax = boundary.getNorthEast().lng();
-            let lngMin = boundary.getSouthWest().lng();
-            this.whereClause['and'] = [
-                { 'location_lat': { 'lt': latMax } },
-                { 'location_lat': { 'gt': latMin } },
-                { 'location_lng': { 'lt': lngMax } },
-                { 'location_lng': { 'gt': lngMin } },
-            ];
-            yield this.initLoad();
-        });
-    }
-    initLoad() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.loadedListings = [];
-            this.mapView.clearMarkers();
-            yield this.loadMoreListings();
-        });
-    }
-};
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */])
-], ListingsTabPage.prototype, "content", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */])
-], ListingsTabPage.prototype, "mapView", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('mapContainerCol'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
-], ListingsTabPage.prototype, "mapContainerCol", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('listContainerCol'),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["ElementRef"])
-], ListingsTabPage.prototype, "listContainerCol", void 0);
-ListingsTabPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'listing-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-searchbar>\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <button ion-button (click)="popoverFilter($event)">\n                <ion-icon name="funnel"> 筛选</ion-icon>\n            </button>\n            <button ion-button (click)="goToCreationPage()">\n                <ion-icon name="add"> 发帖</ion-icon>\n            </button>\n\n        </ion-buttons>\n    </ion-navbar>\n\n    <ion-navbar *ngIf="!largeEnough()">\n        <ion-segment [(ngModel)]="mapOrList" (ngModelChange)="updateMapOrList($event)">\n            <ion-segment-button value="ONLY_LIST">列表</ion-segment-button>\n            <ion-segment-button value="ONLY_MAP">地图</ion-segment-button>\n        </ion-segment>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row style="height: 100%;">\n        <ion-col #listContainerCol class="grey-background"\n                 style="height: 100%;" id="left" no-padding>\n            <ion-content fullscreen>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <!--\n                    We duplicate the grid and original ion-item because responsive\n                    grid doesn\'t work well with iOS yet.\n                    TODO(xinbenlv): remove this ion-list when works on iOS.\n                -->\n                <ion-list *ngIf="!useGrid">\n                    <listing-item *ngFor="let listing of loadedListings; let i = index"\n                                  [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-item>\n                </ion-list>\n                <ion-grid *ngIf="useGrid">\n                    <ion-row>\n                        <ion-col\n                                col-xl-6\n                                col-lg-6\n                                col-md-6\n                                col-sm-12\n                                col-xs-12\n                                *ngFor="let listing of loadedListings; let i = index">\n                            <listing-item [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-item>\n                        </ion-col>\n                    </ion-row>\n                </ion-grid>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-content>\n        </ion-col>\n        <!-- the main content -->\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n    </ion-row>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-tab.page.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_3__services_auth_service__["a" /* AuthService */],
-        __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
-        __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["i" /* PopoverController */],
-        __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
-], ListingsTabPage);
-
-//# sourceMappingURL=listings-tab.page.js.map
-
-/***/ }),
-
-/***/ 93:
+/***/ 90:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseLoopBackApi; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__search_params__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__error_service__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_service__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lb_config__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__custom_SDKModels__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__custom_SDKModels__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Subject__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_Subject__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_catch__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_catch__ = __webpack_require__(278);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_add_operator_catch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_map__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_map__ = __webpack_require__(280);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -7167,77 +6375,7 @@ BaseLoopBackApi = __decorate([
 
 //# sourceMappingURL=base.service.js.map
 
-/***/ }),
-
-/***/ 94:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HsyInteractionApi; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_auth_service__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_search_params__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(52);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-/* tslint:disable */
-
-
-
-
-
-
-
-/**
- * Api services for the `HsyInteraction` model.
- */
-let HsyInteractionApi = class HsyInteractionApi extends __WEBPACK_IMPORTED_MODULE_3__core_base_service__["a" /* BaseLoopBackApi */] {
-    constructor(http, models, auth, searchParams, errorHandler) {
-        super(http, models, auth, searchParams, errorHandler);
-        this.http = http;
-        this.models = models;
-        this.auth = auth;
-        this.searchParams = searchParams;
-        this.errorHandler = errorHandler;
-    }
-    /**
-     * The name of the model represented by this $resource,
-     * i.e. `HsyInteraction`.
-     */
-    getModelName() {
-        return "HsyInteraction";
-    }
-};
-HsyInteractionApi = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"])),
-    __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_2__SDKModels__["a" /* SDKModels */])),
-    __param(2, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_4__core_auth_service__["a" /* LoopBackAuth */])),
-    __param(3, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__core_search_params__["a" /* JSONSearchParams */])),
-    __param(4, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(4, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_6__core_error_service__["a" /* ErrorHandler */])),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"],
-        __WEBPACK_IMPORTED_MODULE_2__SDKModels__["a" /* SDKModels */],
-        __WEBPACK_IMPORTED_MODULE_4__core_auth_service__["a" /* LoopBackAuth */],
-        __WEBPACK_IMPORTED_MODULE_5__core_search_params__["a" /* JSONSearchParams */],
-        __WEBPACK_IMPORTED_MODULE_6__core_error_service__["a" /* ErrorHandler */]])
-], HsyInteractionApi);
-
-//# sourceMappingURL=HsyInteraction.js.map
-
 /***/ })
 
-},[509]);
+},[507]);
 //# sourceMappingURL=main.js.map
