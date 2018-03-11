@@ -24,13 +24,16 @@
         </ion-col>
         <ion-col #listContainerCol
                  style="height: 100%;" id="left" no-padding>
-            <ion-content>
+            <ion-content fullscreen>
             <ion-list>
                 <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
                     <ion-spinner></ion-spinner>
                 </ion-row>
                 <listing-ux-item *ngFor="let listing of loadedListings; let i = index"
-                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"></listing-ux-item>
+                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"
+                                [indexFromParent]="i">
+
+                </listing-ux-item>
                 <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">
                     <ion-infinite-scroll-content></ion-infinite-scroll-content>
                 </ion-infinite-scroll>
