@@ -3,9 +3,8 @@ import {
   ViewChild
 } from "@angular/core";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
-import {ListingDetailPage} from "./listing-detail.page";
 import {NavController} from "ionic-angular";
-import {GeoPoint} from "../../loopbacksdk/models/BaseModels";
+import {ListingUxDetailPage} from "./listing-ux-detail.page";
 
 declare let google, document;
 declare let ga:any;
@@ -22,26 +21,9 @@ function SearchButtonInMap(controlDiv, map, eventEmitter) {
   // Set CSS for the control border.
   // TODO(xinbenlv): from Google Map developer example, to be updated.
   var controlUI = document.createElement('div');
-  controlUI.style.backgroundColor = '#fff';
-  controlUI.style.border = '2px solid #fff';
-  controlUI.style.borderRadius = '3px';
-  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-  controlUI.style.cursor = 'pointer';
-  controlUI.style.marginBottom = '22px';
-  controlUI.style.textAlign = 'center';
-  controlUI.title = 'Click to search within the map';
+  controlUI.classList = ['search-in-map-btn'];
+  controlUI.innerHTML = '在地图区域内搜索';
   controlDiv.appendChild(controlUI);
-
-  // Set CSS for the control interior.
-  var controlText = document.createElement('div');
-  controlText.style.color = 'rgb(25,25,25)';
-  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-  controlText.style.fontSize = '16px';
-  controlText.style.lineHeight = '38px';
-  controlText.style.paddingLeft = '5px';
-  controlText.style.paddingRight = '5px';
-  controlText.innerHTML = '在地图区域内搜索';
-  controlUI.appendChild(controlText);
 
   // Setup the click event listeners: simply set the map to Chicago.
   controlUI.addEventListener('click', function() {
@@ -77,7 +59,8 @@ export class MapViewComponent implements OnChanges {
       eventAction: 'listing-detail',
       eventLabel: 'from-map-view'
     });
-    this.nav.push(ListingDetailPage, {listing: listing});
+    this.nav.push('ListingUxDetailPage', {listing: listing});
+
   }
 
   public render() {
@@ -115,10 +98,10 @@ export class MapViewComponent implements OnChanges {
           position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
           icon: `data:image/svg+xml,
 <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
-    <path fill="#FFFFFF" stroke="#ccc" stroke-width=".5"
+    <path fill="#21b3fe" stroke="#ccc" stroke-width=".5"
           d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/>
     <text transform="translate(19 18.5)" 
-          fill="#000" 
+          fill="#fff" 
           style="font-family: Arial, sans-serif;
           text-align:center;"
           font-size="10" text-anchor="middle">${listing.price ? listing.price : '待议'}

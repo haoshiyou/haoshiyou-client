@@ -1,6 +1,5 @@
 import {AuthService} from "../../services/auth.service";
 import {Component, OnInit} from "@angular/core";
-import {Env} from "../../app/env";
 import {CodePush} from "@ionic-native/code-push";
 import {Platform, ToastController} from "ionic-angular";
 import {AppVersion} from "@ionic-native/app-version";

@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {NavController, AlertController} from "ionic-angular";
-import {ListingDetailPage} from "./listing-detail.page";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyInteractionApi} from "../../loopbacksdk/services/custom/HsyInteraction";
 import {HsyInteraction} from "../../loopbacksdk/models/HsyInteraction";

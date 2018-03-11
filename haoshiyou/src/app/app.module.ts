@@ -6,9 +6,6 @@ import { AuthConfig, AuthHttp } from 'angular2-jwt';
 import {FilterSettingsComponent} from "../pages/listings-tab/filter-settings.comp";
 import {ImageGridComponent} from "../pages/listings-tab/image-grid.comp";
 import {CreationPage} from "../pages/listings-tab/listing-creation.page";
-import {ListingDetailPage} from "../pages/listings-tab/listing-detail.page";
-import {ListingItem} from "../pages/listings-tab/listing-item.comp";
-import {ListingsTabPage} from "../pages/listings-tab/listings-tab.page";
 import {MapViewComponent} from "../pages/listings-tab/map-view.comp";
 import {LongImageComponent} from "../pages/listings-tab/long-image.comp";
 import {RemoveModal} from "../pages/listings-tab/remove.modal";
@@ -57,13 +54,10 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     TabsPage,
     ImageGridComponent,
     CreationPage,
-    ListingDetailPage,
+    MapViewComponent,
     ListingUxDetailPage,
-    ListingItem,
-    ListingsTabPage,
     ListingUxItem,
     ListingsUxTabPage,
-    MapViewComponent,
     LongImageComponent,
     RemoveModal,
     SettingsTabPage,
@@ -87,8 +81,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     },  {
       links: [
         {segment: '', component: TabsPage, name: 'TabsPage' },
-        {segment: 'listing/:id', component: ListingDetailPage, name: 'ListingDetailPage' },
-        {segment: 'listing-ux/:id', component: ListingUxDetailPage, name: 'ListingUxDetailPage' },
+        {segment: 'listing/:id', component: ListingUxDetailPage, name: 'ListingUxDetailPage' },
         // As of 2016-11-14 per https://github.com/driftyco/ionic/issues/9012,
         // Ionic deeplinker and navigation does not work well with Tab structures.
       ]
@@ -105,13 +98,10 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     TabsPage,
     ImageGridComponent,
     CreationPage,
-    ListingDetailPage,
+    MapViewComponent,
     ListingUxDetailPage,
-    ListingItem,
-    ListingsTabPage,
     ListingUxItem,
     ListingsUxTabPage,
-    MapViewComponent,
     LongImageComponent,
     RemoveModal,
     SettingsTabPage,
