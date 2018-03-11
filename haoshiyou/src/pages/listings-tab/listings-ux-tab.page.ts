@@ -346,6 +346,10 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     }
   }
 
+  public flipMapAndList() {
+    this.showMapInstead = !this.showMapInstead;
+    this.updateLayout();
+  }
   public updateLayout() {
     if (!this.largeEnough()) {
       if (this.showMapInstead) {

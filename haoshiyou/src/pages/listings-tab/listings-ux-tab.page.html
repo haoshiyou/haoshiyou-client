@@ -9,9 +9,9 @@
 
         </ion-searchbar>
         <ion-buttons end>
-            <button ion-button *ngIf="!largeEnough()">
-                <ion-icon *ngIf="!showMapInstead" name="map"></ion-icon>
-                <ion-icon *ngIf="showMapInstead" name="list"></ion-icon>
+            <button ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">
+                <ion-icon *ngIf="!showMapInstead" name="ios-map-outline"></ion-icon>
+                <ion-icon *ngIf="showMapInstead" name="ios-list-box-outline"></ion-icon>
             </button>
         </ion-buttons>
     </ion-navbar>
