@@ -5,7 +5,12 @@
                 <ion-icon name="md-add"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-searchbar>
+        <ion-searchbar
+                [(ngModel)]="searchBarModel"
+                (ionInput)="filterItems($event)"
+                placeholder="搜索 区域/城市"
+                (ionFocus)="isSearching = true"
+        >
 
         </ion-searchbar>
         <ion-buttons end>
@@ -18,7 +23,7 @@
 </ion-header>
 
 <ion-content>
-    <ion-row #splitPanelContainer class="split-panel-container" style="height: 100%;">
+    <ion-row [hidden]="isSearching" #splitPanelContainer class="split-panel-container" style="height: 100%;">
         <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>
             <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>
         </ion-col>
@@ -42,4 +47,10 @@
         </ion-col>
         <!-- the main content -->
     </ion-row>
+    <ion-list [hidden]="!isSearching">
+        <ng-container  *ngFor="let searchItem of searchItemsFiltered">
+            <ion-item (click)="setSearchTerm(searchItem)">{{ searchItem }}
+            </ion-item>
+        </ng-container>
+    </ion-list>
 </ion-content>
