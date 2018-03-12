@@ -12,8 +12,18 @@ import {FlagService} from "../../services/flag.service";
 import {FilterSettingsComponent} from "./filter-settings.comp";
 import {MapViewComponent} from "./map-view.comp";
 declare let ga:any;
+declare let google, document;
+
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
+const HSY_GROUP_AREAS = ['南湾西', '南湾东', '中半岛', '三番', '东湾'];
+const BAY_AREA_CITIES = [
+  "Alameda","El Cerrito","Mountain View","San Leandro","Albany","Emeryville","Napa","San Mateo","American Canyon","Fairfax","Newark","San Pablo","Antioch","Fairfield","Novato","San Rafael","Atherton","Foster City","Oakland","San Ramon","Belmont","Fremont","Oakley","Santa Clara","Belvedere","Gilroy","Orinda","Santa Rosa","Benicia","Half Moon Bay","Pacifica","Saratoga","Berkeley","Hayward","Palo Alto","Sausalito","Brentwood","Healdsburg","Petaluma","Sebastopol","Brisbane","Hercules","Piedmont","Sonoma","Burlingame","Hillsborough","Pinole","South San Francisco","Calistoga","Lafayette","Pittsburg","St. Helena","Campbell","Larkspur","Pleasant Hill","Suisun City","Clayton","Livermore","Pleasanton","Sunnyvale","Cloverdale","Los Altos","Portola Valley","Tiburon","Colma","Los Altos Hills","Redwood City","Union City","Concord","Los Gatos","Richmond","Vacaville","Corte Madera","Martinez","Rio Vista","Vallejo","Cotati","Menlo Park","Rohnert Park","Walnut Creek","Cupertino","Mill Valley","Ross","Windsor","Daly City","Millbrae","San Anselmo","Woodside","Danville","Milpitas","San Bruno","Yountville","Dixon","Monte Sereno","San Carlos","Dublin","Moraga","San Francisco","East Palo Alto","Morgan Hill","San Jose", // From http://www.bayareacensus.ca.gov/cities/cities.htm
+  "Stanford",
+];
+
+let locationsForSearch = HSY_GROUP_AREAS.concat(BAY_AREA_CITIES);
+
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -22,6 +32,7 @@ const AREA_KEY: string = 'area';
   templateUrl: 'listings-ux-tab.page.html',
 })
 export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
+  private isSearching = false;
   ngOnDestroy(): any {
     if (this.markers)
     for (let marker of this.markers) {
@@ -46,6 +57,8 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   private isLoading = false;
   private showMapInstead:boolean = false;
   private largeEnoughWas:boolean;
+  private searchItemsFiltered = locationsForSearch.slice(0, 5);
+  public searchBarModel;
   constructor(private platform: Platform,
               private nav: NavController,
               private alertCtrl: AlertController,
@@ -312,6 +325,23 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     }
     /* END filtering area */
 
+    /* START filtering with geo bounds */
+    if (this.filterSettings['boundary']) {
+      let boundary = this.filterSettings['boundary'];
+      let latMax = boundary.getNorthEast().lat();
+      let latMin = boundary.getSouthWest().lat();
+      let lngMax = boundary.getNorthEast().lng();
+      let lngMin = boundary.getSouthWest().lng();
+      whereClause_['and'] = [
+        {'location_lat': {'lt': latMax}},
+        {'location_lat': {'gt': latMin}},
+        {'location_lng': {'lt': lngMax}},
+        {'location_lng': {'gt': lngMin}},
+      ];
+    }
+
+    /* END filtering with geo bounds */
+
     /* EXEC filtering */
     this.whereClause = whereClause_;
   }
@@ -362,21 +392,66 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   }
 
   public async onBoundaryFilter(boundary) {
-    let latMax = boundary.getNorthEast().lat();
-    let latMin = boundary.getSouthWest().lat();
-    let lngMax = boundary.getNorthEast().lng();
-    let lngMin = boundary.getSouthWest().lng();
-    this.whereClause['and']  = [
-      {'location_lat': { 'lt': latMax }},
-      {'location_lat': { 'gt': latMin }},
-      {'location_lng': { 'lt': lngMax }},
-      {'location_lng': { 'gt': lngMin }},
-    ];
+    if (boundary) {
+      this.filterSettings['boundary'] = boundary;
+      this.filterSettings['areas'] = {};
+    } else {
+      delete this.filterSettings['boundary'];
+    }
+    this.updateWhereClause();
     await this.initLoad();
   }
   private async initLoad() {
     this.loadedListings = [];
     this.mapView.clearMarkers();
     await this.loadMoreListings();
+  }
+
+  public filterItems(ev: any) {
+    // Reset items back to all of the items
+    this.searchItemsFiltered = locationsForSearch.slice(0,5);
+
+    // set val to the value of the searchbar
+    let val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.searchItemsFiltered = (locationsForSearch.filter((item) => {
+        return item.indexOf(val) > -1 || item.toLowerCase().indexOf(val.toLowerCase()) > -1;
+      })).slice(0,5)
+    }
+
+  }
+
+  public async setSearchTerm(searchItem) {
+    this.searchBarModel = searchItem;
+    this.isSearching = false;
+    this.isLoading = true;
+    if (HSY_GROUP_AREAS.indexOf(this.searchBarModel) >= 0) {
+      for (let option of this.options) {
+        if (this.optionsMap[option] == this.searchBarModel) {
+          this.filterSettings['areas'] = {};
+          this.filterSettings['areas'][option] = true;
+          this.onBoundaryFilter(null);
+          this.updateWhereClause();
+          await this.initLoad();
+        }
+      }
+      // Fetch by group
+    } else if (BAY_AREA_CITIES.indexOf(this.searchBarModel) >= 0) {
+      // Fetch by city
+      let geocoder = new google.maps.Geocoder();
+
+      geocoder.geocode( { 'address': this.searchBarModel}, async (results, status) => {
+        if (status == 'OK') {
+          await this.onBoundaryFilter(results[0].geometry.bounds);
+        } else {
+          console.warn('Geocode was not successful for the following reason: ', status);
+        }
+      });
+
+    } else {
+      // Do something else?
+    }
   }
 }
