@@ -16,7 +16,7 @@ declare let google, document;
 
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
-const HSY_GROUP_AREAS = ['南湾西', '南湾东', '中半岛', '旧金山', '东湾'];
+const HSY_GROUP_AREAS = ['南湾西', '南湾东', '中半岛', '三番', '东湾'];
 const BAY_AREA_CITIES = [
   "Alameda","El Cerrito","Mountain View","San Leandro","Albany","Emeryville","Napa","San Mateo","American Canyon","Fairfax","Newark","San Pablo","Antioch","Fairfield","Novato","San Rafael","Atherton","Foster City","Oakland","San Ramon","Belmont","Fremont","Oakley","Santa Clara","Belvedere","Gilroy","Orinda","Santa Rosa","Benicia","Half Moon Bay","Pacifica","Saratoga","Berkeley","Hayward","Palo Alto","Sausalito","Brentwood","Healdsburg","Petaluma","Sebastopol","Brisbane","Hercules","Piedmont","Sonoma","Burlingame","Hillsborough","Pinole","South San Francisco","Calistoga","Lafayette","Pittsburg","St. Helena","Campbell","Larkspur","Pleasant Hill","Suisun City","Clayton","Livermore","Pleasanton","Sunnyvale","Cloverdale","Los Altos","Portola Valley","Tiburon","Colma","Los Altos Hills","Redwood City","Union City","Concord","Los Gatos","Richmond","Vacaville","Corte Madera","Martinez","Rio Vista","Vallejo","Cotati","Menlo Park","Rohnert Park","Walnut Creek","Cupertino","Mill Valley","Ross","Windsor","Daly City","Millbrae","San Anselmo","Woodside","Danville","Milpitas","San Bruno","Yountville","Dixon","Monte Sereno","San Carlos","Dublin","Moraga","San Francisco","East Palo Alto","Morgan Hill","San Jose", // From http://www.bayareacensus.ca.gov/cities/cities.htm
   "Stanford",
@@ -325,6 +325,23 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     }
     /* END filtering area */
 
+    /* START filtering with geo bounds */
+    if (this.filterSettings['boundary']) {
+      let boundary = this.filterSettings['boundary'];
+      let latMax = boundary.getNorthEast().lat();
+      let latMin = boundary.getSouthWest().lat();
+      let lngMax = boundary.getNorthEast().lng();
+      let lngMin = boundary.getSouthWest().lng();
+      whereClause_['and'] = [
+        {'location_lat': {'lt': latMax}},
+        {'location_lat': {'gt': latMin}},
+        {'location_lng': {'lt': lngMax}},
+        {'location_lng': {'gt': lngMin}},
+      ];
+    }
+
+    /* END filtering with geo bounds */
+
     /* EXEC filtering */
     this.whereClause = whereClause_;
   }
@@ -376,19 +393,11 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
 
   public async onBoundaryFilter(boundary) {
     if (boundary) {
-      let latMax = boundary.getNorthEast().lat();
-      let latMin = boundary.getSouthWest().lat();
-      let lngMax = boundary.getNorthEast().lng();
-      let lngMin = boundary.getSouthWest().lng();
-      this.whereClause['and'] = [
-        {'location_lat': {'lt': latMax}},
-        {'location_lat': {'gt': latMin}},
-        {'location_lng': {'lt': lngMax}},
-        {'location_lng': {'gt': lngMin}},
-      ];
+      this.filterSettings['boundary'] = boundary;
     } else {
-      delete this.whereClause['and'];
+      delete this.filterSettings['boundary'];
     }
+    this.updateWhereClause();
     await this.initLoad();
   }
   private async initLoad() {
@@ -413,19 +422,29 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
 
   }
 
-  public setSearchTerm(searchItem) {
+  public async setSearchTerm(searchItem) {
     this.searchBarModel = searchItem;
     this.isSearching = false;
     this.isLoading = true;
     if (HSY_GROUP_AREAS.indexOf(this.searchBarModel) >= 0) {
-
+      for (let option of this.options) {
+        if (this.optionsMap[option] == this.searchBarModel) {
+          this.filterSettings['areas'] = {};
+          this.filterSettings['areas'][option] = true;
+          this.onBoundaryFilter(null);
+          this.updateWhereClause();
+          await this.initLoad();
+        }
+      }
       // Fetch by group
     } else if (BAY_AREA_CITIES.indexOf(this.searchBarModel) >= 0) {
       // Fetch by city
       let geocoder = new google.maps.Geocoder();
+
       geocoder.geocode( { 'address': this.searchBarModel}, async (results, status) => {
         if (status == 'OK') {
           await this.onBoundaryFilter(results[0].geometry.bounds);
+          this.filterSettings['areas'] = {};
         } else {
           console.warn('Geocode was not successful for the following reason: ', status);
         }
