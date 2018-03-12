@@ -394,6 +394,7 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   public async onBoundaryFilter(boundary) {
     if (boundary) {
       this.filterSettings['boundary'] = boundary;
+      this.filterSettings['areas'] = {};
     } else {
       delete this.filterSettings['boundary'];
     }
@@ -444,7 +445,6 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
       geocoder.geocode( { 'address': this.searchBarModel}, async (results, status) => {
         if (status == 'OK') {
           await this.onBoundaryFilter(results[0].geometry.bounds);
-          this.filterSettings['areas'] = {};
         } else {
           console.warn('Geocode was not successful for the following reason: ', status);
         }
