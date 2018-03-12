@@ -1,19 +1,51 @@
-import {Component, OnChanges, Input, SimpleChange, OnInit} from "@angular/core";
+import {
+  Component, OnChanges, Input, SimpleChange, OnInit, Output, EventEmitter, ElementRef,
+  ViewChild
+} from "@angular/core";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
-import {ListingDetailPage} from "./listing-detail.page";
 import {NavController} from "ionic-angular";
+import {ListingUxDetailPage} from "./listing-ux-detail.page";
 
 declare let google, document;
 declare let ga:any;
+const DEFAULT_CENTER = { lat: 37.6042379, lng: -122.1755228};
+
+/**
+ * The addSearchButtonInMap adds a button to the map that allows
+ * seach in the map.
+ * This constructor takes the control DIV as an argument.
+ * @constructor
+ */
+function SearchButtonInMap(controlDiv, map, eventEmitter) {
+
+  // Set CSS for the control border.
+  // TODO(xinbenlv): from Google Map developer example, to be updated.
+  var controlUI = document.createElement('div');
+  controlUI.classList = ['search-in-map-btn'];
+  controlUI.innerHTML = '在地图区域内搜索';
+  controlDiv.appendChild(controlUI);
+
+  // Setup the click event listeners: simply set the map to Chicago.
+  controlUI.addEventListener('click', function() {
+    eventEmitter.emit(map.getBounds());
+  });
+
+}
+
 @Component({
   selector: 'map-view',
   templateUrl: 'map-view.comp.html',
 })
 export class MapViewComponent implements OnChanges {
-  @Input() listings:HsyListing[];
-  listingsHasLocation:HsyListing[] = null;
-  private map = google.maps.Maps;
+  private zoomLevel = 10; // default
+  private markers = [];
+  @ViewChild('mapCanvas') mapCanvas:ElementRef;
 
+  @Output()
+  onBoundaryFilter = new EventEmitter<any>();
+  @Input() showSearchButton:boolean = true;
+  private map = google.maps.Maps;
+  private mapDirty = false;
   constructor(private nav:NavController,) {
   }
   ngOnChanges(changes:{[propertyName:string]:SimpleChange}) {
@@ -27,52 +59,69 @@ export class MapViewComponent implements OnChanges {
       eventAction: 'listing-detail',
       eventLabel: 'from-map-view'
     });
-    this.nav.push(ListingDetailPage, {listing: listing});
+    this.nav.push('ListingUxDetailPage', {listing: listing});
+
   }
 
-  public resize() {
-    console.log(`XXX mapview Triggered resize!`);
-    google.maps.event.trigger(this.map, 'resize');
-  }
   public render() {
-    console.log(`XXX Render!`);
-    let minZoomLevel = 10;
-    let latAve:number = 0, lngAve:number = 0;
-    if (document.getElementById('map_view_canvas')) {
-      this.map = new google.maps.Map(document.getElementById('map_view_canvas'), {
-        zoom: minZoomLevel,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
+    if (!this.mapCanvas || !this.mapCanvas.nativeElement) {
+      this.map = null;
+      return;
+    } // do nothing
 
-      if (this.listings) {
-        this.listingsHasLocation = this.listings.filter(l => l.location);
-        let n = this.listingsHasLocation.length;
+    this.map = new google.maps.Map(this.mapCanvas.nativeElement, {
+      zoom: this.zoomLevel,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    this.setCenter(DEFAULT_CENTER);
 
-        this.listingsHasLocation.map((listing:HsyListing) => {
-            latAve += listing.location.lat/n;
-            lngAve += listing.location.lng/n;
-            let marker = new google.maps.Marker({
-              position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
-            });
-            marker.addListener('click', () => {
-              this.gotoListingDetail(listing);
-            });
-            marker.setMap(this.map);
-        });
-        console.log(`XXX averaging locations to get lat = ${latAve}, lng = ${lngAve}, n = ${n}`);
+    // Create the DIV to hold the control and call the CenterControl()
+    // constructor passing in this DIV.
+    var searchInMapButtonDiv = document.createElement('div');
+    if (this.showSearchButton) var centerControl = new SearchButtonInMap(searchInMapButtonDiv, this.map, this.onBoundaryFilter);
 
-      }
+    searchInMapButtonDiv.index = 1;
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchInMapButtonDiv);
+    google.maps.event.addListener(this.map, 'bounds_changed', () => {
+      google.maps.event.trigger(this.map, 'resize');
+      this.mapDirty = true;
+    });
+    for (let marker of this.markers) {
+      marker.setMap(this.map);
     }
-    if (latAve == 0 || lngAve == 0) {
-      latAve = 	37.386051;
-      lngAve = -122.083855;
-      console.log(`XXX empty locations, set lat = ${latAve}, lng = ${lngAve}`);
-    }
-
-    latAve = 	37.6042379;
-    lngAve = -122.1755228;
-    this.map.setCenter(new google.maps.LatLng(latAve, lngAve));
-    this.resize();
   }
 
+  public addListings(newListings:HsyListing[]) {
+    let listingsHasLocation = newListings.filter((l) => l.location);
+    listingsHasLocation.map((listing:HsyListing) => {
+        let marker = new google.maps.Marker({
+          position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
+          icon: `data:image/svg+xml,
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
+    <path fill="#21b3fe" stroke="#ccc" stroke-width=".5"
+          d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/>
+    <text transform="translate(19 18.5)" 
+          fill="#fff" 
+          style="font-family: Arial, sans-serif;
+          text-align:center;"
+          font-size="10" text-anchor="middle">${listing.price ? listing.price : '待议'}
+    </text>
+</svg>`,
+          map: this.map
+        });
+        marker.addListener('click', () => {
+          this.gotoListingDetail(listing);
+        });
+        this.markers.push(marker);
+    });
+  }
+
+  public clearMarkers() {
+    this.markers.forEach(l => l.setMap(null));
+    this.markers = [];
+  }
+
+  public setCenter(center) {
+    if (this.map) this.map.setCenter(new google.maps.LatLng(center.lat, center.lng));
+  }
 }

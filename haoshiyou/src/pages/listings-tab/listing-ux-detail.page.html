@@ -1,0 +1,116 @@
+<ion-content id="page-container" class="dynamic-width-container" #content>
+        <div class="detail-header">
+            <div class="detail-header-shadow">
+            </div>
+            <div id="back" class="in-image-item" item-right (click)="backToMain()">
+                <ion-icon name="ios-arrow-back-outline"></ion-icon>
+            </div>
+            <div id="heart" class="in-image-item" item-right>
+                <ion-icon name="ios-heart-outline"></ion-icon>
+            </div>
+
+        <ion-slides class="detail-image-slides" pager *ngIf="!loading && listing.imageIds">
+            <ng-container *ngFor="let imageId of listing.imageIds;let i = index">
+                <ion-slide class="slide" style="background-size:cover; background-repeat:no-repeat; background-position: center center; "
+                           [style.background-image]="'url(' + imageService.getUrlFromId(imageId) + ')'">
+                </ion-slide>
+            </ng-container>
+        </ion-slides>
+        </div>
+        <div class="detail-content" *ngIf="!loading">
+            <div class="detail-content-title-block">
+                <h1 class="title">
+                    {{this.listing.title}}
+                </h1>
+                <div class="subtitle">{{ listing.lastUpdated | timeFromNow }}更新</div>
+                <div class="subtitle">110人看过</div>
+            </div>
+
+            <div class="detail-content-map" *ngIf="listing.location_lat && listing.location_lng">
+                <!--<img style="width:100%;height:100%"-->
+                     <!--src="https://maps.googleapis.com/maps/api/staticmap?center={{listing.location_lat}},{{listing.location_lng}}&zoom=12&size=375x140&key=AIzaSyDilZ69sI7zcszD1XWZ6oeV4IW8rufebMY"-->
+                     <!--alt="">-->
+                <map-view #mapViewSingle class="map-view-item" [showSearchButton]="false"> </map-view>
+                <div class="detail-map-title-block">
+                    <div class="detail-map-title">{{listing.addressCity}}</div>
+                    <div class="detail-map-subtitle"> {{ listing.addressLine || "具体地址请联系房东获得" }}</div>
+                </div>
+            </div>
+
+            <div class="section highlight-facts"
+                 *ngIf="false"> <!--TODO(zzn): reopen when this kind of information is extracted -->
+                <div class="logo-box" *ngFor="let i of ['独栋别墅','2室1卫','12个月起租','2017/01/01开始']">
+                    <div class="logo-box-logo">
+                        <ion-icon name="ios-home-outline"></ion-icon>
+                    </div>
+                    <div class="logo-box-text">
+                        {{i}}
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">描述</div>
+                <div class="section-body">
+                    <p>
+                        <ng-container *ngFor="let textPiece of listing.content.split('\n')">
+                            {{ textPiece }} <br/>
+                        </ng-container>
+                    </p>
+                </div>
+            </div>
+            <div class="section" *ngIf="listing.amenityArray && listing.amenityArray.length > 0">
+                <div class="section-title">设施／须知</div>
+                <div class="grid-container">
+                    <div class="grid-half-screen" *ngFor="let i of listing.amenityArray">
+                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>
+                        <span class="label">{{i}}</span>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="listing.requireToContact == null || listing.requireToContact.length == 0 || eligibleToViewContact()">
+                <div class="section">
+                    <div class="section-title">联系房东</div>
+                    <div class="grid-full-screen" #contact_phone *ngIf="listing.owner && listing.owner.contactPhone">
+                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>
+                        <span class="label">电话</span>
+                        <span class="contetn">{{listing.owner.contactPhone}}</span>
+                    </div>
+                    <div class="grid-full-screen" #contact_email *ngIf="listing.owner && listing.owner.contactEmail">
+                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>
+                        <span class="label">邮箱</span>
+                        <span class="contetn">{{listing.owner.contactEmail}}</span>
+                    </div>
+                    <div class="grid-full-screen" #contact_group_nick *ngIf="listing.hsyGroupEnum && listing.hsyGroupNick">
+                        <span class="small-logo"><ion-icon name="ios-cube-outline"></ion-icon></span>
+                        <span class="label">微信</span>
+                        <span class="contetn">
+                            请在【好室友】{{listing.hsyGroupEnum|hsyGroupEnumMsgPipe}}群内搜索"
+                         {{ listing.hsyGroupNick ?
+                                listing.hsyGroupNick : listing.ownerId.replace('group-collected-', '') }}"
+                        </span>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <ion-list *ngIf="loading">
+            <ion-item>
+                <ion-row align-items-center justify-content-center>
+                    <ion-spinner></ion-spinner>
+                </ion-row>
+            </ion-item>
+        </ion-list>
+</ion-content>
+<ion-footer class="footer" *ngIf="!loading">
+    <div class="dynamic-width-container  grid-container">
+            <div class="footer-button" id="price-button">
+                <ng-container >
+                    <span id="price">$ {{listing.price || "价格待议" }}</span><span id="per-month">/月</span>
+                </ng-container>
+            </div>
+            <div class="footer-button" id="contact-button" (click)="scrollToContact()">
+                <span>联系房东</span>
+            </div>
+    </div>
+</ion-footer>
+
+

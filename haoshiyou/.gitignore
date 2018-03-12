@@ -41,7 +41,6 @@ haoshiyou.app.dSYM.zip
 haoshiyou.ipa
 release-cred/
 Gemfile.lock
-res/
 releases/
 # fastlane's latency report
 fastlane/report.xml
@@ -52,3 +51,4 @@ src/**/*.js
 
 TDCVDBXA6X.cer
 TDCVDBXA6X.certSigningRequest
+.sourcemaps

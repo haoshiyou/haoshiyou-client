@@ -1,8 +1,5 @@
 <ion-tabs *ngIf="shouldShowQrCode">
-    <ion-tab [root]="tab2Root" tabTitle="信息" tabIcon="map" tabUrlPath="listings-tab"></ion-tab>
-    <ion-tab [root]="tab1Root" tabTitle="对话" tabIcon="chatbubbles" tabUrlPath="chats-tab"
-             tabBadge="{{unreadMessagesCount}}" ></ion-tab>
-    <ion-tab [root]="tab5Root" tabTitle="我的" tabIcon="contact" tabUrlPath="mine-tab"></ion-tab>
-    <ion-tab [root]="tab3Root" tabTitle="设置" tabIcon="cog" tabUrlPath="settings-tab"></ion-tab>
-    <ion-tab [root]="tab4Root" tabTitle="加微信群" tabIcon="qr-scanner" tabUrlPath="qrcode-tab"></ion-tab>
+    <ion-tab [root]="tab2Root" tabIcon="home" tabUrlPath="listings-tab"></ion-tab>
+    <ion-tab [root]="tab4Root" tabIcon="chatbubbles" tabUrlPath="qrcode-tab"></ion-tab>
+    <ion-tab [root]="tab3Root" tabIcon="cog" tabUrlPath="settings-tab"></ion-tab>
 </ion-tabs>

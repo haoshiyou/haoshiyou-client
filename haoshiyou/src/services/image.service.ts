@@ -63,7 +63,8 @@ export class CloudinaryImageService implements IImageService {
   getUrlFromId(id:string, width:number = 300, height:number = 200):string {
     let param = "c_fill,g_north";
     if (width == 0 && height == 0) { // full
-      param += ',w_413'; // 1242 is the width of iphone 6plus.
+      let ion_card_width = 560; //TODO: get the card width
+      param += ',w_' + ion_card_width; // 1242 is the width of iphone 6plus.
       // param = 'w_300,h_150,c_fill,g_auto';
     } else if (width == 0) {
       param += `,h_${height}`;
@@ -72,6 +73,7 @@ export class CloudinaryImageService implements IImageService {
     } else {
       param += `,w_${width},h_${height}`;
     }
+    param += `,g_center`;
     return `http://res.cloudinary.com/${this.config.cloud_name}/image/upload/${param}/${id}.jpg`;
   }
 }
