@@ -221,6 +221,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
 const SEGMENT_KEY = 'segment';
 const AREA_KEY = 'area';
+const HSY_GROUP_AREAS = ['南湾西', '南湾东', '中半岛', '三番', '东湾'];
+const BAY_AREA_CITIES = [
+    "Alameda", "El Cerrito", "Mountain View", "San Leandro", "Albany", "Emeryville", "Napa", "San Mateo", "American Canyon", "Fairfax", "Newark", "San Pablo", "Antioch", "Fairfield", "Novato", "San Rafael", "Atherton", "Foster City", "Oakland", "San Ramon", "Belmont", "Fremont", "Oakley", "Santa Clara", "Belvedere", "Gilroy", "Orinda", "Santa Rosa", "Benicia", "Half Moon Bay", "Pacifica", "Saratoga", "Berkeley", "Hayward", "Palo Alto", "Sausalito", "Brentwood", "Healdsburg", "Petaluma", "Sebastopol", "Brisbane", "Hercules", "Piedmont", "Sonoma", "Burlingame", "Hillsborough", "Pinole", "South San Francisco", "Calistoga", "Lafayette", "Pittsburg", "St. Helena", "Campbell", "Larkspur", "Pleasant Hill", "Suisun City", "Clayton", "Livermore", "Pleasanton", "Sunnyvale", "Cloverdale", "Los Altos", "Portola Valley", "Tiburon", "Colma", "Los Altos Hills", "Redwood City", "Union City", "Concord", "Los Gatos", "Richmond", "Vacaville", "Corte Madera", "Martinez", "Rio Vista", "Vallejo", "Cotati", "Menlo Park", "Rohnert Park", "Walnut Creek", "Cupertino", "Mill Valley", "Ross", "Windsor", "Daly City", "Millbrae", "San Anselmo", "Woodside", "Danville", "Milpitas", "San Bruno", "Yountville", "Dixon", "Monte Sereno", "San Carlos", "Dublin", "Moraga", "San Francisco", "East Palo Alto", "Morgan Hill", "San Jose",
+    "Stanford",
+];
+let locationsForSearch = HSY_GROUP_AREAS.concat(BAY_AREA_CITIES);
 /**
  * A page contains a map view and a list showing the listings.
  */
@@ -234,6 +240,7 @@ let ListingsUxTabPage = class ListingsUxTabPage {
         this.flagService = flagService;
         this.popoverCtrl = popoverCtrl;
         this.ref = ref;
+        this.isSearching = false;
         this.segmentModel = 'ROOMMATE_WANTED'; // by default for rent
         this.areaModel = 'All'; // by default for All
         this.useGrid = !(navigator.platform == 'iPhone');
@@ -244,6 +251,7 @@ let ListingsUxTabPage = class ListingsUxTabPage {
         this.whereClause = {};
         this.isLoading = false;
         this.showMapInstead = false;
+        this.searchItemsFiltered = locationsForSearch.slice(0, 5);
         this.options = [
             'All',
             'SanFrancisco',
@@ -512,6 +520,21 @@ let ListingsUxTabPage = class ListingsUxTabPage {
                 whereClause_['hsyGroupEnum'] = { 'inq': areaClause };
         }
         /* END filtering area */
+        /* START filtering with geo bounds */
+        if (this.filterSettings['boundary']) {
+            let boundary = this.filterSettings['boundary'];
+            let latMax = boundary.getNorthEast().lat();
+            let latMin = boundary.getSouthWest().lat();
+            let lngMax = boundary.getNorthEast().lng();
+            let lngMin = boundary.getSouthWest().lng();
+            whereClause_['and'] = [
+                { 'location_lat': { 'lt': latMax } },
+                { 'location_lat': { 'gt': latMin } },
+                { 'location_lng': { 'lt': lngMax } },
+                { 'location_lng': { 'gt': lngMin } },
+            ];
+        }
+        /* END filtering with geo bounds */
         /* EXEC filtering */
         this.whereClause = whereClause_;
     }
@@ -559,16 +582,14 @@ let ListingsUxTabPage = class ListingsUxTabPage {
     }
     onBoundaryFilter(boundary) {
         return __awaiter(this, void 0, void 0, function* () {
-            let latMax = boundary.getNorthEast().lat();
-            let latMin = boundary.getSouthWest().lat();
-            let lngMax = boundary.getNorthEast().lng();
-            let lngMin = boundary.getSouthWest().lng();
-            this.whereClause['and'] = [
-                { 'location_lat': { 'lt': latMax } },
-                { 'location_lat': { 'gt': latMin } },
-                { 'location_lng': { 'lt': lngMax } },
-                { 'location_lng': { 'gt': lngMin } },
-            ];
+            if (boundary) {
+                this.filterSettings['boundary'] = boundary;
+                this.filterSettings['areas'] = {};
+            }
+            else {
+                delete this.filterSettings['boundary'];
+            }
+            this.updateWhereClause();
             yield this.initLoad();
         });
     }
@@ -577,6 +598,52 @@ let ListingsUxTabPage = class ListingsUxTabPage {
             this.loadedListings = [];
             this.mapView.clearMarkers();
             yield this.loadMoreListings();
+        });
+    }
+    filterItems(ev) {
+        // Reset items back to all of the items
+        this.searchItemsFiltered = locationsForSearch.slice(0, 5);
+        // set val to the value of the searchbar
+        let val = ev.target.value;
+        // if the value is an empty string don't filter the items
+        if (val && val.trim() != '') {
+            this.searchItemsFiltered = (locationsForSearch.filter((item) => {
+                return item.indexOf(val) > -1 || item.toLowerCase().indexOf(val.toLowerCase()) > -1;
+            })).slice(0, 5);
+        }
+    }
+    setSearchTerm(searchItem) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.searchBarModel = searchItem;
+            this.isSearching = false;
+            this.isLoading = true;
+            if (HSY_GROUP_AREAS.indexOf(this.searchBarModel) >= 0) {
+                for (let option of this.options) {
+                    if (this.optionsMap[option] == this.searchBarModel) {
+                        this.filterSettings['areas'] = {};
+                        this.filterSettings['areas'][option] = true;
+                        this.onBoundaryFilter(null);
+                        this.updateWhereClause();
+                        yield this.initLoad();
+                    }
+                }
+                // Fetch by group
+            }
+            else if (BAY_AREA_CITIES.indexOf(this.searchBarModel) >= 0) {
+                // Fetch by city
+                let geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ 'address': this.searchBarModel }, (results, status) => __awaiter(this, void 0, void 0, function* () {
+                    if (status == 'OK') {
+                        yield this.onBoundaryFilter(results[0].geometry.bounds);
+                    }
+                    else {
+                        console.warn('Geocode was not successful for the following reason: ', status);
+                    }
+                }));
+            }
+            else {
+                // Do something else?
+            }
         });
     }
 };
@@ -608,7 +675,7 @@ __decorate([
 ], ListingsUxTabPage.prototype, "onResize", null);
 ListingsUxTabPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons start>\n            <button ion-button (click)="goToCreationPage()">\n                <ion-icon name="md-add"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-searchbar>\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <button ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">\n                <ion-icon *ngIf="!showMapInstead" name="ios-map-outline"></ion-icon>\n                <ion-icon *ngIf="showMapInstead" name="ios-list-box-outline"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row #splitPanelContainer class="split-panel-container" style="height: 100%;">\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-content fullscreen>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"\n                                [indexFromParent]="i">\n\n                </listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n            </ion-content>\n        </ion-col>\n        <!-- the main content -->\n    </ion-row>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
+        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons start>\n            <button ion-button (click)="goToCreationPage()">\n                <ion-icon name="md-add"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-searchbar\n                [(ngModel)]="searchBarModel"\n                (ionInput)="filterItems($event)"\n                placeholder="搜索 区域/城市"\n                (ionFocus)="isSearching = true"\n        >\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <button ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">\n                <ion-icon *ngIf="!showMapInstead" name="ios-map-outline"></ion-icon>\n                <ion-icon *ngIf="showMapInstead" name="ios-list-box-outline"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row [hidden]="isSearching" #splitPanelContainer class="split-panel-container" style="height: 100%;">\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-content fullscreen>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"\n                                [indexFromParent]="i">\n\n                </listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n            </ion-content>\n        </ion-col>\n        <!-- the main content -->\n    </ion-row>\n    <ion-list [hidden]="!isSearching">\n        <ng-container  *ngFor="let searchItem of searchItemsFiltered">\n            <ion-item (click)="setSearchTerm(searchItem)">{{ searchItem }}\n            </ion-item>\n        </ng-container>\n    </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
