@@ -1,4 +1,6 @@
-import {Platform, NavController, AlertController, Content, PopoverController, Popover} from "ionic-angular";
+import {
+  Platform, NavController, AlertController, Content, PopoverController
+} from "ionic-angular";
 import {OnDestroy, Component, ViewChild, ChangeDetectorRef,
   ElementRef, AfterViewInit, HostListener
 } from "@angular/core";
@@ -9,8 +11,8 @@ import {HsyListing} from "../../loopbacksdk/models/HsyListing";
 import {HsyListingApi} from "../../loopbacksdk/services/custom/HsyListing";
 import UrlUtil from "../../util/url_util";
 import {FlagService} from "../../services/flag.service";
-import {FilterSettingsComponent} from "./filter-settings.comp";
 import {MapViewComponent} from "./map-view.comp";
+import {FilterSettingsPage} from "./filter-settings.page";
 declare let ga:any;
 declare let google, document;
 
@@ -52,7 +54,7 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   private markers: any[]; // Actually google.maps.Marker[];
   private mapReady: boolean = false;
   private currentIndex:number = 0;
-  private filterSettings = {'types': {}, 'areas': {}, 'duration': {}};
+  private filterSettings = {'types': {}, 'areas': {}, 'duration': 0, 'price': {lower: 0, upper: 5000}};
   private whereClause = {};
   private isLoading = false;
   private showMapInstead:boolean = false;
@@ -69,7 +71,6 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
               private ref:ChangeDetectorRef) {
   }
   async ngAfterViewInit() {
-    console.log(`XXX called ngAfterViewInit!`);
     let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
     if (segmentFromUrl) {
       this.segmentModel = segmentFromUrl;
@@ -246,25 +247,17 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     }
   }
 
-  public async popoverFilter(myEvent) {
-    let popover:Popover = this.popoverCtrl.create(
-        FilterSettingsComponent,
-        {'filterSettings': this.filterSettings},
-        {});
-    await popover.onDidDismiss(async (data) => {
-      console.log(`--- received ` + JSON.stringify(data));
-      if (data !== undefined && data !== null) {
-        this.filterSettings = data["filterSettings"];
-      } else if (this.popoverCtrl['_app'].filterSettings) {
-        this.filterSettings = this.popoverCtrl['_app']/*a hack to access private */.filterSettings;
-      }
-      this.updateWhereClause();
-      await this.initLoad();
-      this.updateLayout();
-    });
-    await popover.present({
-      ev: myEvent
-    });
+  public async gotoFilterSettingsPage(_) {
+    let ret = await this.nav.push(
+        FilterSettingsPage,
+        {
+          filterSettings: this.filterSettings ,
+          callback: async (data) => {
+            this.filterSettings = data;
+            this.updateWhereClause();
+            await this.initLoad();
+          },
+        });
   }
 
   private updateWhereClause() {
@@ -282,28 +275,18 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     /* END filtering type */
     /* START filtering duration */
     let ago = null;
-    switch (this.filterSettings['duration']) {
-      case '最近3天':
-        ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
-        break;
-      case '最近7天':
-        ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
-        break;
-      case '最近30天':
-        ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
-        break;
-      case '最近90天':
-        ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
-        break;
-      case '不限': // fall though
-      default:
-        // do nothing
+    if (this.filterSettings['duration'] != 0) {
+      ago = new Date(new Date().getTime() - (this.filterSettings['duration'] * 24 * 60 * 60 * 1000));
     }
     if(ago) whereClause_['lastUpdated'] = { "gte": ago};
+    else delete whereClause_['lastUpdated'];
     /* END filtering duration */
     /* START filtering price */
     if (this.filterSettings['price']) {
-      whereClause_['price'] = {lt: this.filterSettings['price']};
+      if (this.filterSettings['price'].upper)
+        whereClause_['price'] = {lt: this.filterSettings['price'].upper};
+      if (this.filterSettings['price'].lower)
+        whereClause_['price'] = {gte: this.filterSettings['price'].lower};
     } else {
       delete whereClause_['price'];
     }

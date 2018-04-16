@@ -3,7 +3,6 @@ import {IonicApp, IonicModule} from "ionic-angular";
 import {NgModule} from "@angular/core";
 import {Http} from "@angular/http";
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
-import {FilterSettingsComponent} from "../pages/listings-tab/filter-settings.comp";
 import {ImageGridComponent} from "../pages/listings-tab/image-grid.comp";
 import {CreationPage} from "../pages/listings-tab/listing-creation.page";
 import {MapViewComponent} from "../pages/listings-tab/map-view.comp";
@@ -37,6 +36,7 @@ import { FormsModule }   from '@angular/forms';
 import {ListingUxDetailPage} from "../pages/listings-tab/listing-ux-detail.page";
 import {ListingsUxTabPage} from "../pages/listings-tab/listings-ux-tab.page";
 import {ListingUxItem} from "../pages/listings-tab/listing-ux-item.comp";
+import {FilterSettingsPage} from "../pages/listings-tab/filter-settings.page";
 
 export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
@@ -50,7 +50,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
   declarations: [
     // All Components
     HaoshiyouApp,
-    FilterSettingsComponent,
+    FilterSettingsPage,
     TabsPage,
     ImageGridComponent,
     CreationPage,
@@ -94,7 +94,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
   bootstrap: [IonicApp],
   entryComponents: [
     HaoshiyouApp,
-    FilterSettingsComponent,
+    FilterSettingsPage,
     TabsPage,
     ImageGridComponent,
     CreationPage,
