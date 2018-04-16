@@ -97,6 +97,6 @@ export class FilterSettingsPage {
   }
 
   private getPostDateFilterText(val) {
-    return  0 ? '所有时间' : '最近' + val + '天';
+    return  (val == 0) ? '所有时间' : '最近' + val + '天';
   }
 }
