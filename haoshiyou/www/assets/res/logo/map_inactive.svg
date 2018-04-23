@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="52px" height="52px" viewBox="0 0 52 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>home-inactive</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="home-inactive" stroke="#616770">
+            <g id="map-icon" transform="translate(4.000000, 4.000000)">
+                <path d="M6,25.0035232 C2,27.3819614 2.84217094e-14,29.726889 2.84217094e-14,32.0383061 C2.89506177e-14,35.5054318 5.72097685,43 22,43 C38.2790232,43 44,35.6512087 44,32.0383061 C44,29.6297044 42,27.2847768 38,25.0035232" id="Line" stroke-width="3" stroke-linecap="round"></path>
+                <path d="M8,14.1919747 C8,17.8095368 9.37254902,21.334341 11.8431373,24.0243231 L21.0849673,33.4856396 L21.4153152,33.8071047 C21.7382278,34.1213346 22.2597642,34.1232888 22.5846849,33.8071047 L22.9150327,33.4856396 L32.1568627,24.0243231 C34.627451,21.334341 36,17.9022948 36,14.2847327 C36,6.4003023 29.6862745,0 22,0 C14.3137255,0 8,6.4003023 8,14.1919747 Z" id="Shape" stroke-width="3" fill="#FFFFFF"></path>
+                <path d="M22.5,8 C20.0131579,8 18,10.0131579 18,12.5 C18,14.9868421 20.0131579,17 22.5,17 C24.9868421,17 27,14.9868421 27,12.5 C27,10.0131579 24.9868421,8 22.5,8 L22.5,8 Z" id="Shape" stroke-width="2" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

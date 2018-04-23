@@ -190,8 +190,8 @@ class SDKStorage extends BaseStorage {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_url_util__ = __webpack_require__(382);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_flag_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__ = __webpack_require__(383);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__map_view_comp__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__map_view_comp__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__filter_settings_page__ = __webpack_require__(383);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -222,8 +222,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const SEGMENT_KEY = 'segment';
 const AREA_KEY = 'area';
 const HSY_GROUP_AREAS = ['南湾西', '南湾东', '中半岛', '三番', '东湾'];
-const BAY_AREA_CITIES = [
-    "Alameda", "El Cerrito", "Mountain View", "San Leandro", "Albany", "Emeryville", "Napa", "San Mateo", "American Canyon", "Fairfax", "Newark", "San Pablo", "Antioch", "Fairfield", "Novato", "San Rafael", "Atherton", "Foster City", "Oakland", "San Ramon", "Belmont", "Fremont", "Oakley", "Santa Clara", "Belvedere", "Gilroy", "Orinda", "Santa Rosa", "Benicia", "Half Moon Bay", "Pacifica", "Saratoga", "Berkeley", "Hayward", "Palo Alto", "Sausalito", "Brentwood", "Healdsburg", "Petaluma", "Sebastopol", "Brisbane", "Hercules", "Piedmont", "Sonoma", "Burlingame", "Hillsborough", "Pinole", "South San Francisco", "Calistoga", "Lafayette", "Pittsburg", "St. Helena", "Campbell", "Larkspur", "Pleasant Hill", "Suisun City", "Clayton", "Livermore", "Pleasanton", "Sunnyvale", "Cloverdale", "Los Altos", "Portola Valley", "Tiburon", "Colma", "Los Altos Hills", "Redwood City", "Union City", "Concord", "Los Gatos", "Richmond", "Vacaville", "Corte Madera", "Martinez", "Rio Vista", "Vallejo", "Cotati", "Menlo Park", "Rohnert Park", "Walnut Creek", "Cupertino", "Mill Valley", "Ross", "Windsor", "Daly City", "Millbrae", "San Anselmo", "Woodside", "Danville", "Milpitas", "San Bruno", "Yountville", "Dixon", "Monte Sereno", "San Carlos", "Dublin", "Moraga", "San Francisco", "East Palo Alto", "Morgan Hill", "San Jose",
+const BAY_AREA_CITIES = ["Mountain View", "San Francisco",
+    "Alameda", "El Cerrito", "San Leandro", "Albany", "Emeryville", "Napa", "San Mateo", "American Canyon", "Fairfax", "Newark", "San Pablo", "Antioch", "Fairfield", "Novato", "San Rafael", "Atherton", "Foster City", "Oakland", "San Ramon", "Belmont", "Fremont", "Oakley", "Santa Clara", "Belvedere", "Gilroy", "Orinda", "Santa Rosa", "Benicia", "Half Moon Bay", "Pacifica", "Saratoga", "Berkeley", "Hayward", "Palo Alto", "Sausalito", "Brentwood", "Healdsburg", "Petaluma", "Sebastopol", "Brisbane", "Hercules", "Piedmont", "Sonoma", "Burlingame", "Hillsborough", "Pinole", "South San Francisco", "Calistoga", "Lafayette", "Pittsburg", "St. Helena", "Campbell", "Larkspur", "Pleasant Hill", "Suisun City", "Clayton", "Livermore", "Pleasanton", "Sunnyvale", "Cloverdale", "Los Altos", "Portola Valley", "Tiburon", "Colma", "Los Altos Hills", "Redwood City", "Union City", "Concord", "Los Gatos", "Richmond", "Vacaville", "Corte Madera", "Martinez", "Rio Vista", "Vallejo", "Cotati", "Menlo Park", "Rohnert Park", "Walnut Creek", "Cupertino", "Mill Valley", "Ross", "Windsor", "Daly City", "Millbrae", "San Anselmo", "Woodside", "Danville", "Milpitas", "San Bruno", "Yountville", "Dixon", "Monte Sereno", "San Carlos", "Dublin", "Moraga", "East Palo Alto", "Morgan Hill", "San Jose",
     "Stanford",
 ];
 let locationsForSearch = HSY_GROUP_AREAS.concat(BAY_AREA_CITIES);
@@ -247,11 +247,11 @@ let ListingsUxTabPage = class ListingsUxTabPage {
         this.loadedListings = [];
         this.mapReady = false;
         this.currentIndex = 0;
-        this.filterSettings = { 'types': {}, 'areas': {}, 'duration': {} };
+        this.filterSettings = { 'types': {}, 'areas': {}, 'duration': 0, 'price': { lower: 0, upper: 5000 } };
         this.whereClause = {};
         this.isLoading = false;
         this.showMapInstead = false;
-        this.searchItemsFiltered = locationsForSearch.slice(0, 5);
+        this.searchItemsFiltered = locationsForSearch.slice(0, 7);
         this.options = [
             'All',
             'SanFrancisco',
@@ -283,7 +283,6 @@ let ListingsUxTabPage = class ListingsUxTabPage {
     }
     ngAfterViewInit() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(`XXX called ngAfterViewInit!`);
             let segmentFromUrl = __WEBPACK_IMPORTED_MODULE_6__util_url_util__["a" /* default */].getParameterByName(SEGMENT_KEY);
             if (segmentFromUrl) {
                 this.segmentModel = segmentFromUrl;
@@ -440,23 +439,15 @@ let ListingsUxTabPage = class ListingsUxTabPage {
             }
         });
     }
-    popoverFilter(myEvent) {
+    gotoFilterSettingsPage(_) {
         return __awaiter(this, void 0, void 0, function* () {
-            let popover = this.popoverCtrl.create(__WEBPACK_IMPORTED_MODULE_8__filter_settings_comp__["a" /* FilterSettingsComponent */], { 'filterSettings': this.filterSettings }, {});
-            yield popover.onDidDismiss((data) => __awaiter(this, void 0, void 0, function* () {
-                console.log(`--- received ` + JSON.stringify(data));
-                if (data !== undefined && data !== null) {
-                    this.filterSettings = data["filterSettings"];
-                }
-                else if (this.popoverCtrl['_app'].filterSettings) {
-                    this.filterSettings = this.popoverCtrl['_app'] /*a hack to access private */.filterSettings;
-                }
-                this.updateWhereClause();
-                yield this.initLoad();
-                this.updateLayout();
-            }));
-            yield popover.present({
-                ev: myEvent
+            let ret = yield this.nav.push(__WEBPACK_IMPORTED_MODULE_9__filter_settings_page__["a" /* FilterSettingsPage */], {
+                filterSettings: this.filterSettings,
+                callback: (data) => __awaiter(this, void 0, void 0, function* () {
+                    this.filterSettings = data;
+                    this.updateWhereClause();
+                    yield this.initLoad();
+                }),
             });
         });
     }
@@ -476,28 +467,20 @@ let ListingsUxTabPage = class ListingsUxTabPage {
         /* END filtering type */
         /* START filtering duration */
         let ago = null;
-        switch (this.filterSettings['duration']) {
-            case '最近3天':
-                ago = new Date(new Date().getTime() - (3 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近7天':
-                ago = new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近30天':
-                ago = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
-                break;
-            case '最近90天':
-                ago = new Date(new Date().getTime() - (90 * 24 * 60 * 60 * 1000));
-                break;
-            case '不限': // fall though
-            default:
+        if (this.filterSettings['duration'] != 0) {
+            ago = new Date(new Date().getTime() - (this.filterSettings['duration'] * 24 * 60 * 60 * 1000));
         }
         if (ago)
             whereClause_['lastUpdated'] = { "gte": ago };
+        else
+            delete whereClause_['lastUpdated'];
         /* END filtering duration */
         /* START filtering price */
         if (this.filterSettings['price']) {
-            whereClause_['price'] = { lt: this.filterSettings['price'] };
+            if (this.filterSettings['price'].upper)
+                whereClause_['price'] = { lt: this.filterSettings['price'].upper };
+            if (this.filterSettings['price'].lower)
+                whereClause_['price'] = { gte: this.filterSettings['price'].lower };
         }
         else {
             delete whereClause_['price'];
@@ -609,7 +592,7 @@ let ListingsUxTabPage = class ListingsUxTabPage {
         if (val && val.trim() != '') {
             this.searchItemsFiltered = (locationsForSearch.filter((item) => {
                 return item.indexOf(val) > -1 || item.toLowerCase().indexOf(val.toLowerCase()) > -1;
-            })).slice(0, 5);
+            })).slice(0, 20);
         }
     }
     setSearchTerm(searchItem) {
@@ -652,8 +635,8 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["b" /* Content */])
 ], ListingsUxTabPage.prototype, "content", void 0);
 __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */]),
-    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_9__map_view_comp__["a" /* MapViewComponent */])
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_8__map_view_comp__["a" /* MapViewComponent */]),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_8__map_view_comp__["a" /* MapViewComponent */])
 ], ListingsUxTabPage.prototype, "mapView", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["ViewChild"])('mapContainerCol'),
@@ -675,15 +658,15 @@ __decorate([
 ], ListingsUxTabPage.prototype, "onResize", null);
 ListingsUxTabPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons start>\n            <button ion-button (click)="goToCreationPage()">\n                <ion-icon name="md-add"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-searchbar\n                [(ngModel)]="searchBarModel"\n                (ionInput)="filterItems($event)"\n                placeholder="搜索 区域/城市"\n                (ionFocus)="isSearching = true"\n        >\n\n        </ion-searchbar>\n        <ion-buttons end>\n            <button ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">\n                <ion-icon *ngIf="!showMapInstead" name="ios-map-outline"></ion-icon>\n                <ion-icon *ngIf="showMapInstead" name="ios-list-box-outline"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-row [hidden]="isSearching" #splitPanelContainer class="split-panel-container" style="height: 100%;">\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-content fullscreen>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"\n                                [indexFromParent]="i">\n\n                </listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n            </ion-content>\n        </ion-col>\n        <!-- the main content -->\n    </ion-row>\n    <ion-list [hidden]="!isSearching">\n        <ng-container  *ngFor="let searchItem of searchItemsFiltered">\n            <ion-item (click)="setSearchTerm(searchItem)">{{ searchItem }}\n            </ion-item>\n        </ng-container>\n    </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
+        selector: 'listing-ux-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons class="searchbar-buttons" start>\n            <button ion-button (click)="goToCreationPage()">\n                <ion-icon name="md-add"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-searchbar\n                [(ngModel)]="searchBarModel"\n                [showCancelButton]="true"\n                (ionCancel)="isSearching = false"\n                (ionInput)="filterItems($event)"\n                placeholder="搜索 区域/城市"\n                (ionFocus)="isSearching = true"\n        >\n\n        </ion-searchbar>\n        <ion-buttons class="searchbar-buttons" end>\n            <button  ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">\n                <ion-icon *ngIf="!showMapInstead" name="custom-map"></ion-icon>\n                <ion-icon *ngIf="showMapInstead" name="custom-list"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n    <ion-toolbar class="filter-toolbar" >\n            <button>\n                <span class="filter-toolbar-text">排序</span>\n                <ion-icon class="filter-icon" name="custom-sort"></ion-icon>\n            </button>\n            <button (click)="gotoFilterSettingsPage($event)">\n                <span class="filter-toolbar-text">筛选条件</span>\n                <ion-icon class="filter-icon" name="custom-filter"></ion-icon>\n            </button>\n    </ion-toolbar>\n\n</ion-header>\n\n<ion-content>\n    <ion-row [hidden]="isSearching" #splitPanelContainer class="split-panel-container" style="height: 100%;">\n        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>\n            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>\n        </ion-col>\n        <ion-col #listContainerCol\n                 style="height: 100%;" id="left" no-padding>\n            <ion-content fullscreen>\n            <ion-list>\n                <ion-row align-items-center justify-content-center *ngIf="isInitLoading">\n                    <ion-spinner></ion-spinner>\n                </ion-row>\n                <listing-ux-item *ngFor="let listing of loadedListings; let i = index"\n                                 [listing]=listing (onBump)="bumpUpdateOrder($event)"\n                                [indexFromParent]="i">\n\n                </listing-ux-item>\n                <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">\n                    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n                </ion-infinite-scroll>\n            </ion-list>\n            </ion-content>\n        </ion-col>\n        <!-- the main content -->\n    </ion-row>\n    <ion-list [hidden]="!isSearching">\n        <ng-container  *ngFor="let searchItem of searchItemsFiltered.slice(0,7)">\n            <ion-item (click)="setSearchTerm(searchItem)">{{ searchItem }}\n            </ion-item>\n        </ng-container>\n        <ion-item [hidden]="(searchItemsFiltered.length - 7) < 0"><span>...</span></ion-item>\n    </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listings-ux-tab.page.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */],
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["i" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
         __WEBPACK_IMPORTED_MODULE_3__services_auth_service__["a" /* AuthService */],
         __WEBPACK_IMPORTED_MODULE_5__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
         __WEBPACK_IMPORTED_MODULE_7__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["i" /* PopoverController */],
+        __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["j" /* PopoverController */],
         __WEBPACK_IMPORTED_MODULE_1__angular_core__["ChangeDetectorRef"]])
 ], ListingsUxTabPage);
 
@@ -947,7 +930,7 @@ CreationPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
         selector: 'creation-page',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-title>\n            创建\n        </ion-title>\n        <ion-buttons end>\n            <button ion-button (click)="save()">保存</button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content class="creation grey-background" id="page-container">\n        <ion-card offset-lg-3 col-lg-6 offset-md-2 col-md-8 >\n            <form #hsyListingForm="ngForm">\n            <ion-item>\n                <ion-label>类型</ion-label>\n                <ion-select interface="popover"\n                            text-right required [(ngModel)]="listing.listingTypeEnum"\n                            name="listingTypeEnum" placeholder="必选">\n                    <ion-option  *ngFor="let v of listingTypeEnums "\n                                 value={{v}}>{{ v | enumMsgPipe }}</ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"> <!-- 只有招租需要填写 -->\n                <ion-label>地址</ion-label>\n                <ion-input item-right class="address" text-right [(ngModel)]="listing.addressLine" name="addressLine"\n                ></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>城市</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.addressCity"\n                           name="addressCity"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>预期价格</ion-label>\n                <ion-input item-right text-right\n                           type="number" min="0"\n                           [(ngModel)]="listing.price" name="price"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>标题</ion-label>\n                <ion-input\n                        item-right text-right required [(ngModel)]="listing.title"\n                        name="title" placeholder="必填"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>详情</ion-label>\n                <ion-textarea item-right text-right required [(ngModel)]="listing.content"\n                              name="content"\n                              placeholder="必填"></ion-textarea>\n\n            </ion-item>\n            <ion-item *ngIf="isDebug()">\n                <ion-label>测试</ion-label>\n                <ion-checkbox item-right text-right fixed color="dark" checked="true"\n                              [(ngModel)]="inTestGroup"\n                              name="inTestGroup"\n                ></ion-checkbox>\n\n            </ion-item>\n\n\n            <ion-item>\n                <ion-label>所在好室友群</ion-label>\n                <ion-select interface="popover"\n                            text-right [(ngModel)]="listing.hsyGroupEnum"\n                            name="type">\n                    <ion-option  *ngFor="let enum of hsyGroupEnumOptions "\n                                 value={{enum}}> {{ hsyGroupEnumOptionsMap[enum] }}\n                    </ion-option>\n                </ion-select>\n            </ion-item>\n            <ion-item>\n                <ion-label>群中昵称</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"\n                           name="hsyGroupNick"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label>电子邮箱</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactEmail"\n                           name="contactEmail"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>联系电话</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.contactPhone"\n                           name="contactPhone"></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label>微信号</ion-label>\n                <ion-input item-right text-right [(ngModel)]="listing.owner.weixin"\n                           name="weixin"></ion-input>\n            </ion-item>\n            <ng-container *ngIf="listing.listingTypeEnum == \'NeedRoommate\'"><!-- 只有招租需要填写这段 -->\n                <ion-item>\n                    <ion-label>整租单租</ion-label>\n                    <ion-select item-right interface="popover" text-right\n                                [(ngModel)]="listing.isRentingEntireHouse"\n                                name="isRentingEntireHouse">\n                        <ion-option text-right [value]="true">整房出租</ion-option>\n                        <ion-option text-right [value]="false">单间出租</ion-option>\n                    </ion-select>\n                </ion-item>\n                <ion-item >\n                    <ion-label>卧室数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBedRoom"\n                    name="numBedRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>卫生间数量</ion-label>\n                    <ion-input item-right text-right\n                               type="number"\n                               [(ngModel)]="listing.numBathRoom"\n                    name="numBathRoom"></ion-input>\n                </ion-item>\n                <ion-item>\n                    <ion-label>设施/须知</ion-label>\n                    <div item-right text-right text-wrap>\n                        <button ion-button small round color="primary"\n                                *ngFor="let o of amenityOptions"\n                                (click)="toggleAmenity(o)"\n                                [outline] = "listing.amenityArray.indexOf(o) < 0">{{o}}</button>\n                    </div>\n                </ion-item>\n            </ng-container>\n            <ion-item>\n                <ion-label>起租时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD"\n                              [(ngModel)]="listing.rentalStartDate"\n                name="rentalStartDate"></ion-datetime>\n            </ion-item>\n            <ion-item>\n                <ion-label>终止时间</ion-label>\n                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"\n                              min="2013-01-01"\n                              max="2020-01-01"\n                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"\n                name="rentalEndDate"></ion-datetime>\n            </ion-item>\n            <ion-item *ngIf="flagService.getFlag(\'requireToContact\')">\n                <ion-label>登LinkedIn才可联系我</ion-label>\n                <ion-toggle item-right text-right name="requireToContact"></ion-toggle>\n                <!--TODO(xinbenlv): wire it-->\n            </ion-item>\n            <ion-item>\n                <ion-label>图片</ion-label>\n                <ion-input item-right disabled name="imageBlock"></ion-input>\n            </ion-item>\n            <ion-item>\n                <image-grid\n                        [imageIds]="listing.imageIds"\n                        (updateImageIds)="updateImageIds($event)"\n                        [isEdit]="true"\n                ></image-grid>\n            </ion-item>\n            <ion-row>\n                <button col-6 ion-button block color="secondary" (click)="save()">保存</button>\n                <button col-6 ion-button outline block color="danger" (click)="deleteListing()">删除</button>\n            </ion-row>\n            </form>\n        </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/listing-creation.page.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["i" /* Platform */], __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["g" /* NavParams */],
         __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["a" /* AlertController */],
         __WEBPACK_IMPORTED_MODULE_4__services_auth_service__["a" /* AuthService */],
@@ -1351,11 +1334,11 @@ let TabsPage = class TabsPage {
 };
 TabsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'main-tab-nav',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/tabs.html"*/'<ion-tabs *ngIf="shouldShowQrCode">\n    <ion-tab [root]="tab2Root" tabIcon="home" tabUrlPath="listings-tab"></ion-tab>\n    <ion-tab [root]="tab4Root" tabIcon="chatbubbles" tabUrlPath="qrcode-tab"></ion-tab>\n    <ion-tab [root]="tab3Root" tabIcon="cog" tabUrlPath="settings-tab"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/tabs.html"*/,
+        selector: 'main-tab-nav',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/tabs.html"*/'<ion-tabs *ngIf="shouldShowQrCode">\n    <ion-tab [root]="tab2Root"\n             tabIcon="custom-home"\n             tabUrlPath="listings-tab"></ion-tab>\n    <ion-tab [root]="tab4Root" tabIcon="custom-message" tabUrlPath="qrcode-tab"></ion-tab>\n    <ion-tab [root]="tab3Root" tabIcon="custom-profile" tabUrlPath="settings-tab"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/tabs/tabs.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* ModalController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_3__ionic_native_network__["a" /* Network */],
         __WEBPACK_IMPORTED_MODULE_7__services_auth_service__["a" /* AuthService */],
@@ -1476,9 +1459,9 @@ SettingsTabPage = __decorate([
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_auth_service__["a" /* AuthService */],
         __WEBPACK_IMPORTED_MODULE_3__ionic_native_code_push__["a" /* CodePush */],
-        __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["h" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["i" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_5__ionic_native_app_version__["a" /* AppVersion */],
-        __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["j" /* ToastController */],
+        __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["k" /* ToastController */],
         __WEBPACK_IMPORTED_MODULE_6__services_flag_service__["a" /* FlagService */]])
 ], SettingsTabPage);
 
@@ -1800,7 +1783,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 let QrCodeTabPage = class QrCodeTabPage {
     constructor() {
-        this.shouldShow = false;
+        this.shouldShowQrCode = false;
     }
     ionViewWillEnter() {
         ga('set', 'page', '/qrcode-tab.page.html');
@@ -1811,12 +1794,12 @@ let QrCodeTabPage = class QrCodeTabPage {
             eventCategory: 'show-qrcode',
             eventAction: 'qrcode-tab',
         });
-        this.shouldShow = true;
+        this.shouldShowQrCode = true;
     }
 };
 QrCodeTabPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'qrcode-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/qrcode-tab/qrcode-tab.page.html"*/'<ion-header>\n    <ion-toolbar>\n        <ion-title>\n            加微信群\n        </ion-title>\n    </ion-toolbar>\n</ion-header>\n<ion-content class="grey-background">\n    <ion-list *ngIf="!shouldShow"  padding center style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">\n        <button center style="text-align: center;" id="show_qrcode_btn" ion-button (click)="showQrCode()">\n            <ion-icon name="qr-scanner"></ion-icon> <span>点此加小助手自动拉入微信群</span>\n        </button>\n    </ion-list>\n    <ion-list *ngIf="shouldShow">\n        <ion-item style="text-align: center; width:100%">\n            <img src="../../assets/res/haoshiyou-bot2.jpeg"\n                 style="max-width: 350px"\n                 alt="好室友™微信群介绍">\n        </ion-item>\n    </ion-list>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/qrcode-tab/qrcode-tab.page.html"*/,
+        selector: 'qrcode-tab',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/qrcode-tab/qrcode-tab.page.html"*/'<ion-header>\n    <ion-toolbar>\n        <ion-title>\n            加好室友微信群\n        </ion-title>\n    </ion-toolbar>\n</ion-header>\n<ion-content class="curtain-page">\n    <ion-list *ngIf="!shouldShowQrCode"  padding center style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">\n        <div class="mkt-logo-wrapper">\n            <img class="mkt-logo" src="../../assets/res/mkt-logo.svg" alt="">\n        </div>\n        <div class="mkt-text-wrapper">\n            <span class="mkt-text">想获取最新房源和找室友信息吗</span>\n            <br>\n            <span class="mkt-text">加入好室友微信群吧!</span>\n        </div>\n        <button class="mkt-btn" center style="text-align: center;" id="show_qrcode_btn" ion-button small (click)="showQrCode()">\n            <span>点此添加好室友微信群</span>\n        </button>\n    </ion-list>\n    <ion-list class="display-page" *ngIf="shouldShowQrCode">\n        <div class="step-text-wrapper">\n            <span class="step-text">STEP. 1</span>\n        </div>\n        <div class="intro-text-wrapper">\n            <span class="intro-text">扫码添加好室友小助手为好友</span>\n        </div>\n        <div class="qrcode-wrapper">\n            <img class="qr-code-img" src="../../assets/res/haoshiyou-bot.jpeg" alt="">\n        </div>\n        <div class="step-text-wrapper">\n            <span class="step-text">STEP. 2</span>\n        </div>\n        <div class="intro-text-wrapper">\n            <div class="intro-text">通过小助手加入好室友微信群</div>\n            <div class="intro-text-small-wrapper">\n                <span class="intro-text-small">发送南湾西/南湾东/东湾/中半岛/三番/西雅图，</span>\n                <br>\n                <span class="intro-text-small">好室友小助手会邀请你进入相应的微信群 :)</span>\n            </div>\n\n        </div>\n        <div class="fake-chat">\n            <div class="right-chat-wrapper chat-wrapper">\n                <img class="right-chat-svg" src="../../assets/res/message_01.svg" alt="">\n            </div>\n            <div class="left-chat-wrapper chat-wrapper">\n                <img class="left-chat-svg" src="../../assets/res/message_02.svg" alt="">\n            </div>\n        </div>\n    </ion-list>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/qrcode-tab/qrcode-tab.page.html"*/,
     })
 ], QrCodeTabPage);
 
@@ -1924,9 +1907,9 @@ MineTabPage = __decorate([
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_auth_service__["a" /* AuthService */],
         __WEBPACK_IMPORTED_MODULE_2__ionic_native_code_push__["a" /* CodePush */],
-        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* Platform */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_4__ionic_native_app_version__["a" /* AppVersion */],
-        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* ToastController */],
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* ToastController */],
         __WEBPACK_IMPORTED_MODULE_5__services_flag_service__["a" /* FlagService */],
         __WEBPACK_IMPORTED_MODULE_6__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */]])
 ], MineTabPage);
@@ -2135,7 +2118,7 @@ UrlUtil.getParameterByName = function (name) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterSettingsComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterSettingsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_flag_service__ = __webpack_require__(34);
@@ -2151,17 +2134,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-let FilterSettingsComponent = class FilterSettingsComponent {
-    constructor(viewCtrl, flagService, _navParams) {
+let FilterSettingsPage = class FilterSettingsPage {
+    constructor(viewCtrl, flagService, pickerCtrl, navParams, nav) {
         this.viewCtrl = viewCtrl;
         this.flagService = flagService;
-        this._navParams = _navParams;
-        // TODO(xinbenlv): use interface
-        this.filterSettings = {
-            'types': {},
-            'areas': {},
-            'duration': {}
-        };
+        this.pickerCtrl = pickerCtrl;
+        this.navParams = navParams;
+        this.nav = nav;
+        this.filterSettings = null;
         this.options = [
             'All',
             'SanFrancisco',
@@ -2191,29 +2171,63 @@ let FilterSettingsComponent = class FilterSettingsComponent {
             '最近90天',
             '不限'
         ];
-        if (this._navParams.data) {
-            console.log(" --- " + JSON.stringify(this._navParams.data));
-            //TODO: get filterSettings and initial UI
-            this.filterSettings = this._navParams.data['filterSettings'];
+        if (this.navParams.data) {
+            this.filterSettings = this.navParams.data['filterSettings'];
+            this.callback = this.navParams.data['callback'];
         }
     }
-    applyFilterSettings() {
-        this.close();
-    }
     close() {
-        this.viewCtrl.dismiss({ filterSettings: this.filterSettings });
+        this.callback(this.filterSettings);
+        this.viewCtrl.dismiss();
+    }
+    pickPostTime() {
+        // Add a cancel and done button by default to the picker
+        let pickerOptions = {};
+        const defaultButtons = [{
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => this.picker.dismiss()
+            }, {
+                text: 'Done',
+                handler: (data) => {
+                    this.filterSettings['duration'] = data.selection.value;
+                    return data;
+                }
+            }];
+        pickerOptions.buttons = defaultButtons;
+        let columnKey = 'selection';
+        let values = [0, 1, 7, 30, 60, 90];
+        let defaultColumn = {
+            name: columnKey,
+            selectedIndex: 0,
+            options: values.map(val => {
+                return {
+                    value: val,
+                    text: this.getPostDateFilterText(val),
+                };
+            })
+        };
+        pickerOptions.buttons = defaultButtons;
+        pickerOptions.columns = [defaultColumn];
+        this.picker = this.pickerCtrl.create(pickerOptions);
+        this.picker.present(pickerOptions);
+    }
+    getPostDateFilterText(val) {
+        return (val == 0) ? '所有时间' : '最近' + val + '天';
     }
 };
-FilterSettingsComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/'<ion-content>\n    <ion-list-header>类型</ion-list-header>\n    <ion-item>\n        <ion-label>招租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'zhaozu\']" value="ROOMMATE_WANTED"></ion-checkbox>\n    </ion-item>\n    <ion-item>\n        <ion-label>求租</ion-label>\n        <ion-checkbox [(ngModel)]="filterSettings[\'types\'][\'qiuzu\']"></ion-checkbox>\n    </ion-item>\n\n    <ion-list-header>区域</ion-list-header>\n    <ng-container *ngFor="let option of options; let i=index;">\n        <ion-item *ngIf="flagService.getFlag(\'debug\') || option != \'TestGroup\'">\n            <ion-label>{{optionsMap[option]}}</ion-label>\n            <ion-checkbox [(ngModel)]="filterSettings[\'areas\'][option]"  >\n            </ion-checkbox>\n        </ion-item>\n    </ng-container>\n\n    <ion-list-header>日期</ion-list-header>\n    <ion-list radio-group [(ngModel)]="filterSettings[\'duration\']">\n        <ion-item *ngFor="let option of durationList">\n            <ion-label>{{option}}</ion-label>\n            <ion-radio value="{{option}}"></ion-radio>\n        </ion-item>\n    </ion-list>\n    <ion-list-header>价格上限: {{filterSettings[\'price\']}}</ion-list-header>\n    <ion-item >\n        <ion-range min="0" max="10000" [(ngModel)]="filterSettings[\'price\']">\n        </ion-range>\n    </ion-item>\n</ion-content>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.comp.html"*/,
+FilterSettingsPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.page.html"*/'<ion-header>\n    <ion-navbar>\n        <ion-buttons start>\n            <button ion-button (click)="cancel()">\n                <ion-icon name="cross"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-title>\n            筛选条件\n        </ion-title>\n    </ion-navbar>\n</ion-header>\n<ion-content>\n    <ion-item>\n        <ion-label>租金范围</ion-label>\n    </ion-item>\n    <ion-item >\n        <ion-range id="price-filter" dualKnobs="true"\n                   min="0" max=10000 step="10"\n                   [(ngModel)]="filterSettings[\'price\']">\n            <ion-label range-left>${{filterSettings[\'price\'].lower}}</ion-label>\n            <ion-label range-right>${{filterSettings[\'price\'].upper}}</ion-label>\n        </ion-range>\n    </ion-item>\n    <ion-item (click)="pickPostTime()">\n        <ion-label>发布时间</ion-label>\n        <ion-label text-right>{{getPostDateFilterText(filterSettings[\'duration\'])}}</ion-label>\n    </ion-item>\n\n</ion-content>\n<ion-footer>\n    <ion-buttons>\n        <button ion-button block (click)="close()">\n            查看结果\n        </button>\n    </ion-buttons>\n</ion-footer>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/filter-settings.page.html"*/,
         selector: 'filter-settings',
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* ViewController */],
         __WEBPACK_IMPORTED_MODULE_2__services_flag_service__["a" /* FlagService */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
-], FilterSettingsComponent);
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* PickerController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]])
+], FilterSettingsPage);
 
-//# sourceMappingURL=filter-settings.comp.js.map
+//# sourceMappingURL=filter-settings.page.js.map
 
 /***/ }),
 
@@ -2266,7 +2280,7 @@ RemoveModal = __decorate([
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["g" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["k" /* ViewController */]])
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular_index__["l" /* ViewController */]])
 ], RemoveModal);
 
 //# sourceMappingURL=remove.modal.js.map
@@ -2604,7 +2618,7 @@ AuthService = AuthService_1 = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgZone"],
         __WEBPACK_IMPORTED_MODULE_2__loopbacksdk_services_custom_HsyUser__["a" /* HsyUserApi */],
-        __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["j" /* ToastController */]])
+        __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["k" /* ToastController */]])
 ], AuthService);
 
 var AuthService_1;
@@ -3843,39 +3857,39 @@ JSONSearchParams = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_jwt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__ = __webpack_require__(383);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__ = __webpack_require__(831);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_map_view_comp__ = __webpack_require__(170);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_long_image_comp__ = __webpack_require__(832);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_remove_modal__ = __webpack_require__(384);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_settings_tab_settings_tab_page__ = __webpack_require__(268);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_tabs_disconnect_modal__ = __webpack_require__(285);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_image_service__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_auth_service__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_tabs_tabs__ = __webpack_require__(267);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pipes_enum_msg_pipe__ = __webpack_require__(833);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pipes_image_id_to_url_pipe__ = __webpack_require__(834);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pipes_time_from_now_pipe__ = __webpack_require__(835);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_native_storage__ = __webpack_require__(838);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_map_service__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pipes_city_n_zip_pipe__ = __webpack_require__(839);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_qrcode_tab_qrcode_tab_page__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__loopbacksdk_index__ = __webpack_require__(840);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pipes_hsy_group_enum_msg_pipe__ = __webpack_require__(844);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__angular_platform_browser__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ionic_native_transfer__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ionic_native_network__ = __webpack_require__(283);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ionic_native_push__ = __webpack_require__(845);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ionic_native_code_push__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_app_version__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pipes_date_formatter_pipe__ = __webpack_require__(846);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__services_flag_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__pages_mine_tab_mine_tab_page__ = __webpack_require__(287);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__angular_forms__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listing_ux_detail_page__ = __webpack_require__(506);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listings_ux_tab_page__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_listing_ux_item_comp__ = __webpack_require__(847);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_image_grid_comp__ = __webpack_require__(831);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_listing_creation_page__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_map_view_comp__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_long_image_comp__ = __webpack_require__(832);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_remove_modal__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_settings_tab_settings_tab_page__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_tabs_disconnect_modal__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_image_service__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_auth_service__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_tabs_tabs__ = __webpack_require__(267);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pipes_enum_msg_pipe__ = __webpack_require__(833);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pipes_image_id_to_url_pipe__ = __webpack_require__(834);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pipes_time_from_now_pipe__ = __webpack_require__(835);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ionic_native_native_storage__ = __webpack_require__(838);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_map_service__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pipes_city_n_zip_pipe__ = __webpack_require__(839);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pages_qrcode_tab_qrcode_tab_page__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__loopbacksdk_index__ = __webpack_require__(840);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pipes_hsy_group_enum_msg_pipe__ = __webpack_require__(844);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__angular_platform_browser__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ionic_native_transfer__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ionic_native_network__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ionic_native_push__ = __webpack_require__(845);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ionic_native_code_push__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__ionic_native_app_version__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pipes_date_formatter_pipe__ = __webpack_require__(846);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__services_flag_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__pages_mine_tab_mine_tab_page__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__angular_forms__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pages_listings_tab_listing_ux_detail_page__ = __webpack_require__(506);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listings_ux_tab_page__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listing_ux_item_comp__ = __webpack_require__(847);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_filter_settings_page__ = __webpack_require__(383);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3934,77 +3948,77 @@ AppModule = __decorate([
         declarations: [
             // All Components
             __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* HaoshiyouApp */],
-            __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__["a" /* FilterSettingsComponent */],
-            __WEBPACK_IMPORTED_MODULE_15__pages_tabs_tabs__["a" /* TabsPage */],
-            __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__["a" /* ImageGridComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__["a" /* CreationPage */],
-            __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
-            __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
-            __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
-            __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
-            __WEBPACK_IMPORTED_MODULE_11__pages_settings_tab_settings_tab_page__["a" /* SettingsTabPage */],
-            __WEBPACK_IMPORTED_MODULE_12__pages_tabs_disconnect_modal__["a" /* DisconnectModal */],
-            __WEBPACK_IMPORTED_MODULE_22__pages_qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */],
-            __WEBPACK_IMPORTED_MODULE_33__pages_mine_tab_mine_tab_page__["a" /* MineTabPage */],
+            __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_filter_settings_page__["a" /* FilterSettingsPage */],
+            __WEBPACK_IMPORTED_MODULE_14__pages_tabs_tabs__["a" /* TabsPage */],
+            __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_image_grid_comp__["a" /* ImageGridComponent */],
+            __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_listing_creation_page__["a" /* CreationPage */],
+            __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_34__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
+            __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
+            __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
+            __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
+            __WEBPACK_IMPORTED_MODULE_10__pages_settings_tab_settings_tab_page__["a" /* SettingsTabPage */],
+            __WEBPACK_IMPORTED_MODULE_11__pages_tabs_disconnect_modal__["a" /* DisconnectModal */],
+            __WEBPACK_IMPORTED_MODULE_21__pages_qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */],
+            __WEBPACK_IMPORTED_MODULE_32__pages_mine_tab_mine_tab_page__["a" /* MineTabPage */],
             // All Pipes
-            __WEBPACK_IMPORTED_MODULE_16__pipes_enum_msg_pipe__["a" /* EnumMsgPipe */],
-            __WEBPACK_IMPORTED_MODULE_24__pipes_hsy_group_enum_msg_pipe__["a" /* HsyGroupEnumMsgPipe */],
-            __WEBPACK_IMPORTED_MODULE_17__pipes_image_id_to_url_pipe__["b" /* ImageIdsToUrlPipe */],
-            __WEBPACK_IMPORTED_MODULE_17__pipes_image_id_to_url_pipe__["a" /* ImageIdToUrlPipe */],
-            __WEBPACK_IMPORTED_MODULE_18__pipes_time_from_now_pipe__["a" /* TimeFromNowPipe */],
-            __WEBPACK_IMPORTED_MODULE_21__pipes_city_n_zip_pipe__["a" /* CityNZipPipe */],
-            __WEBPACK_IMPORTED_MODULE_31__pipes_date_formatter_pipe__["a" /* DateFormatterPipe */],
+            __WEBPACK_IMPORTED_MODULE_15__pipes_enum_msg_pipe__["a" /* EnumMsgPipe */],
+            __WEBPACK_IMPORTED_MODULE_23__pipes_hsy_group_enum_msg_pipe__["a" /* HsyGroupEnumMsgPipe */],
+            __WEBPACK_IMPORTED_MODULE_16__pipes_image_id_to_url_pipe__["b" /* ImageIdsToUrlPipe */],
+            __WEBPACK_IMPORTED_MODULE_16__pipes_image_id_to_url_pipe__["a" /* ImageIdToUrlPipe */],
+            __WEBPACK_IMPORTED_MODULE_17__pipes_time_from_now_pipe__["a" /* TimeFromNowPipe */],
+            __WEBPACK_IMPORTED_MODULE_20__pipes_city_n_zip_pipe__["a" /* CityNZipPipe */],
+            __WEBPACK_IMPORTED_MODULE_30__pipes_date_formatter_pipe__["a" /* DateFormatterPipe */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* HaoshiyouApp */], {
                 mode: 'ios'
             }, {
                 links: [
-                    { segment: '', component: __WEBPACK_IMPORTED_MODULE_15__pages_tabs_tabs__["a" /* TabsPage */], name: 'TabsPage' },
-                    { segment: 'listing/:id', component: __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */], name: 'ListingUxDetailPage' },
+                    { segment: '', component: __WEBPACK_IMPORTED_MODULE_14__pages_tabs_tabs__["a" /* TabsPage */], name: 'TabsPage' },
+                    { segment: 'listing/:id', component: __WEBPACK_IMPORTED_MODULE_34__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */], name: 'ListingUxDetailPage' },
                 ]
             }),
-            __WEBPACK_IMPORTED_MODULE_25__angular_platform_browser__["a" /* BrowserModule */],
+            __WEBPACK_IMPORTED_MODULE_24__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["HttpModule"],
-            __WEBPACK_IMPORTED_MODULE_23__loopbacksdk_index__["a" /* SDKBrowserModule */].forRoot(),
-            __WEBPACK_IMPORTED_MODULE_34__angular_forms__["a" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_22__loopbacksdk_index__["a" /* SDKBrowserModule */].forRoot(),
+            __WEBPACK_IMPORTED_MODULE_33__angular_forms__["a" /* FormsModule */],
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* IonicApp */]],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_0__app_component__["a" /* HaoshiyouApp */],
-            __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_filter_settings_comp__["a" /* FilterSettingsComponent */],
-            __WEBPACK_IMPORTED_MODULE_15__pages_tabs_tabs__["a" /* TabsPage */],
-            __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_image_grid_comp__["a" /* ImageGridComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_listing_creation_page__["a" /* CreationPage */],
-            __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
-            __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
-            __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
-            __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
-            __WEBPACK_IMPORTED_MODULE_11__pages_settings_tab_settings_tab_page__["a" /* SettingsTabPage */],
-            __WEBPACK_IMPORTED_MODULE_12__pages_tabs_disconnect_modal__["a" /* DisconnectModal */],
-            __WEBPACK_IMPORTED_MODULE_22__pages_qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */],
-            __WEBPACK_IMPORTED_MODULE_33__pages_mine_tab_mine_tab_page__["a" /* MineTabPage */]
+            __WEBPACK_IMPORTED_MODULE_37__pages_listings_tab_filter_settings_page__["a" /* FilterSettingsPage */],
+            __WEBPACK_IMPORTED_MODULE_14__pages_tabs_tabs__["a" /* TabsPage */],
+            __WEBPACK_IMPORTED_MODULE_5__pages_listings_tab_image_grid_comp__["a" /* ImageGridComponent */],
+            __WEBPACK_IMPORTED_MODULE_6__pages_listings_tab_listing_creation_page__["a" /* CreationPage */],
+            __WEBPACK_IMPORTED_MODULE_7__pages_listings_tab_map_view_comp__["a" /* MapViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_34__pages_listings_tab_listing_ux_detail_page__["a" /* ListingUxDetailPage */],
+            __WEBPACK_IMPORTED_MODULE_36__pages_listings_tab_listing_ux_item_comp__["a" /* ListingUxItem */],
+            __WEBPACK_IMPORTED_MODULE_35__pages_listings_tab_listings_ux_tab_page__["a" /* ListingsUxTabPage */],
+            __WEBPACK_IMPORTED_MODULE_8__pages_listings_tab_long_image_comp__["a" /* LongImageComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__pages_listings_tab_remove_modal__["a" /* RemoveModal */],
+            __WEBPACK_IMPORTED_MODULE_10__pages_settings_tab_settings_tab_page__["a" /* SettingsTabPage */],
+            __WEBPACK_IMPORTED_MODULE_11__pages_tabs_disconnect_modal__["a" /* DisconnectModal */],
+            __WEBPACK_IMPORTED_MODULE_21__pages_qrcode_tab_qrcode_tab_page__["a" /* QrCodeTabPage */],
+            __WEBPACK_IMPORTED_MODULE_32__pages_mine_tab_mine_tab_page__["a" /* MineTabPage */]
         ],
         providers: [
-            { provide: __WEBPACK_IMPORTED_MODULE_13__services_image_service__["b" /* IImageService */], useClass: __WEBPACK_IMPORTED_MODULE_13__services_image_service__["a" /* CloudinaryImageService */] },
-            __WEBPACK_IMPORTED_MODULE_20__services_map_service__["a" /* MapService */],
-            __WEBPACK_IMPORTED_MODULE_14__services_auth_service__["a" /* AuthService */],
+            { provide: __WEBPACK_IMPORTED_MODULE_12__services_image_service__["b" /* IImageService */], useClass: __WEBPACK_IMPORTED_MODULE_12__services_image_service__["a" /* CloudinaryImageService */] },
+            __WEBPACK_IMPORTED_MODULE_19__services_map_service__["a" /* MapService */],
+            __WEBPACK_IMPORTED_MODULE_13__services_auth_service__["a" /* AuthService */],
             {
                 provide: __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__["AuthHttp"],
                 useFactory: getAuthHttp,
-                deps: [__WEBPACK_IMPORTED_MODULE_3__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_19__ionic_native_native_storage__["a" /* NativeStorage */]]
+                deps: [__WEBPACK_IMPORTED_MODULE_3__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_18__ionic_native_native_storage__["a" /* NativeStorage */]]
             },
-            __WEBPACK_IMPORTED_MODULE_19__ionic_native_native_storage__["a" /* NativeStorage */],
-            __WEBPACK_IMPORTED_MODULE_26__ionic_native_transfer__["a" /* Transfer */],
-            __WEBPACK_IMPORTED_MODULE_27__ionic_native_network__["a" /* Network */],
-            __WEBPACK_IMPORTED_MODULE_28__ionic_native_push__["a" /* Push */],
-            __WEBPACK_IMPORTED_MODULE_29__ionic_native_code_push__["a" /* CodePush */],
-            __WEBPACK_IMPORTED_MODULE_30__ionic_native_app_version__["a" /* AppVersion */],
-            __WEBPACK_IMPORTED_MODULE_32__services_flag_service__["a" /* FlagService */]
+            __WEBPACK_IMPORTED_MODULE_18__ionic_native_native_storage__["a" /* NativeStorage */],
+            __WEBPACK_IMPORTED_MODULE_25__ionic_native_transfer__["a" /* Transfer */],
+            __WEBPACK_IMPORTED_MODULE_26__ionic_native_network__["a" /* Network */],
+            __WEBPACK_IMPORTED_MODULE_27__ionic_native_push__["a" /* Push */],
+            __WEBPACK_IMPORTED_MODULE_28__ionic_native_code_push__["a" /* CodePush */],
+            __WEBPACK_IMPORTED_MODULE_29__ionic_native_app_version__["a" /* AppVersion */],
+            __WEBPACK_IMPORTED_MODULE_31__services_flag_service__["a" /* FlagService */]
         ]
     })
 ], AppModule);
@@ -4095,7 +4109,7 @@ HaoshiyouApp = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["Component"])({
         template: '<ion-nav [root]="rootPage"></ion-nav>'
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["h" /* Platform */],
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["i" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_4__services_auth_service__["a" /* AuthService */],
         __WEBPACK_IMPORTED_MODULE_3__angular_http__["Http"],
         __WEBPACK_IMPORTED_MODULE_9__loopbacksdk_services_custom_HsyListing__["a" /* HsyListingApi */],
@@ -4609,7 +4623,7 @@ ImageGridComponent = __decorate([
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_image_service__["b" /* IImageService */],
         __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["f" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["e" /* ModalController */],
-        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* Platform */]])
+        __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* Platform */]])
 ], ImageGridComponent);
 
 //# sourceMappingURL=image-grid.comp.js.map
@@ -4854,7 +4868,7 @@ LongImageComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'long-image',template:/*ion-inline-start:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/long-image.comp.html"*/'<button ion-button color="primary" clear item-left (click)="generateLongImage()">\n    下载长图片 <ion-icon name="ios-long-image"></ion-icon>\n</button>\n<a id="downloadLink" hidden></a>'/*ion-inline-end:"/Users/zzn/ws/haoshiyou-client/haoshiyou/src/pages/listings-tab/long-image.comp.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* Platform */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_transfer__["a" /* Transfer */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_transfer__["a" /* Transfer */]])
 ], LongImageComponent);
 
 //# sourceMappingURL=long-image.comp.js.map
