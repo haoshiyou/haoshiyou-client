@@ -13,7 +13,6 @@
                 placeholder="搜索 区域/城市"
                 (ionFocus)="isSearching = true"
         >
-
         </ion-searchbar>
         <ion-buttons [hidden]="isSearching" class="searchbar-buttons" end>
             <button  ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">
