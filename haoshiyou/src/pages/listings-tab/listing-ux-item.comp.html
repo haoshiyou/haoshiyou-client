@@ -1,7 +1,7 @@
 <div class="wrapper" (click)="gotoDetail()">
     <div class="grid-container">
         <div class="content">
-            <div class="title">{{listing.content.substr(0, 70)}}</div>
+            <div class="title">{{listing.content ? listing.content.substr(0, 70) : "详见图片"}}</div>
             <div class="middle">
                 <ng-container *ngIf="listing.location_lat && listing.location_lng">
                     <ion-icon
