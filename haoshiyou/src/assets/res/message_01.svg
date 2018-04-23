@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="247px" height="78px" viewBox="0 0 247 78" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background: #FFFFFF;">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>message_01</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="96.9965259%" x2="50%" y2="1.49872449%" id="linearGradient-1">
+            <stop stop-color="#21B3FE" offset="0%"></stop>
+            <stop stop-color="#66CBFF" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="0" y="0" width="77" height="77" rx="16"></rect>
+    </defs>
+    <g id="WeChat_Group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="message_01">
+            <g id="Group-6">
+                <g id="Group-3" transform="translate(0.000000, 2.000000)">
+                    <path d="M15,0 L124,-1.77635684e-15 C132.284271,4.05975817e-15 139,6.71572875 139,15 L139,75 L15,75 C6.71572875,75 2.91712926e-15,68.2842712 -1.77635684e-15,60 L-1.77635684e-15,15 C-2.79088747e-15,6.71572875 6.71572875,-2.54560899e-16 15,-1.77635684e-15 Z" id="Rectangle-2-Copy-3" fill="url(#linearGradient-1)"></path>
+                    <text id="南湾西" font-family="NotoSansSC-Regular, Noto Sans SC" font-size="24" font-weight="normal" letter-spacing="0.3529412" fill="#FFFFFF">
+                        <tspan x="32.4705882" y="48">南湾西</tspan>
+                    </text>
+                </g>
+                <g id="Group-5" transform="translate(169.000000, 0.000000)">
+                    <g id="Rectangle-4">
+                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-2"></use>
+                        <rect stroke="#D9D9D9" stroke-width="1" x="0.5" y="0.5" width="76" height="76" rx="16"></rect>
+                    </g>
+                    <g id="Group" transform="translate(14.000000, 15.000000)">
+                        <circle id="Oval-2" stroke="#B0E4FF" stroke-width="3" fill="#24B4FE" cx="24" cy="24" r="24"></circle>
+                        <path d="M31,29 C31,32.2439382 28.0900703,35 24.5,35 C20.9102734,35 18,32.2439382 18,29 L31,29 Z" id="Shape" stroke="#FFFFFF" stroke-width="2" fill="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <rect id="Rectangle-7" fill="#FFFFFF" x="14" y="18" width="4" height="4" rx="1"></rect>
+                        <rect id="Rectangle-7" fill="#FFFFFF" x="30" y="18" width="4" height="4" rx="1"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

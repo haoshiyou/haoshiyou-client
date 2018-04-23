@@ -1,25 +1,38 @@
 <ion-header>
     <ion-navbar>
-        <ion-buttons start>
+        <ion-buttons class="searchbar-buttons" start>
             <button ion-button (click)="goToCreationPage()">
                 <ion-icon name="md-add"></ion-icon>
             </button>
         </ion-buttons>
         <ion-searchbar
                 [(ngModel)]="searchBarModel"
+                [showCancelButton]="true"
+                (ionCancel)="isSearching = false"
                 (ionInput)="filterItems($event)"
                 placeholder="搜索 区域/城市"
                 (ionFocus)="isSearching = true"
         >
 
         </ion-searchbar>
-        <ion-buttons end>
-            <button ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">
-                <ion-icon *ngIf="!showMapInstead" name="ios-map-outline"></ion-icon>
-                <ion-icon *ngIf="showMapInstead" name="ios-list-box-outline"></ion-icon>
+        <ion-buttons class="searchbar-buttons" end>
+            <button  ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">
+                <ion-icon *ngIf="!showMapInstead" name="custom-map"></ion-icon>
+                <ion-icon *ngIf="showMapInstead" name="custom-list"></ion-icon>
             </button>
         </ion-buttons>
     </ion-navbar>
+    <ion-toolbar class="filter-toolbar" >
+            <button>
+                <span class="filter-toolbar-text">排序</span>
+                <ion-icon class="filter-icon" name="custom-sort"></ion-icon>
+            </button>
+            <button (click)="gotoFilterSettingsPage($event)">
+                <span class="filter-toolbar-text">筛选条件</span>
+                <ion-icon class="filter-icon" name="custom-filter"></ion-icon>
+            </button>
+    </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
@@ -48,9 +61,10 @@
         <!-- the main content -->
     </ion-row>
     <ion-list [hidden]="!isSearching">
-        <ng-container  *ngFor="let searchItem of searchItemsFiltered">
+        <ng-container  *ngFor="let searchItem of searchItemsFiltered.slice(0,7)">
             <ion-item (click)="setSearchTerm(searchItem)">{{ searchItem }}
             </ion-item>
         </ng-container>
+        <ion-item [hidden]="(searchItemsFiltered.length - 7) < 0"><span>...</span></ion-item>
     </ion-list>
 </ion-content>

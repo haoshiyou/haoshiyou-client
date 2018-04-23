@@ -1,6 +1,29 @@
 listing-ux-tab {
   .split-panel-container {
-      display: grid;
-      grid-template-columns: 1fr minmax(30%, 600px);
+    display: grid;
+    grid-template-columns: 1fr minmax(30%, 600px);
   }
+
+  .filter-toolbar {
+    padding: 0 0.50em;
+    border-top: #e1e1e1 solid 1px;
+    button {
+      color: #6c6c6c;
+      font-size: 12px;
+      background-color: #fafafa;
+      margin: 1em 0.375em;
+    }
+  }
+
+  span.filter-toolbar-text {
+    margin-right: 0.25em;
+  }
+
+  .filter-icon {
+    vertical-align: middle;
+    font-size:16px;
+    height: 16px;
+    width: 16px;
+  }
+
 }

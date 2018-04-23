@@ -6,7 +6,7 @@ declare let ga:any;
   templateUrl: 'qrcode-tab.page.html',
 })
 export class QrCodeTabPage {
-  public shouldShow:boolean = false;
+  public shouldShowQrCode:boolean = false;
 
   ionViewWillEnter() {
     ga('set', 'page', '/qrcode-tab.page.html');
@@ -18,6 +18,6 @@ export class QrCodeTabPage {
       eventCategory: 'show-qrcode',
       eventAction: 'qrcode-tab',
     });
-    this.shouldShow = true;
+    this.shouldShowQrCode = true;
   }
 }

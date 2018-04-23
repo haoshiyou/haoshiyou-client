@@ -1,5 +1,22 @@
 main-tab-nav {
-  .tabbar {
+  .tabs-ios > .tabbar {
     background-color: white;
   }
+}
+
+ion-toolbar {
+  .toolbar-title {
+
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+}
+
+.tabbar {
+  height: 50px;
+}
+
+.tabs-ios .tab-button-icon {
+  height: 26px;
 }
