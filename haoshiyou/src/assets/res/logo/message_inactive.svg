@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="52px" height="52px" viewBox="0 0 52 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>home-inactive</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="home-inactive">
+            <g id="Group" transform="translate(2.000000, 2.000000)">
+                <path d="M23.9886325,46.0164398 L29.5552291,39.3917108 C30.0302401,38.8264068 30.7308523,38.5 31.4692317,38.5 L43,38.5 C44.9329966,38.5 46.5,36.9329966 46.5,35 L46.5,5 C46.5,3.06700338 44.9329966,1.5 43,1.5 L5,1.5 C3.06700338,1.5 1.5,3.06700338 1.5,5 L1.5,35 C1.5,36.9329966 3.06700338,38.5 5,38.5 L16.3961055,38.5 C17.1259156,38.5 17.8192877,38.818905 18.2942431,39.3730171 L23.9886325,46.0164398 Z" id="Rectangle-3" stroke="#616770" stroke-width="3"></path>
+                <rect id="Rectangle-7" fill="#616770" x="12" y="19" width="4" height="4" rx="1"></rect>
+                <rect id="Rectangle-7" fill="#616770" x="22" y="19" width="4" height="4" rx="1"></rect>
+                <rect id="Rectangle-7" fill="#616770" x="32" y="19" width="4" height="4" rx="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
