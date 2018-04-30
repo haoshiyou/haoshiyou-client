@@ -40066,6 +40066,11 @@ listing-ux-detail .map-view-item {
   height: 140px;
 }
 
+listing-ux-detail .viewer-container {
+  background-color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 97px;
+}
+
 listing-ux-item {
   font-size: 16px;
 }
