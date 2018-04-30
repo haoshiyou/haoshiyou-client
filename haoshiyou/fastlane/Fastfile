@@ -113,7 +113,7 @@ lane :upload_web do
     sh("cd .. && cd .. && git push publish-prod `git subtree split --prefix haoshiyou/www/ release-web-prod`:gh-pages --force")
     sh("git checkout dev")
     slack(message: "Successfully deployed to www.haoshiyou.org Web at Version #{new_version}.")
-  else
+  elsif ENV["IONIC_ENV"] == "dev"
     # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
     # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
     sh("echo 'Assumming you are checking out from dev branch'")
@@ -127,7 +127,26 @@ lane :upload_web do
     sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
     sh("git checkout dev")
     slack(message: "Successfully deployed to dev.haoshiyou.org Web at Version #{new_version}.")
+  elsif ENV["IONIC_ENV"] == "staging"
+    # sh("git remote add publish-staging git@github.com:xinbenlv/staging-haoshiyou-org.git")
+    # sh("git subtree push --prefix haoshiyou/www/ publish-staging release-web-staging:gh-pages")
+    sh("echo 'Assumming you are checking out from staging branch'")
+    sh("git checkout -- ../config.xml")
+    sh("git checkout release-web-staging")
+    sh("git merge staging")
+    sh("cd .. && ionic cordova build ios --release")
+    sh("git add ../../haoshiyou/www/ -f")
+    sh("git commit -m 'web-release';true")
+
+    sh("cd .. && cd .. && git push publish-staging `git subtree split --prefix haoshiyou/www/ release-web-staging`:gh-pages --force")
+    sh("git checkout staging")
+    slack(message: "Successfully deployed to staging.haoshiyou.org Web at Version #{new_version}.")
+  else
+    sh("echo \"Wrong IONIC_ENV which is: ${IONIC_ENV}\"")
+    exit
   end
+
+
 end
 
 desc "Deploy a new version to the App Store/"

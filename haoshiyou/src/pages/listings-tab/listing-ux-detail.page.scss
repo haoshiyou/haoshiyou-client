@@ -1,5 +1,6 @@
 $bg_color_grey: #eef3f5;
 
+
 listing-ux-detail {
   background-color: $bg_color_grey;
 
@@ -255,5 +256,9 @@ listing-ux-detail {
     height: 140px;
   }
 
+  .viewer-container {
+    background-color: rgba(0,0,0,0.8);
+    margin-bottom: 97px;
+  }
 }
 

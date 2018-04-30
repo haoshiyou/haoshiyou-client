@@ -1,5 +1,5 @@
 import {AlertController, Content, NavController, NavParams} from "ionic-angular";
-import {ChangeDetectorRef, Component, ViewChild} from "@angular/core";
+import {ChangeDetectorRef, Component, ElementRef, ViewChild} from "@angular/core";
 import {CreationPage} from "./listing-creation.page";
 import {IImageService} from "../../services/image.service";
 import {HsyListing} from "../../loopbacksdk/models/HsyListing";
@@ -21,6 +21,8 @@ export class ListingUxDetailPage {
   private view:MapViewComponent;
   @ViewChild(Content) content: Content;
 
+  @ViewChild('pageContainer') pageContainer;
+  @ViewChild('imageContainer') imageContainer;
   @ViewChild('mapViewSingle') set mapView(view:MapViewComponent) {
     this.view = view;
     if (this.view) {
@@ -207,31 +209,6 @@ export class ListingUxDetailPage {
     await alert.present();
   }
 
-  // TODO(xinbenlv): merge with the same piece of code in image-grid.
-  //noinspection JSUnusedLocalSymbols, used in HTML
-  private showImage(imageId) {
-    let el = document.getElementsByTagName('body');
-    // TODO(xinbenlv): modify the viewerjs to customize the following
-    // 1. click on background area to close
-    let url = this.imageService.getUrlFromId(imageId, 0, 0);
-    let viewer = new window.Viewer(el[0],
-        {
-          url: () => {
-            return url;
-          },
-          inline:false,
-          toolbar: true,
-          title: false,
-          movable: true,
-          keyboard: false,
-          navbar: true,
-          hidden: () => {
-            viewer.destroy();
-          }
-        });
-    viewer.show();
-  }
-
   private isClaimed():boolean {
     return !/^group-collected-/.test(this.listing.ownerId);
   }
@@ -266,5 +243,27 @@ export class ListingUxDetailPage {
 
   private scrollToContact() {
     this.content.scrollToBottom();
+  }
+
+  private fullscreen(currentIndex) {
+
+    let dom = this.imageContainer;
+    let viewer = new window.Viewer(dom.getNativeElement(), {
+      url: (image) => {
+        let imageId = image.getAttribute('imageid');
+        return this.imageService.getUrlFromId(imageId, 0, 0);
+      },
+      inline: false,
+      title: false,
+      movable: true,
+      rotatable: false,
+      backdrop: true,
+      toolbar: false,
+      zoomable: true,
+      fullscreen: true,
+      container: this.pageContainer.getNativeElement()
+    }, currentIndex);
+    viewer.show();
+    // viewer.view(currentIndex);
   }
 }
