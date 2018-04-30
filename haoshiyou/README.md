@@ -1,10 +1,10 @@
 # Haoshiyou project (ionic v2)
 
 ## Master Status 
-[![Build Status](https://travis-ci.org/xinbenlv/rent.zzn.im.svg?branch=master)](https://travis-ci.org/xinbenlv/rent.zzn.im)
+[![Build Status](https://travis-ci.org/xinbenlv/haoshiyou-client.svg?branch=master)](https://travis-ci.org/xinbenlv/haoshiyou-client)
 
 ## Dev Status
-[![Build Status](https://travis-ci.org/xinbenlv/rent.zzn.im.svg?branch=dev)](https://travis-ci.org/xinbenlv/rent.zzn.im)
+[![Build Status](https://travis-ci.org/xinbenlv/haoshiyou-client.svg?branch=dev)](https://travis-ci.org/xinbenlv/haoshiyou-client)
 
 
 This project is a project built with ionic v2
@@ -19,7 +19,7 @@ Released features are in [CHANGELOG.md](CHANGELOG.md),
 Some of the old feature are in [OLD_CHANGELOG.md](OLD_CHANGELOG.md)
 
 Future features are in the 
-[issues](https://github.com/xinbenlv/rent.zzn.im/issues)
+[issues](https://github.com/xinbenlv/haoshiyou-client/issues)
 
 Security related bugs are filed under 
 [security repo](https://github.com/xinbenlv/haoshiyou-security/issues)

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="52px" height="52px" viewBox="0 0 52 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>home-inactive</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="home-inactive" stroke="#616770" stroke-width="3">
+            <g id="if_house_384890" transform="translate(2.000000, 2.000000)">
+                <polyline id="Shape" points="0.437268293 18.7711579 24.1779512 0.363157895 47.5627317 18.7711579"></polyline>
+                <path d="M18,46.0395789 L18,30.0056842 C18,30.0056842 19.9562927,26.3153684 24.1041951,26.3153684 C28.2509268,26.3153684 30.2066341,30.0056842 30.2066341,30.0056842 L30.2066341,46.0395789" id="Shape"></path>
+                <path d="M44.364878,16.2536842 L44.364878,43.3275789 C44.364878,45.708 42.5771707,47.6362105 40.3715122,47.6362105 L7.6284878,47.6362105 C5.4222439,47.6362105 3.63512195,45.7073684 3.63512195,43.3275789 L3.63512195,16.2915789" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

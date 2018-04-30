@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="52px" height="52px" viewBox="0 0 52 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>home-inactive</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M5,0 L43,0 C45.7614237,-5.07265313e-16 48,2.23857625 48,5 L48,35 C48,37.7614237 45.7614237,40 43,40 L31.4692317,40 C31.1738799,40 30.8936351,40.1305627 30.7036306,40.3566843 L24.7580227,47.4324694 C24.4027292,47.8552992 23.7719357,47.9100482 23.349106,47.5547547 C23.3073967,47.5197075 23.2686212,47.4813104 23.2331666,47.4399469 L17.1553605,40.3492068 C16.9653783,40.127562 16.6880295,40 16.3961055,40 L5,40 C2.23857625,40 3.38176876e-16,37.7614237 0,35 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 Z" id="path-1"></path>
+    </defs>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="home-inactive">
+            <g id="Group" transform="translate(2.000000, 2.000000)">
+                <g id="Rectangle-3">
+                    <use fill="#21B3FE" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    <path stroke="#21B3FE" stroke-width="2" d="M5,1 C2.790861,1 1,2.790861 1,5 L1,35 C1,37.209139 2.790861,39 5,39 L16.3961055,39 C16.9799536,39 17.5346512,39.255124 17.9146156,39.6984137 L23.9924217,46.7891537 L29.9380296,39.7133686 C30.3180384,39.2611254 30.8785282,39 31.4692317,39 L43,39 C45.209139,39 47,37.209139 47,35 L47,5 C47,2.790861 45.209139,1 43,1 L5,1 Z"></path>
+                </g>
+                <rect id="Rectangle-7" fill="#FFFFFF" x="12" y="19" width="4" height="4" rx="1"></rect>
+                <rect id="Rectangle-7" fill="#FFFFFF" x="22" y="19" width="4" height="4" rx="1"></rect>
+                <rect id="Rectangle-7" fill="#FFFFFF" x="32" y="19" width="4" height="4" rx="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

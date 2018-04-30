@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="52px" height="52px" viewBox="0 0 52 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>location-inactive</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="location-inactive" stroke="#616770" stroke-width="3">
+            <g id="Group" transform="translate(7.000000, 11.000000)">
+                <path d="M0.5,1.5 L28.5,1.5" id="Line"></path>
+                <path d="M32.5,29.5 L32.5,8" id="Line"></path>
+                <path d="M0.5,12 L24.5,12" id="Line"></path>
+                <path d="M0.5,22.5 L20.5,22.5" id="Line"></path>
+                <path d="M26,23 L31.7819479,29.1691051 C32.159623,29.5720691 32.792456,29.5925699 33.19542,29.2148949 C33.2111736,29.2001299 33.2264448,29.1848587 33.2412097,29.1691051 L39.0231577,23" id="Line"></path>
+            </g>
+        </g>
+    </g>
+</svg>

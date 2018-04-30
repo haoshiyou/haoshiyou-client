@@ -1,4 +1,4 @@
-<ion-content id="page-container" class="dynamic-width-container" #content>
+<ion-content #pageContainer id="page-container" class="dynamic-width-container" #content>
         <div class="detail-header">
             <div class="detail-header-shadow">
             </div>
@@ -9,11 +9,13 @@
                 <ion-icon name="ios-heart-outline"></ion-icon>
             </div>
 
-        <ion-slides class="detail-image-slides" pager *ngIf="!loading && listing.imageIds">
+        <ion-slides #imageContainer class="detail-image-slides" pager *ngIf="!loading && listing.imageIds">
             <ng-container *ngFor="let imageId of listing.imageIds;let i = index">
-                <ion-slide class="slide" style="background-size:cover; background-repeat:no-repeat; background-position: center center; "
-                           [style.background-image]="'url(' + imageService.getUrlFromId(imageId) + ')'">
+                <ion-slide class="slide" style="background-size:cover; background-repeat:no-repeat; background-position: center; "
+                           [style.background-image]="'url(' + imageService.getUrlFromId(imageId) + ')'"
+                (click)="fullscreen(i)">
                 </ion-slide>
+                <img [attr.imageid]="imageId" bind-src="imageService.getUrlFromId(imageId)" alt="">
             </ng-container>
         </ion-slides>
         </div>
@@ -112,5 +114,3 @@
             </div>
     </div>
 </ion-footer>
-
-
