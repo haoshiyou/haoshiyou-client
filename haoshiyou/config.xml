@@ -129,4 +129,6 @@
         <variable name="SENDER_ID" value="59094925347" />
     </plugin>
     <engine name="ios" spec="^4.4.0" />
+    <engine name="android" spec="~6.1.2" />
+    <allow-navigation href="http://100.99.166.83:8101" />
 </widget>
