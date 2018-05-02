@@ -22,9 +22,9 @@ lane :bump_version do
   unless done_incremented == true
     old_version = read_current_version
     puts "Before Version Increment: " + old_version
-    new_version = increment_version(old_version)
-    write_new_version(new_version)
-    puts "After Version Increment: " + new_version
+    new_version_array = increment_version(old_version)
+    write_new_version(new_version_array)
+    puts "After Version Increment: " + new_version_array.join('.')
     done_incremented = true
   end
 end
@@ -76,7 +76,7 @@ private_lane :deploy_android do |options|
          "-keystore fastlane/release-cred/haoshiyou-android.keystore " +
          "platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name")
 
-  sh("cd .. && ${HOME}/Library/Android/sdk/build-tools/23.0.3/zipalign -f " +
+  sh("cd .. && ${HOME}/Library/Android/sdk/build-tools/27.0.3/zipalign -f " +
          "-v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk " +
          android_release_path)
 end
@@ -87,7 +87,8 @@ private_lane :upload_android do
       track: "alpha",
       apk: android_release_path,
       json_key: "fastlane/release-cred/haoshiyou-play-release-manager-credentials.json",
-      package_name: "org.haoshiyou.app"
+      package_name: "org.haoshiyou.app",
+      verbose: true
   )
   slack(message: "Successfully deployed to Google Play at version #{new_version}.")
 end
