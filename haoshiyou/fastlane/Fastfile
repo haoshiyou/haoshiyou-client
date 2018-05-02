@@ -22,8 +22,8 @@ lane :bump_version do
   unless done_incremented == true
     old_version = read_current_version
     puts "Before Version Increment: " + old_version
-    new_version = increment_version(old_version)
-    write_new_version(new_version)
+    new_version_array = increment_version(old_version)
+    write_new_version(new_version_array)
     puts "After Version Increment: " + new_version
     done_incremented = true
   end
