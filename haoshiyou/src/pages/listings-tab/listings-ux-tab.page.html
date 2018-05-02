@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-buttons [hidden]="isSearching"  class="searchbar-buttons" start>
-            <button ion-button (click)="goToCreationPage()">
+            <button ion-button (tap)="goToCreationPage()">
                 <ion-icon name="md-add"></ion-icon>
             </button>
         </ion-buttons>
@@ -15,7 +15,7 @@
         >
         </ion-searchbar>
         <ion-buttons [hidden]="isSearching" class="searchbar-buttons" end>
-            <button  ion-button *ngIf="!largeEnough()" (click)="flipMapAndList()">
+            <button  ion-button *ngIf="!largeEnough()" (tap)="flipMapAndList()">
                 <ion-icon *ngIf="!showMapInstead" name="custom-map"></ion-icon>
                 <ion-icon *ngIf="showMapInstead" name="custom-list"></ion-icon>
             </button>
@@ -23,7 +23,7 @@
     </ion-navbar>
     <ion-list [hidden]="!isSearching">
         <ng-container  *ngFor="let searchItem of searchItemsFiltered.slice(0,7)">
-            <ion-item (click)="setSearchTerm(searchItem)">{{ searchItem }}
+            <ion-item (tap)="setSearchTerm(searchItem)">{{ searchItem }}
             </ion-item>
         </ng-container>
         <ion-item [hidden]="(searchItemsFiltered.length - 7) < 0">
@@ -35,7 +35,7 @@
             <span class="filter-toolbar-text">排序</span>
             <ion-icon class="filter-icon" name="custom-sort"></ion-icon>
         </button>
-        <button (click)="gotoFilterSettingsPage($event)">
+        <button (tap)="gotoFilterSettingsPage($event)">
             <span class="filter-toolbar-text">筛选条件</span>
             <ion-icon class="filter-icon" name="custom-filter"></ion-icon>
         </button>

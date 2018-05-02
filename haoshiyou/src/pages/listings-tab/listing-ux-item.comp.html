@@ -1,4 +1,4 @@
-<div class="wrapper" (click)="gotoDetail()">
+<div class="wrapper" (tap)="gotoDetail()">
     <div class="grid-container">
         <div class="content">
             <div class="title">{{listing.content ? listing.content.substr(0, 70) : "详见图片"}}</div>
@@ -22,10 +22,10 @@
             <img *ngIf="listing.imageIds.length > 0"
                  src="{{ listing.imageIds[0] | imageIdToUrlPipe : 'thumbnail' }}"
                  alt="img-{{imageId}}"
-                 (click)="gotoDetail()"/>
+                 (tap)="gotoDetail()"/>
             <img *ngIf="listing.imageIds.length == 0"
                  src="{{'assets/res/placeholders/'+ placeholderIds[indexFromParent % 3] + '.png'}}"
-                 alt="" (click)="gotoDetail()">
+                 alt="" (tap)="gotoDetail()">
         </div>
     </div>
 </div>

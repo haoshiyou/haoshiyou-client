@@ -10,7 +10,7 @@
     <ion-list *ngIf="!auth.authenticated()">
         <ion-item >
             <ion-label>请登录</ion-label>
-            <button ion-button item-right (click)="auth.login()">登录</button>
+            <button ion-button item-right (tap)="auth.login()">登录</button>
         </ion-item>
     </ion-list>
     <ion-list>
