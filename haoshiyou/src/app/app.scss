@@ -56,21 +56,6 @@ body {
   src: url("../assets/res/fonts/NotoSans-Black.ttf");
 }
 
-@font-face {
-  font-family: "Hosted Source Han Sans Normal";
-  src: url("../assets/res/fonts/SourceHanSans-Normal.ttc");
-}
-
-@font-face {
-  font-family: "Hosted Source Han Sans Regular";
-  src: url("../assets/res/fonts/SourceHanSans-Regular.ttc");
-}
-
-@font-face {
-  font-family: "Hosted Source Han Sans SC Regular";
-  src: url("../assets/res/fonts/SourceHanSansSC-Regular.otf");
-}
-
 .item {
   min-height: 3rem; /* <- this can be whatever you need */
 }
