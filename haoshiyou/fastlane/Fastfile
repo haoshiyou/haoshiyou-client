@@ -24,7 +24,7 @@ lane :bump_version do
     puts "Before Version Increment: " + old_version
     new_version_array = increment_version(old_version)
     write_new_version(new_version_array)
-    puts "After Version Increment: " + new_version
+    puts "After Version Increment: " + new_version_array.join('.')
     done_incremented = true
   end
 end
