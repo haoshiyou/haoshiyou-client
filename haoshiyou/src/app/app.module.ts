@@ -37,6 +37,7 @@ import {ListingUxDetailPage} from "../pages/listings-tab/listing-ux-detail.page"
 import {ListingsUxTabPage} from "../pages/listings-tab/listings-ux-tab.page";
 import {ListingUxItem} from "../pages/listings-tab/listing-ux-item.comp";
 import {FilterSettingsPage} from "../pages/listings-tab/filter-settings.page";
+import {BreakLinePipe} from "../pipes/break-line.pipe";
 
 export function getAuthHttp(http, nativeStorage:NativeStorage) {
   return new AuthHttp(new AuthConfig({
@@ -72,6 +73,7 @@ export function getAuthHttp(http, nativeStorage:NativeStorage) {
     ImageIdsToUrlPipe,
     ImageIdToUrlPipe,
     TimeFromNowPipe,
+    BreakLinePipe,
     CityNZipPipe,
     DateFormatterPipe,
   ],

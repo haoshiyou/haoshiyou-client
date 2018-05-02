@@ -39,7 +39,13 @@ end
 # ===== iOS Private Lanes =====
 desc "Do a new iOS build using ionic."
 private_lane :build_ios do
-  sh("cd .. &&  ionic cordova build ios --release")
+  cmd = "cd .. &&  ionic cordova build ios"
+  if ENV["IONIC_ENV"] == "prod" or ENV["IONIC_ENV"] == "staging"
+    cmd += " --release --prod"
+  else
+    cmd += " --debug"
+  end
+  sh(cmd)
 end
 
 desc "Do a new iOS deploy using sigh and gym"
@@ -63,7 +69,13 @@ end
 
 desc "Do a new Android build"
 private_lane :build_android do
-  sh("cd .. && ionic cordova build android --release")
+  cmd = "cd .. &&  ionic cordova build android"
+  if ENV["IONIC_ENV"] == "prod" or ENV["IONIC_ENV"] == "staging"
+    cmd += " --release --prod"
+  else
+    cmd += " --debug"
+  end
+  sh(cmd)
 end
 
 # ===== Android Private Lanes =====
@@ -107,7 +119,7 @@ lane :upload_web do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-prod")
     sh("git merge dev")
-    sh("cd .. && ionic cordova build ios --release")
+    sh("cd .. && ionic cordova build ios --release --prod")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
@@ -135,7 +147,7 @@ lane :upload_web do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-staging")
     sh("git merge staging")
-    sh("cd .. && ionic cordova build ios --release")
+    sh("cd .. && ionic cordova build ios --release --prod")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
