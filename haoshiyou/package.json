@@ -7,7 +7,8 @@
         "codepush": "echo \"~$CORDOVA_VERSION\" && code-push release-cordova haoshiyou-Android android -d Production -m --targetBinaryVersion \"~$CORDOVA_VERSION\" && code-push release-cordova haoshiyou-iOS ios -d Production -m --targetBinaryVersion \"~$CORDOVA_VERSION\" "
     },
     "config": {
-        "ionic_copy": "./config/copy.config.js"
+        "ionic_copy": "./config/copy.config.js",
+        "ionic_clean_before_copy": true
     },
     "dependencies": {
         "@angular/animations": "5.1.2",

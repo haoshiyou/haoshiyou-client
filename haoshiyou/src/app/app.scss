@@ -19,7 +19,6 @@
           "primary": #0074d9,
           "danger": #ff4136
   );
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
   color: #333333;
@@ -46,32 +45,19 @@ body {
   background: #EEE;
 }
 
-@font-face {
-  font-family: "Hosted Noto Sans Regular";
-  src: url("../assets/res/fonts/NotoSans-Regular.ttf");
-}
-
-@font-face {
-  font-family: "Hosted Noto Sans Black";
-  src: url("../assets/res/fonts/NotoSans-Black.ttf");
-}
-
 .item {
   min-height: 3rem; /* <- this can be whatever you need */
 }
 
 .hsy-listing-item-header {
-  font-family: "Hosted Noto Sans Regular";
   font-size: 16px;
 }
 
 .hsy-listing-item-price {
-  font-family: "Hosted Noto Sans Regular";
   font-size: 16px;
 }
 
 .hsy-listing-item-last-updated {
-  font-family: "Hosted Noto Sans Regular";
   font-size: 14px;
 }
 
