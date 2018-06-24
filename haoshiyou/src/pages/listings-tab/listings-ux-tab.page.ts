@@ -13,6 +13,7 @@ import UrlUtil from "../../util/url_util";
 import {FlagService} from "../../services/flag.service";
 import {MapViewComponent} from "./map-view.comp";
 import {FilterSettingsPage} from "./filter-settings.page";
+import {UxPrimaryCreationPage} from "./creation/ux-primary-creation.page";
 declare let ga:any;
 declare let google, document;
 
@@ -148,27 +149,15 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     // TODO(xinbenlv): update markers
   }
 
-  async fakeGoToCreationPage() {
-    ga('send', 'event', {
-      eventCategory: 'go-to',
-      eventAction: 'listing-creation',
-    });
-    let alert = this.alertCtrl.create({
-      title: '新版app中发帖功能正在建设中',
-      buttons: [
-        {
-          text: 'OK',
-        },
-      ]
-    });
-    await alert.present();
-  }
-
   async goToCreationPage() {
     if (this.auth.authenticated()) {
       //push another page onto the history stack
       //causing the nav controller to animate the new page in
-      this.nav.push(CreationPage);
+      if (this.flagService.getFlag( 'newUx')) {
+        this.nav.push(UxPrimaryCreationPage);
+      } else {
+        this.nav.push(CreationPage);
+      }
     } else {
       let alert = this.alertCtrl.create({
         title: '请登录后发帖',

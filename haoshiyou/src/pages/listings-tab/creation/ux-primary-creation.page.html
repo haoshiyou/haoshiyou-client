@@ -1,0 +1,167 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            新版创建
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button (tap)="save()">保存</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content class="creation grey-background" id="page-container">
+        <ion-card offset-lg-3 col-lg-6 offset-md-2 col-md-8 >
+            <form #hsyListingForm="ngForm">
+            <ion-item>
+                <ion-label>类型</ion-label>
+                <ion-select interface="popover"
+                            text-right required [(ngModel)]="listing.listingTypeEnum"
+                            name="listingTypeEnum" placeholder="必选">
+                    <ion-option  *ngFor="let v of listingTypeEnums "
+                                 value={{v}}>{{ v | enumMsgPipe }}</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item *ngIf="listing.listingTypeEnum == 'NeedRoommate'"> <!-- 只有招租需要填写 -->
+                <ion-label>地址</ion-label>
+                <ion-input item-right class="address" text-right [(ngModel)]="listing.addressLine" name="addressLine"
+                ></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>城市</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.addressCity"
+                           name="addressCity"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>预期价格</ion-label>
+                <ion-input item-right text-right
+                           type="number" min="0"
+                           [(ngModel)]="listing.price" name="price"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>标题</ion-label>
+                <ion-input
+                        item-right text-right required [(ngModel)]="listing.title"
+                        name="title" placeholder="必填"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>详情</ion-label>
+                <ion-textarea item-right text-right required [(ngModel)]="listing.content"
+                              name="content"
+                              placeholder="必填"></ion-textarea>
+
+            </ion-item>
+            <ion-item *ngIf="isDebug()">
+                <ion-label>测试</ion-label>
+                <ion-checkbox item-right text-right fixed color="dark" checked="true"
+                              [(ngModel)]="inTestGroup"
+                              name="inTestGroup"
+                ></ion-checkbox>
+
+            </ion-item>
+
+
+            <ion-item>
+                <ion-label>所在好室友群</ion-label>
+                <ion-select interface="popover"
+                            text-right [(ngModel)]="listing.hsyGroupEnum"
+                            name="type">
+                    <ion-option  *ngFor="let enum of hsyGroupEnumOptions "
+                                 value={{enum}}> {{ hsyGroupEnumOptionsMap[enum] }}
+                    </ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item>
+                <ion-label>群中昵称</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.hsyGroupNick"
+                           name="hsyGroupNick"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>电子邮箱</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.owner.contactEmail"
+                           name="contactEmail"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>联系电话</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.owner.contactPhone"
+                           name="contactPhone"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>微信号</ion-label>
+                <ion-input item-right text-right [(ngModel)]="listing.owner.weixin"
+                           name="weixin"></ion-input>
+            </ion-item>
+            <ng-container *ngIf="listing.listingTypeEnum == 'NeedRoommate'"><!-- 只有招租需要填写这段 -->
+                <ion-item>
+                    <ion-label>整租单租</ion-label>
+                    <ion-select item-right interface="popover" text-right
+                                [(ngModel)]="listing.isRentingEntireHouse"
+                                name="isRentingEntireHouse">
+                        <ion-option text-right [value]="true">整房出租</ion-option>
+                        <ion-option text-right [value]="false">单间出租</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item >
+                    <ion-label>卧室数量</ion-label>
+                    <ion-input item-right text-right
+                               type="number"
+                               [(ngModel)]="listing.numBedRoom"
+                    name="numBedRoom"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>卫生间数量</ion-label>
+                    <ion-input item-right text-right
+                               type="number"
+                               [(ngModel)]="listing.numBathRoom"
+                    name="numBathRoom"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>设施/须知</ion-label>
+                    <div item-right text-right text-wrap>
+                        <button ion-button small round color="primary"
+                                *ngFor="let o of amenityOptions"
+                                (tap)="toggleAmenity(o)"
+                                [outline] = "listing.amenityArray.indexOf(o) < 0">{{o}}</button>
+                    </div>
+                </ion-item>
+            </ng-container>
+            <ion-item>
+                <ion-label>起租时间</ion-label>
+                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"
+                              min="2013-01-01"
+                              max="2020-01-01"
+                              pickerFormat="YYYY MM DD"
+                              [(ngModel)]="listing.rentalStartDate"
+                name="rentalStartDate"></ion-datetime>
+            </ion-item>
+            <ion-item>
+                <ion-label>终止时间</ion-label>
+                <ion-datetime item-right text-right displayFormat="YYYY-MM-DD"
+                              min="2013-01-01"
+                              max="2020-01-01"
+                              pickerFormat="YYYY MM DD" [(ngModel)]="listing.rentalEndDate"
+                name="rentalEndDate"></ion-datetime>
+            </ion-item>
+            <ion-item *ngIf="flagService.getFlag('requireToContact')">
+                <ion-label>登LinkedIn才可联系我</ion-label>
+                <ion-toggle item-right text-right name="requireToContact"></ion-toggle>
+                <!--TODO(xinbenlv): wire it-->
+            </ion-item>
+            <ion-item>
+                <ion-label>图片</ion-label>
+                <ion-input item-right disabled name="imageBlock"></ion-input>
+            </ion-item>
+            <ion-item>
+                <image-grid
+                        [imageIds]="listing.imageIds"
+                        (updateImageIds)="updateImageIds($event)"
+                        [isEdit]="true"
+                ></image-grid>
+            </ion-item>
+            <ion-row>
+                <button col-6 ion-button block color="secondary" (tap)="save()">保存</button>
+                <button col-6 ion-button outline block color="danger" (tap)="deleteListing()">删除</button>
+            </ion-row>
+            </form>
+        </ion-card>
+</ion-content>
