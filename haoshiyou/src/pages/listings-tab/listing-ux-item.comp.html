@@ -24,7 +24,7 @@
                  alt="img-{{imageId}}"
                  (tap)="gotoDetail()"/>
             <img *ngIf="listing.imageIds.length == 0"
-                 src="{{'assets/res/placeholders/'+ placeholderIds[indexFromParent % 3] + '.png'}}"
+                 src='assets/res/no-photo-placeholder.jpg'
                  alt="" (tap)="gotoDetail()">
         </div>
     </div>
