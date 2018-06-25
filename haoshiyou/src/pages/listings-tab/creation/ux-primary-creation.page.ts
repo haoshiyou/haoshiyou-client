@@ -138,6 +138,11 @@ export class UxPrimaryCreationPage implements OnInit {
       this.listing.amenityArray = [];
     }
     if (!this.listing.imageIds) this.listing.imageIds = [];
+
+    // TODO: remove after wards
+    this.listing.content = '地點位於San Francisco 的Hayes Valley，地點非常方便 在SF城裡到哪基本上都是20分鐘以內\n' +
+        '租金每月＄1400，簽三個月的合約\n' +
+        '(目前打算簽7/15-10/15，但如果你有其他日期比較方便也可溝通) 帶$1000 security deposit，租約結束無破壞全額退回';
   }
 
   ngOnInit():any {
