@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-buttons start>
-            <button ion-button (click)="cancel()">
+            <button ion-button (tap)="cancel()">
                 <ion-icon name="cross"></ion-icon>
             </button>
         </ion-buttons>
@@ -22,7 +22,7 @@
             <ion-label range-right>${{filterSettings['price'].upper}}</ion-label>
         </ion-range>
     </ion-item>
-    <ion-item (click)="pickPostTime()">
+    <ion-item (tap)="pickPostTime()">
         <ion-label>发布时间</ion-label>
         <ion-label text-right>{{getPostDateFilterText(filterSettings['duration'])}}</ion-label>
     </ion-item>
@@ -30,7 +30,7 @@
 </ion-content>
 <ion-footer>
     <ion-buttons>
-        <button ion-button block (click)="close()">
+        <button ion-button block (tap)="close()">
             查看结果
         </button>
     </ion-buttons>
