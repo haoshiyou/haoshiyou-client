@@ -1,8 +1,8 @@
 {
   "name": "haoshiyou",
-  "app_id": "1f51c25b",
-  "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "ionic-angular",
+  "pro_id": "1f51c25b"
 }
