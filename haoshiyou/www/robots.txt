@@ -1,0 +1,3 @@
+Sitemap: http://www.haoshyou.org/sitemap.xml
+User-agent: *
+Disallow:
