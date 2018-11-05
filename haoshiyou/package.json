@@ -60,7 +60,8 @@
         "socket.io-client": "^2.0.4",
         "sw-toolbox": "3.6.0",
         "underscore": "1.8.3",
-        "zone.js": "^0.8.19"
+        "zone.js": "^0.8.19",
+        "cordova-android": "~6.1.2"
     },
     "devDependencies": {
         "@ionic/app-scripts": "^3.1.7",
@@ -164,7 +165,15 @@
             }
         },
         "platforms": [
-            "ios"
+            "ios",
+            "android"
         ]
-    }
+    },
+    "engines": {
+        "node": "8.11.3",
+        "npm": "5.6.0"
+    },
+    "os": [
+        "darwin"
+    ]
 }
