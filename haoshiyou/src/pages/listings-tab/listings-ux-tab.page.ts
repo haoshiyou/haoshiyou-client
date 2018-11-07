@@ -1,5 +1,5 @@
 import {
-  Platform, NavController, AlertController, Content, PopoverController
+  Platform, NavController, AlertController, Content, PopoverController, ModalController
 } from "ionic-angular";
 import {OnDestroy, Component, ViewChild, ChangeDetectorRef,
   ElementRef, AfterViewInit, HostListener
@@ -14,6 +14,8 @@ import {FlagService} from "../../services/flag.service";
 import {MapViewComponent} from "./map-view.comp";
 import {FilterSettingsPage} from "./filter-settings.page";
 import {UxPrimaryCreationPage} from "./creation/ux-primary-creation.page";
+import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
+import { CookieService } from 'ngx-cookie-service';
 declare let ga:any;
 declare let google, document;
 
@@ -69,7 +71,9 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
               private api: HsyListingApi,
               private flagService: FlagService,
               public popoverCtrl: PopoverController,
-              private ref:ChangeDetectorRef) {
+              private ref:ChangeDetectorRef,
+              private modalCtrl:ModalController,
+              private cookie:CookieService) {
   }
   async ngAfterViewInit() {
     let segmentFromUrl = UrlUtil.getParameterByName(SEGMENT_KEY);
@@ -83,6 +87,17 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     this.updateWhereClause();
     await this.loadMoreListings();
     this.updateLayout();
+
+    let hasShownQrCodeModal = this.cookie.get("hasShownQrCodeModal");
+    console.log('hasShownQrCodeModal', hasShownQrCodeModal);
+    if (!hasShownQrCodeModal) {
+      this.presentQrCodeModal();
+    }
+  }
+
+  presentQrCodeModal() {
+    let m = this.modalCtrl.create(QrCodeTabPage, {isModal: true});
+    m.present();
   }
 
   ionViewDidEnter() {
