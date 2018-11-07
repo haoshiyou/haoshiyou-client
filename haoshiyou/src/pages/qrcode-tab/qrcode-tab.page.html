@@ -1,5 +1,10 @@
 <ion-header>
     <ion-toolbar>
+        <ion-buttons start *ngIf="params.data.isModal">
+            <button ion-button (tap)="dismiss()">
+               关闭
+            </button>
+        </ion-buttons>
         <ion-title>
             加好室友微信群
         </ion-title>
