@@ -1,0 +1,31 @@
+<div class="wrapper" (tap)="gotoDetail()">
+    <div class="grid-container">
+        <div class="content">
+            <div class="title">{{listing.content ? listing.content.substr(0, 70) : "详见图片"}}</div>
+            <div class="middle">
+                <ng-container *ngIf="listing.location_lat && listing.location_lng">
+                    <ion-icon
+                            name="ios-pin-outline"></ion-icon><span class="location">{{listing.addressCity}}</span>
+                </ng-container>
+                <ion-icon name="ios-time-outline"></ion-icon><span class="lastUpdate">{{listing.lastUpdated | timeFromNow }}</span>
+            </div>
+            <div class="price" >
+                <ng-container *ngIf="listing.price">
+                    <span class="price-dollar-number-per">${{listing.price}}</span><span class="month">/月</span>
+                </ng-container>
+                <ng-container *ngIf="!listing.price">
+                    <span  class="price-dollar-number-per">价格待议</span>
+                </ng-container>
+            </div>
+        </div>
+        <div class="thumbnail">
+            <img *ngIf="listing.imageIds.length > 0"
+                 src="{{ listing.imageIds[0] | imageIdToUrlPipe : 'thumbnail' }}"
+                 alt="img-{{imageId}}"
+                 (tap)="gotoDetail()"/>
+            <img *ngIf="listing.imageIds.length == 0"
+                 src='assets/res/no-photo-placeholder.jpg'
+                 alt="" (tap)="gotoDetail()">
+        </div>
+    </div>
+</div>

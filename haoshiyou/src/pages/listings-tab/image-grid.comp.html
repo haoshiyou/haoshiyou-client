@@ -2,7 +2,7 @@
     <ion-col width-33 *ngFor="let imageId of imageIds;">
         <img src="{{imageId | imageIdToUrlPipe}}"
              alt="Image {{imageId}}"
-             (click)="showImage(imageId)">
+             (tap)="showImage(imageId)">
     </ion-col>
 
     <ion-col width-33 *ngIf="isEdit" width="300px" height="300px">
@@ -12,6 +12,6 @@
         </label>
     </ion-col>
     <ion-col width-33 *ngIf="isEdit && imageIds.length > 0 ">
-        <img src="http://placehold.it/300x300?text=删除" (click)="clickDelete()">
+        <img src="http://placehold.it/300x300?text=删除" (tap)="clickDelete()">
     </ion-col>
 </ion-row>

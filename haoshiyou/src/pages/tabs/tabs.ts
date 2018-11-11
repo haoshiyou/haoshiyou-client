@@ -1,6 +1,5 @@
 import {OnInit, OnDestroy, Component} from "@angular/core";
 import {NavController, Modal, ModalController, Platform} from "ionic-angular";
-import {ListingsTabPage} from "../listings-tab/listings-tab.page";
 import {SettingsTabPage} from "../settings-tab/settings-tab.page";
 import {Network} from "@ionic-native/network";
 import {DisconnectModal} from "./disconnect.modal";
@@ -8,8 +7,11 @@ import {Subscription} from "rxjs";
 import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
 import {MineTabPage} from "../mine-tab/mine-tab.page";
 import {AuthService} from "../../services/auth.service";
+import {FlagService} from "../../services/flag.service";
+import {ListingsUxTabPage} from "../listings-tab/listings-ux-tab.page";
 
 @Component({
+  selector: 'main-tab-nav',
   templateUrl: 'tabs.html',
 })
 export class TabsPage implements OnInit, OnDestroy {
@@ -19,7 +21,7 @@ export class TabsPage implements OnInit, OnDestroy {
   // this tells the tabs component which Pages
   // should be each tab's root Page
   //noinspection JSUnusedGlobalSymbols
-  tab2Root:any = ListingsTabPage;
+  tab2Root:any = ListingsUxTabPage;
   //noinspection JSUnusedGlobalSymbols
   tab3Root:any = SettingsTabPage;
   //noinspection JSUnusedGlobalSymbols
@@ -33,7 +35,8 @@ export class TabsPage implements OnInit, OnDestroy {
               private platform:Platform,
               private navController: NavController,
               private network: Network,
-              private auth:AuthService) {
+              private auth:AuthService,
+              private flagService: FlagService) {
   }
 
   ngOnInit():void {
@@ -53,6 +56,7 @@ export class TabsPage implements OnInit, OnDestroy {
           this.disconnectModal.dismiss();
         });
       }
+
     });
   }
 

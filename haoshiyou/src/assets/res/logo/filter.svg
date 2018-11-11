@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="52px" height="52px" viewBox="0 0 52 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>location-inactive</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="location-inactive">
+            <g id="Group" transform="translate(8.000000, 11.000000)"></g>
+            <g id="Group-3" transform="translate(8.000000, 10.000000)" stroke="#616770" stroke-width="3">
+                <g id="Group-2">
+                    <path d="M0,4 L36,4" id="Line" stroke-linecap="round"></path>
+                    <circle id="Oval-3" fill="#FFFFFF" cx="7.5" cy="3.5" r="3.5"></circle>
+                </g>
+                <g id="Group-2" transform="translate(0.000000, 22.000000)">
+                    <path d="M0,4 L36,4" id="Line" stroke-linecap="round"></path>
+                    <circle id="Oval-3" fill="#FFFFFF" cx="7.5" cy="3.5" r="3.5"></circle>
+                </g>
+                <g id="Group-2" transform="translate(0.000000, 11.000000)">
+                    <path d="M0,4 L36,4" id="Line" stroke-linecap="round"></path>
+                    <circle id="Oval-3" fill="#FFFFFF" cx="27.5" cy="3.5" r="3.5"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

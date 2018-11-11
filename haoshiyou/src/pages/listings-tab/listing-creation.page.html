@@ -4,7 +4,7 @@
             创建
         </ion-title>
         <ion-buttons end>
-            <button ion-button (click)="save()">保存</button>
+            <button ion-button (tap)="save()">保存</button>
         </ion-buttons>
     </ion-navbar>
 </ion-header>
@@ -120,7 +120,7 @@
                     <div item-right text-right text-wrap>
                         <button ion-button small round color="primary"
                                 *ngFor="let o of amenityOptions"
-                                (click)="toggleAmenity(o)"
+                                (tap)="toggleAmenity(o)"
                                 [outline] = "listing.amenityArray.indexOf(o) < 0">{{o}}</button>
                     </div>
                 </ion-item>
@@ -159,8 +159,8 @@
                 ></image-grid>
             </ion-item>
             <ion-row>
-                <button col-6 ion-button block color="secondary" (click)="save()">保存</button>
-                <button col-6 ion-button outline block color="danger" (click)="deleteListing()">删除</button>
+                <button col-6 ion-button block color="secondary" (tap)="save()">保存</button>
+                <button col-6 ion-button outline block color="danger" (tap)="deleteListing()">删除</button>
             </ion-row>
             </form>
         </ion-card>

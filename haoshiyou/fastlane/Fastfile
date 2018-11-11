@@ -22,9 +22,9 @@ lane :bump_version do
   unless done_incremented == true
     old_version = read_current_version
     puts "Before Version Increment: " + old_version
-    new_version = increment_version(old_version)
-    write_new_version(new_version)
-    puts "After Version Increment: " + new_version
+    new_version_array = increment_version(old_version)
+    write_new_version(new_version_array)
+    puts "After Version Increment: " + new_version_array.join('.')
     done_incremented = true
   end
 end
@@ -39,7 +39,13 @@ end
 # ===== iOS Private Lanes =====
 desc "Do a new iOS build using ionic."
 private_lane :build_ios do
-  sh("cd .. &&  ionic cordova build ios --release")
+  cmd = "cd .. &&  ionic cordova build ios"
+  if ENV["IONIC_ENV"] == "prod" or ENV["IONIC_ENV"] == "staging"
+    cmd += " --release --prod"
+  else
+    cmd += " --debug"
+  end
+  sh(cmd)
 end
 
 desc "Do a new iOS deploy using sigh and gym"
@@ -63,7 +69,13 @@ end
 
 desc "Do a new Android build"
 private_lane :build_android do
-  sh("cd .. && ionic cordova build android --release")
+  cmd = "cd .. &&  ionic cordova build android"
+  if ENV["IONIC_ENV"] == "prod" or ENV["IONIC_ENV"] == "staging"
+    cmd += " --release --prod"
+  else
+    cmd += " --debug"
+  end
+  sh(cmd)
 end
 
 # ===== Android Private Lanes =====
@@ -76,7 +88,7 @@ private_lane :deploy_android do |options|
          "-keystore fastlane/release-cred/haoshiyou-android.keystore " +
          "platforms/android/build/outputs/apk/android-release-unsigned.apk alias_name")
 
-  sh("cd .. && ${HOME}/Library/Android/sdk/build-tools/23.0.3/zipalign -f " +
+  sh("cd .. && ${HOME}/Library/Android/sdk/build-tools/27.0.3/zipalign -f " +
          "-v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk " +
          android_release_path)
 end
@@ -87,7 +99,8 @@ private_lane :upload_android do
       track: "alpha",
       apk: android_release_path,
       json_key: "fastlane/release-cred/haoshiyou-play-release-manager-credentials.json",
-      package_name: "org.haoshiyou.app"
+      package_name: "org.haoshiyou.app",
+      verbose: true
   )
   slack(message: "Successfully deployed to Google Play at version #{new_version}.")
 end
@@ -106,14 +119,14 @@ lane :upload_web do
     sh("git checkout -- ../config.xml")
     sh("git checkout release-web-prod")
     sh("git merge dev")
-    sh("cd .. && ionic cordova build ios --release")
+    sh("cd .. && ionic cordova build ios --release --prod")
     sh("git add ../../haoshiyou/www/ -f")
     sh("git commit -m 'web-release';true")
 
     sh("cd .. && cd .. && git push publish-prod `git subtree split --prefix haoshiyou/www/ release-web-prod`:gh-pages --force")
     sh("git checkout dev")
     slack(message: "Successfully deployed to www.haoshiyou.org Web at Version #{new_version}.")
-  else
+  elsif ENV["IONIC_ENV"] == "dev"
     # sh("git remote add publish-dev git@github.com:xinbenlv/dev-haoshiyou-org.git")
     # sh("git subtree push --prefix haoshiyou/www/ publish-dev release-web-dev:gh-pages")
     sh("echo 'Assumming you are checking out from dev branch'")
@@ -127,7 +140,26 @@ lane :upload_web do
     sh("cd .. && cd .. && git push publish-dev `git subtree split --prefix haoshiyou/www/ release-web-dev`:gh-pages --force")
     sh("git checkout dev")
     slack(message: "Successfully deployed to dev.haoshiyou.org Web at Version #{new_version}.")
+  elsif ENV["IONIC_ENV"] == "staging"
+    # sh("git remote add publish-staging git@github.com:xinbenlv/staging-haoshiyou-org.git")
+    # sh("git subtree push --prefix haoshiyou/www/ publish-staging release-web-staging:gh-pages")
+    sh("echo 'Assumming you are checking out from staging branch'")
+    sh("git checkout -- ../config.xml")
+    sh("git checkout release-web-staging")
+    sh("git merge staging")
+    sh("cd .. && ionic cordova build ios --release --prod")
+    sh("git add ../../haoshiyou/www/ -f")
+    sh("git commit -m 'web-release';true")
+
+    sh("cd .. && cd .. && git push publish-staging `git subtree split --prefix haoshiyou/www/ release-web-staging`:gh-pages --force")
+    sh("git checkout staging")
+    slack(message: "Successfully deployed to staging.haoshiyou.org Web at Version #{new_version}.")
+  else
+    sh("echo \"Wrong IONIC_ENV which is: ${IONIC_ENV}\"")
+    exit
   end
+
+
 end
 
 desc "Deploy a new version to the App Store/"

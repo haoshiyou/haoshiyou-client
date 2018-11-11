@@ -1,0 +1,70 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            新版创建
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button (tap)="saveAndExit()">保存并退出</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content class="primary-creation">
+    <div class="section content-section">
+        <div class="section-header">发布房源</div>
+        <div class="section-body" >
+            <ion-textarea placeholder="跟大家介绍一下你的豪宅吧..." class="content-input" [(ngModel)]="listing.content" ></ion-textarea>
+        </div>
+    </div>
+    <!--<div class="section photo-section"> // grid size, wrap, flex-->
+        <!--<div class="photo-block" *ngFor="let imageId of listing.imageIds;"-->
+             <!--background-image-src="{{imageId | imageIdToUrlPipe}}">-->
+        <!--</div>-->
+        <!--<div class="photo-block photo-add"-->
+             <!--background-image-src="/*placeholder*/">-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="section extractions-section">-->
+        <!--<div class="subsection-location">-->
+            <!--<div class="column">-->
+                <!--<div class="small-label row">-->
+                    <!--邮编-->
+                <!--</div>-->
+                <!--<div class="extraction-content">-->
+                    <!--<span class="extraction-text" id="zipcodeText">{{listing.addressZipcode}}</span> &lt;!&ndash; // TODO add ngIf &ndash;&gt;-->
+                    <!--<span class="extraction-subtext" id="cityText">{{listing.addressCity}}</span> &lt;!&ndash; // TODO add ngIf &ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="subsection-time-and-price">-->
+            <!--<div class="column">-->
+                <!--<div class="small-label">-->
+                    <!--起租时间-->
+                <!--</div>-->
+                <!--<div class="extraction-content">-->
+                    <!--<input type="text" [(ngModel)]="listing.rentalStartDate"> &lt;!&ndash;// TODO add ngIf &ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="column">-->
+                <!--<div class="small-label">-->
+                    <!--价格-->
+                <!--</div>-->
+                <!--<div class="extraction-content">-->
+                    <!--<input type="text" [(ngModel)]="listing.price"> &lt;!&ndash;// TODO add ngIf &ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="subsection-contact">-->
+            <!--<div class="column">-->
+                <!--<div class="small-label">-->
+                    <!--联系方式-->
+                <!--</div>-->
+                <!--<div class="extraction-content">-->
+                    <!--<dropdown [(ngModel)]="contactInfoInDisplay" values="['contactEmail','contactPhone','weixin']">-->
+                        <!--logo{{contactInfoInDisplay}}-->
+                    <!--</dropdown> &lt;!&ndash;// TODO fix dropbox &ndash;&gt;-->
+                    <!--<input type="text" [(ngModel)]="listing.owner[contactInfoInDisplay]"> &lt;!&ndash;// TODO add ngIf &ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+</ion-content>

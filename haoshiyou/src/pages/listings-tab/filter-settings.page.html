@@ -1,0 +1,37 @@
+<ion-header>
+    <ion-navbar>
+        <ion-buttons start>
+            <button ion-button (tap)="cancel()">
+                <ion-icon name="cross"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>
+            筛选条件
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-item>
+        <ion-label>租金范围</ion-label>
+    </ion-item>
+    <ion-item >
+        <ion-range id="price-filter" dualKnobs="true"
+                   min="0" max=10000 step="10"
+                   [(ngModel)]="filterSettings['price']">
+            <ion-label range-left>${{filterSettings['price'].lower}}</ion-label>
+            <ion-label range-right>${{filterSettings['price'].upper}}</ion-label>
+        </ion-range>
+    </ion-item>
+    <ion-item (tap)="pickPostTime()">
+        <ion-label>发布时间</ion-label>
+        <ion-label text-right>{{getPostDateFilterText(filterSettings['duration'])}}</ion-label>
+    </ion-item>
+
+</ion-content>
+<ion-footer>
+    <ion-buttons>
+        <button ion-button block (tap)="close()">
+            查看结果
+        </button>
+    </ion-buttons>
+</ion-footer>

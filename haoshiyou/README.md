@@ -1,7 +1,7 @@
 # Haoshiyou project (ionic v2)
 
 ## Master Status 
-[![Build Status](https://travis-ci.org/xinbenlv/haoshiyou-client.svg?branch=master)](https://travis-ci.org/xinbenlv/haoshiyou--client)
+[![Build Status](https://travis-ci.org/xinbenlv/haoshiyou-client.svg?branch=master)](https://travis-ci.org/xinbenlv/haoshiyou-client)
 
 ## Dev Status
 [![Build Status](https://travis-ci.org/xinbenlv/haoshiyou-client.svg?branch=dev)](https://travis-ci.org/xinbenlv/haoshiyou-client)

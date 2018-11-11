@@ -1,0 +1,71 @@
+<ion-header>
+    <ion-navbar>
+        <ion-buttons [hidden]="isSearching"  class="searchbar-buttons" start>
+            <button ion-button (tap)="goToCreationPage()">
+                <ion-icon name="md-add"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-searchbar
+                [(ngModel)]="searchBarModel"
+                [showCancelButton]="isSearching"
+                (ionCancel)="isSearching = false"
+                (ionInput)="filterItems($event)"
+                placeholder="搜索 区域/城市"
+                (ionFocus)="isSearching = true"
+        >
+        </ion-searchbar>
+        <ion-buttons [hidden]="isSearching" class="searchbar-buttons" end>
+            <button  ion-button *ngIf="!largeEnough()" (tap)="flipMapAndList()">
+                <ion-icon *ngIf="!showMapInstead" name="custom-map"></ion-icon>
+                <ion-icon *ngIf="showMapInstead" name="custom-list"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-list [hidden]="!isSearching">
+        <ng-container  *ngFor="let searchItem of searchItemsFiltered.slice(0,7)">
+            <ion-item (tap)="setSearchTerm(searchItem)">{{ searchItem }}
+            </ion-item>
+        </ng-container>
+        <ion-item [hidden]="(searchItemsFiltered.length - 7) < 0">
+            <span>...</span>
+        </ion-item>
+    </ion-list>
+    <ion-toolbar [hidden]="isSearching" class="filter-toolbar" >
+        <button>
+            <span class="filter-toolbar-text">排序</span>
+            <ion-icon class="filter-icon" name="custom-sort"></ion-icon>
+        </button>
+        <button (tap)="gotoFilterSettingsPage($event)">
+            <span class="filter-toolbar-text">筛选条件</span>
+            <ion-icon class="filter-icon" name="custom-filter"></ion-icon>
+        </button>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-row [hidden]="isSearching" #splitPanelContainer class="split-panel-container" style="height: 100%;">
+        <ion-col #mapContainerCol style="height: 100%;" id="right" no-padding>
+            <map-view #mapView (onBoundaryFilter)="onBoundaryFilter($event)"></map-view>
+        </ion-col>
+        <ion-col #listContainerCol
+                 style="height: 100%;" id="left" no-padding>
+            <ion-content fullscreen>
+                <ion-list>
+                    <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
+                        <ion-spinner></ion-spinner>
+                    </ion-row>
+                    <listing-ux-item *ngFor="let listing of loadedListings; let i = index"
+                                     [listing]=listing (onBump)="bumpUpdateOrder($event)"
+                                     [indexFromParent]="i">
+
+                    </listing-ux-item>
+                    <ion-infinite-scroll *ngIf="!isInitLoading" (ionInfinite)="doInfinite($event)">
+                        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+                    </ion-infinite-scroll>
+                </ion-list>
+            </ion-content>
+        </ion-col>
+        <!-- the main content -->
+    </ion-row>
+
+</ion-content>

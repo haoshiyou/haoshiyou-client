@@ -12,7 +12,9 @@
 
 $text-color:        #000;
 $background-color:  #fff;
-
+$toolbar-background: #fff;
+$hsy-logo-blue: #21b3fe;
+$toolbar-ios-button-color: #616770;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -32,6 +34,7 @@ $colors: (
         grey:       #777,
 );
 
+$grey__line_color: #e1e1e1;
 
 // App iOS Variables
 // --------------------------------------------------
@@ -71,3 +74,4 @@ $colors: (
 
 $ionicons-font-path: "../assets/fonts";
 @import "ionicons";
+

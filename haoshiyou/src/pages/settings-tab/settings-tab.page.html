@@ -14,15 +14,15 @@
             </ion-avatar>
             <h2>{{ auth.user.nickname }}</h2>
             <p>{{ auth.user.email }}</p>
-            <button ion-button item-right (click)="auth.logout()">登出</button>
+            <button ion-button item-right (tap)="auth.logout()">登出</button>
         </ion-item>
     </ion-card>
     <ion-list>
         <ion-item *ngIf="!auth.authenticated()">
             <ion-label>请登录</ion-label>
-            <button ion-button item-right (click)="auth.login()">登录</button>
+            <button ion-button item-right (tap)="auth.login()">登录</button>
         </ion-item>
-        <ion-item (click)="debugIncrementer()">
+        <ion-item (tap)="debugIncrementer()">
             <ion-label>关于
                 <span *ngIf="debugCounter > 1">({{debugCounter}})</span>
             </ion-label>
@@ -35,7 +35,7 @@
                 <ion-label>
                     环境版本: {{ versionEnv }} - 6.0.0.{{debugCounter}}
                 </ion-label>
-                <button ion-button item-right (click)="startSync()">刷新</button>
+                <button ion-button item-right (tap)="startSync()">刷新</button>
             </ion-item>
             <ion-item>
                 服务器: {{ serverUrl }}

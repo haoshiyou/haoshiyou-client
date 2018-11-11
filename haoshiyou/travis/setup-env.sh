@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 ENVSTR=""
-if [ "$IONIC_ENV" == "prod" ]; then
+if [ "$IONIC_ENV" == "prod" ] || [ "$IONIC_ENV" == "staging" ]; then
   ENVSTR="prod"
 else
   ENVSTR="dev"
 fi
 
 echo "Setting up haoshiyou env = $ENVSTR"
+echo "IONIC_ENV = ${IONIC_ENV}"
 
 if [ -z "${GITHUB_TOKEN}" ]; then
   echo "Github repo 'haoshiyou-security' GITHUB_TOKEN not set in env vars. Now exit... !";

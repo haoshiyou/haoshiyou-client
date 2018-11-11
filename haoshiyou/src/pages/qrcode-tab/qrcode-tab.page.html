@@ -1,22 +1,59 @@
 <ion-header>
     <ion-toolbar>
+        <ion-buttons start *ngIf="params.data.isModal">
+            <button ion-button (tap)="dismiss()">
+               关闭
+            </button>
+        </ion-buttons>
         <ion-title>
-            加微信群
+            加好室友微信群
         </ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content class="grey-background">
-    <ion-list *ngIf="!shouldShow"  padding center style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-        <button center style="text-align: center;" id="show_qrcode_btn" ion-button (click)="showQrCode()">
-            <ion-icon name="qr-scanner"></ion-icon> <span>点此加小助手自动拉入微信群</span>
+<ion-content class="curtain-page">
+    <ion-list *ngIf="!shouldShowQrCode"  padding center style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+        <div class="mkt-logo-wrapper">
+            <img class="mkt-logo" src="assets/res/mkt-logo.svg" alt="">
+        </div>
+        <div class="mkt-text-wrapper">
+            <span class="mkt-text">想获取最新房源和找室友信息吗</span>
+            <br>
+            <span class="mkt-text">加入好室友微信群吧!</span>
+        </div>
+        <button class="mkt-btn" center style="text-align: center;" id="show_qrcode_btn" ion-button small (tap)="showQrCode()">
+            <span>点此添加好室友微信群</span>
         </button>
     </ion-list>
-    <ion-list *ngIf="shouldShow">
-        <ion-item style="text-align: center; width:100%">
-            <img src="../../assets/res/haoshiyou-bot2.jpeg"
-                 style="max-width: 350px"
-                 alt="好室友™微信群介绍">
-        </ion-item>
+    <ion-list class="display-page" *ngIf="shouldShowQrCode">
+        <div class="step-text-wrapper">
+            <span class="step-text">STEP. 1</span>
+        </div>
+        <div class="intro-text-wrapper">
+            <span class="intro-text">扫码添加好室友小助手为好友</span>
+        </div>
+        <div class="qrcode-wrapper">
+            <img class="qr-code-img" src="assets/res/haoshiyou-bot.jpeg" alt="">
+        </div>
+        <div class="step-text-wrapper">
+            <span class="step-text">STEP. 2</span>
+        </div>
+        <div class="intro-text-wrapper">
+            <div class="intro-text">通过小助手加入好室友微信群</div>
+            <div class="intro-text-small-wrapper">
+                <span class="intro-text-small">发送南湾西/南湾东/东湾/中半岛/三番/西雅图，</span>
+                <br>
+                <span class="intro-text-small">好室友小助手会邀请你进入相应的微信群 :)</span>
+            </div>
+
+        </div>
+        <div class="fake-chat">
+            <div class="right-chat-wrapper chat-wrapper">
+                <img class="right-chat-svg" src="assets/res/message_01.svg" alt="">
+            </div>
+            <div class="left-chat-wrapper chat-wrapper">
+                <img class="left-chat-svg" src="assets/res/message_02.svg" alt="">
+            </div>
+        </div>
     </ion-list>
 
 

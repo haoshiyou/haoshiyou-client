@@ -1,0 +1,87 @@
+qrcode-tab {
+  .curtain-page {
+    .mkt-logo-wrap {
+      margin-top: 221px;
+    }
+    .mkt-text-wrapper {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .mkt-text {
+      color: #6C6C6C;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .mkt-btn {
+      padding: 8.5px 54px;
+      margin-top: 60px;
+    }
+
+    .mkt-logo {
+      width: 107px;
+    }
+  }
+
+
+  .display-page {
+    div {
+      text-align: center;
+    }
+    .qr-code-wrapper {
+      margin-top:16px;
+    }
+    .qr-code-img {
+      width: 153.5px;
+    }
+    .intro-text-wrapper {
+      margin-top: 8px;
+    }
+    .intro-text {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .intro-text-small-wrapper {
+      margin-top: 12px;
+    }
+    .intro-text-small {
+      color: #6C6C6C;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .step-text-wrapper {
+      margin-top: 16px;
+    }
+    .step-text {
+      color: #21B3FE;
+      line-spacing: 2.5px;
+      line-height: 18px;
+
+    }
+
+    .fake-chat {
+      padding: 0px 32px;
+    }
+
+    .chat-wrapper {
+      margin-top: 30px;
+    }
+    .right-chat-wrapper {
+      text-align: right;
+    }
+
+    .left-chat-wrapper {
+      text-align: left;
+    }
+
+    .right-chat-svg {
+      width: 123px;
+    }
+
+    .left-chat-svg {
+      width: 240px;
+    }
+  }
+
+
+}

@@ -19,7 +19,6 @@
           "primary": #0074d9,
           "danger": #ff4136
   );
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
   color: #333333;
@@ -46,47 +45,19 @@ body {
   background: #EEE;
 }
 
-@font-face {
-  font-family: "Hosted Noto Sans Regular";
-  src: url("../assets/res/fonts/NotoSans-Regular.ttf");
-}
-
-@font-face {
-  font-family: "Hosted Noto Sans Black";
-  src: url("../assets/res/fonts/NotoSans-Black.ttf");
-}
-
-@font-face {
-  font-family: "Hosted Source Han Sans Normal";
-  src: url("../assets/res/fonts/SourceHanSans-Normal.ttc");
-}
-
-@font-face {
-  font-family: "Hosted Source Han Sans Regular";
-  src: url("../assets/res/fonts/SourceHanSans-Regular.ttc");
-}
-
-@font-face {
-  font-family: "Hosted Source Han Sans SC Regular";
-  src: url("../assets/res/fonts/SourceHanSansSC-Regular.otf");
-}
-
 .item {
   min-height: 3rem; /* <- this can be whatever you need */
 }
 
 .hsy-listing-item-header {
-  font-family: "Hosted Noto Sans Regular";
   font-size: 16px;
 }
 
 .hsy-listing-item-price {
-  font-family: "Hosted Noto Sans Regular";
   font-size: 16px;
 }
 
 .hsy-listing-item-last-updated {
-  font-family: "Hosted Noto Sans Regular";
   font-size: 14px;
 }
 
@@ -119,6 +90,41 @@ body {
 
 .full-width {
   width:100%;
+}
+
+ion-icon {
+  &[class*="custom-"] {
+    // Instead of using the font-based icons
+    // We're applying SVG masks
+    mask-size: contain;
+    mask-position: 50% 50%;
+    mask-repeat: no-repeat;
+    background: currentColor;
+    width: 1em;
+    height: 1em;
+  }
+  // custom icons
+  &[class*="custom-home"] {
+    mask-image: url(../assets/res/logo/home_inactive.svg);
+  }
+  &[class*="custom-message"] {
+    mask-image: url(../assets/res/logo/message_inactive.svg);
+  }
+  &[class*="custom-profile"] {
+    mask-image: url(../assets/res/logo/profile_inactive.svg);
+  }
+  &[class*="custom-sort"] {
+    mask-image: url(../assets/res/logo/sort.svg);
+  }
+  &[class*="custom-filter"] {
+    mask-image: url(../assets/res/logo/filter.svg);
+  }
+  &[class*="custom-map"] {
+    mask-image: url(../assets/res/logo/map_inactive.svg);
+  }
+  &[class*="custom-list"] {
+    mask-image: url(../assets/res/logo/list.svg);
+  }
 }
 //
 //.card .item.item-block:not(.item-input):not(.item-select):not(.item-radio):not(.item-checkbox) .item-inner {

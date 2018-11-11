@@ -22,15 +22,20 @@ def increment_version(old_version)
   version_splitted[1] = version_splitted[1].to_i
   version_splitted[2] = version_splitted[2].to_i
   version_splitted[2] += 1
-  return version_splitted.join('.')
+  assert(version_splitted[0] <= 99, 'version should be less than 99')
+  assert(version_splitted[1] <= 99, 'version should be less than 99')
+  assert(version_splitted[2] <= 99, 'version should be less than 99')
+  return version_splitted
 end
 
-def write_new_version (new_version = nil)
+def write_new_version (new_version_array = nil)
   filename = "../config.xml"
   @doc = File.open(filename) do |f|
     Nokogiri::XML(f)
   end
-  @doc.root['version'] = new_version
+  @doc.root['version'] = new_version_array.join('.')
+  @doc.root['android-versionCode'] =
+      new_version_array[0] * 1000000 + new_version_array[1] * 10000 + new_version_array[0] * 100
   File.write(filename, @doc.to_xml)
 end
 

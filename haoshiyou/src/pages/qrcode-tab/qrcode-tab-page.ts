@@ -1,4 +1,6 @@
 import {Component} from "@angular/core";
+import {NavParams, ViewController} from "ionic-angular";
+import { CookieService } from 'ngx-cookie-service';
 declare let ga:any;
 
 @Component({
@@ -6,7 +8,22 @@ declare let ga:any;
   templateUrl: 'qrcode-tab.page.html',
 })
 export class QrCodeTabPage {
-  public shouldShow:boolean = false;
+  constructor(
+      public params: NavParams,
+      private viewCtrl:ViewController,
+      private cookie:CookieService) {
+    console.log(params);
+  }
+
+  async dismiss() {
+    this.viewCtrl.dismiss();
+    let expireDate = new Date();
+    let numberOfDaysToAdd = 7;
+    expireDate.setDate(expireDate.getDate() + numberOfDaysToAdd);
+    this.cookie.set("hasShownQrCodeModal", 'true', expireDate);
+  }
+
+  public shouldShowQrCode:boolean = false;
 
   ionViewWillEnter() {
     ga('set', 'page', '/qrcode-tab.page.html');
@@ -18,6 +35,6 @@ export class QrCodeTabPage {
       eventCategory: 'show-qrcode',
       eventAction: 'qrcode-tab',
     });
-    this.shouldShow = true;
+    this.shouldShowQrCode = true;
   }
 }
