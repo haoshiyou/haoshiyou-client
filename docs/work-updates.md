@@ -8,9 +8,11 @@ This is a running updates for haoshiyou project
    - Chose `waffle.io` for the project management
 
  - @WilliamChen
- 
+   - 输出了第一个Golden Output和有关的Precision / Recall比例数据
+  
  - @JiehuaZhu
- 
+   - 帮助Kitty进行小程序的Project On-boarding
+   
  - @RenjieWeng
 
  - @KittyHe
