@@ -1,5 +1,7 @@
 This is a running updates for haoshiyou project
 
+DEPRECATED, moved to http://zgzg.link/hsy-notes
+
 ## Week of 2018-11-05 ~ 2018-11-11
  - @ZainanZhou:
    - On Board了 何佳惠Kitty的UX Design
