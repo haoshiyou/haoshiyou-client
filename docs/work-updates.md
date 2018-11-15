@@ -16,7 +16,7 @@ DEPRECATED, moved to http://zgzg.link/hsy-notes
    - 帮助Kitty进行小程序的Project On-boarding
    
  - @RenjieWeng
-
+  - 把发帖模板放到bot里
  - @KittyHe
    - UX Design OnBoard
    - First Draft of 小程序 Design
