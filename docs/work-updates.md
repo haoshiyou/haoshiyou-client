@@ -10,16 +10,16 @@ DEPRECATED, moved to http://zgzg.link/hsy-notes
 *   @ZainanZhou
     *   Team Building: On Board了 何佳惠Kitty的UX Design
     *   Project Management:
-        **   Chose [waffle.io](waffle.io) for the project management
-        **   创建了work-updates.md文件，以后在这里进行update
+        *   Chose [waffle.io](waffle.io) for the project management
+        *   创建了work-updates.md文件，以后在这里进行update
     *   SEO：
-        **   Debug了好室友haoshiyou.org页面的的"Fetch as Google" Rendering. Google现在的Fetch as Google 版本无法支持Angular和React等Javascript-based PWA的Rendering
-        **   尝试添加Mixpanel和Amplitude由于对node支持不好放弃
+        *   Debug了好室友haoshiyou.org页面的的"Fetch as Google" Rendering. Google现在的Fetch as Google 版本无法支持Angular和React等Javascript-based PWA的Rendering
+        *   尝试添加Mixpanel和Amplitude由于对node支持不好放弃
     *   Engineering:
-        **   添加了Modal用于展示QRCode
-        **   Testing: Updated CI travis YML config to fix the build, now green
-        **   修复加黑名单功能
-        **   Move storage from MySQL/Memory to MongoDB (persistent)
+        *   添加了Modal用于展示QRCode
+        *   Testing: Updated CI travis YML config to fix the build, now green
+        *   修复加黑名单功能
+        *   Move storage from MySQL/Memory to MongoDB (persistent)
 *   @WilliamChen
     *   输出了第一版本的AI数据，Golden Output和有关的Precision / Recall比例数据
 *   @JiehuaZhu
