@@ -54,6 +54,12 @@
                     <ion-row align-items-center justify-content-center *ngIf="isInitLoading">
                         <ion-spinner></ion-spinner>
                     </ion-row>
+                    <listing-ux-item *ngFor="let listing of stickyListings; let i = index"
+                                     [listing]=listing (onBump)="bumpUpdateOrder($event)"
+                                     [indexFromParent]="i"
+                                     [badgeText]="'置顶'">
+
+                    </listing-ux-item>
                     <listing-ux-item *ngFor="let listing of loadedListings; let i = index"
                                      [listing]=listing (onBump)="bumpUpdateOrder($event)"
                                      [indexFromParent]="i">

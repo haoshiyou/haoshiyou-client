@@ -36,6 +36,9 @@ TODO
   [ ] Admin mark bad post
   [O] 地图闪动和重新调整中心和zoom的问题
   
+  [ ] 2018-11-17 新功能 - 一键置顶
+  [ ] 2018-11-17 微信登陆，置顶的时候可以用微信支付或者点数购买
+  
 - Server
 
   [ ] Add location approximate radius into schema

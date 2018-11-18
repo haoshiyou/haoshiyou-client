@@ -18,6 +18,7 @@ import {QrCodeTabPage} from "../qrcode-tab/qrcode-tab-page";
 import { CookieService } from 'ngx-cookie-service';
 declare let ga:any;
 declare let google, document;
+declare let $; // jQuery
 
 const SEGMENT_KEY: string = 'segment';
 const AREA_KEY: string = 'area';
@@ -38,6 +39,7 @@ let locationsForSearch = HSY_GROUP_AREAS.concat(BAY_AREA_CITIES);
 })
 export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   private isSearching = false;
+
   ngOnDestroy(): any {
     if (this.markers)
     for (let marker of this.markers) {
@@ -53,6 +55,7 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
   public areaModel: string = 'All'; // by default for All
   public useGrid:boolean = !(navigator.platform == 'iPhone');
   public loadedListings: HsyListing[] = [];
+  public stickyListings: HsyListing[] = [];
   private map: any; // Actually google.maps.Map;
   private markers: any[]; // Actually google.maps.Marker[];
   private mapReady: boolean = false;
@@ -85,6 +88,7 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
       this.areaModel = areaFromUrl;
     }
     this.updateWhereClause();
+    await this.loadStickyListings();
     await this.loadMoreListings();
     this.updateLayout();
 
@@ -122,6 +126,19 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     ga('set', 'page', `/listings-ux-tab.page.html#area-${newValue}`);
     ga('send', 'pageview');
   }
+
+  async loadStickyListings() {
+    // TODO: this is very hacky but let's just refactor later
+    $.get( `http://0.0.0.0:3000/GetStickyListings` /* TODO(xinbenlv): update URL to point to prod important */, async data => {
+      console.log(`Sticky`, data);
+      console.log(`Sticky array`, data.map(item=>item.listingId));
+      let l = await this.api.find<HsyListing>({
+        where: {uid: { inq: data.map(item=>item.listingId)}}
+      }).take(1).toPromise();
+      console.log(`XXX loadStickyListings`, l, data);
+      this.stickyListings = l;
+    });
+  };
 
   async loadMoreListings() {
     this.isLoading = true;
