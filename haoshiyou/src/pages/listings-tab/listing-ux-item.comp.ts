@@ -17,7 +17,7 @@ declare let ga:any;
 })
 export class ListingUxItem {
   @Output() onBump = new EventEmitter<HsyListing>();
-
+  @Input() badgeText;
   @Input() listing:HsyListing;
   @Input() indexFromParent:number = 0;
 
