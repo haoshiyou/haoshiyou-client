@@ -82,61 +82,6 @@ export class HsyListing implements HsyListingInterface {
     Object.assign(this, data);
   }
   /**
-   * regenerate title
-   */
-  private getReTitle(): string{
-    return this.isGoodTitle() ? this.title : this.genReTitle();
-  }
-  /**
-   * good title should contain following information
-   * 1: 出租、求租
-   * 2: 地点
-   * 3: 房间
-   * 4: available date
-   */
-  private isGoodTitle(): boolean{
-    let targets = ["出租","招租","求租","转租","合租","长租","短租","找室友","招室友"];
-    let includeTarget = this.includesValue(this.title, targets);
-    let cities = ["san","santa","francisco","berkeley","oakland","mateo","palo alto","daly","forster","redwood","menlo park","stanford","mountain view","sunnyvale","cupertino","jose","santa clara","campbell","milpitas","fremont","newark","union","hayward","东湾","南湾","三番","旧金山","区","半岛"];
-    let includeLocation = this.includesValue(this.title.toLowerCase(), cities);
-    let rooms = ["主卧","次卧","单房","两房","1B1B","2B1B","2B2B","4B","3B","2B","1B","猫","狗"];
-    let includeRoom = this.includesValue(this.title, rooms);
-    return includeTarget && includeLocation && includeRoom;
-  }
-  /**
-   * simply helper function to match any available values in content
-   */
-  private includesValue(content:string, values:Array<any>): boolean{
-    for (let i = 0; i < values.length; i++) {
-      if (content.includes(values[i])) {
-        return true;
-      }
-    }
-    return false;
-  }
-  /**
-   * generate reTitle by: [出租] 1b1b @ Sunnyvale, 8月起
-   */
-  private genReTitle(): string{
-    let targets = ["出租","招租","求租","转租","合租","长租","短租","找室友","招室友"];
-    let rooms = ["主卧","次卧","单房","两房","1B1B","2B1B","2B2B","4B","3B","2B","1B","猫","狗"];
-    return "[" + this.getValue(this.content, targets, "信息") + "]"
-        + " " + this.getValue(this.content, rooms, "有一房间")
-        + " @ " + (this.addressCity ? this.addressCity.charAt(0).toUpperCase() + this.addressCity.slice(1) : "湾区")
-        + (this.addressZipcode ? ", " + this.addressZipcode : "");
-  }
-  /**
-   * retrieve any matched values in content
-   */
-  private getValue(content:string, values:Array<any>, defaultValue:string): string{
-    for (let i = 0; i < values.length; i++) {
-      if (content.includes(values[i])) {
-        return values[i];
-      }
-    }
-    return defaultValue;
-  }
-  /**
    * The name of the model represented by this $resource,
    * i.e. `HsyListing`.
    */
