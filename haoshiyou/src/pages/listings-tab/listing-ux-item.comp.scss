@@ -31,6 +31,16 @@ listing-ux-item {
           word-wrap: break-word;
         }
 
+        & > .subtitle {
+          color: #6C6C6C;
+          line-height: 0.75em;
+          margin-bottom: 0.25em;
+          & > span {
+            font-size: 0.8em;
+            margin-right: 1.5em;
+          }
+        }
+
         & > .middle {
           color: #6C6C6C;
           line-height: 0.75em;
@@ -48,6 +58,7 @@ listing-ux-item {
             text-transform: capitalize;
           }
         }
+
         & > .price {
           color: $hsy-logo-blue;
           & > span.price-dollar-number-per {

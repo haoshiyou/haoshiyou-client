@@ -1,13 +1,18 @@
 <div class="wrapper" (tap)="gotoDetail()">
     <div class="grid-container">
         <div class="content">
-            <div class="title"><ion-badge *ngIf="badgeText" color="Secondary">{{badgeText}}</ion-badge>{{(getRenamedTitle() ? getRenamedTitle() + " █ " : "") + (listing.content ? listing.content.substr(0, 70) : "详见图片")}}</div>
+            <div class="title"><ion-badge *ngIf="badgeText" color="Secondary">{{badgeText}}</ion-badge>{{isGoodTitle() ? listing.content.substr(0,70) : getRenamedTitle()}}</div>
             <div class="middle">
                 <ng-container *ngIf="listing.location_lat && listing.location_lng">
                     <ion-icon
                             name="ios-pin-outline"></ion-icon><span class="location">{{listing.addressCity}}</span>
                 </ng-container>
                 <ion-icon name="ios-time-outline"></ion-icon><span class="lastUpdate">{{listing.lastUpdated | timeFromNow }}</span>
+            </div>
+            <div class="subtitle">
+                <ng-container *ngIf="!isGoodTitle()">
+                    <span>{{listing.content ? listing.content.substr(0,70) : "详见图片"}}</span>
+                </ng-container>
             </div>
             <div class="price" >
                 <ng-container *ngIf="listing.price">
