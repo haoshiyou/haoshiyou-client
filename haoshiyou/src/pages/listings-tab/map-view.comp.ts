@@ -88,17 +88,7 @@ export class MapViewComponent implements OnChanges {
       google.maps.event.trigger(this.map, 'resize');
       this.mapDirty = true;
     });
-    for (let marker of this.markers) {
-      console.log(' --- marker ' + marker);
-      console.log(' --- listings ' + this.listings);
-      //marker.setMap(this.map);
-      //let currLatLng = marker.position;
-      //new google.maps.Marker({ position: marker.position, map: this.map, title: "Hello maps!"});
-    }
     this.renderMarkers();
-    //TODO: test marker
-    //var myLatLng = new google.maps.LatLng(37.6042379, -122.1755228);
-    //var marker = new google.maps.Marker({ position: myLatLng, map: this.map, title: "Hello maps!"});
   }
 
   public addListings(newListings:HsyListing[]) {
