@@ -39,6 +39,7 @@ function SearchButtonInMap(controlDiv, map, eventEmitter) {
 export class MapViewComponent implements OnChanges {
   private zoomLevel = 10; // default
   private markers = [];
+  private listingsForMarkers = [];
   @ViewChild('mapCanvas') mapCanvas:ElementRef;
 
   @Output()
@@ -74,6 +75,7 @@ export class MapViewComponent implements OnChanges {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     this.setCenter(DEFAULT_CENTER);
+    console.log(' --- get geolocation and set center --- ');
 
     // Create the DIV to hold the control and call the CenterControl()
     // constructor passing in this DIV.
@@ -87,33 +89,45 @@ export class MapViewComponent implements OnChanges {
       this.mapDirty = true;
     });
     for (let marker of this.markers) {
-      marker.setMap(this.map);
+      console.log(' --- marker ' + marker);
+      console.log(' --- listings ' + this.listings);
+      //marker.setMap(this.map);
+      //let currLatLng = marker.position;
+      //new google.maps.Marker({ position: marker.position, map: this.map, title: "Hello maps!"});
     }
+    this.renderMarkers();
+    //TODO: test marker
+    //var myLatLng = new google.maps.LatLng(37.6042379, -122.1755228);
+    //var marker = new google.maps.Marker({ position: myLatLng, map: this.map, title: "Hello maps!"});
   }
 
   public addListings(newListings:HsyListing[]) {
+    console.log(' --- addListings --- ');
     let listingsHasLocation = newListings.filter((l) => l.location);
     listingsHasLocation.map((listing:HsyListing) => {
-        let marker = new google.maps.Marker({
-          position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
-          icon: `data:image/svg+xml,
-<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
-    <path fill="#21b3fe" stroke="#ccc" stroke-width=".5"
-          d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/>
-    <text transform="translate(19 18.5)" 
-          fill="#fff" 
-          style="font-family: Arial, sans-serif;
-          text-align:center;"
-          font-size="10" text-anchor="middle">${listing.price ? listing.price : '待议'}
-    </text>
-</svg>`,
-          map: this.map
-        });
-        marker.addListener('click', () => {
-          this.gotoListingDetail(listing);
-        });
-        this.markers.push(marker);
+        this.listingsForMarkers.push(listing);
     });
+  }
+
+  /*
+   * Two reasons caused marker not rendered in Chrome/Firefox:
+   * 1. google maps rendering sequence https://stackoverflow.com/questions/36911245/ionic-2-map-markers-not-appearing
+   * 2. customized icon in marker
+   */
+  private renderMarkers() {
+    console.log(' --- renderMarkers --- ');
+    for (let listing of this.listingsForMarkers) {
+      console.log(' --- in listing: ' + listing);
+      let price  = listing.price ? "$" + listing.price : "待议";
+      let marker = new google.maps.Marker({
+        position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
+        icon: { url: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38"><path fill="#21b3fe" stroke="#ccc" stroke-width=".5" d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/><text transform="translate(19 18.5)" fill="#fff" style="font-family: Arial, sans-serif; text-align:center;" font-size="10" text-anchor="middle">' + price + '</text></svg>') },
+        map: this.map,
+      });
+      marker.addListener('click', () => {
+        this.gotoListingDetail(listing);
+        });
+    }
   }
 
   public clearMarkers() {

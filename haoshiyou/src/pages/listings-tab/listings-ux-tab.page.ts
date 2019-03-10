@@ -173,7 +173,7 @@ export class ListingsUxTabPage implements AfterViewInit, OnDestroy {
     for (let item of newItems) {
       this.loadedListings.push(item);
     }
-    this.mapView.addListings(newItems);
+    setTimeout(this.mapView.addListings(newItems), 2000);
     this.isLoading = false;
   }
 
