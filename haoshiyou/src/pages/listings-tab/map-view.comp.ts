@@ -38,7 +38,7 @@ function SearchButtonInMap(controlDiv, map, eventEmitter) {
 })
 export class MapViewComponent implements OnChanges {
   private zoomLevel = 10; // default
-  private listingsForMarkers = [];
+  private markers = [];
   @ViewChild('mapCanvas') mapCanvas:ElementRef;
 
   @Output()
@@ -86,14 +86,9 @@ export class MapViewComponent implements OnChanges {
       google.maps.event.trigger(this.map, 'resize');
       this.mapDirty = true;
     });
-    this.renderMarkers();
-  }
-
-  public addListings(newListings:HsyListing[]) {
-    let listingsHasLocation = newListings.filter((l) => l.location);
-    listingsHasLocation.map((listing:HsyListing) => {
-        this.listingsForMarkers.push(listing);
-    });
+    for (let marker of this.markers) {
+      marker.setMap(this.map);
+    }
   }
 
   /*
@@ -101,17 +96,23 @@ export class MapViewComponent implements OnChanges {
    * 1. google maps rendering sequence https://stackoverflow.com/questions/36911245/ionic-2-map-markers-not-appearing
    * 2. customized icon in marker
    */
-  private renderMarkers() {
-    for (let listing of this.listingsForMarkers) {
+  public addListings(newListings:HsyListing[]) {
+    let listingsHasLocation = newListings.filter((l) => l.location);
+    listingsHasLocation.map((listing:HsyListing) => {
       let price  = listing.price ? "$" + listing.price : "待议";
       let marker = new google.maps.Marker({
         position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
         icon: { url: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38"><path fill="#21b3fe" stroke="#ccc" stroke-width=".5" d="M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z"/><text transform="translate(19 18.5)" fill="#fff" style="font-family: Arial, sans-serif; text-align:center;" font-size="10" text-anchor="middle">' + price + '</text></svg>') },
-        map: this.map,
       });
       marker.addListener('click', () => {
         this.gotoListingDetail(listing);
         });
+      this.markers.push(marker);
+    });
+    if (this.map) {
+      for (let marker of this.markers) {
+        marker.setMap(this.map);
+      }
     }
   }
 
