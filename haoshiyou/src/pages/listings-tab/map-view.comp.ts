@@ -38,7 +38,6 @@ function SearchButtonInMap(controlDiv, map, eventEmitter) {
 })
 export class MapViewComponent implements OnChanges {
   private zoomLevel = 10; // default
-  private markers = [];
   private listingsForMarkers = [];
   @ViewChild('mapCanvas') mapCanvas:ElementRef;
 
