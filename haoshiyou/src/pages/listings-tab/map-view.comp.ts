@@ -75,7 +75,6 @@ export class MapViewComponent implements OnChanges {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     this.setCenter(DEFAULT_CENTER);
-    console.log(' --- get geolocation and set center --- ');
 
     // Create the DIV to hold the control and call the CenterControl()
     // constructor passing in this DIV.
@@ -92,7 +91,6 @@ export class MapViewComponent implements OnChanges {
   }
 
   public addListings(newListings:HsyListing[]) {
-    console.log(' --- addListings --- ');
     let listingsHasLocation = newListings.filter((l) => l.location);
     listingsHasLocation.map((listing:HsyListing) => {
         this.listingsForMarkers.push(listing);
@@ -105,9 +103,7 @@ export class MapViewComponent implements OnChanges {
    * 2. customized icon in marker
    */
   private renderMarkers() {
-    console.log(' --- renderMarkers --- ');
     for (let listing of this.listingsForMarkers) {
-      console.log(' --- in listing: ' + listing);
       let price  = listing.price ? "$" + listing.price : "待议";
       let marker = new google.maps.Marker({
         position: new google.maps.LatLng(listing.location.lat, listing.location.lng),
